@@ -1,3 +1,4 @@
+
 -- 회원
 DROP TABLE IF EXISTS member;
 
@@ -80,7 +81,7 @@ DROP TABLE IF EXISTS rental_home_detail;
 DROP TABLE IF EXISTS board_report_category;
 
 -- 국가
-DROP TABLE IF EXISTS national;
+DROP TABLE IF EXISTS nation;
 
 -- 숙소 사진
 DROP TABLE IF EXISTS rental_home_photo;
@@ -102,22 +103,22 @@ DROP TABLE IF EXISTS board_like;
 
 -- 회원
 CREATE TABLE member (
-	member_no INT NOT NULL,
-	national_no INT NULL,
-	email VARCHAR(30) NOT NULL,
-	password VARCHAR(255) NOT NULL,
-	name VARCHAR(20) NOT NULL,
-	nickname VARCHAR(20) NOT NULL,
-	birthday DATE NOT NULL,
-	tel_no VARCHAR(15) NULL,
-	state CHAR(1) DEFAULT '0',
-	address VARCHAR(255) NULL,
-	sex CHAR(1) NULL,
-	join_date DATE DEFAULT 'now()',
-	last_login_date DATE DEFAULT 'now()',
-	exit_date DATE NULL,
-	warning_count INT DEFAULT '0',
-	photo VARCHAR(255) NULL
+    member_no INT NOT NULL,
+    nation_no INT NULL,
+    email VARCHAR(30) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(20) NOT NULL,
+    nickname VARCHAR(20) NOT NULL,
+    birthday DATE NOT NULL,
+    tel_no VARCHAR(15) NULL,
+    state CHAR(1) DEFAULT '0',
+    address VARCHAR(255) NULL,
+    sex CHAR(1) NULL,
+    join_date DATE DEFAULT (CURRENT_DATE),
+    last_login_date DATE DEFAULT (CURRENT_DATE),
+    exit_date DATE NULL,
+    warning_count INT DEFAULT 0,
+    photo VARCHAR(255) NULL
 );
 
 -- 회원
@@ -135,7 +136,7 @@ CREATE UNIQUE INDEX UIX_member
 	);
 
 ALTER TABLE member
-	MODIFY COLUMN member_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN member_no INT NOT NULL AUTO_INCREMENT;
 
 -- 게시글 카테고리
 CREATE TABLE board_category (
@@ -178,7 +179,7 @@ CREATE UNIQUE INDEX UIX_board_file
 	);
 
 ALTER TABLE board_file
-	MODIFY COLUMN file_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN file_no INT NOT NULL AUTO_INCREMENT;
 
 -- 게시글
 CREATE TABLE board (
@@ -188,9 +189,9 @@ CREATE TABLE board (
 	head_no INT NOT NULL,
 	title VARCHAR(30) NOT NULL,
 	content text NULL,
-	like_count INT DEFAULT '0',
-	created_date DATE DEFAULT 'now()',
-	view_count INT DEFAULT '0',
+	like_count INT DEFAULT 0,
+	created_date DATE DEFAULT (CURRENT_DATE),
+	view_count INT DEFAULT 0,
 	state CHAR(1) DEFAULT '0'
 );
 
@@ -202,14 +203,14 @@ ALTER TABLE board
 	);
 
 ALTER TABLE board
-	MODIFY COLUMN board_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN board_no INT NOT NULL AUTO_INCREMENT;
 
 -- 포인트내역
 CREATE TABLE point_history (
 	member_no INT NOT NULL,
 	save_content VARCHAR(30) NOT NULL,
 	save_point INT NOT NULL,
-	save_date DATE DEFAULT 'now()'
+	save_date DATE DEFAULT (CURRENT_DATE)
 );
 
 -- 유저-선호사항
@@ -248,7 +249,7 @@ CREATE UNIQUE INDEX UIX_question_file
 	);
 
 ALTER TABLE question_file
-	MODIFY COLUMN question_file_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN question_file_no INT NOT NULL AUTO_INCREMENT;
 
 -- 문의내역
 CREATE TABLE question (
@@ -257,7 +258,7 @@ CREATE TABLE question (
 	title VARCHAR(30) NOT NULL,
 	content text NULL,
 	state char(1) NOT NULL,
-	register_date DATE DEFAULT 'now()'
+	register_date DATE DEFAULT (CURRENT_DATE)
 );
 
 -- 문의내역
@@ -268,14 +269,14 @@ ALTER TABLE question
 	);
 
 ALTER TABLE question
-	MODIFY COLUMN question_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN question_no INT NOT NULL AUTO_INCREMENT;
 
 -- 알림내역
 CREATE TABLE notify_history (
 	notify_no INT NOT NULL,
 	member_no INT NOT NULL,
 	content VARCHAR(255) NOT NULL,
-	notify_date DATE DEFAULT 'now()',
+	notify_date DATE DEFAULT (CURRENT_DATE),
 	state char(1) DEFAULT '0'
 );
 
@@ -287,7 +288,7 @@ ALTER TABLE notify_history
 	);
 
 ALTER TABLE notify_history
-	MODIFY COLUMN notify_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN notify_no INT NOT NULL AUTO_INCREMENT;
 
 -- 댓글
 CREATE TABLE comment (
@@ -295,7 +296,7 @@ CREATE TABLE comment (
 	board_no INT NOT NULL,
 	member_no INT NOT NULL,
 	content text NOT NULL,
-	created_date DATETIME DEFAULT 'now()',
+	created_date DATETIME DEFAULT now(),
 	state char(1) DEFAULT '0'
 );
 
@@ -307,7 +308,7 @@ ALTER TABLE comment
 	);
 
 ALTER TABLE comment
-	MODIFY COLUMN comment_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN comment_no INT NOT NULL AUTO_INCREMENT;
 
 -- 답글
 CREATE TABLE reply (
@@ -315,7 +316,7 @@ CREATE TABLE reply (
 	comment_no INT NOT NULL,
 	member_no INT NOT NULL,
 	content text NOT NULL,
-	created_date DATETIME DEFAULT 'now()',
+	created_date DATETIME DEFAULT now(),
 	state char(1) DEFAULT '0'
 );
 
@@ -327,7 +328,7 @@ ALTER TABLE reply
 	);
 
 ALTER TABLE reply
-	MODIFY COLUMN reply_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN reply_no INT NOT NULL AUTO_INCREMENT;
 
 -- 게시판 신고 상세
 CREATE TABLE board_report_detail (
@@ -335,7 +336,7 @@ CREATE TABLE board_report_detail (
 	member_no INT NOT NULL,
 	report_category_no INT NOT NULL,
 	content text NULL,
-	report_date DATE DEFAULT 'now()',
+	report_date DATE DEFAULT (CURRENT_DATE),
 	state char(1) DEFAULT '0'
 );
 
@@ -347,7 +348,7 @@ ALTER TABLE board_report_detail
 	);
 
 ALTER TABLE board_report_detail
-	MODIFY COLUMN report_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN report_no INT NOT NULL AUTO_INCREMENT;
 
 -- 게시판 신고 파일
 CREATE TABLE board_report_file (
@@ -371,7 +372,7 @@ CREATE UNIQUE INDEX UIX_board_report_file
 	);
 
 ALTER TABLE board_report_file
-	MODIFY COLUMN report_file_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN report_file_no INT NOT NULL AUTO_INCREMENT;
 
 -- 즐겨찾기
 CREATE TABLE bookmark (
@@ -394,7 +395,7 @@ CREATE TABLE rental_home (
 	state CHAR(1) NOT NULL,
 	hosting_start_date DATE NOT NULL,
 	hosting_end_date DATE NOT NULL,
-	registe_date DATE DEFAULT 'now()'
+	registe_date DATE DEFAULT (CURRENT_DATE)
 );
 
 -- 숙소
@@ -405,7 +406,7 @@ ALTER TABLE rental_home
 	);
 
 ALTER TABLE rental_home
-	MODIFY COLUMN rental_home_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN rental_home_no INT NOT NULL AUTO_INCREMENT;
 
 -- 숙소신고
 CREATE TABLE rental_home_report (
@@ -440,7 +441,7 @@ ALTER TABLE rental_home_report_category
 CREATE TABLE region (
 	region_no INT NOT NULL,
 	region_name VARCHAR(50) NOT NULL,
-	national_no INT NOT NULL
+	nation_no INT NOT NULL
 );
 
 -- 지역
@@ -519,7 +520,7 @@ ALTER TABLE theme
 -- 숙소리뷰
 CREATE TABLE rental_home_review (
 	reservation_no INT NOT NULL,
-	created_date DATE DEFAULT 'now()',
+	created_date DATE DEFAULT (CURRENT_DATE),
 	score INT NOT NULL,
 	review VARCHAR(255) NOT NULL,
 	state CHAR(1) DEFAULT '0'
@@ -536,7 +537,7 @@ ALTER TABLE rental_home_review
 CREATE TABLE payment (
 	reservation_no INT NOT NULL,
 	payment_no VARCHAR(255) NOT NULL,
-	payment_date DATETIME DEFAULT 'now()',
+	payment_date DATETIME DEFAULT now(),
 	amount INT NOT NULL,
 	card_no VARCHAR(20) NOT NULL,
 	validity_date DATE NOT NULL,
@@ -563,7 +564,7 @@ CREATE TABLE reservation (
 	rental_home_no INT NOT NULL,
 	start_date DATE NOT NULL,
 	end_date DATE NOT NULL,
-	payment_date DATE DEFAULT 'now()',
+	payment_date DATE DEFAULT (CURRENT_DATE),
 	state CHAR(1) DEFAULT '0',
 	chat_file_name VARCHAR(255) NOT NULL
 );
@@ -576,7 +577,7 @@ ALTER TABLE reservation
 	);
 
 ALTER TABLE reservation
-	MODIFY COLUMN reservation_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN reservation_no INT NOT NULL AUTO_INCREMENT;
 
 -- 숙소 상세
 CREATE TABLE rental_home_detail (
@@ -618,22 +619,22 @@ CREATE UNIQUE INDEX UIX_board_report_category
 	);
 
 -- 국가
-CREATE TABLE national (
-	national_no INT NOT NULL,
-	national_name VARCHAR(10) NOT NULL
+CREATE TABLE nation (
+	nation_no INT NOT NULL,
+	nation_name VARCHAR(10) NOT NULL
 );
 
 -- 국가
-ALTER TABLE national
-	ADD CONSTRAINT PK_national -- 국가 기본키
+ALTER TABLE nation
+	ADD CONSTRAINT PK_nation -- 국가 기본키
 	PRIMARY KEY (
-	national_no -- 국가번호
+	nation_no -- 국가번호
 	);
 
 -- 국가 유니크 인덱스
-CREATE UNIQUE INDEX UIX_national
-	ON national ( -- 국가
-				national_name ASC -- 국가명
+CREATE UNIQUE INDEX UIX_nation
+	ON nation ( -- 국가
+				nation_name ASC -- 국가명
 	);
 
 -- 숙소 사진
@@ -659,13 +660,13 @@ CREATE UNIQUE INDEX UIX_rental_home_photo
 	);
 
 ALTER TABLE rental_home_photo
-	MODIFY COLUMN photo_no INT NOT NULL AUTO_INCREMENT(1,1);
+	MODIFY COLUMN photo_no INT NOT NULL AUTO_INCREMENT;
 
 -- 문의 답변
 CREATE TABLE qna (
 	question_no INT NOT NULL,
 	content text NULL,
-	created_date DATE DEFAULT 'now()'
+	created_date DATE DEFAULT (CURRENT_DATE)
 );
 
 -- 문의 답변
@@ -731,12 +732,12 @@ ALTER TABLE board_like
 
 -- 회원
 ALTER TABLE member
-	ADD CONSTRAINT FK_national_TO_member -- 국가 -> 회원
+	ADD CONSTRAINT FK_nation_TO_member -- 국가 -> 회원
 	FOREIGN KEY (
-	national_no -- 국가번호
+	nation_no -- 국가번호
 	)
-	REFERENCES national ( -- 국가
-	national_no -- 국가번호
+	REFERENCES nation ( -- 국가
+	nation_no -- 국가번호
 	);
 
 -- 게시글첨부파일
@@ -991,12 +992,12 @@ ALTER TABLE rental_home_report
 
 -- 지역
 ALTER TABLE region
-	ADD CONSTRAINT FK_national_TO_region -- 국가 -> 지역
+	ADD CONSTRAINT FK_nation_TO_region -- 국가 -> 지역
 	FOREIGN KEY (
-	national_no -- 국가번호
+	nation_no -- 국가번호
 	)
-	REFERENCES national ( -- 국가
-	national_no -- 국가번호
+	REFERENCES nation ( -- 국가
+	nation_no -- 국가번호
 	);
 
 -- 등급
