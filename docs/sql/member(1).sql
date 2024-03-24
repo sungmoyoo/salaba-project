@@ -1,13 +1,13 @@
 -- 예약 내역
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_day,state,chat_file_name)
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
 values(1234,1,1,'2024-03-21','2024-04-21','2024-02-10','예약됨','채팅1');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_day,state,chat_file_name)
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
 values(1235,2,2,'2023-02-20','2023-03-20','2023-01-9','완료됨','채팅2');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_day,state,chat_file_name)
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
 values(1236,3,3,'2022-01-19','2022-02-19','2022-12-8','취소됨','채팅3');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_day,state,chat_file_name)
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
 values(1237,4,4,'2021-12-18','2021-12-18','2021-11-7','완료됨','채팅4');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_day,state,chat_file_name)
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
 values(1238,5,5,'2020-11-17','2020-11-17','2020-10-6','취소됨','채팅5');
 
 select
@@ -134,3 +134,25 @@ select
   state
 from
   notify_history;
+
+-- 결제
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1231','1','2024-01-01','150000','1234-5678-0000-0000','2024-08','결제 거부');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1232','2','2024-02-02','200000','1234-5678-0000-0001','2026-07','결제 완료');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1233','3','2024-03-03','370000','1234-5678-0000-0002','2028-06','결제 취소');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1234','4','2024-04-04','460000','1234-5678-0000-0003','2030-05','결제 완료');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1235','5','2024-05-05','290000','1234-5678-0000-0004','2032-04','결제 완료');
+
+select
+ reservation_no,
+ payment_no,
+ payment_date,
+ amount,
+ card_no,
+ validity_date
+from
+ payment;
