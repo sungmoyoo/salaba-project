@@ -149,7 +149,7 @@ where
       grade
     where 
       member_no = #{member_no}
-    ) t2 
+    )
   )
 
 -- 회원 경고 처리
@@ -177,7 +177,7 @@ select
   t1.email,
   t1.tel_no,
   t1.join_date,
-  t2.count(rental_home_no)
+  t2.count(t2.rental_home_no) regist_count
 from
   member t1,
   rental_home t2
