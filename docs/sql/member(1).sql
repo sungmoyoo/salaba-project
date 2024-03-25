@@ -1,14 +1,14 @@
 -- 예약 내역
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
-values(1234,1,1,'2024-03-21','2024-04-21','2024-02-10','예약됨','채팅1');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
-values(1235,2,2,'2023-02-20','2023-03-20','2023-01-9','완료됨','채팅2');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
-values(1236,3,3,'2022-01-19','2022-02-19','2022-12-8','취소됨','채팅3');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
-values(1237,4,4,'2021-12-18','2021-12-18','2021-11-7','완료됨','채팅4');
-insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
-values(1238,5,5,'2020-11-17','2020-11-17','2020-10-6','취소됨','채팅5');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name,ppl_no)
+values(1234,1,1,'2024-03-21','2024-04-21','2024-02-10','예약됨','채팅1','6');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name,ppl_no)
+values(1235,2,2,'2023-02-20','2023-03-20','2023-01-9','완료됨','채팅2','4');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name,ppl_no)
+values(1236,3,3,'2022-01-19','2022-02-19','2022-12-8','취소됨','채팅3','3');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name,ppl_no)
+values(1237,4,4,'2021-12-18','2021-12-18','2021-11-7','완료됨','채팅4','2');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name,ppl_no)
+values(1238,5,5,'2020-11-17','2020-11-17','2020-10-6','취소됨','채팅5','1');
 
 select
   reservation_no,
