@@ -1,4 +1,4 @@
--- 예약 내역
+-- 예약 내역   reservation
 insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name,ppl_no)
 values(1234,1,1,'2024-03-21','2024-04-21','2024-02-10','예약됨','채팅1','6');
 insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name,ppl_no)
@@ -23,7 +23,7 @@ from
   reservation;
 
 
--- 선호사항
+-- 선호사항  preference
 insert into member_preference(member_no,theme_no) values(1,1);
 insert into member_preference(member_no,theme_no) values(2,2);
 insert into member_preference(member_no,theme_no) values(3,3);
@@ -37,7 +37,7 @@ select
   preference;
 
 
--- 즐겨찾기
+-- 즐겨찾기 bookmark
 insert into bookmark(rental_home_no,member_no) values(1,1);
 insert into bookmark(rental_home_no,member_no) values(2,2);
 insert into bookmark(rental_home_no,member_no) values(3,3);
@@ -51,7 +51,7 @@ from
  bookmark;
 
 
--- 문의 내역
+-- 문의 내역 question
 insert into question(question_no,member_no,title,content,state,register_date)
 values(1,1,'문의합니다','문의내용...','진행중','2024-08-24')
 insert into question(question_no,member_no,title,content,state,register_date)
@@ -74,7 +74,7 @@ from
  question;
 
 
--- 문의 파일
+-- 문의 파일  question_file
 insert into question_file(question_file_no,question_no,ori_file_name,uuid_file_name)
 values(1,1,'file1','b1deb4d-3b7d-4bad-9bdd');
 insert into question_file(question_file_no,question_no,ori_file_name,uuid_file_name)
@@ -94,7 +94,7 @@ select
 from
   question_file;
 
--- 문의 답변
+-- 문의 답변 qna
 insert into qna(question_no,content,created_date)
 values(1,'답변드립니다.','2024-05-14');
 insert into qna(question_no,content,created_date)
@@ -114,7 +114,7 @@ from
  qna;
 
 
--- 알림 내역
+-- 알림 내역  notify_history
 insert into notify_history(notify_no,member_no,content,notify_date,state)
 values(1,1,'작성하신 게시글에 새 댓글이 달렸습니다.','2024-10-20','N');
 insert into notify_history(notify_no,member_no,content,notify_date,state)
@@ -135,7 +135,7 @@ select
 from
   notify_history;
 
--- 결제
+-- 결제 payment
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
 values('1231','1','2024-01-01','150000','1234-5678-0000-0000','2024-08-01','결제 거부');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
