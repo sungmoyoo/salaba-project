@@ -127,7 +127,7 @@ insert into notify_history(notify_no,member_no,content,notify_date,state)
 values(5,5,'리뷰 작성으로 500 포인트가 발급되었습니다.','2023-11-05','Y');
 
 select
-  notify_no,eeeeee
+  notify_no,
   member_no,
   content,
   notify_date,
@@ -137,15 +137,15 @@ from
 
 -- 결제
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
-values('1231','1','2024-01-01','150000','1234-5678-0000-0000','2024-08','결제 거부');
+values('1231','1','2024-01-01','150000','1234-5678-0000-0000','2024-08-01','결제 거부');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
-values('1232','2','2024-02-02','200000','1234-5678-0000-0001','2026-07','결제 완료');
+values('1232','2','2024-02-02','200000','1234-5678-0000-0001','2026-07-01','결제 완료');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
-values('1233','3','2024-03-03','370000','1234-5678-0000-0002','2028-06','결제 취소');
+values('1233','3','2024-03-03','370000','1234-5678-0000-0002','2028-06-01','결제 취소');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
-values('1234','4','2024-04-04','460000','1234-5678-0000-0003','2030-05','결제 완료');
+values('1234','4','2024-04-04','460000','1234-5678-0000-0003','2030-05-01','결제 완료');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
-values('1235','5','2024-05-05','290000','1234-5678-0000-0004','2032-04','결제 완료');
+values('1235','5','2024-05-05','290000','1234-5678-0000-0004','2032-04-01','결제 완료');
 
 select
  reservation_no,

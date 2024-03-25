@@ -395,7 +395,7 @@ CREATE TABLE rental_home (
 	state CHAR(1) NOT NULL,
 	hosting_start_date DATE NOT NULL,
 	hosting_end_date DATE NOT NULL,
-	registe_date DATE DEFAULT (CURRENT_DATE)
+	register_date DATE DEFAULT (CURRENT_DATE)
 );
 
 -- 숙소
