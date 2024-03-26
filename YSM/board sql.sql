@@ -13,10 +13,11 @@ from
   left join board_like bl on b.board_no=bl.board_no
   left join board_file bf on b.board_no=bf.board_no
 group by
-  b.board_no,
-  like_count
+  b.board_no
 order by
   like_count desc;
+
+
 
 -- 정보공유/자유 게시판 리스트 조회
 -- 정렬은 기본 최신순, 추천순, 조회순은 order by만 바꾸면 됨
@@ -39,8 +40,9 @@ from
 where
   b.board_category_no=1 
 group by
-  b.board_no;
-
+  b.board_no
+order by
+  b.created_date;
 
 -- 후기 게시판 리스트 조회
 select 
@@ -61,9 +63,11 @@ where
   b.board_category_no=3
 group by
   b.board_no,
-  bf.uuid_file_name
+  bl.uuid_file_name
 order by
   b.created_date desc;
+
+
 
 
 -- 뷰 조회(공통)
@@ -81,8 +85,8 @@ select
   where 
     bl.board_no = b.board_no) like_count,
   c.content comment_content,
-  c.created_date comment_date,
   r.content reply_comment,
+  c.created_date comment_date,
   r.created_date reply_date,
   mc.name comment_writer,
   mr.name reply_writer
@@ -96,7 +100,10 @@ from
   left join member mc on c.member_no = mc.member_no
   left join member mr on r.member_no = mr.member_no
 where
-  b.board_no = 1
+  b.board_no = 2
+order by
+  c.created_date,
+  r.created_date;
 
 
 --뷰 조회 중복 합친 버전
@@ -132,6 +139,7 @@ where
 --   LEFT JOIN member mr on r.member_no = mr.member_no
 -- where
 --   b.board_no = 1;
+
 
 
 
@@ -192,9 +200,6 @@ insert into member(email, password, name, nickname, birthday) values
 
 
 
-
-
-
 --게시글 조회수 업데이트
 update 
   board
@@ -202,6 +207,9 @@ set
   view_count = view_count + 1
 where 
   board_no = "게시글번호";
+
+
+
 
 --게시글 수정
 update 
@@ -234,61 +242,73 @@ where
 
 
 
-
-
-
-
-
-
 --게시글 추천수 삭제
+--추천수는 바로 삭제해도 된다. 
 delete from board_like where board_no="게시글번호"; --게시글이 삭제 되었을 때
 delete from board_like where member_no="회원번호"; --회원이 추천 취소 눌렀을 떄
 
+
+--게시글/댓글/답글 삭제
+--: 게시글/댓글/답글은 삭제되어도 데이터를 보존해야 한다.
+--: 삭제 시 상태를 삭제 번호로 변경하고, 내용을 비우는 방식
 --게시글 삭제
-delete from board where board_no="게시글번호";
+--(상태 변경)
+update
+  board
+set
+  state=${state}
+where
+  board_no=${board_no}
+  content=${content};
+
+--(일괄 삭제)
+delete from board where state=${state};
+
+
 
 --게시글 첨부파일 삭제
 delete from board_file where file_no="파일번호"; --특정 파일만 삭제
 delete from board_file where board_no="게시글번호"; --전체 삭제
 
+
+
 --댓글 삭제
-delete from comment where comment_no="댓글번호";
+--(상태 변경)
+update
+  comment
+set
+  state=${state};
+where
+  comment_no=${comment_no}
+  content=${content};
+
+--(일괄 삭제)
+delete from comment where state=${state};
+
+
 
 --답글 삭제
-delete from reply where reply_no="답글번호";
-
-
-
-
-
-select 
-  b.title,
-  b.view_count,
-  b.created_date,
-  GROUP_CONCAT(distinct bf.uuid_file_name) uuid_file_name,
-  h.head_content,
-  m.name,
-  (select 
-    COUNT(*) 
-  from 
-    board_like bl 
-  where 
-    bl.board_no = b.board_no) like_count,
-  c.content comment_content,
-  c.created_date comment_date,
-  r.content reply_comment,
-  r.created_date reply_date,
-  mc.name comment_writer,
-  mr.name reply_writer
-from 
-  board b 
-  inner join head h on b.head_no = h.head_no
-  inner join member m on b.member_no = m.member_no
-  LEFT JOIN board_file bf on b.board_no = bf.board_no
-  LEFT JOIN comment c on b.board_no = c.board_no
-  LEFT JOIN reply r on c.comment_no = r.comment_no
-  LEFT JOIN member mc on c.member_no = mc.member_no
-  LEFT JOIN member mr on r.member_no = mr.member_no
+--(상태 변경)
+update
+  board
+set
+  state=${state};
 where
-  b.board_no = 1
-group by 
+  reply_no=${reply_no}
+  content=${content};
+
+--(일괄 삭제)
+delete from reply where state=${state};
+
+
+insert into point_history(
+  member_no,
+  save_content,
+  save_point,
+  save_date
+) values 
+-- (1, "숙소 예약", 300, "2024-01-01"),
+-- (1, "후기글 작성", 50, "2024-02-01"),
+(2, "이벤트 당첨", 1000, "2024-03-01"),
+(2, "숙소 예약", 300, "2024-04-01");
+
