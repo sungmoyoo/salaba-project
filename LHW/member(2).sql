@@ -1,8 +1,42 @@
 --회원
-insert into member(member_no,national_no,email,password,name,nickname,birthday,tel_no,state,address,
-sex,join_date,last_login_date,exit_date,warning_count,photo)
-values(1,82,'user1.test.com',sha2('1111',256),'이름1','회원1','2000-01-01','010-1111-1111','0','주소1',
-'1','2024-03-20','2024-03-21',null,'a.gif')
+insert into 
+member(
+  member_no,
+  national_no,
+  email,
+  password,
+  name,
+  nickname,
+  birthday,
+  tel_no,
+  state,
+  address,
+  sex,
+  join_date,
+  last_login_date,
+  exit_date,
+  warning_count,
+  photo
+  )
+values
+  (
+    1,
+    82,
+    'user1.test.com',
+    sha2('1111',256),
+    '이름1',
+    '회원1',
+    '2000-01-01',
+    '010-1111-1111',
+    '0',
+    '주소1',
+    '1',
+    '2024-03-20',
+    '2024-03-21',
+    null,
+    'a.gif'
+    )
+
 insert into member(member_no,national_no,email,password,name,nickname,birthday,tel_no,state,address,
 sex,join_date,last_login_date,exit_date,warning_count,photo)
 values(2,82,'user2.test.com',sha2('1111',256),'이름2','회원2','2000-02-02','010-2222-2222','0','주소2',
@@ -20,6 +54,9 @@ sex,join_date,last_login_date,exit_date,warning_count,photo)
 values(4,86,'user5.test.com',sha2('1111',256),'이름5','회원5','2000-05-05','010-5555-5555','0','주소5',
 '2','2024-03-20','2024-03-21',null,'.gif')
 
+-- 수정
+
+-- 회원 정보 조회
 select
   member_no,
   national_no,
@@ -41,8 +78,22 @@ select
   member;
 
 --포인트 내역
-insert into point_history(member_no,save_content,save_point,save_date)
-values(1,'숙소 리뷰 작성','200','2024-03-21')
+insert into 
+  point_history
+  (
+    member_no,
+    save_content,
+    save_point,
+    save_date
+  )
+values
+  (
+    1,
+    '숙소 리뷰 작성',
+    '200',
+    '2024-03-21'
+  )
+
 insert into point_history(member_no,save_content,save_point,save_date)
 values(1,'댓글작성','50','2024-03-21')
 insert into point_history(member_no,save_content,save_point,save_date)
@@ -54,6 +105,23 @@ values(2,'댓글 작성','50','2024-03-22')
 insert into point_history(member_no,save_content,save_point,save_date)
 values(3,'숙소 리뷰 작성','200','2024-03-23')
 
+-- 포인트 조회 1
+
+
+insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+values(101,1,'숙소 리뷰 작성','200','2024-03-21')
+insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+values(102,1,'댓글작성','50','2024-03-21')
+insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+values(103,2,'숙소 리뷰 작성','200','2024-03-21')
+insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+values(104,2,'숙소 리뷰 작성','200','2024-03-22')
+insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+values(105,2,'댓글 작성','50','2024-03-22')
+insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+values(106,3,'숙소 리뷰 작성','200','2024-03-23')
+
+-- 포인트 조회 2
 select
   member_no,
   save_content,
@@ -61,40 +129,218 @@ select
   save_date
 from
   point_history
+order by
+  save_date
 
---insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
---values(101,1,'숙소 리뷰 작성','200','2024-03-21')
---insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
---values(102,1,'댓글작성','50','2024-03-21')
---insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
---values(103,2,'숙소 리뷰 작성','200','2024-03-21')
---insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
---values(104,2,'숙소 리뷰 작성','200','2024-03-22')
---insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
---values(105,2,'댓글 작성','50','2024-03-22')
---insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
---values(106,3,'숙소 리뷰 작성','200','2024-03-23')
---
---select
---  point_history_no,
---  member_no,
---  save_content,
---  save_point,
---  save_date
---from
---  point_history
+--------------------------------------------------------------------------------------
+
+-- 예약 내역
+insert into 
+  reservation
+  (
+    member_no,
+    rental_home_no,
+    start_date,
+    end_date,
+    payment_date,
+    chat_file_name
+  )
+values
+  (
+    1,
+    1,
+    '2024-03-21',
+    '2024-04-21',
+    '2024-02-10',
+    '채팅1'
+  );
+
+insert into 
+payment
+(
+  payment_no,
+  payment_date,
+  amount,
+  card_no,
+  validity_date,
+)
+values
+  (
+    '1',
+    '2024-01-01',
+    '150000',
+    '1234-5678-0000-0000',
+    '2024-08'
+  );
+
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
+values(1235,2,2,'2023-02-20','2023-03-20','2023-01-9','완료됨','채팅2');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
+values(1236,3,3,'2022-01-19','2022-02-19','2022-12-8','취소됨','채팅3');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
+values(1237,4,4,'2021-12-18','2021-12-18','2021-11-7','완료됨','채팅4');
+insert into reservation(reservation_no,member_no,rental_home_no,start_date,end_date,payment_date,state,chat_file_name)
+values(1238,5,5,'2020-11-17','2020-11-17','2020-10-6','취소됨','채팅5');
+
+-- 예약 내역 조회
+select
+  reservation_no,
+  member_no,
+  rental_home_no,
+  start_date,
+  end_date,
+  payment_day,
+  state,
+  chat_file_name
+from
+  reservation;
 
 
 
---select
---  p.point_history_no,
---  m.member_no,
---  p.save_content,
---  p.save_point,
---  p.save_date
---from
--- inner join member m on p.member_no=m.member_no
--- group by
---  point_history_no
--- order by
--- point_history_no desc
+-- 선호사항
+insert into member_preference(member_no,theme_no) values(1,1);
+insert into member_preference(member_no,theme_no) values(2,2);
+insert into member_preference(member_no,theme_no) values(3,3);
+insert into member_preference(member_no,theme_no) values(4,4);
+insert into member_preference(member_no,theme_no) values(5,5);
+
+-- 선호 사항 조회
+select
+  member_no,
+  theme_no
+ from
+  preference;
+
+
+-- 즐겨찾기
+insert into bookmark(rental_home_no,member_no) values(1,1);
+insert into bookmark(rental_home_no,member_no) values(2,2);
+insert into bookmark(rental_home_no,member_no) values(3,3);
+insert into bookmark(rental_home_no,member_no) values(4,4);
+insert into bookmark(rental_home_no,member_no) values(5,5);
+
+-- 즐겨 찾기 조회
+select
+ rental_home_no,
+ member_no
+from
+ bookmark;
+
+
+-- 문의 내역
+insert into question(question_no,member_no,title,content,state,register_date)
+values(1,1,'문의합니다','문의내용...','진행중','2024-08-24')
+insert into question(question_no,member_no,title,content,state,register_date)
+values(2,2,'문의합니다','문의내용...','진행중','2024-03-06');
+insert into question(question_no,member_no,title,content,state,register_date)
+values(3,3,'문의합니다','문의내용...','답변 완료','2023-02-09');
+insert into question(question_no,member_no,title,content,state,register_date)
+values(4,4,'문의합니다','문의내용...','답변 완료','2018-01-01');
+insert into question(question_no,member_no,title,content,state,register_date)
+values(5,5,'문의합니다','문의내용...','답변 완료','2016-08-24');
+
+
+-- 문의 내역 조회
+select
+  question_no,
+  member_no,
+  title,
+  content,
+  state,
+  register_date
+from
+ question;
+
+
+-- 문의 파일
+insert into question_file(question_file_no,question_no,ori_file_name,uuid_file_name)
+values(1,1,'file1','b1deb4d-3b7d-4bad-9bdd');
+insert into question_file(question_file_no,question_no,ori_file_name,uuid_file_name)
+values(2,2,'file2','dgkj-72jh-verl-0fja');
+insert into question_file(question_file_no,question_no,ori_file_name,uuid_file_name)
+values(3,3,'file3','9lhj-knlv-jbtn-bp5t');
+insert into question_file(question_file_no,question_no,ori_file_name,uuid_file_name)
+values(4,4,'file4','thbx-krjh-tbke-ahb5');
+insert into question_file(question_file_no,question_no,ori_file_name,uuid_file_name)
+values(5,5,'file5','argx-rhss-eq3e-a346');
+
+
+-- 문의 내역 파일
+select
+ question_file_no,
+ question_no,
+ ori_file_name,
+ uuid_file_name
+from
+  question_file;
+
+-- 문의 답변
+insert into qna(question_no,content,created_date)
+values(1,'답변드립니다.','2024-05-14');
+insert into qna(question_no,content,created_date)
+values(2,'답변드립니다.','2023-04-10');
+insert into qna(question_no,content,created_date)
+values(3,'답변드립니다.','2022-03-06');
+insert into qna(question_no,content,created_date)
+values(4,'답변드립니다.','2021-02-02');
+insert into qna(question_no,content,created_date)
+values(5,'답변드립니다.','2020-12-28');
+
+-- 답변 조회
+select
+ question_no,
+ content,
+ created_date
+from
+ qna;
+
+
+-- 알림 내역
+insert into notify_history(notify_no,member_no,content,notify_date,state)
+values(1,1,'작성하신 게시글에 새 댓글이 달렸습니다.','2024-10-20','N');
+insert into notify_history(notify_no,member_no,content,notify_date,state)
+values(2,2,'작성하신 댓글에 새 답글이 달렸습니다.','2024-02-25','N');
+insert into notify_history(notify_no,member_no,content,notify_date,state)
+values(3,3,'호스트로부터 채팅이 왔습니다.','2022-03-08','Y');
+insert into notify_history(notify_no,member_no,content,notify_date,state)
+values(4,4,'리뷰 작성으로 500 포인트가 발급되었습니다.','2024-10-20','Y');
+insert into notify_history(notify_no,member_no,content,notify_date,state)
+values(5,5,'리뷰 작성으로 500 포인트가 발급되었습니다.','2023-11-05','Y');
+
+-- 알림 update문
+
+
+-- 알림 내역 조회
+select
+  notify_no,
+  member_no,
+  content,
+  notify_date,
+  state
+from
+  notify_history;
+
+-- 결제
+
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1232','2','2024-02-02','200000','1234-5678-0000-0001','2026-07','결제 완료');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1233','3','2024-03-03','370000','1234-5678-0000-0002','2028-06','결제 취소');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1234','4','2024-04-04','460000','1234-5678-0000-0003','2030-05','결제 완료');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date,state)
+values('1235','5','2024-05-05','290000','1234-5678-0000-0004','2032-04','결제 완료');
+
+
+-- 결제 내역 조회
+select
+ reservation_no,
+ payment_no,
+ payment_date,
+ amount,
+ card_no,
+ validity_date
+from
+ payment;
+
+ -- 결제 취소
