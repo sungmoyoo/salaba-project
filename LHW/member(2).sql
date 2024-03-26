@@ -60,4 +60,41 @@ select
   save_point,
   save_date
 from
-  point_history;
+  point_history
+
+--insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+--values(101,1,'숙소 리뷰 작성','200','2024-03-21')
+--insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+--values(102,1,'댓글작성','50','2024-03-21')
+--insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+--values(103,2,'숙소 리뷰 작성','200','2024-03-21')
+--insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+--values(104,2,'숙소 리뷰 작성','200','2024-03-22')
+--insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+--values(105,2,'댓글 작성','50','2024-03-22')
+--insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
+--values(106,3,'숙소 리뷰 작성','200','2024-03-23')
+--
+--select
+--  point_history_no,
+--  member_no,
+--  save_content,
+--  save_point,
+--  save_date
+--from
+--  point_history
+
+
+
+--select
+--  p.point_history_no,
+--  m.member_no,
+--  p.save_content,
+--  p.save_point,
+--  p.save_date
+--from
+-- inner join member m on p.member_no=m.member_no
+-- group by
+--  point_history_no
+-- order by
+-- point_history_no desc
