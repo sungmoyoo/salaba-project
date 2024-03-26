@@ -233,14 +233,22 @@ order by
  reservation_no asc payment_date desc;
 
 
- -- 결제 취소
- -- 테이블 생성
+
+ -- 결제 취소 테이블 생성
  CREATE TABLE cancellation (
      cancellation_no INT AUTO_INCREMENT PRIMARY KEY,
      payment_no INT,
      cancellation_date DATE,
      FOREIGN KEY (payment_no) REFERENCES payment(payment_no)
  );
+
+ -- 결제 취소
+insert into cancellation(payment_no, cancellation_date) values('1','2024-01-01');
+insert into cancellation(payment_no, cancellation_date) values('2','2024-02-01');
+insert into cancellation(payment_no, cancellation_date) values('3','2024-03-01');
+insert into cancellation(payment_no, cancellation_date) values('4','2024-04-01');
+insert into cancellation(payment_no, cancellation_date) values('5','2024-05-01');
+
 
  -- 결제 취소내역
 select
