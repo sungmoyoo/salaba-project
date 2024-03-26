@@ -43,7 +43,7 @@ order by
   reservation_no asc;
 
 
--- 예약을 취소/변경
+-- 예약 취소/변경
 UPDATE reservation
 SET
     start_date = '2024-04-01',
