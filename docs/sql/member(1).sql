@@ -119,7 +119,9 @@ values(5,'file5','argx-rhss-eq3e-a346');
 
 -- 문의 내역 조회
 SELECT
-  q.*, qf.ori_file_name, qf.uuid_file_name
+  q.*,
+  qf.ori_file_name,
+  qf.uuid_file_name
 FROM
   question q
 LEFT JOIN
@@ -127,7 +129,7 @@ LEFT JOIN
 ON
   q.question_no = qf.question_no;
 WHERE
-  q.question_no
+  q.question_no = 2
 ORDER BY
   register_date desc;
 
@@ -145,16 +147,20 @@ insert into qna(question_no,content,created_date)
 values('5','답변드립니다.','2020-12-28');
 
 -- 답변 조회
-select
- question_no,
- content,
- created_date
-from
- qna
-where
- question_no = 3;
-order by
+SELECT
+  q.*,
+  qna
+FROM
+  qna
+LEFT JOIN
+  question_no q
+ON
+  q.question_no = qna_no;
+WHERE
+  qna_no = 2
+ORDER BY
   created_date desc;
+
 
 
 -- 알림 내역  notify_history
