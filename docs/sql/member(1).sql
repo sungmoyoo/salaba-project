@@ -45,6 +45,39 @@ WHERE
     AND ppl_no = 6;
 
 
+-- 사용자 예약 취소(상태 변경)
+   -- 예약 취소 + 결제 취소 한꺼번에 rollback / commit : Transaction
+  START TRANSACTION;
+
+  -- 예약 취소
+  UPDATE
+    reservation
+  SET
+    status = '0'
+  WHERE
+    status = '1';
+
+  -- 결제 취소
+  UPDATE
+    payment
+  SET
+    status = '0'
+  WHERE
+    reservation_no IN (SELECT reservation_no FROM reservation WHERE status = '0');
+
+  COMMIT;
+
+
+
+-- 예약 취소(관리자 일괄 삭제) (보류)
+DELETE FROM
+  reservation
+WHERE
+    status = '0'
+  AND
+    start_date <= '2024-03-26';
+
+
 -- 선호사항  preference
 insert into member_preference(member_no,theme_no) values(1,1);
 insert into member_preference(member_no,theme_no) values(2,2);
@@ -259,3 +292,5 @@ SELECT
   cancellation c
  ON
   p.payment_no = c.payment_no;
+
+
