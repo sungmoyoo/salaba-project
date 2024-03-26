@@ -10,22 +10,7 @@ values(4,4,'2021-12-18','2021-12-18','2021-11-7','채팅4','2');
 insert into reservation(member_no,rental_home_no,start_date,end_date,payment_date,chat_file_name,ppl_no)
 values(5,5,'2020-11-17','2020-11-17','2020-10-6',Null,'1');
 
--- 예약내역 조회(findAll)
-select
-  reservation_no,
-  member_no,
-  rental_home_no,
-  start_date,
-  end_date,
-  payment_day,
-  state,
-  chat_file_name
-from
-  reservation
-order by
-  reservation_no asc;
-
--- 회원별 예약내역 조회(findBy)
+-- 예약내역 조회
 select
   reservation_no,
   member_no,
@@ -43,7 +28,7 @@ order by
   reservation_no asc;
 
 
--- 예약 취소/변경
+-- 예약 변경
 UPDATE reservation
 SET
     start_date = '2024-04-01',
@@ -133,20 +118,18 @@ insert into question_file(question_no,ori_file_name,uuid_file_name)
 values(5,'file5','argx-rhss-eq3e-a346');
 
 -- 문의 내역 조회
-select
-  member_no,
-  title,
-  content,
-  state,
-  register_date,
-  question_file_no
-from
-  question;
-where
-  member_no = 1
-order by
+SELECT
+  q.*, qf.ori_file_name, qf.uuid_file_name
+FROM
+  question q
+LEFT JOIN
+  question_file qf
+ON
+  q.question_no = qf.question_no;
+WHERE
+  q.question_no
+ORDER BY
   register_date desc;
-
 
 
 -- 문의 답변 qna
@@ -260,3 +243,13 @@ where
  payment_no = 1
 order by
  cancellation_date desc;
+
+ -- 결제 및 취소내역 전체 조회
+SELECT
+  p.*, c.cancellation_date
+ FROM
+   payment p
+ LEFT JOIN
+  cancellation c
+ ON
+  p.payment_no = c.payment_no;
