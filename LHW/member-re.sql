@@ -130,6 +130,7 @@ select
   rh.state,
   rh.name,
   rh.price,
+  rh.clean_fee,
   rh.explanation,
   rh.capacity,
   rf.facility_count,
@@ -150,6 +151,7 @@ set
   state='',
   name='',
   price='',
+  clean_fee='',
   explanation='',
   capacity='',
   facility_count='',
@@ -163,11 +165,12 @@ select
   rh.name,
   rh.address,
   sum(rh.rental_home_no) price_sum,
-  count(rh.rental_home_no) member_count
+  count(rh.rental_home_no) member_count,
+  rh.registe_date
 from
   rental_home rh
   left join rental_home_photo rp on rp.photo_no=rh.photo_no
 order by
-  registe_date;
+  rh.registe_date;
 
 --수입 상세 보기
