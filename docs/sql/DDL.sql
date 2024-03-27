@@ -1,4 +1,3 @@
-
 -- 회원
 DROP TABLE IF EXISTS member;
 
@@ -56,9 +55,6 @@ DROP TABLE IF EXISTS region;
 -- 등급
 DROP TABLE IF EXISTS grade;
 
--- 등급 카테고리
-DROP TABLE IF EXISTS grade_category;
-
 -- 숙소_테마
 DROP TABLE IF EXISTS rental_home_theme;
 
@@ -101,24 +97,28 @@ DROP TABLE IF EXISTS head;
 -- 게시글 추천수
 DROP TABLE IF EXISTS board_like;
 
+-- 게시글 공개범위
+DROP TABLE IF EXISTS board_scope;
+
 -- 회원
 CREATE TABLE member (
-    member_no INT NOT NULL,
-    nation_no INT NULL,
-    email VARCHAR(30) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    name VARCHAR(20) NOT NULL,
-    nickname VARCHAR(20) NOT NULL,
-    birthday DATE NOT NULL,
-    tel_no VARCHAR(15) NULL,
-    state CHAR(1) DEFAULT '0',
-    address VARCHAR(255) NULL,
-    sex CHAR(1) NULL,
-    join_date DATE DEFAULT (CURRENT_DATE),
-    last_login_date DATE DEFAULT (CURRENT_DATE),
-    exit_date DATE NULL,
-    warning_count INT DEFAULT 0,
-    photo VARCHAR(255) NULL
+	member_no INT NOT NULL,
+	nation_no INT NULL,
+	email VARCHAR(30) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	name VARCHAR(20) NOT NULL,
+	nickname VARCHAR(20) NOT NULL,
+	birthday DATE NOT NULL,
+	tel_no VARCHAR(15) NULL,
+	grade_no INT DEFAULT '1',
+	state CHAR(1) DEFAULT '0',
+	address VARCHAR(255) NULL,
+	sex CHAR(1) NULL,
+	join_date DATE DEFAULT (current_date),
+	last_login_date DATE DEFAULT (current_date),
+	exit_date DATE NULL,
+	warning_count INT DEFAULT '0',
+	photo VARCHAR(255) NULL
 );
 
 -- 회원
@@ -141,7 +141,7 @@ ALTER TABLE member
 -- 게시글 카테고리
 CREATE TABLE board_category (
 	board_category_no INT NOT NULL,
-	board_category char(5) NOT NULL
+	board_category char(10) NOT NULL
 );
 
 -- 게시글 카테고리
@@ -189,10 +189,12 @@ CREATE TABLE board (
 	head_no INT NOT NULL,
 	title VARCHAR(30) NOT NULL,
 	content text NULL,
-	like_count INT DEFAULT 0,
-	created_date DATE DEFAULT (CURRENT_DATE),
-	view_count INT DEFAULT 0,
-	state CHAR(1) DEFAULT '0'
+	like_count INT DEFAULT '0',
+	created_date DATE DEFAULT (current_date),
+	view_count INT DEFAULT '0',
+	state CHAR(1) DEFAULT '0',
+	scope_no INT NULL,
+	region_no INT NULL
 );
 
 -- 게시글
@@ -210,7 +212,7 @@ CREATE TABLE point_history (
 	member_no INT NOT NULL,
 	save_content VARCHAR(30) NOT NULL,
 	save_point INT NOT NULL,
-	save_date DATE DEFAULT (CURRENT_DATE)
+	save_date DATE DEFAULT (current_date)
 );
 
 -- 유저-선호사항
@@ -258,7 +260,7 @@ CREATE TABLE question (
 	title VARCHAR(30) NOT NULL,
 	content text NULL,
 	state char(1) NOT NULL,
-	register_date DATE DEFAULT (CURRENT_DATE)
+	register_date DATE DEFAULT (current_date)
 );
 
 -- 문의내역
@@ -276,7 +278,7 @@ CREATE TABLE notify_history (
 	notify_no INT NOT NULL,
 	member_no INT NOT NULL,
 	content VARCHAR(255) NOT NULL,
-	notify_date DATE DEFAULT (CURRENT_DATE),
+	notify_date DATE DEFAULT (current_date),
 	state char(1) DEFAULT '0'
 );
 
@@ -296,7 +298,7 @@ CREATE TABLE comment (
 	board_no INT NOT NULL,
 	member_no INT NOT NULL,
 	content text NOT NULL,
-	created_date DATETIME DEFAULT now(),
+	created_date DATETIME DEFAULT (current_date),
 	state char(1) DEFAULT '0'
 );
 
@@ -316,7 +318,7 @@ CREATE TABLE reply (
 	comment_no INT NOT NULL,
 	member_no INT NOT NULL,
 	content text NOT NULL,
-	created_date DATETIME DEFAULT now(),
+	created_date DATETIME DEFAULT (current_date),
 	state char(1) DEFAULT '0'
 );
 
@@ -336,8 +338,10 @@ CREATE TABLE board_report_detail (
 	member_no INT NOT NULL,
 	report_category_no INT NOT NULL,
 	content text NULL,
-	report_date DATE DEFAULT (CURRENT_DATE),
-	state char(1) DEFAULT '0'
+	report_date DATE DEFAULT (current_date),
+	state char(1) DEFAULT '0',
+	report_target_no INT NOT NULL,
+	report_target_type CHAR(1) NOT NULL
 );
 
 -- 게시판 신고 상세
@@ -352,27 +356,16 @@ ALTER TABLE board_report_detail
 
 -- 게시판 신고 파일
 CREATE TABLE board_report_file (
-	report_file_no INT NOT NULL,
 	report_no INT NOT NULL,
 	ori_file_name VARCHAR(255) NOT NULL,
 	uuid_file_name VARCHAR(255) NOT NULL
 );
-
--- 게시판 신고 파일
-ALTER TABLE board_report_file
-	ADD CONSTRAINT PK_board_report_file -- 게시판 신고 파일 기본키
-	PRIMARY KEY (
-	report_file_no -- 신고파일번호
-	);
 
 -- 게시판 신고 파일 유니크 인덱스
 CREATE UNIQUE INDEX UIX_board_report_file
 	ON board_report_file ( -- 게시판 신고 파일
 				uuid_file_name ASC -- 파일명(uuid)
 	);
-
-ALTER TABLE board_report_file
-	MODIFY COLUMN report_file_no INT NOT NULL AUTO_INCREMENT;
 
 -- 즐겨찾기
 CREATE TABLE bookmark (
@@ -395,7 +388,9 @@ CREATE TABLE rental_home (
 	state CHAR(1) NOT NULL,
 	hosting_start_date DATE NOT NULL,
 	hosting_end_date DATE NOT NULL,
-	register_date DATE DEFAULT (CURRENT_DATE)
+	registe_date DATE DEFAULT (current_date),
+	rental_home_rule TEXT NULL,
+	clean_fee INT NOT NULL
 );
 
 -- 숙소
@@ -426,15 +421,15 @@ ALTER TABLE rental_home_report
 
 -- 숙소신고유형
 CREATE TABLE rental_home_report_category (
-	COL INT NOT NULL,
-	COL2 VARCHAR(10) NOT NULL
+	rental_home_report_no INT NOT NULL,
+	rental_home_report_name VARCHAR(30) NOT NULL
 );
 
 -- 숙소신고유형
 ALTER TABLE rental_home_report_category
 	ADD CONSTRAINT PK_rental_home_report_category -- 숙소신고유형 기본키
 	PRIMARY KEY (
-	COL -- 신고유형번호
+	rental_home_report_no -- 신고유형번호
 	);
 
 -- 지역
@@ -459,34 +454,20 @@ CREATE UNIQUE INDEX UIX_region
 
 -- 등급
 CREATE TABLE grade (
-	grade_category_no INT NOT NULL,
-	member_no INT NOT NULL
+	grade_no INT NOT NULL,
+	grade_name VARCHAR(5) NOT NULL
 );
 
 -- 등급
 ALTER TABLE grade
 	ADD CONSTRAINT PK_grade -- 등급 기본키
 	PRIMARY KEY (
-	grade_category_no, -- 등급카테고리번호
-	member_no          -- 회원번호
+	grade_no -- 등급카테고리번호
 	);
 
--- 등급 카테고리
-CREATE TABLE grade_category (
-	grade_category_no INT NOT NULL,
-	grade_name VARCHAR(5) NOT NULL
-);
-
--- 등급 카테고리
-ALTER TABLE grade_category
-	ADD CONSTRAINT PK_grade_category -- 등급 카테고리 기본키
-	PRIMARY KEY (
-	grade_category_no -- 등급카테고리번호
-	);
-
--- 등급 카테고리 유니크 인덱스
-CREATE UNIQUE INDEX UIX_grade_category
-	ON grade_category ( -- 등급 카테고리
+-- 등급 유니크 인덱스
+CREATE UNIQUE INDEX UIX_grade
+	ON grade ( -- 등급
 				grade_name ASC -- 등급명
 	);
 
@@ -520,7 +501,7 @@ ALTER TABLE theme
 -- 숙소리뷰
 CREATE TABLE rental_home_review (
 	reservation_no INT NOT NULL,
-	created_date DATE DEFAULT (CURRENT_DATE),
+	created_date DATE DEFAULT (current_date),
 	score INT NOT NULL,
 	review VARCHAR(255) NOT NULL,
 	state CHAR(1) DEFAULT '0'
@@ -537,7 +518,7 @@ ALTER TABLE rental_home_review
 CREATE TABLE payment (
 	reservation_no INT NOT NULL,
 	payment_no VARCHAR(255) NOT NULL,
-	payment_date DATETIME DEFAULT now(),
+	payment_date DATETIME DEFAULT (current_date),
 	amount INT NOT NULL,
 	card_no VARCHAR(20) NOT NULL,
 	validity_date DATE NOT NULL,
@@ -562,11 +543,11 @@ CREATE TABLE reservation (
 	reservation_no INT NOT NULL,
 	member_no INT NOT NULL,
 	rental_home_no INT NOT NULL,
-	start_date DATE NOT NULL,
-	end_date DATE NOT NULL,
-	payment_date DATE DEFAULT (CURRENT_DATE),
+	start_date DATETIME NOT NULL,
+	end_date DATETIME NOT NULL,
 	state CHAR(1) DEFAULT '0',
-	chat_file_name VARCHAR(255) NOT NULL
+	chat_file_name VARCHAR(255) NOT NULL,
+	number_of_people INT DEFAULT '1'
 );
 
 -- 예약내역
@@ -592,11 +573,6 @@ ALTER TABLE rental_home_detail
 	PRIMARY KEY (
 	rental_home_no, -- 숙소번호
 	facility_no     -- 숙소시설번호
-	);
-
--- 숙소 상세 유니크 인덱스
-CREATE UNIQUE INDEX UIX_rental_home_detail
-	ON rental_home_detail ( -- 숙소 상세
 	);
 
 -- 게시판 신고유형
@@ -643,7 +619,8 @@ CREATE TABLE rental_home_photo (
 	ori_photo_name VARCHAR(255) NOT NULL,
 	uuid_photo_name VARCHAR(255) NOT NULL,
 	photo_explanation VARCHAR(20) NOT NULL,
-	rental_home_no INT NOT NULL
+	rental_home_no INT NOT NULL,
+	photo_order INT DEFAULT '0'
 );
 
 -- 숙소 사진
@@ -666,7 +643,7 @@ ALTER TABLE rental_home_photo
 CREATE TABLE qna (
 	question_no INT NOT NULL,
 	content text NULL,
-	created_date DATE DEFAULT (CURRENT_DATE)
+	created_date DATE DEFAULT (current_date)
 );
 
 -- 문의 답변
@@ -730,6 +707,28 @@ ALTER TABLE board_like
 	member_no  -- 회원번호
 	);
 
+-- 게시글 공개범위
+CREATE TABLE board_scope (
+	scope_no INT NOT NULL,
+	scope_name char(10) NOT NULL
+);
+
+-- 게시글 공개범위
+ALTER TABLE board_scope
+	ADD CONSTRAINT PK_board_scope -- 게시글 공개범위 기본키
+	PRIMARY KEY (
+	scope_no -- 게시글 공개범위번호
+	);
+
+-- 게시글 공개범위 유니크 인덱스
+CREATE UNIQUE INDEX UIX_board_scope
+	ON board_scope ( -- 게시글 공개범위
+				scope_name ASC -- 게시글 공개 범위명
+	);
+
+ALTER TABLE board_scope
+	MODIFY COLUMN scope_no INT NOT NULL AUTO_INCREMENT;
+
 -- 회원
 ALTER TABLE member
 	ADD CONSTRAINT FK_nation_TO_member -- 국가 -> 회원
@@ -738,6 +737,16 @@ ALTER TABLE member
 	)
 	REFERENCES nation ( -- 국가
 	nation_no -- 국가번호
+	);
+
+-- 회원
+ALTER TABLE member
+	ADD CONSTRAINT FK_grade_TO_member -- 등급 -> 회원
+	FOREIGN KEY (
+	grade_no -- 등급카테고리번호
+	)
+	REFERENCES grade ( -- 등급
+	grade_no -- 등급카테고리번호
 	);
 
 -- 게시글첨부파일
@@ -778,6 +787,26 @@ ALTER TABLE board
 	)
 	REFERENCES head ( -- 말머리
 	head_no -- 말머리 번호
+	);
+
+-- 게시글
+ALTER TABLE board
+	ADD CONSTRAINT FK_board_scope_TO_board -- 게시글 공개범위 -> 게시글
+	FOREIGN KEY (
+	scope_no -- 게시글 공개범위번호
+	)
+	REFERENCES board_scope ( -- 게시글 공개범위
+	scope_no -- 게시글 공개범위번호
+	);
+
+-- 게시글
+ALTER TABLE board
+	ADD CONSTRAINT FK_region_TO_board -- 지역 -> 게시글
+	FOREIGN KEY (
+	region_no -- 지역번호
+	)
+	REFERENCES region ( -- 지역
+	region_no -- 지역번호
 	);
 
 -- 포인트내역
@@ -882,16 +911,6 @@ ALTER TABLE reply
 
 -- 게시판 신고 상세
 ALTER TABLE board_report_detail
-	ADD CONSTRAINT FK_TABLE10_TO_board_report_detail -- 커뮤니티_신고 -> 게시판 신고 상세
-	FOREIGN KEY (
-	report_no -- 신고번호
-	)
-	REFERENCES TABLE10 ( -- 커뮤니티_신고
-	COL -- 신고번호
-	);
-
--- 게시판 신고 상세
-ALTER TABLE board_report_detail
 	ADD CONSTRAINT FK_board_report_category_TO_board_report_detail -- 게시판 신고유형 -> 게시판 신고 상세
 	FOREIGN KEY (
 	report_category_no -- 신고유형번호
@@ -987,7 +1006,7 @@ ALTER TABLE rental_home_report
 	report_category_no -- 신고유형번호
 	)
 	REFERENCES rental_home_report_category ( -- 숙소신고유형
-	COL -- 신고유형번호
+	rental_home_report_no -- 신고유형번호
 	);
 
 -- 지역
@@ -998,26 +1017,6 @@ ALTER TABLE region
 	)
 	REFERENCES nation ( -- 국가
 	nation_no -- 국가번호
-	);
-
--- 등급
-ALTER TABLE grade
-	ADD CONSTRAINT FK_grade_category_TO_grade -- 등급 카테고리 -> 등급
-	FOREIGN KEY (
-	grade_category_no -- 등급카테고리번호
-	)
-	REFERENCES grade_category ( -- 등급 카테고리
-	grade_category_no -- 등급카테고리번호
-	);
-
--- 등급
-ALTER TABLE grade
-	ADD CONSTRAINT FK_member_TO_grade -- 회원 -> 등급
-	FOREIGN KEY (
-	member_no -- 회원번호
-	)
-	REFERENCES member ( -- 회원
-	member_no -- 회원번호
 	);
 
 -- 숙소_테마
