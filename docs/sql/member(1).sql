@@ -1,14 +1,31 @@
--- 예약 내역   reservation
-insert into reservation(member_no,rental_home_no,start_date,end_date,payment_date,chat_file_name,ppl_no)
-values(1,1,'2024-03-21','2024-04-21','2024-02-10','채팅1','6');
-insert into reservation(member_no,rental_home_no,start_date,end_date,payment_date,chat_file_name,ppl_no)
-values(2,2,'2023-02-20','2023-03-20','2023-01-9','채팅2','4');
-insert into reservation(member_no,rental_home_no,start_date,end_date,payment_date,chat_file_name,ppl_no)
-values(3,3,'2022-01-19','2022-02-19','2022-12-8',Null,'3');
-insert into reservation(member_no,rental_home_no,start_date,end_date,payment_date,chat_file_name,ppl_no)
-values(4,4,'2021-12-18','2021-12-18','2021-11-7','채팅4','2');
-insert into reservation(member_no,rental_home_no,start_date,end_date,payment_date,chat_file_name,ppl_no)
-values(5,5,'2020-11-17','2020-11-17','2020-10-6',Null,'1');
+-- 예약 내역   reservation  - 예약 시 기본 상태: 0 / 취소 : 1
+insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
+values(1,1,'2024-03-21','2024-04-21','채팅1','6');
+insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
+values(2,2,'2023-02-20','2023-03-20','채팅2','4');
+insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
+values(3,3,'2022-01-19','2022-02-19','채팅3','3');
+insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
+values(4,4,'2021-12-18','2021-12-18','채팅4','2');
+insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
+values(5,5,'2020-11-17','2020-11-17','채팅5','1');
+
+-- 예약하기
+SELECT
+    rh.name,
+    r.number_of_people,
+    r.start_date,
+    r.end_date,
+    rh.price,
+    m.name,
+    m.email,
+    m.country,
+    m.phone_number
+FROM
+    reservation r
+JOIN
+    member m ON r.member_no = m.member_no
+JOIN rental_home rh ON r.rental_home_no = rh.rental_home_no;
 
 -- 예약내역 조회(숙소 조인)
 select
@@ -28,40 +45,32 @@ order by
   r.reservation_no;
 
 
-
 -- 예약 변경
 UPDATE
   reservation
 SET
   start_date = '2024-04-01',
   end_date = '2024-05-01',
-  ppl_no = 3
+  number_of_people = 3
 WHERE
   reservation_no = 1;
 
 
 -- 사용자 예약 취소(상태 변경)
-
-  -- 예약 취소
   UPDATE
     reservation
   SET
-    state = '0'
+    state = '1'
   WHERE
-    reservation_no = 1
-   AND
-    member_no = 1;
+    member_no = 2;
 
   -- 결제 취소
   UPDATE
     payment
   SET
-    state = '0'
+    state = '1'
   WHERE
-    reservation_no = 1
-  AND
-    member_no = 1;
-
+    reservation_no = 1;
 
 
 -- 예약 취소(관리자 일괄 삭제) (보류)
@@ -73,7 +82,7 @@ WHERE
     start_date <= '2024-03-26';
 
 
--- 선호사항  preference
+-- 유저 선호사항 member_preference
 insert into member_preference(member_no,theme_no) values(1,1);
 insert into member_preference(member_no,theme_no) values(2,2);
 insert into member_preference(member_no,theme_no) values(3,3);
@@ -85,7 +94,7 @@ select
   member_no,
   theme_no
  from
-  preference;
+  member_preference
  where
    member_no = 5;
 
@@ -103,15 +112,19 @@ insert into bookmark(rental_home_no,member_no) values(4,4);
 insert into bookmark(rental_home_no,member_no) values(5,5);
 
 -- 즐겨찾기 조회
-select
- rh.rental_home_no,
- count(b.rental_home_no) as recommendation_count
-from
- rental_home rh
-where
- b.member_no = 1
-group by
-  rh.rental_home_no;
+SELECT
+    rh.name,
+    rh.address,
+    rh.price
+    COUNT(b.rental_home_no) AS bookmark_count,
+FROM
+    rental_home rh
+LEFT JOIN
+    bookmark b ON rh.rental_home_no = b.rental_home_no
+GROUP BY
+    rh.rental_home_no;
+
+
 
 -- 즐겨찾기 취소
 Delete from
@@ -178,10 +191,10 @@ values('5','답변드립니다.','2020-12-28');
 -- 답변 조회
 SELECT
   q.question_no,
-  q.content as question_content,
-  q.register_date AS question_register_date,
-  a.content AS qna_content,
-  a.created_date AS qna_created_date
+  q.content,
+  q.register_date,,
+  a.content,
+  a.created_date
 FROM
   question q
 LEFT JOIN  -- 작성한 문의에 대한 답변이 없는 경우에는 해당 문의의 답변 내용은 NULL
@@ -190,19 +203,19 @@ WHERE
   q.member_no = 1;
 
 
--- 알림 내역  notify_history
+-- 알림 내역  notify_history - 0: 안읽음 / 1: 읽음
 insert into notify_history(member_no,content,notify_date,state)
-values(1,'작성하신 게시글에 새 댓글이 달렸습니다.','2024-10-20','N');
+values(1,'작성하신 게시글에 새 댓글이 달렸습니다.','2024-10-20','0');
 insert into notify_history(member_no,content,notify_date,state)
-values(2,'작성하신 댓글에 새 답글이 달렸습니다.','2024-02-25','N');
+values(2,'작성하신 댓글에 새 답글이 달렸습니다.','2024-02-25','0');
 insert into notify_history(member_no,content,notify_date,state)
-values(3,'호스트로부터 채팅이 왔습니다.','2022-03-08','Y');
+values(3,'호스트로부터 채팅이 왔습니다.','2022-03-08','1');
 insert into notify_history(member_no,content,notify_date,state)
-values(4,'리뷰 작성으로 500 포인트가 발급되었습니다.','2024-10-20','N');
+values(4,'리뷰 작성으로 500 포인트가 발급되었습니다.','2024-10-20','1');
 insert into notify_history(member_no,content,notify_date,state)
-values(5,'리뷰 작성으로 500 포인트가 발급되었습니다.','2023-11-05','Y');
+values(5,'리뷰 작성으로 500 포인트가 발급되었습니다.','2023-11-05','1');
 
--- 알림 조회
+-- 회원 별 알림 조회
 select
   member_no,
   content,
@@ -212,38 +225,40 @@ from
   notify_history
 where
   member_no = 1
- and notify_no = 1
+ and
+  notify_no = 1
 order by
   notify_date;
 
 
--- 알림 상태 업데이트(확인 시 N -> Y로 변경됨)
+-- 알림 상태 업데이트(확인 시 0 -> 1로 변경됨)
 UPDATE notify_history
-SET state = 'Y'
+SET state = '1'
 WHERE member_no = '1'
 AND notify_no = '1';
 
 
--- 결제 payment
-insert into payment(reservation_no,payment_date,amount,card_no,validity_date)
-values('1','2024-01-01','150000','1234-5678-0000-0000','2024-08-01');
-insert into payment(reservation_no,payment_date,amount,card_no,validity_date)
-values('2','2024-02-02','200000','1234-5678-0000-0001','2026-07-01');
-insert into payment(reservation_no,payment_date,amount,card_no,validity_date)
-values('3','2024-03-03','370000','1234-5678-0000-0002','2028-06-01');
-insert into payment(reservation_no,payment_date,amount,card_no,validity_date)
-values('4','2024-04-04','460000','1234-5678-0000-0003','2030-05-01');
-insert into payment(reservation_no,payment_date,amount,card_no,validity_date)
-values('5','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
+-- 결제 payment - 상태 결제 시 기본: 0 / 취소 시: 1
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
+values('1','100','2024-01-01','150000','1234-5678-0000-0000','2024-08-01');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
+values('2','101','2024-02-02','200000','1234-5678-0000-0001','2026-07-01');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
+values('3','102','2024-03-03','370000','1234-5678-0000-0002','2028-06-01');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
+values('4','103','2024-04-04','460000','1234-5678-0000-0003','2030-05-01');
+insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
+values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
+
 
 -- 결제 내역 조회
  SELECT
      r.start_date,
-     r.end_date
-     rh.price AS weekly_price,
+     r.end_date,
+     rh.price,
      rh.clean_fee,
      p.tax,
-     p.amount AS total_amount,
+     p.amount,
      ph.save_point,
     -- c.coupon,
  FROM
