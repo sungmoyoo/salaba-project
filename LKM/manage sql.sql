@@ -1,7 +1,20 @@
 -- 숙소 신고 내역 목록
-select content, state, report_date from rental_home_report order by report_date desc
+select
+  t1.rental_home_no,
+  t1.content,
+  t1.state,
+  t1.report_date,
+  t2.rental_home_report_name
+from 
+  rental_home_report t1,
+  rental_home_report_category t2
+where
+  t1.report_category_no = t2.rental_home_report_no
+order by
+  t1.report_date
 
--- 숙소 신고 내용 보기
+
+-- 숙소 신고 내용 보기 -- UI 추가 해야함
 select 
   t1.rental_home_no,
   t1.member_no,
@@ -35,9 +48,12 @@ select
   report_no,
   content,
   state,
-  report_date
+  report_date,
+  report_target_type
 from
   board_report_detail
+where
+  report_target_type = #{report_target_type}
 order by
   report_date desc
 
@@ -47,15 +63,15 @@ select
   t1.member_no,
   t1.content,
   t1.report_date,
+  t1.report_target_no,
   t1.state,
-  t2.report_file_no,
   t2.uuid_file_name,
-  t2.ori.file_name,
+  t2.ori_file_name,
   t3.report_type
 from
   board_report_detail t1,
   board_report_file t2,
-  board_report_category
+  board_report_category t3
 where
   t1.report_no = #{report_no} and
   t1.report_no = t2.report_no and
@@ -78,7 +94,7 @@ where
   member_no = #{member_no}
 
 
--- 문의 내역
+-- 문의 내역 목록 조회
 select
   question_no,
   title,
@@ -102,7 +118,7 @@ from
   member t3
 where
   ( t1.member_no = #{member_no} and t3.member_no = #{member_no} ) and
-  ( t1.report_no = #{report_no} and t2.report_no = #{report_no} )
+  ( t1.question_no = #{question_no} and t2.question_no = #{question_no} )
 
 -- 문의 답변
 insert into qna(question_no,content) values(#{question_no},#{content})
@@ -125,32 +141,24 @@ select
   join_date,
   state
 from
-  member_no
+  member
 
 -- 회원 상세 정보
 select
-  t1.member_no
+  t1.member_no,
   t1.name,
   t1.email,
   t1.tel_no,
   t1.join_date,
-  t3.grade_name,
+  t2.grade_name,
   t1.state,
   t1.warning_count
 from
   member t1,
-  grade_category t3
+  grade t2
 where
   t1.member_no = #{member_no} and
-  ( t3.grade_category_no in 
-    (select 
-      grade_category_no
-    from
-      grade
-    where 
-      member_no = #{member_no}
-    )
-  )
+  t2.grade_no = t1.grade_no
 
 -- 회원 경고 처리
 update
@@ -177,51 +185,55 @@ select
   t1.email,
   t1.tel_no,
   t1.join_date,
-  t2.count(t2.rental_home_no) regist_count
+  count(t2.rental_home_no) regist_count
 from
   member t1,
   rental_home t2
 where
+  t1.member_no = #{member_no} and
   t1.member_no = t2.member_no
 
--- 등록 숙소 정보
+-- 호스트 목록 상세보기
 select
   t1.member_no,
   t1.name,
   t1.email,
+  t2.hosting_start_date,
+  t2.hosting_end_date,
   t2.rental_home_no,
   t2.address,
-  ( 
-    select 
-      t3.facility_name
-    from
-      rental_home_facility t3,
-      rental_home_detail t4
-    where 
-      t4.rental_home_no = t2.rental_home_no and
-      t3.facility_no = t4.facility_no
-  )
+  t3.facility_name
 from
   member t1,
-  rental_home t2
-  rental_home_facility t3
+  rental_home t2,
+  rental_home_facility t3,
+  rental_home_detail t4
 where
-  ( t1.member_no = #{member_no} and t2.member_no = #{member_no} )
+  t1.member_no = #{member_no} and 
+  t2.member_no = t1.member_no and
+  t3.facility_no in( 100 , 101 , 102 , 103 ) and
+  t3.facility_no = t4.facility_no and
+  t2.rental_home_no = t4.rental_home_no
 order by
   t2.rental_home_no
-
+  
 
 -- 숙소 등록 심사
 select
   t1.rental_home_no,
-  t1.name,
+  t1.name home_name,
   t1.registe_date,
-  t2.member_no
-  t2.name,
-  t1.state
+  t1.state,
+  t2.name user_name
 from
-  rental_home t1
+  rental_home t1,
   member t2
+where
+  t1.member_no = t2.member_no
+order by
+  t1.registe_date desc,
+  t1.rental_home_no desc
+
 
 
 -- 숙소 등록 심사 상세
@@ -231,7 +243,7 @@ select
   t1.name,
   t1.price,
   t1.lat,
-  t1.lno,
+  t1.lon,
   t1.capacity,
   t1.explanation,
   t1.address,
@@ -249,18 +261,18 @@ from
   member t2,
   rental_home_photo t3,
   rental_home_detail t4,
-  rental_home_facility t5
+  rental_home_facility t5,
   rental_home_theme t6,
   theme t7
 where
-  t1.rental_home_no = #{rental_home_no} and 
+  t1.rental_home_no = 1 and 
   ( t1.member_no = t2.member_no and
   t1.rental_home_no = t3.rental_home_no and
-  t1.rental_home_no = t4.rental_home_detail and
+  t1.rental_home_no = t4.rental_home_no and
   t4.facility_no = t5.facility_no and
   t1.rental_home_no = t6.rental_home_no and
   t6.theme_no = t7.theme_no )
-
+  
 -- 숙소 등록 심사 상태 변경
 update
   rental_home

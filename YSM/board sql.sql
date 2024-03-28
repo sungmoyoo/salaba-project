@@ -85,8 +85,8 @@ select
   where 
     bl.board_no = b.board_no) like_count,
   c.content comment_content,
-  r.content reply_comment,
   c.created_date comment_date,
+  r.content reply_comment,
   r.created_date reply_date,
   mc.name comment_writer,
   mr.name reply_writer
@@ -100,7 +100,7 @@ from
   left join member mc on c.member_no = mc.member_no
   left join member mr on r.member_no = mr.member_no
 where
-  b.board_no = 2
+  b.board_no = 3
 order by
   c.created_date,
   r.created_date;
