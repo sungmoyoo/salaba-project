@@ -173,20 +173,20 @@ insert into question_file(question_no,ori_file_name,uuid_file_name)
 values(5,'file5','argx-rhss-eq3e-a346');
 
 
--- 관리자 입장 전체 문의 조회(1:1 문의내역)
+-- 1:1 문의내역
 SELECT
-    q.question_no,
-    q.member_no,
-    q.title,
-    q.content,
-    q.register_date,
-    qf.ori_file_name,
-    qf.uuid_file_name
+  q.question_no,
+  q.title,
+  q.register_date,
+  a.state
 FROM
-    question q
-LEFT JOIN -- 첨부파일 없이 내용만 작성한 경우 NULL 값 들어감.
-    question_file f
- ON q.question_no = qf.question_no;
+  question q
+LEFT JOIN answer a ON q.question_no = a.question_no
+WHERE
+  q.member_no = 1
+ORDER BY
+  q.register_date;
+
 
 
 -- 문의 답변 qna
@@ -205,7 +205,7 @@ values('5','답변드립니다.','2020-12-28');
 SELECT
   q.question_no,
   q.content,
-  q.register_date,,
+  q.register_date,
   a.content,
   a.created_date
 FROM
