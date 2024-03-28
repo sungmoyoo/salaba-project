@@ -24,7 +24,6 @@ values(3,'이름3','닉네임3','2000-01-01','user3@test.com',sha2('1111',256));
 
 --개인정보 조회
 select
-  m.member_no,
   n.nation_name,
   m.name,
   m.nickname,
@@ -36,7 +35,7 @@ select
   m.photo
 from
   member m
-  left join nation n on m.nation_no=n.nation_no
+  inner join nation n on m.nation_no=n.nation_no
 where m.member_no='3';
 
 --개인정보 수정
@@ -56,7 +55,21 @@ where
   member_no='3';
 
 --개인정보 삭제
-delete from member where member_no='3';
+update
+  member
+set
+  state='',
+  exit_date=''
+where
+  member_no='';
+
+--로그인
+select
+  password
+from
+  member
+where
+  email='';
 
 --이메일 찾기
 select
@@ -85,7 +98,7 @@ where
   member_no;
 
 ----------------------------------------------------------------------
---테스트 포인트내역 데이터
+--샘플 포인트내역 데이터
 insert into point_history(member_no,save_content,save_point,save_date)
 values(1,'aa','500','2020-01-01');
 insert into point_history(member_no,save_content,save_point,save_date)
@@ -112,8 +125,7 @@ order by
 select
   name,
   capacity,
-  lat,
-  lon,
+  address,
   price,
   state,
   hosting_start_date,
@@ -124,6 +136,18 @@ order by
   state;
 
 --숙소 관리 상세 조회
+  -- 사진 조회
+select
+  uuid_photo_name,
+  photo_explanation,
+  order
+from
+  rental_home_photo
+where
+  rental_home_no=''
+order by
+  order;
+
 select
   rp.ori_photo_name,
   rp.photo_explanation,
@@ -137,8 +161,8 @@ select
   rf.facility_name
 from
   rental_home rh
-  left join rental_home_photo rp on rp.photo_no=rh.photo_no
-  left join rental_home_facility rf on rf.facility_no=rh.facility_no
+  inner join rental_home_photo rp on rp.photo_no=rh.photo_no
+  inner join rental_home_facility rf on rf.facility_no=rh.facility_no
 where
   rental_home_no='1';
 
@@ -172,5 +196,3 @@ from
   left join rental_home_photo rp on rp.photo_no=rh.photo_no
 order by
   rh.registe_date;
-
---수입 상세 보기
