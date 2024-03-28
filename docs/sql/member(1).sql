@@ -17,7 +17,7 @@ SELECT
     r.start_date,
     r.end_date,
     rh.price,
-    m.name,
+ -- 영문 성 / 이름 입력받기
     m.email,
     m.country,
     m.phone_number
