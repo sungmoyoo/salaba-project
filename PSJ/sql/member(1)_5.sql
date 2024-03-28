@@ -29,16 +29,16 @@ JOIN rental_home rh ON r.rental_home_no = rh.rental_home_no;
 
 -- 예약내역 조회(숙소 조인)
 select
-  rh.name as rental_home_name,
+  rh.name,
   r.reservation_no,
   r.start_date,
   r.end_date,
   r.ppl_no,
-  r.state,
+  r.state
 from
   reservation r
 JOIN
-  rental_home rh ON r.rental_home_no = rh.rental_home_no;
+  rental_home rh ON r.rental_home_no = rh.rental_home_no
 WHERE
   member_no = 2
 order by
@@ -124,19 +124,25 @@ insert into bookmark(rental_home_no,member_no) values(3,3);
 insert into bookmark(rental_home_no,member_no) values(4,4);
 insert into bookmark(rental_home_no,member_no) values(5,5);
 
+
 -- 즐겨찾기 조회
 SELECT
     rh.name,
     rh.address,
-    rh.price
-    COUNT(b.rental_home_no) AS bookmark_count,
+    rh.price,
+COUNT(rl.rental_home_no) -- 추천수 count
 FROM
-    rental_home rh
+    bookmark b
+INNER JOIN
+    rental_home rh ON b.rental_home_no = rh.rental_home_no
 LEFT JOIN
-    bookmark b ON rh.rental_home_no = b.rental_home_no
+    rental_home_like rl ON rl.rental_home_no = rh.rental_home_no
+LEFT JOIN
+    bookmark b ON rl.rental_home_like = b.rental_home_like
+WHERE
+    b.member_no = 1
 GROUP BY
-    rh.rental_home_no;
-
+    rh.rental_home_no, rh.address, rh.price;
 
 
 -- 즐겨찾기 취소
@@ -150,9 +156,9 @@ and
 
 -- 문의 내역 question
 insert into question(member_no,title,content,register_date)
-values(1,'문의합니다','문의내용...','2024-08-24')
+values(1,'문의합니다','문의내용','2024-08-24')
 insert into question(member_no,title,content,register_date)
-values(2,'문의합니다','문의내용...','2024-03-06');
+values(2,'문의합니다','문의내용','2024-03-06');
 insert into question(member_no,title,content,register_date)
 values(3,'문의합니다',NULL,'2023-02-09');
 insert into question(member_no,title,content,register_date)
@@ -211,7 +217,7 @@ SELECT
 FROM
   question q
 LEFT JOIN  -- 작성한 문의에 대한 답변이 없는 경우에는 해당 문의의 답변 내용은 NULL
-  qna a ON q.question_no = a.question_no;
+  qna a ON q.question_no = a.question_no
 WHERE
   q.member_no = 1;
 
@@ -239,7 +245,7 @@ from
 where
   member_no = 1
  and
-  notify_no = 1
+  state = 0
 order by
   notify_date;
 
@@ -263,7 +269,8 @@ values('4','103','2024-04-04','460000','1234-5678-0000-0003','2030-05-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
 values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
 
--- 결제하기
+
+-- 결제하기 - form에서 처리
 
 
 -- 결제 내역 조회
@@ -274,8 +281,8 @@ values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
      rh.clean_fee,
      p.tax,
      p.amount,
-     ph.save_point,
-    -- c.coupon,
+     ph.save_point
+    -- ,c.coupon
  FROM
      payment p
  JOIN
