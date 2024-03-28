@@ -10,14 +10,13 @@ values(4,4,'2021-12-18','2021-12-18','채팅4','2');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
 values(5,5,'2020-11-17','2020-11-17','채팅5','1');
 
--- 예약하기
+-- 예약하기 화면 조회 내역
 SELECT
     rh.name,
     r.number_of_people,
     r.start_date,
     r.end_date,
     rh.price,
- -- 영문 성 / 이름 직접 입력받기
     m.email,
     m.country,
     m.phone_number
@@ -263,6 +262,8 @@ insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validi
 values('4','103','2024-04-04','460000','1234-5678-0000-0003','2030-05-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
 values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
+
+-- 결제하기
 
 
 -- 결제 내역 조회
