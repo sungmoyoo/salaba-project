@@ -2,13 +2,13 @@
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
 values(1,1,'2024-03-21','2024-04-21','채팅1','6');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(2,2,'2023-02-20','2023-03-20','채팅2','4');
+values(2,222,'2023-02-20','2023-03-20','채팅2','4');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(3,3,'2022-01-19','2022-02-19','채팅3','3');
+values(3,333,'2022-01-19','2022-02-19','채팅3','3');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(4,4,'2021-12-18','2021-12-18','채팅4','2');
+values(33,444,'2021-12-18','2021-12-18','채팅4','2');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(5,5,'2020-11-17','2020-11-17','채팅5','1');
+values(44,445,'2020-11-17','2020-11-17','채팅5','1');
 
 -- 예약하기 화면 조회 내역
 SELECT
@@ -18,29 +18,34 @@ SELECT
     r.end_date,
     rh.price,
     m.email,
-    m.country,
-    m.phone_number
+    n.nation_name,
+    m.tel_no
 FROM
     reservation r
 JOIN
     member m ON r.member_no = m.member_no
-JOIN rental_home rh ON r.rental_home_no = rh.rental_home_no;
-
+JOIN 
+	rental_home rh ON r.rental_home_no = rh.rental_home_no
+JOIN 
+	nation n ON n.nation_no = m.nation_no
+WHERE 
+	m.member_no = 1
+    and reservation_no = 1;
 
 -- 예약내역 조회(숙소 조인)
 select
-  rh.name as rental_home_name,
+  rh.name,
   r.reservation_no,
   r.start_date,
   r.end_date,
-  r.ppl_no,
-  r.state,
+  r.number_of_people,
+  r.state
 from
   reservation r
 JOIN
-  rental_home rh ON r.rental_home_no = rh.rental_home_no;
+  rental_home rh ON r.rental_home_no = rh.rental_home_no
 WHERE
-  member_no = 2
+  r.member_no = 2
 order by
   r.reservation_no;
 
@@ -56,7 +61,7 @@ WHERE
 
 -- 예약 완료 화면 조회
 SELECT
-    rh.rental_home_name,
+    rh.name,
     rh.price,
     rh.clean_fee,
     r.start_date,
@@ -66,7 +71,9 @@ FROM
 JOIN
     rental_home rh ON r.rental_home_no = rh.rental_home_no
 WHERE
-    r.member_no = 1;
+    r.member_no = 1
+	and 
+    r.reservation_no = 1;
 
 
 -- 사용자 예약 취소(상태 변경)
@@ -109,7 +116,7 @@ select
  from
   member_preference
  where
-   member_no = 5;
+   member_no = 55;
 
 -- 선호사항 업데이트
 UPDATE member_preference
@@ -124,19 +131,23 @@ insert into bookmark(rental_home_no,member_no) values(3,3);
 insert into bookmark(rental_home_no,member_no) values(4,4);
 insert into bookmark(rental_home_no,member_no) values(5,5);
 
+
 -- 즐겨찾기 조회
 SELECT
     rh.name,
     rh.address,
-    rh.price
-    COUNT(b.rental_home_no) AS bookmark_count,
+    rh.price,
+COUNT(rl.rental_home_no) -- 추천수 count
 FROM
-    rental_home rh
+    bookmark b
+INNER JOIN
+    rental_home rh ON b.rental_home_no = rh.rental_home_no
 LEFT JOIN
-    bookmark b ON rh.rental_home_no = b.rental_home_no
+    rental_home_like rl ON rl.rental_home_no = rh.rental_home_no
+WHERE
+    b.member_no = 1
 GROUP BY
-    rh.rental_home_no;
-
+    rh.rental_home_no, rh.address, rh.price;
 
 
 -- 즐겨찾기 취소
@@ -149,16 +160,16 @@ and
 
 
 -- 문의 내역 question
-insert into question(member_no,title,content,register_date)
-values(1,'문의합니다','문의내용...','2024-08-24')
-insert into question(member_no,title,content,register_date)
-values(2,'문의합니다','문의내용...','2024-03-06');
-insert into question(member_no,title,content,register_date)
-values(3,'문의합니다',NULL,'2023-02-09');
-insert into question(member_no,title,content,register_date)
-values(4,'문의합니다',NULL,'2018-01-01');
-insert into question(member_no,title,content,register_date)
-values(5,'문의합니다',NULL,'2016-08-24');
+insert into question(member_no,title,content,state,register_date)
+values(1,'문의합니다','문의내용','1','2024-08-24');
+insert into question(member_no,title,content,state,register_date)
+values(2,'문의합니다','문의내용','0','2024-08-23');
+insert into question(member_no,title,content,state,register_date)
+values(33,'문의합니다',NULL,'0','2023-08-22');
+insert into question(member_no,title,content,state,register_date)
+values(44,'문의합니다',NULL,'1','2018-01-01');
+insert into question(member_no,title,content,state,register_date)
+values(55,'문의합니다',NULL,'1','2016-08-24');
 
 -- 문의 파일  question_file
 insert into question_file(question_no,ori_file_name,uuid_file_name)
@@ -178,10 +189,9 @@ SELECT
   q.question_no,
   q.title,
   q.register_date,
-  a.state
+  q.state
 FROM
   question q
-LEFT JOIN answer a ON q.question_no = a.question_no
 WHERE
   q.member_no = 1
 ORDER BY
@@ -211,9 +221,9 @@ SELECT
 FROM
   question q
 LEFT JOIN  -- 작성한 문의에 대한 답변이 없는 경우에는 해당 문의의 답변 내용은 NULL
-  qna a ON q.question_no = a.question_no;
+  qna a ON q.question_no = a.question_no
 WHERE
-  q.member_no = 1;
+  q.question_no = 1;
 
 
 -- 알림 내역  notify_history - 0: 안읽음 / 1: 읽음
@@ -224,7 +234,7 @@ values(2,'작성하신 댓글에 새 답글이 달렸습니다.','2024-02-25','0
 insert into notify_history(member_no,content,notify_date,state)
 values(3,'호스트로부터 채팅이 왔습니다.','2022-03-08','1');
 insert into notify_history(member_no,content,notify_date,state)
-values(4,'리뷰 작성으로 500 포인트가 발급되었습니다.','2024-10-20','1');
+values(4,'리뷰 작성으로 500 포인트가 발급되었습니다.','2024-10-21','1');
 insert into notify_history(member_no,content,notify_date,state)
 values(5,'리뷰 작성으로 500 포인트가 발급되었습니다.','2023-11-05','1');
 
@@ -239,7 +249,7 @@ from
 where
   member_no = 1
  and
-  notify_no = 1
+  state = 0
 order by
   notify_date;
 
@@ -253,7 +263,7 @@ AND notify_no = '1';
 
 -- 결제 payment - 상태 결제 시 기본: 0 / 취소 시: 1
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
-values('1','100','2024-01-01','150000','1234-5678-0000-0000','2024-08-01');
+values('1','1','2024-01-01','150000','1234-5678-0000-0000','2024-08-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
 values('2','101','2024-02-02','200000','1234-5678-0000-0001','2026-07-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
@@ -261,9 +271,10 @@ values('3','102','2024-03-03','370000','1234-5678-0000-0002','2028-06-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
 values('4','103','2024-04-04','460000','1234-5678-0000-0003','2030-05-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
-values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
+values('9','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
 
--- 결제하기
+
+-- 결제하기 - form에서 처리
 
 
 -- 결제 내역 조회
@@ -272,10 +283,9 @@ values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
      r.end_date,
      rh.price,
      rh.clean_fee,
-     p.tax,
      p.amount,
-     ph.save_point,
-    -- c.coupon,
+     ph.save_point
+    -- ,c.coupon
  FROM
      payment p
  JOIN
@@ -283,8 +293,11 @@ values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
  JOIN
      rental_home rh ON r.rental_home_no = rh.rental_home_no
  LEFT JOIN
-     point_history ph ON p.member_no = ph.member_no
+     point_history ph ON r.member_no = ph.member_no
+	
  WHERE
-     p.reservation_no = '3';
+     p.reservation_no = '3'
+     And 
+     ph.save_content='aa';
 
 
