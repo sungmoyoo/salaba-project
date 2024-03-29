@@ -2,13 +2,13 @@
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
 values(1,1,'2024-03-21','2024-04-21','채팅1','6');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(2,2,'2023-02-20','2023-03-20','채팅2','4');
+values(2,222,'2023-02-20','2023-03-20','채팅2','4');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(3,3,'2022-01-19','2022-02-19','채팅3','3');
+values(3,333,'2022-01-19','2022-02-19','채팅3','3');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(4,4,'2021-12-18','2021-12-18','채팅4','2');
+values(33,444,'2021-12-18','2021-12-18','채팅4','2');
 insert into reservation(member_no,rental_home_no,start_date,end_date,chat_file_name,number_of_people)
-values(5,5,'2020-11-17','2020-11-17','채팅5','1');
+values(44,445,'2020-11-17','2020-11-17','채팅5','1');
 
 -- 예약하기 화면 조회 내역
 SELECT
@@ -18,14 +18,19 @@ SELECT
     r.end_date,
     rh.price,
     m.email,
-    m.country,
-    m.phone_number
+    n.nation_name,
+    m.tel_no
 FROM
     reservation r
 JOIN
     member m ON r.member_no = m.member_no
-JOIN rental_home rh ON r.rental_home_no = rh.rental_home_no;
-
+JOIN 
+	rental_home rh ON r.rental_home_no = rh.rental_home_no
+JOIN 
+	nation n ON n.nation_no = m.nation_no
+WHERE 
+	m.member_no = 1
+    and reservation_no = 1;
 
 -- 예약내역 조회(숙소 조인)
 select
@@ -33,14 +38,14 @@ select
   r.reservation_no,
   r.start_date,
   r.end_date,
-  r.ppl_no,
+  r.number_of_people,
   r.state
 from
   reservation r
 JOIN
   rental_home rh ON r.rental_home_no = rh.rental_home_no
 WHERE
-  member_no = 2
+  r.member_no = 2
 order by
   r.reservation_no;
 
@@ -56,7 +61,7 @@ WHERE
 
 -- 예약 완료 화면 조회
 SELECT
-    rh.rental_home_name,
+    rh.name,
     rh.price,
     rh.clean_fee,
     r.start_date,
@@ -66,7 +71,9 @@ FROM
 JOIN
     rental_home rh ON r.rental_home_no = rh.rental_home_no
 WHERE
-    r.member_no = 1;
+    r.member_no = 1
+	and 
+    r.reservation_no = 1;
 
 
 -- 사용자 예약 취소(상태 변경)
@@ -137,8 +144,6 @@ INNER JOIN
     rental_home rh ON b.rental_home_no = rh.rental_home_no
 LEFT JOIN
     rental_home_like rl ON rl.rental_home_no = rh.rental_home_no
-LEFT JOIN
-    bookmark b ON rl.rental_home_like = b.rental_home_like
 WHERE
     b.member_no = 1
 GROUP BY
@@ -156,11 +161,11 @@ and
 
 -- 문의 내역 question
 insert into question(member_no,title,content,register_date)
-values(1,'문의합니다','문의내용','2024-08-24')
+values(1,'문의합니다','문의내용','2024-08-24');
 insert into question(member_no,title,content,register_date)
-values(2,'문의합니다','문의내용','2024-03-06');
+values(2,'문의합니다','문의내용','2024-08-23');
 insert into question(member_no,title,content,register_date)
-values(3,'문의합니다',NULL,'2023-02-09');
+values(3,'문의합니다',NULL,'2023-08-22');
 insert into question(member_no,title,content,register_date)
 values(4,'문의합니다',NULL,'2018-01-01');
 insert into question(member_no,title,content,register_date)
@@ -184,10 +189,9 @@ SELECT
   q.question_no,
   q.title,
   q.register_date,
-  a.state
+  q.state
 FROM
   question q
-LEFT JOIN answer a ON q.question_no = a.question_no
 WHERE
   q.member_no = 1
 ORDER BY
@@ -219,7 +223,7 @@ FROM
 LEFT JOIN  -- 작성한 문의에 대한 답변이 없는 경우에는 해당 문의의 답변 내용은 NULL
   qna a ON q.question_no = a.question_no
 WHERE
-  q.member_no = 1;
+  q.question_no = 1;
 
 
 -- 알림 내역  notify_history - 0: 안읽음 / 1: 읽음
@@ -230,7 +234,7 @@ values(2,'작성하신 댓글에 새 답글이 달렸습니다.','2024-02-25','0
 insert into notify_history(member_no,content,notify_date,state)
 values(3,'호스트로부터 채팅이 왔습니다.','2022-03-08','1');
 insert into notify_history(member_no,content,notify_date,state)
-values(4,'리뷰 작성으로 500 포인트가 발급되었습니다.','2024-10-20','1');
+values(4,'리뷰 작성으로 500 포인트가 발급되었습니다.','2024-10-21','1');
 insert into notify_history(member_no,content,notify_date,state)
 values(5,'리뷰 작성으로 500 포인트가 발급되었습니다.','2023-11-05','1');
 
@@ -279,7 +283,6 @@ values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
      r.end_date,
      rh.price,
      rh.clean_fee,
-     p.tax,
      p.amount,
      ph.save_point
     -- ,c.coupon
@@ -290,8 +293,11 @@ values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
  JOIN
      rental_home rh ON r.rental_home_no = rh.rental_home_no
  LEFT JOIN
-     point_history ph ON p.member_no = ph.member_no
+     point_history ph ON r.member_no = ph.member_no
+	
  WHERE
-     p.reservation_no = '3';
+     p.reservation_no = '3'
+     And 
+     ph.save_content='aa';
 
 
