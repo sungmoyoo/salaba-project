@@ -140,15 +140,15 @@ ALTER TABLE member
 
 -- 게시글 카테고리
 CREATE TABLE board_category (
-	board_category_no INT NOT NULL,
-	board_category char(10) NOT NULL
+	category_no INT NOT NULL,
+	category_name char(10) NOT NULL
 );
 
 -- 게시글 카테고리
 ALTER TABLE board_category
 	ADD CONSTRAINT PK_board_category -- 게시글 카테고리 Primary key
 	PRIMARY KEY (
-	board_category_no -- 게시글카테고리번호
+	category_no -- 게시글카테고리번호
 	);
 
 -- 게시글 카테고리 유니크 인덱스
@@ -185,7 +185,7 @@ ALTER TABLE board_file
 CREATE TABLE board (
 	board_no INT NOT NULL,
 	member_no INT NOT NULL,
-	board_category_no INT NOT NULL,
+	category_no INT NOT NULL,
 	head_no INT NOT NULL,
 	title VARCHAR(30) NOT NULL,
 	content text NULL,
@@ -193,7 +193,7 @@ CREATE TABLE board (
 	created_date DATE DEFAULT (current_date),
 	view_count INT DEFAULT '0',
 	state CHAR(1) DEFAULT '0',
-	scope_no INT NULL,
+	scope_no INT NOT NULL DEFAULT '0',
 	region_no INT NULL
 );
 
@@ -773,10 +773,10 @@ ALTER TABLE board
 ALTER TABLE board
 	ADD CONSTRAINT FK_board_category_TO_board -- 게시글 카테고리 -> 게시글
 	FOREIGN KEY (
-	board_category_no -- 게시글카테고리번호
+	category_no -- 게시글카테고리번호
 	)
 	REFERENCES board_category ( -- 게시글 카테고리
-	board_category_no -- 게시글카테고리번호
+	category_no -- 게시글카테고리번호
 	);
 
 -- 게시글
