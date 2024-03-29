@@ -116,7 +116,7 @@ select
  from
   member_preference
  where
-   member_no = 5;
+   member_no = 55;
 
 -- 선호사항 업데이트
 UPDATE member_preference
@@ -160,16 +160,16 @@ and
 
 
 -- 문의 내역 question
-insert into question(member_no,title,content,register_date)
-values(1,'문의합니다','문의내용','2024-08-24');
-insert into question(member_no,title,content,register_date)
-values(2,'문의합니다','문의내용','2024-08-23');
-insert into question(member_no,title,content,register_date)
-values(3,'문의합니다',NULL,'2023-08-22');
-insert into question(member_no,title,content,register_date)
-values(4,'문의합니다',NULL,'2018-01-01');
-insert into question(member_no,title,content,register_date)
-values(5,'문의합니다',NULL,'2016-08-24');
+insert into question(member_no,title,content,state,register_date)
+values(1,'문의합니다','문의내용','1','2024-08-24');
+insert into question(member_no,title,content,state,register_date)
+values(2,'문의합니다','문의내용','0','2024-08-23');
+insert into question(member_no,title,content,state,register_date)
+values(33,'문의합니다',NULL,'0','2023-08-22');
+insert into question(member_no,title,content,state,register_date)
+values(44,'문의합니다',NULL,'1','2018-01-01');
+insert into question(member_no,title,content,state,register_date)
+values(55,'문의합니다',NULL,'1','2016-08-24');
 
 -- 문의 파일  question_file
 insert into question_file(question_no,ori_file_name,uuid_file_name)
@@ -263,7 +263,7 @@ AND notify_no = '1';
 
 -- 결제 payment - 상태 결제 시 기본: 0 / 취소 시: 1
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
-values('1','100','2024-01-01','150000','1234-5678-0000-0000','2024-08-01');
+values('1','1','2024-01-01','150000','1234-5678-0000-0000','2024-08-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
 values('2','101','2024-02-02','200000','1234-5678-0000-0001','2026-07-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
@@ -271,7 +271,7 @@ values('3','102','2024-03-03','370000','1234-5678-0000-0002','2028-06-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
 values('4','103','2024-04-04','460000','1234-5678-0000-0003','2030-05-01');
 insert into payment(reservation_no,payment_no,payment_date,amount,card_no,validity_date)
-values('5','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
+values('9','104','2024-05-05','290000','1234-5678-0000-0004','2032-04-01');
 
 
 -- 결제하기 - form에서 처리
