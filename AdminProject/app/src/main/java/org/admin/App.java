@@ -3,12 +3,22 @@
  */
 package org.admin;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@SpringBootApplication
+@EnableTransactionManagement
+@PropertySource({
+        "classpath:config/ncp.properties",
+        "classpath:config/ncp-secret.properties"
+})
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        System.out.println("한달살기 관리자 시스템 실행");
+        SpringApplication.run(App.class, args);
     }
 }
