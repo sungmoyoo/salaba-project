@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="salaba.dao.HostReservationDao">
+
+  <resultMap id="HostReservationMap" type="HostReservation">
+    <id column="reservation_no" property="reservationNo"/>
+    <result column="member_no" property="memberNo"/>
+    <result column="rentalHomeName" property="rentalHomeName"/>
+    <result column="memberName" property="memberName"/>
+    <result column="rental_home_no" property="rentalHomeNo"/>
+    <result column="hostNo" property="hostNo"/>
+    <result column="start_date" property="startDate"/>
+    <result column="end_date" property="endDate"/>
+    <result column="state" property="state"/>
+    <result column="payment_date" property="paymentDate"/>
+  </resultMap>
+
+  <select id="findAll" resultMap="HostReservationMap" parameterType="int">
+    select
+      rent.name as rentalHomeName,
+      rent.member_no hostNo,
+      m.name as memberName,
+      rv.reservation_no,
+      rv.member_no,
+      rv.rental_home_no,
+      rv.start_date,
+      rv.end_date,
+      rv.state,
+      p.payment_date
+    from
+      member m
+    inner join
+      reservation rv on m.member_no = rv.member_no
+    inner join
+      rental_home rent on rv.rental_home_no = rent.rental_home_no
+    inner join
+      payment p on rv.reservation_no = p.reservation_no
+    where
+      rent.member_no = #{value}
+    order by
+      rv.start_date asc;
+  </select>
+
+  <update id="update">
+    update reservation
+    set state = #{state}
+    where reservation_no = #{reservationNo};
+  </update>
+
+</mapper>
