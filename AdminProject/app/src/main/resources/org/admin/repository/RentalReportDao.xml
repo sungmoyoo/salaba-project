@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.admin.repository.RentalReportDao">
+    <resultMap id="RentalReportMap" type="RentalReport">
+        <result column="rental_home_no" property="rentalNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="report_category_no" property="category"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="content" property="content"/>
+        <result column="state" property="state"/>
+        <result column="created_date" property="createdDate"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="RentalReportMap">
+        SELECT t1.rental_home_no,
+        t1.member_no,
+        t1.report_category_no,
+        t1.state,
+        t1.created_date,
+        t2.rental_home_report_name as category_name
+        FROM rental_home_report t1
+        INNER JOIN rental_home_report_category t2 on t1.report_category_no = t2.rental_home_report_no
+        ORDER BY
+        t1.created_date desc
+    </select>
+
+    <select id="findBy" resultMap="RentalReportMap">
+        SELECT t1.rental_home_no,
+        t1.member_no,
+        t1.report_category_no,
+        t1.content,
+        t1.state,
+        t1.created_date,
+        t2.rental_home_report_name
+        FROM rental_home_report t1
+        INNER JOIN rental_home_report_category t2 on t1.report_category_no = t2.rental_home_report_no
+        order by
+        t1.created_date
+    </select>
+</mapper>
+

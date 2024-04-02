@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div data-th-replace="header :: header">헤더</div>
+<h3>숙소 신고 내역</h3>
+<table border="1">
+    <thead>
+    <tr>
+        <th>No</th>
+        <th>신고유형</th>
+        <th>처리여부</th>
+        <th>접수일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-each="rentalReport : ${rentalReportList}" data-th-object="${rentalReport}">
+            <td data-th-text="*{rentalNo} + *{memberNo}">1</td>
+            <td data-th-text="*{categoryName}">신고 유형</td>
+            <td data-th-text="*{state}">처리 여부</td>
+            <td data-th-text="*{createdDate}">접수일</td>
+    </tr>
+    </tbody>
+</table>
+<div data-th-replace="footer :: footer">풋터</div>
+
+</body>
+</html>
