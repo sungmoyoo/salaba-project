@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
+import salaba.vo.rental_home.Theme;
 
 @Mapper
 public interface RentalHomeDao {
@@ -13,6 +14,9 @@ public interface RentalHomeDao {
   // 숙소 조회 메인(추천수)
   RentalHome rentalHomeDefaultSelect();
   
+  // 숙소 조회 메인(로그인 유저 선호 사항으로 목록 출력)
+  RentalHome rentalHomeSelectForMember( List<Theme> themes );
+
   // 숙소 테마별 조회
   RentalHome rentalHomeThemeSelect( @Param("theme_name") String themeName);
   
@@ -29,7 +33,10 @@ public interface RentalHomeDao {
   
   // 숙소 리뷰 조회
   List<RentalHomeReview> rentalHomeReviewSelect( @Param("rental_home_no") int rentalHomeNo );
-  
+
+  // 숙소 리뷰 작성
+  void rentalHomeReviewAdd( RentalHomeReview rentalHomeReview );
+
   // 숙소 신고
   void rentalHomeReportAdd( RentalHomeReport rentalHomeReport);
 

@@ -69,6 +69,36 @@
       like_count asc
   </select>
 
+  <!-- 숙소 테마 검색(선호 사항 선택한 유저의 숙소 출력) -->
+  <select id="rentalHomeSelectForMember" resultType="RentalHome" parameterType="String">
+    select
+      rhp.uuid_photo_name,
+      rh.rental_home_no,
+      rhp.photo_no,
+      rhp.photo_order,
+      rh.name,
+      rh.price,
+      count(rhl.rental_home_no) as like_count
+    from
+      rental_home rh
+      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
+      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
+      inner join rental_home_theme rht on rht.rental_home_no = rh.rental_home_no
+    where (rht.theme_no) in (
+      select
+        theme_no
+      from
+        theme
+      where
+        theme_name REGEXP
+        <foreach collection="list" item="item" open="('" close="')" separator="|">
+          #{item.name}
+        </foreach>
+      )
+    order by
+    like_count
+  </select>
+
   <!-- 숙소 테마 검색 -->
   <select id="rentalHomeThemeSelect" resultType="RentalHome" parameterType="String">
     select
@@ -92,6 +122,8 @@
       where
         theme_name like '%#{theme_name}%'
       )
+    order by
+      like_count
   </select>
 
   <!-- 숙소 위치 검색 -->
@@ -211,6 +243,24 @@
     order by
       t2.created_date;
   </select>
+
+  <!-- 숙소 리뷰 작성 -->
+  <insert id="rentalHomeReviewAdd" parameterType="RentalHomeReview">
+    insert into
+      rental_home_review
+      (
+        reservation_no,
+        score,
+        review,
+      )
+    values
+      (
+        #{reservation_no},
+        #{score},
+        #{review}
+      )
+  </insert>
+
 
   <!-- 숙소 신고 -->
   <insert id="rentalHomeReportAdd" parameterType="RentalHomeReport">
