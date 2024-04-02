@@ -3,14 +3,20 @@
  */
 package salaba;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.mybatis.logging.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import salaba.controller.RentalHomeController;
 
 @SpringBootApplication
 @EnableTransactionManagement
 public class App {
     public static void main(String[] args) {
+
         SpringApplication.run(App.class,args);
     }
 }

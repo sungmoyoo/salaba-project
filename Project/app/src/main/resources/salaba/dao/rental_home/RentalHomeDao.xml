@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.rental_home.RentalHomeDao">
+  <resultMap id="RentalHomeDao" type="RentalHome">
+    <id column="rental_home_no" property="rentalHomeNo"/>
+    <result column="name" property="name"/>
+    <result column="price" property="price"/>
+    <result column="explanation" property="explanation"/>
+    <result column="address" property="address"/>
+    <result column="capacity" property="capacity"/>
+    <result column="lat" property="lat"/>
+    <result column="lon" property="lon"/>
+    <result column="hosting_start_date" property="hostingStartDate"/>
+    <result column="hosting_end_date" property="hostingEndDate"/>
+    <result column="registe_date" property="registeDate"/>
+    <result column="clean_fee" property="cleanFee"/>
+    <result column="state" property="state"/>
+    <result column="rental_home_rule" property="rentalHomeRule"/>
+    <result column="like_count" property="rentalHomeLikeCount"/>
+
+    <association property="region" javaType="Region">
+      <id column="region_no" property="regionNo"/>
+      <result column="region_name" property="regionName"/>
+    </association>
+    <collection property="rentalHomePhotos" ofType="RentalHomePhoto">
+      <id column="photo_no" property="photoNo"/>
+      <result column="ori_photo_name" property="oriPhotoName"/>
+      <result column="uuid_photo_name" property="uuidPhotoName"/>
+      <result column="photo_explanation" property="photoExplanation"/>
+      <result column="photo_order" property="photoOrder"/>
+    </collection>
+    <collection property="rentalHomeFacilities" ofType="RentalHomeFacility">
+      <id column="facility_no" property="facilityNo"/>
+      <result column="facility_name" property="facilityName"/>
+      <result column="facility_count" property="facilityCount"/>
+    </collection>
+    <collection property="themes" ofType="Theme">
+      <id column="theme_no" property="themeNo"/>
+      <result column="theme_name" property="themeName"/>
+    </collection>
+    <collection property="rentalHomeReviews" resultMap="rentalHomeReview"/>
+  </resultMap>
+  
+  <resultMap id="rentalHomeReview" type="RentalHomeReview">
+    <id column="reservation_no" property="reservationNo"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="score" property="score"/>
+    <result column="review" property="review"/>
+  </resultMap>
+  
+  <!-- 숙소 목록 검색(추천수) -->
+  <select id="rentalHomeDefaultSelect" resultType="RentalHome">
+    select
+      rhp.uuid_photo_name,
+      rhp.photo_no,
+      rhp.photo_order,
+      rh.rental_home_no,
+      rh.name,
+      rh.price,
+      count(rhl.rental_home_no) as like_count
+    from
+      rental_home rh
+      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
+      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
+    order by
+      like_count asc
+  </select>
+
+  <!-- 숙소 테마 검색 -->
+  <select id="rentalHomeThemeSelect" resultType="RentalHome" parameterType="String">
+    select
+      rhp.uuid_photo_name,
+      rh.rental_home_no,
+      rhp.photo_no,
+      rhp.photo_order,
+      rh.name,
+      rh.price,
+      count(rhl.rental_home_no) as like_count
+    from
+      rental_home rh
+      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
+      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
+      inner join rental_home_theme rht on rht.rental_home_no = rh.rental_home_no
+    where (rht.theme_no) in (
+      select
+        theme_no
+      from
+        theme
+      where
+        theme_name like '%#{theme_name}%'
+      )
+  </select>
+
+  <!-- 숙소 위치 검색 -->
+  <select id="rentalHomeRegionSelect" resultType="RentalHome" parameterType="String">
+    select
+      rhp.uuid_photo_name,
+      rhp.photo_no,
+      rhp.photo_order,
+      rh.rental_home_no,
+      rh.name,
+      rh.price,
+      count(rhl.rental_home_no) as like_count
+    from
+      rental_home rh
+      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
+      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
+      inner join region r on r.region_no = rh.region_no
+    where (r.region_no) in (
+      select
+        region_no
+      from
+        region
+      where
+        region_name like '%#{region_name}%'
+      )
+    order by
+      like_count
+  </select>
+
+  <!-- 숙소 테마&위치 검색 -->
+  <select id="rentalHomeThemeAndRegionSelect" resultType="RentalHome">
+    select
+      rhp.uuid_photo_name,
+      rhp.photo_no,
+      rhp.photo_order,
+      rh.rental_home_no,
+      rh.name,
+      rh.price,
+      count(rhl.rental_home_no) as like_count
+    from
+      rental_home rh
+      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
+      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
+      inner join region r on r.region_no = rh.region_no
+    where (r.region_no) in (
+      select
+        region_no
+      from
+        region
+      where
+        region_name like '%#{region_name}%'
+      ) and
+      (rht.theme_no) in (
+        select
+          theme_no
+        from
+          theme
+        where
+          theme_name like '%#{theme_name}%'
+        )
+    order by
+      like_count
+  </select>
+
+  <!-- 숙소 상세 조회 -->
+  <select id="rentalHomeDetailSelect" resultType="RentalHome">
+    select
+      t1.region_no,
+      t1.name,
+      t1.explanation,
+      t1.address,
+      t1.price,
+      t1.capacity,
+      t1.lat,
+      t1.lon,
+      t1.state,
+      t1.hosting_start_date,
+      t1.hosting_end_date,
+      t1.registe_date,
+      t2.photo_no,
+      t2.ori_photo_name,
+      t2.uuid_photo_name,
+      t2.photo_explanation,
+      t2.photo_order,
+      t3.facility_no,
+      t3.facility_count,
+      t4.facility_name,
+      t6.created_date,
+      t6.score,
+      t6.review
+    from
+      rental_home t1
+      inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_detail t3 on t3.rental_home_no = t1.rental_home_no
+      inner join rental_home_facility t4 on t4.facility_no = t3.facility_no
+      left outer join reservation t5 on t5.rental_home_no = t1.rental_home_no
+      left outer join rental_home_review t6 on t6.reservation_no = t5.reservation_no
+    where
+      t1.rental_home_no = #{rental_home_no} and
+      t6.state = '0'
+    order by
+      t2.photo_order asc,
+      t6.created_date desc
+  </select>
+
+  <!-- 숙소 리뷰 조회  -->
+  <select id="rentalHomeReviewSelect" resultMap="rentalHomeReview" parameterType="int">
+    select
+      t2.created_date,
+      t2.score,
+      t2.review
+    from
+      reservation t1
+      inner join rental_home_review t2 on t1.reservation_no = t2.reservation_no
+    where
+      t1.rental_home_no = #{rental_home_no}
+    order by
+      t2.created_date;
+  </select>
+
+  <!-- 숙소 신고 -->
+  <insert id="rentalHomeReportAdd" parameterType="RentalHomeReport">
+    insert into
+      rental_home_report
+      (
+        rental_home_no,
+        member_no,
+        report_category_no,
+        content
+      )
+    values
+      (
+        #{rental_home_no},
+        #{member_no},
+        #{report_category_no},
+        #{content}
+      )
+  </insert>
+
+</mapper>
