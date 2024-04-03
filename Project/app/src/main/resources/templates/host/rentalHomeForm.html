@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>숙소 정보 입력 폼</title>
+</head>
+<body>
+
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+
+<div text-align="left" align="center">
+
+<form action="add" data-th-action="@{rentalHomeAdd}" method='post'>
+  <h2>숙소 타입</h2>
+  <input data-th-href="${hostNo}" name="hostNo" type="hidden">
+  <div>
+  <input type="radio" name="homeType" value="1">호텔</input>
+  <input type="radio" name="homeType" value="2">모텔</input>
+  <input type="radio" name="homeType" value="3">호스텔</input>
+  <input type="radio" name="homeType" value="4">리조트</input>
+  </div>
+
+  <div>
+  <input type="radio" name="homeType" value="5">펜션</input>
+  <input type="radio" name="homeType" value="6">게스트하우스</input>
+  <input type="radio" name="homeType" value="7">쉐어하우스</input>
+  <input type="radio" name="homeType" value="8">전통주택</input>
+  </div>
+
+  <input type="radio" name="homeType" value="9">기타</input>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 위치</h2>
+  <div>
+    지도 API 들어감
+  </div>
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 시설</h2>
+  <div>
+    수용인원 <input type="number" name="capacity" value="0">
+  </div>
+  <div>
+    침실 <input type="number" name="bedRoom" value="0">
+  </div>
+  <div>
+    침대 <input type="number" name="bed" value="0">
+  </div>
+  <div>
+    욕실 <input type="number" name="bathRoom" value="0">
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 사진</h2>
+
+  <div>
+    썸네일(최대 5장) 자바스크립트 사용 <input multiple name="rentalHomePhotos" id='thumbNail' type='file'> <br/>
+    <textarea readonly>파일 리스트 + 각 사진에 대한 설명 추가</textarea>
+  </div>
+  <div>
+    사진 설명 자바스크립트 사용
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 기본 정보</h2>
+  <div>
+    숙소명 <input type="number" name="homeDescription">
+  </div>
+  <div>
+    숙소 설명 <input type="number" name="homeDescription">
+  </div>
+  <div>
+    숙소 이용규칙 <textarea name="homeRule"></textarea>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>요금설정</h2>
+  <script>
+    function calc() {
+      const price = Number(document.getElementById("price").value);
+      const cleanFee = Number(document.getElementById("cleanFee").value)
+      document.getElementById("income").value = (price + cleanFee) * 0.97
+    }
+  </script>
+  <form name="form1">
+    <div>
+    이용요금(주 기준)  <input type="text" id="price" onkeyup="calc(this.value)">
+    </div>
+    <div>
+    청소비  <input type="text" id="cleanFee" onkeyup="calc(this.value)">
+    </div>
+    <div>
+    정산금액 <input type="text" id="income">
+    </div>
+  </form>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>본인 인증</h2>
+  <div>
+    <button type="button">휴대폰인증</button>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <div>
+    <button>다음(보류)</button>
+  </div>
+
+
+
+</form>
+</div>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+
+</body>
+</html>

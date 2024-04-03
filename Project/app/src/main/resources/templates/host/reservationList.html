@@ -2,9 +2,11 @@
 <html lang='en'>
   <head>
   <meta charset='UTF-8'>
-  <title></title>
+  <title>호스트 예약내역</title>
 </head>
 <body>
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
 <h1>승인 대기중 예약</h1>
 <table border="1" >
@@ -16,6 +18,11 @@
   </tr>
   </thead>
   <tbody>
+  <!--
+  1. 상태에 따라 출력되는 위치가 다르게 하려고 조건문을 사용함.
+  2. 예약 승인/거절을 위해 테이블 안에 form 버튼을 추가하고 업데이트에 필요한 값을 hidden으로 보냄.
+  3. 화면에 보여지는 값은 반복문으로 출력되며 페이지 컨트롤러로부터 받은 hostReservation의 값이 들어감.
+   -->
   <tr data-th-if="${hostReservation.state == 0}" data-th-each="hostReservation : ${list}"
       data-th-object="${hostReservation}">
     <td data-th-text="*{rentalHomeName}">그레이트 호텔</td>
@@ -23,13 +30,15 @@
     <td data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
     '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01</td>
     <td><form
-        action="stateUpdate" data-th-action="@{stateUpdate}" method="post">
+        action="update" data-th-action="@{reservationCheck}" method="post">
+      <input name="hostNo" data-th-value="*{hostNo}" type="hidden">
       <input name="state" value="1" type="hidden">
       <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
       <button>예약 승인</button>
     </form></td>
     <td><form
-        action="stateUpdate" data-th-action="@{stateUpdate}" method="post">
+        action="update" data-th-action="@{reservationCheck}" method="post">
+      <input name="hostNo" data-th-value="*{hostNo}" type="hidden">
       <input name="state" value="2" type="hidden">
       <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
       <button>예약 거절</button>
@@ -60,7 +69,7 @@
   </tbody>
 </table>
 
-
+<div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
 </html>

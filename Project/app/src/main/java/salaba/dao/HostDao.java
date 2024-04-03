@@ -3,13 +3,16 @@ package salaba.dao;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import salaba.vo.HostReservation;
+import salaba.vo.host.HostReservation;
+import salaba.vo.rentalHome.RentalHome;
 
 @Mapper
-public interface HostReservationDao {
-  List<HostReservation> findAll(int hostNo);
+public interface HostDao {
+  void addHome(RentalHome rentalHome);
 
-  int update(
+  List<HostReservation> findAllReservation(int hostNo);
+
+  int stateUpdate(
       @Param("state")int state,
       @Param("reservationNo") int reservationNo);
 
