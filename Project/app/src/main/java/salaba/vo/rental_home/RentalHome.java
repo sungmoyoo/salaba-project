@@ -11,7 +11,7 @@ public class RentalHome implements Serializable { // 숙소
 
   private int rentalHomeNo; // 숙소번호
 
-  Region region; // 지역
+  private String region; // 지역
   
   private String name; // 숙소 이름
   

@@ -14,7 +14,7 @@ public interface RentalHomeDao {
   
   // 숙소 조회 메인(추천수)
   RentalHome rentalHomeDefaultSelect();
-  
+
   // 숙소 조회 메인(로그인 유저 선호 사항으로 목록 출력)
   RentalHome rentalHomeSelectForMember( List<Theme> themes );
 

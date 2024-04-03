@@ -3,6 +3,8 @@ package salaba.service.impl;
 import java.sql.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import salaba.dao.RentalHomeDao;
 import salaba.service.RentalHomeService;
@@ -15,6 +17,7 @@ import salaba.vo.rental_home.Theme;
 @Service
 public class DefaultRentalHomeService implements RentalHomeService {
 
+  private final static Log log = LogFactory.getLog(DefaultRentalHomeService.class);
   private final RentalHomeDao rentalHomeDao;
 
   @Override

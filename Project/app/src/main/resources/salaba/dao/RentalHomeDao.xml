@@ -3,8 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="salaba.dao.rental_home.RentalHomeDao">
-  <resultMap id="RentalHomeDao" type="RentalHome">
+<mapper namespace="salaba.dao.RentalHomeDao">
+  <resultMap id="RentalHomeMap" type="RentalHome">
     <id column="rental_home_no" property="rentalHomeNo"/>
     <result column="name" property="name"/>
     <result column="price" property="price"/>
@@ -20,11 +20,12 @@
     <result column="state" property="state"/>
     <result column="rental_home_rule" property="rentalHomeRule"/>
     <result column="like_count" property="rentalHomeLikeCount"/>
+    <result column="region" property="region"/>
 
-    <association property="region" javaType="Region">
-      <id column="region_no" property="regionNo"/>
-      <result column="region_name" property="regionName"/>
-    </association>
+<!--    <association property="region" javaType="Region">-->
+<!--      <id column="region_no" property="regionNo"/>-->
+<!--      <result column="region_name" property="regionName"/>-->
+<!--    </association>-->
     <collection property="rentalHomePhotos" ofType="RentalHomePhoto">
       <id column="photo_no" property="photoNo"/>
       <result column="ori_photo_name" property="oriPhotoName"/>
@@ -52,19 +53,19 @@
   </resultMap>
   
   <!-- 숙소 목록 검색(추천수) -->
-  <select id="rentalHomeDefaultSelect" resultType="RentalHome">
+  <select id="rentalHomeDefaultSelect" resultMap="RentalHomeMap">
     select
-      rhp.uuid_photo_name,
-      rhp.photo_no,
-      rhp.photo_order,
-      rh.rental_home_no,
-      rh.name,
-      rh.price,
-      count(rhl.rental_home_no) as like_count
+      t2.uuid_photo_name,
+      t2.photo_no,
+      t2.photo_order,
+      t1.rental_home_no,
+      t1.name,
+      t1.price,
+      count(t3.rental_home_no) like_count
     from
-      rental_home rh
-      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
-      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
+      rental_home t1
+      inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
     order by
       like_count asc
   </select>
@@ -72,19 +73,19 @@
   <!-- 숙소 테마 검색(선호 사항 선택한 유저의 숙소 출력) -->
   <select id="rentalHomeSelectForMember" resultType="RentalHome" parameterType="String">
     select
-      rhp.uuid_photo_name,
-      rh.rental_home_no,
-      rhp.photo_no,
-      rhp.photo_order,
-      rh.name,
-      rh.price,
-      count(rhl.rental_home_no) as like_count
+      t2.uuid_photo_name,
+      t1.rental_home_no,
+      t2.photo_no,
+      t2.photo_order,
+      t1.name,
+      t1.price,
+      count(t3.rental_home_no) as like_count
     from
-      rental_home rh
-      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
-      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
-      inner join rental_home_theme rht on rht.rental_home_no = rh.rental_home_no
-    where (rht.theme_no) in (
+      rental_home t1
+      inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
+      inner join rental_home_theme t4 on t4.rental_home_no = t1.rental_home_no
+    where (t4.theme_no) in (
       select
         theme_no
       from
@@ -102,19 +103,19 @@
   <!-- 숙소 테마 검색 -->
   <select id="rentalHomeThemeSelect" resultType="RentalHome" parameterType="String">
     select
-      rhp.uuid_photo_name,
-      rh.rental_home_no,
-      rhp.photo_no,
-      rhp.photo_order,
-      rh.name,
-      rh.price,
-      count(rhl.rental_home_no) as like_count
+      t2.uuid_photo_name,
+      t1.rental_home_no,
+      t2.photo_no,
+      t2.photo_order,
+      t1.name,
+      t1.price,
+      count(t3.rental_home_no) as like_count
     from
-      rental_home rh
-      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
-      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
-      inner join rental_home_theme rht on rht.rental_home_no = rh.rental_home_no
-    where (rht.theme_no) in (
+      rental_home t1
+      inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
+      inner join rental_home_theme t4 on t4.rental_home_no = t1.rental_home_no
+    where (t4.theme_no) in (
       select
         theme_no
       from
@@ -129,19 +130,19 @@
   <!-- 숙소 위치 검색 -->
   <select id="rentalHomeRegionSelect" resultType="RentalHome" parameterType="String">
     select
-      rhp.uuid_photo_name,
-      rhp.photo_no,
-      rhp.photo_order,
-      rh.rental_home_no,
-      rh.name,
-      rh.price,
-      count(rhl.rental_home_no) as like_count
+      t2.uuid_photo_name,
+      t2.photo_no,
+      t2.photo_order,
+      t1.rental_home_no,
+      t1.name,
+      t1.price,
+      count(t3rental_home_no) as like_count
     from
-      rental_home rh
-      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
-      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
-      inner join region r on r.region_no = rh.region_no
-    where (r.region_no) in (
+      rental_home t1
+      inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
+      inner join region t4 on t4.region_no = t1.region_no
+    where (t4.region_no) in (
       select
         region_no
       from
