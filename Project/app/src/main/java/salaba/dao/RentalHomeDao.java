@@ -1,5 +1,6 @@
 package salaba.dao;
 
+import java.sql.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,14 +20,13 @@ public interface RentalHomeDao {
 
   // 숙소 테마별 조회
   RentalHome rentalHomeThemeSelect( @Param("theme_name") String themeName);
-  
-  // 숙소 지역별 조회
-  RentalHome rentalHomeRegionSelect( @Param("region_name") String regionName );
-  
-  // 숙소 테마&지역 조회
-  RentalHome rentalHomeThemeAndRegionSelect(
-      @Param("theme_name") String themeName,
-      @Param("region_name") String region_name);
+
+  // 숙소 지역,기간,인원수 조회
+  RentalHome rentalHomeConditionSelect(
+      @Param("region_name") String region_name,
+      @Param("check_in") Date checkIn,
+      @Param("check_out") Date checkOut,
+      @Param("capacity") int capacity );
   
   // 숙소 상세 조회
   RentalHome rentalHomeDetailSelect( @Param("rental_home_no") int rentalHomeNo );

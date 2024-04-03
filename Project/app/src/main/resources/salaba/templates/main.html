@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link rel="stylesheet" href="mainStyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+</head>
+<body>
+<main>
+  <section>
+    <div class="search-container">
+      <h1>어디로 여행 가시나요?</h1>
+      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
+        <input type="text" name="region_name" id="location" placeholder="장소 입력">
+        <input type="date" name="check_in" id="check-in" placeholder="체크인 날짜">
+        <input type="date" name="check_out" id="check-out" placeholder="체크아웃 날짜">
+        <input type="number" name="capacity" id="guests" placeholder="인원">
+        <button type="submit">검색</button>
+      </form>
+    </div>
+  </section>
+  <section>
+    <div>
+      <form action="/rentalHome/search" data-th-action="@{search}" method="get">
+        <p>아이콘 및 필터</p>
+      </form>
+    </div>
+  </section>
+  <section class="slider-container">
+    <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
+      <div class="card">
+        <img data-th-src="'https://kr.object.ncloudstorage.com/tp3-salaba/rental_home/' + ${rentalHome.rentalHomePhotos.uuidPhotoName}" alt="숙소 이미지">
+        <div class="card">
+          <h3 data-th-text="*{name}">숙소이름</h3>
+          <p data-th-text="'가격: ' + *{price}" >가격</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

@@ -1,11 +1,13 @@
 package salaba.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import salaba.dao.RentalHomeDao;
 import salaba.service.RentalHomeService;
 import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
 import salaba.vo.rental_home.Theme;
 
@@ -26,13 +28,33 @@ public class DefaultRentalHomeService implements RentalHomeService {
   }
 
   @Override
+  public RentalHome getRentalHomeConditionSearch(String regionName, Date checkInDate,
+      Date checkOutDate, int capacity) { // 숙소 조건 검색
+    return rentalHomeDao.rentalHomeConditionSelect(regionName,checkInDate,checkOutDate,capacity);
+  }
+
+  @Override
+  public RentalHome getRentalHomeThemeSearch(String themeName) {
+    return rentalHomeDao.rentalHomeThemeSelect(themeName);
+  }
+
+  @Override
   public RentalHome getRentalHomeDetailView(int rentalHomeNo) { // 숙소 상세 조회
     return rentalHomeDao.rentalHomeDetailSelect(rentalHomeNo);
   }
 
-
   @Override
   public void addRentalHomeReview(RentalHomeReview rentalHomeReview) { // 숙소 리뷰 작성
     rentalHomeDao.rentalHomeReviewAdd(rentalHomeReview);
+  }
+
+  @Override
+  public void addRentalHomeReport(RentalHomeReport rentalHomeReport) { // 숙소 신고
+    rentalHomeDao.rentalHomeReportAdd(rentalHomeReport);
+  }
+
+  @Override
+  public List<RentalHomeReview> getRentalHomeReviewList(int rentalHomeNo) { // 숙소 리뷰 조회
+    return rentalHomeDao.rentalHomeReviewSelect(rentalHomeNo);
   }
 }

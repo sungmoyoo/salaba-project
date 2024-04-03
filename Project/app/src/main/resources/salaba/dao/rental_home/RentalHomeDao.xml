@@ -154,36 +154,52 @@
   </select>
 
   <!-- 숙소 테마&위치 검색 -->
-  <select id="rentalHomeThemeAndRegionSelect" resultType="RentalHome">
+  <select id="rentalHomeConditionSelect" resultType="RentalHome">
     select
-      rhp.uuid_photo_name,
-      rhp.photo_no,
-      rhp.photo_order,
-      rh.rental_home_no,
-      rh.name,
-      rh.price,
-      count(rhl.rental_home_no) as like_count
+      t2.uuid_photo_name,
+      t2.photo_no,
+      t2.photo_order,
+      t1.rental_home_no,
+      t1.name,
+      t1.price,
+      count(t3.rental_home_no) as like_count
     from
-      rental_home rh
-      inner join rental_home_photo rhp on rhp.rental_home_no = rh.rental_home_no
-      inner join rental_home_like rhl on rhl.rental_home_no = rh.rental_home_no
-      inner join region r on r.region_no = rh.region_no
-    where (r.region_no) in (
-      select
-        region_no
+      rental_home t1
+      inner join rental_home_photo t2 on rhp.rental_home_no = t1.rental_home_no
+      inner join rental_home_like t3 on rhl.rental_home_no = t1.rental_home_no
+      inner join region t4 on r.region_no = t1.region_no
+    where
+    <if test="region_name!=null and !region_name.equals('')">
+      (t4.region_no) in (
+         select
+           region_no
+         from
+           region
+         where
+           region_name like '%#{region_name}%'
+      )
+    </if>
+    <if test="region_name!=null and !region_name.equals('') and
+    ( (check_in != null and check_out != null) or ( capacity != null and capacity > 0 ) )">
+       and
+    </if>
+    <if test="check_in!=null and check_out!=null">
+      ( select
+        count(*)
       from
-        region
+        reservation
       where
-        region_name like '%#{region_name}%'
-      ) and
-      (rht.theme_no) in (
-        select
-          theme_no
-        from
-          theme
-        where
-          theme_name like '%#{theme_name}%'
-        )
+        <![CDATA[ start_date >= #{check_in} ]]> and <![CDATA[ end_date <= #{check_out} ]]> or
+        <![CDATA[ start_date <= #{check_out} ]]> and <![CDATA[ end_date >= #{check_in} ]]>
+      ) t5 <![CDATA[<]]> 1
+    </if>
+    <if test="region_name!=null and !region_name.equals('') and
+    ( (check_in != null and check_out != null) or ( capacity != null and capacity > 0 ) )">
+      and
+    </if>
+    <if test="capacity != null and capacity > 0">
+      <![CDATA[ t1.capacity <= #{capacity} ]]>
+    </if>
     order by
       like_count
   </select>
