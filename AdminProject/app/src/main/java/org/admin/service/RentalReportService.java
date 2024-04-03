@@ -1,10 +1,10 @@
 package org.admin.service;
 
-import org.admin.domain.RentalReport;
+import org.admin.domain.Report;
 
 import java.util.List;
 
 public interface RentalReportService {
-    public List<RentalReport> getAll();
-    public RentalReport get(int rentalNo, int memberNo);
+    public List<Report> getAll();
+    public Report get(int rentalNo, int memberNo);
 }

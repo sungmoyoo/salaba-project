@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.admin.repository.TextReportDao">
+    <resultMap id="TextReportMap" type="Report">
+        <id column="report_no" property="reportNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="report_category_no" property="category"/>
+        <result column="content" property="content"/>
+        <result column="report_date" property="reportDate"/>
+        <result column="state" property="state"/>
+        <result column="report_target_no" property="targetNo"/>
+        <result column="report_target_type" property="targetType"/>
+        <result column="report_category_name" property="categoryName"/>
+    </resultMap>
+
+    <select id="findAllBy" resultMap="TextReportMap">
+        SELECT
+            brd.report_no,
+            brd.member_no,
+            brd.report_category_no,
+            brd.report_date,
+            brd.state,
+            brd.report_target_no,
+            brd.report_target_type,
+            brc.report_category_name
+        FROM board_report_detail brd
+        INNER JOIN board_report_category brc on brd.report_category_no = brc.report_category_no
+        WHERE brd.report_target_type= #{targetType}
+
+    </select>
+    
+</mapper>

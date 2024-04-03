@@ -5,7 +5,7 @@
 </head>
 <body>
 <div data-th-replace="header :: header">헤더</div>
-<h3>숙소 신고 내역</h3>
+<h3 data-th-text="${menuName}">메뉴 이름</h3>
 <table border="1">
     <thead>
     <tr>
@@ -16,11 +16,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr data-th-each="rentalReport : ${rentalReportList}" data-th-object="${rentalReport}">
-            <td data-th-text="*{rentalNo} + *{memberNo}">1</td>
-            <td data-th-text="*{categoryName}">신고 유형</td>
-            <td data-th-text="*{state}">처리 여부</td>
-            <td data-th-text="*{createdDate}">접수일</td>
+    <tr data-th-each="report : ${list}" data-th-object="${report}">
+        <td data-th-text="*{memberNo}">1</td>
+        <td data-th-text="*{categoryName}">신고 유형</td>
+        <td data-th-text="*{state}">처리 여부</td>
+        <td data-th-text="*{reportDate}">접수일</td>
     </tr>
     </tbody>
 </table>

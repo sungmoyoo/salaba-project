@@ -4,14 +4,14 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.admin.repository.RentalReportDao">
-    <resultMap id="RentalReportMap" type="RentalReport">
-        <result column="rental_home_no" property="rentalNo"/>
+    <resultMap id="RentalReportMap" type="Report">
+        <result column="rental_home_no" property="targetNo"/>
         <result column="member_no" property="memberNo"/>
         <result column="report_category_no" property="category"/>
         <result column="category_name" property="categoryName"/>
         <result column="content" property="content"/>
         <result column="state" property="state"/>
-        <result column="created_date" property="createdDate"/>
+        <result column="created_date" property="reportDate"/>
     </resultMap>
 
     <select id="findAll" resultMap="RentalReportMap">
