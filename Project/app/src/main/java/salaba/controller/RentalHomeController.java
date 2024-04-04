@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,24 +26,26 @@ public class RentalHomeController {
 
   @GetMapping("/search")
   public String rentalHomeMain( HttpSession httpSession, Model model,
-      @RequestParam( name = "region_name", required = false) String regionName,
-      @RequestParam( name = "check_in", required = false) Date checkInDate,
-      @RequestParam( name = "check_out", required = false ) Date checkOutDate,
-      @RequestParam( name = "capacity", required = false ) Integer capacity){ // 메인화면
+      @RequestParam( value = "regionName", defaultValue = "") String regionName,
+      @RequestParam( value = "checkInDate", required = false)
+      @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkInDate,
+      @RequestParam( value = "checkOutDate", required = false )
+      @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
+      @RequestParam( value = "capacity", defaultValue = "1") int capacity){ // 메인화면
     Member loginUser = (Member) httpSession.getAttribute("loginUser");
 
     // LogIn User Check
     if( ( loginUser == null || loginUser.getThemes() == null ) &&
-        ( (regionName == null || regionName.isEmpty()) &&
-        checkInDate == null && checkOutDate == null && capacity == null ) ){
+        ( (regionName == null || regionName.equals("")) &&
+        checkInDate == null && checkOutDate == null && capacity == 1 ) ){
 
       // 로그인하지 않은 경우 기본 숙소 목록 출력 검색 하지 않은 경우
       model.addAttribute("rentalHomeList", rentalHomeService.getRentalHomeMain());
     }
     else if(
          loginUser != null && loginUser.getThemes() != null &&
-        regionName == null && regionName.isEmpty() &&
-        checkInDate == null && checkOutDate == null && capacity == 0 ){
+        regionName == null && regionName.equals("") &&
+        checkInDate == null && checkOutDate == null && capacity == 1 ){
       // 로그인한 유저 중 선호 사항을 고른 유저의 경우
       // 선호사항으로 숙소 목록 출력
       model.addAttribute("rentalHomeList",

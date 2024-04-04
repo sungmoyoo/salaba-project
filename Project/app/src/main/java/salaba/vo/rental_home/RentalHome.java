@@ -11,7 +11,7 @@ public class RentalHome implements Serializable { // 숙소
 
   private int rentalHomeNo; // 숙소번호
 
-  private String region; // 지역
+  private String regionName; // 지역
   
   private String name; // 숙소 이름
   
@@ -48,4 +48,8 @@ public class RentalHome implements Serializable { // 숙소
   List<RentalHomeReview> rentalHomeReviews; // 숙소 리뷰
   
   private int rentalHomeLikeCount; // 숙소 추천수
+  
+  private Date checkInDate; // 체크인 날짜
+  
+  private Date checkOutDate; // 체크아웃 날짜
 }

@@ -21,17 +21,17 @@ public class DefaultRentalHomeService implements RentalHomeService {
   private final RentalHomeDao rentalHomeDao;
 
   @Override
-  public RentalHome getRentalHomeMain() {
+  public List<RentalHome> getRentalHomeMain() {
     return rentalHomeDao.rentalHomeDefaultSelect(); // 비로그인 숙소 목록
   }
 
   @Override
-  public RentalHome getRentalHomeMainForLoginUser(List<Theme> themes) {
+  public List<RentalHome> getRentalHomeMainForLoginUser(List<Theme> themes) {
     return rentalHomeDao.rentalHomeSelectForMember(themes); // 로그인 숙소 목록(선호 사항을 선택한 유저 한정)
   }
 
   @Override
-  public RentalHome getRentalHomeConditionSearch(String regionName, Date checkInDate,
+  public List<RentalHome> getRentalHomeConditionSearch(String regionName, Date checkInDate,
       Date checkOutDate, int capacity) { // 숙소 조건 검색
     return rentalHomeDao.rentalHomeConditionSelect(regionName,checkInDate,checkOutDate,capacity);
   }

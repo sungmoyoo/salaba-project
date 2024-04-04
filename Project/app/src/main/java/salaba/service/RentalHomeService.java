@@ -9,13 +9,13 @@ import salaba.vo.rental_home.Theme;
 
 public interface RentalHomeService {
 
-  RentalHome getRentalHomeMain();
+  List<RentalHome> getRentalHomeMain();
 
-  RentalHome getRentalHomeMainForLoginUser( List<Theme> themes );
+  List<RentalHome> getRentalHomeMainForLoginUser( List<Theme> themes );
 
   RentalHome getRentalHomeDetailView( int rentalHomeNo );
 
-  RentalHome getRentalHomeConditionSearch(
+  List<RentalHome> getRentalHomeConditionSearch(
       String regionName, Date checkInDate, Date checkOutDate, int capacity);
 
   RentalHome getRentalHomeThemeSearch( String themeName );

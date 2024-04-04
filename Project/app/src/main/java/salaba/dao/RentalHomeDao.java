@@ -13,19 +13,19 @@ import salaba.vo.rental_home.Theme;
 public interface RentalHomeDao {
   
   // 숙소 조회 메인(추천수)
-  RentalHome rentalHomeDefaultSelect();
+  List<RentalHome> rentalHomeDefaultSelect();
 
   // 숙소 조회 메인(로그인 유저 선호 사항으로 목록 출력)
-  RentalHome rentalHomeSelectForMember( List<Theme> themes );
+  List<RentalHome> rentalHomeSelectForMember( List<Theme> themes );
 
   // 숙소 테마별 조회
   RentalHome rentalHomeThemeSelect( @Param("theme_name") String themeName);
 
   // 숙소 지역,기간,인원수 조회
-  RentalHome rentalHomeConditionSelect(
-      @Param("region_name") String region_name,
-      @Param("check_in") Date checkIn,
-      @Param("check_out") Date checkOut,
+  List<RentalHome> rentalHomeConditionSelect(
+      @Param("regionName") String regionName,
+      @Param("checkInDate") Date checkInDate,
+      @Param("checkOutDate") Date checkOutDate,
       @Param("capacity") int capacity );
   
   // 숙소 상세 조회

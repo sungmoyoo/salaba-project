@@ -10,7 +10,7 @@
     <result column="price" property="price"/>
     <result column="explanation" property="explanation"/>
     <result column="address" property="address"/>
-    <result column="capacity" property="capacity"/>
+    <result column="capacity" property="capacity" javaType="int"/>
     <result column="lat" property="lat"/>
     <result column="lon" property="lon"/>
     <result column="hosting_start_date" property="hostingStartDate"/>
@@ -20,7 +20,9 @@
     <result column="state" property="state"/>
     <result column="rental_home_rule" property="rentalHomeRule"/>
     <result column="like_count" property="rentalHomeLikeCount"/>
-    <result column="region" property="region"/>
+    <result column="start_date" property="checkInDate"/>
+    <result column="end_date" property="checkOutDate"/>
+    <result column="region_name" property="regionName"/>
 
 <!--    <association property="region" javaType="Region">-->
 <!--      <id column="region_no" property="regionNo"/>-->
@@ -51,27 +53,46 @@
     <result column="score" property="score"/>
     <result column="review" property="review"/>
   </resultMap>
-  
+
+  <resultMap id="conditionSearch" type="RentalHome">
+    <id column="rental_home_no" property="rentalHomeNo"/>
+    <result column="name" property="name"/>
+    <result column="price" property="price"/>
+    <result column="like_count" property="rentalHomeLikeCount"/>
+
+    <collection property="rentalHomePhotos" ofType="RentalHomePhoto">
+      <id column="photo_no" property="photoNo"/>
+      <result column="uuid_photo_name" property="uuidPhotoName"/>
+      <result column="photo_order" property="photoOrder"/>
+    </collection>
+  </resultMap>
+
   <!-- 숙소 목록 검색(추천수) -->
   <select id="rentalHomeDefaultSelect" resultMap="RentalHomeMap">
     select
-      t2.uuid_photo_name,
-      t2.photo_no,
-      t2.photo_order,
       t1.rental_home_no,
       t1.name,
       t1.price,
-      count(t3.rental_home_no) like_count
+      t2.uuid_photo_name,
+      t2.photo_no,
+      t2.photo_order,
+      (
+        select
+          count(*)
+        from
+          rental_home_like
+        where
+          t1.rental_home_no = rental_home_no
+      ) as like_count
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
-      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
     order by
-      like_count asc
+      like_count desc
   </select>
 
   <!-- 숙소 테마 검색(선호 사항 선택한 유저의 숙소 출력) -->
-  <select id="rentalHomeSelectForMember" resultType="RentalHome" parameterType="String">
+  <select id="rentalHomeSelectForMember" resultType="RentalHome">
     select
       t2.uuid_photo_name,
       t1.rental_home_no,
@@ -154,8 +175,8 @@
       like_count
   </select>
 
-  <!-- 숙소 테마&위치 검색 -->
-  <select id="rentalHomeConditionSelect" resultType="RentalHome">
+  <!-- 숙소 위치&날짜&수용인원 검색 -->
+  <select id="rentalHomeConditionSelect" resultMap="conditionSearch">
     select
       t2.uuid_photo_name,
       t2.photo_no,
@@ -166,41 +187,34 @@
       count(t3.rental_home_no) as like_count
     from
       rental_home t1
-      inner join rental_home_photo t2 on rhp.rental_home_no = t1.rental_home_no
-      inner join rental_home_like t3 on rhl.rental_home_no = t1.rental_home_no
-      inner join region t4 on r.region_no = t1.region_no
+      inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
+      inner join region t4 on t4.region_no = t1.region_no
     where
-    <if test="region_name!=null and !region_name.equals('')">
       (t4.region_no) in (
          select
            region_no
          from
            region
          where
-           region_name like '%#{region_name}%'
+           region_name = #{regionName}
       )
-    </if>
-    <if test="region_name!=null and !region_name.equals('') and
-    ( (check_in != null and check_out != null) or ( capacity != null and capacity > 0 ) )">
        and
-    </if>
-    <if test="check_in!=null and check_out!=null">
+    <if test="#{checkInDate}!=null and #{checkOutDate}!=null">
+      1 <![CDATA[ > ]]>
       ( select
         count(*)
       from
         reservation
       where
-        <![CDATA[ start_date >= #{check_in} ]]> and <![CDATA[ end_date <= #{check_out} ]]> or
-        <![CDATA[ start_date <= #{check_out} ]]> and <![CDATA[ end_date >= #{check_in} ]]>
-      ) t5 <![CDATA[<]]> 1
+        <![CDATA[ start_date <= #{checkOutDate} ]]> and
+        <![CDATA[ end_date >= #{checkInDate} ]]>
+      )
     </if>
-    <if test="region_name!=null and !region_name.equals('') and
-    ( (check_in != null and check_out != null) or ( capacity != null and capacity > 0 ) )">
+    <if test="( (#{checkInDate} != null and #{checkOutDate} != null))">
       and
     </if>
-    <if test="capacity != null and capacity > 0">
-      <![CDATA[ t1.capacity <= #{capacity} ]]>
-    </if>
+      <![CDATA[ t1.capacity >= #{capacity} ]]>
     order by
       like_count
   </select>
