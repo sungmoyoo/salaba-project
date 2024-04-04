@@ -17,6 +17,11 @@
     <result column="payment_date" property="paymentDate"/>
   </resultMap>
 
+  <resultMap id="ThemeMap" type="RentalHomeTheme">
+    <id column="theme_no" property="themeNo"/>
+    <result column="theme_name" property="themeName"/>
+  </resultMap>
+
   <insert id="addHome" parameterType="RentalHome"
     useGeneratedKeys="true" keyColumn="rental_home_no" keyProperty="rentalHomeNo">
     insert into rental_home(
@@ -37,8 +42,8 @@
     )
     values
     (
-    #{memberNo},
-    #{region.regionNo},
+    2,
+    2,
     #{name},
     #{explanation},
     #{address},
@@ -54,6 +59,26 @@
     );
   </insert>
 
+  <insert id="addHomeDetail" parameterType="RentalHomeDetail">
+    insert into rental_home_detail(
+    rental_home_no,
+    facility_no,
+    facility_count
+    ) values
+    (
+    #{rentalHomeNo},
+    #{facilityNo},
+    #{facilityCount}
+    );
+  </insert>
+
+  <select id="findAllTheme" resultMap="ThemeMap">
+    select
+      theme_no,
+      theme_name
+    from
+      theme
+  </select>
 
   <select id="findAllReservation" resultMap="HostReservationMap" parameterType="int">
     select

@@ -1,7 +1,7 @@
 package salaba.vo.rentalHome;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import lombok.Data;
 import org.springframework.ui.context.Theme;
@@ -9,11 +9,12 @@ import org.springframework.ui.context.Theme;
 
 @Data
 public class RentalHome implements Serializable { // 숙소
+
   private static final long serialVersionUID = 100L;
 
   private int rentalHomeNo; // 숙소번호
 
-  Region region; // 지역
+  private int regionNo; // 지역
 
   private String name; // 숙소 이름
 
@@ -47,7 +48,7 @@ public class RentalHome implements Serializable { // 숙소
 
   List<RentalHomePhoto> rentalHomePhotos; // 숙소 사진
 
-  List<Theme> themes; // 숙소 테마
+  List<RentalHomeTheme> RentalHomeThemes; // 숙소 테마
 
   List<RentalHomeReview> rentalHomeReviews; // 숙소 리뷰
 

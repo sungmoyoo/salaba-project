@@ -2,33 +2,27 @@
 <html lang='en'>
 <head>
   <meta charset='UTF-8'>
-  <title>숙소 정보 입력 폼</title>
+  <title>숙소 기본 입력 폼</title>
 </head>
 <body>
 
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
-<div text-align="left" align="center">
+<div align="center">
+<form action="add" data-th-action="@{rentalHomeAdd}" enctype="multipart/form-data" method='post'>
+  <br>
 
-<form action="add" data-th-action="@{rentalHomeAdd}" method='post'>
-  <h2>숙소 타입</h2>
-  <input data-th-href="${hostNo}" name="hostNo" type="hidden">
+  <h2>숙소 기본 정보</h2>
   <div>
-  <input type="radio" name="homeType" value="1">호텔</input>
-  <input type="radio" name="homeType" value="2">모텔</input>
-  <input type="radio" name="homeType" value="3">호스텔</input>
-  <input type="radio" name="homeType" value="4">리조트</input>
+    숙소명 <input type="text" name="name">
   </div>
-
   <div>
-  <input type="radio" name="homeType" value="5">펜션</input>
-  <input type="radio" name="homeType" value="6">게스트하우스</input>
-  <input type="radio" name="homeType" value="7">쉐어하우스</input>
-  <input type="radio" name="homeType" value="8">전통주택</input>
+    숙소 설명 <textarea type="text" name="explanation"></textarea>
   </div>
-
-  <input type="radio" name="homeType" value="9">기타</input>
+  <div>
+    숙소 이용규칙 <textarea name="rentalHomeRule"></textarea>
+  </div>
 
   <br>
   <br>
@@ -38,24 +32,18 @@
   <div>
     지도 API 들어감
   </div>
-  <br>
-  <br>
-  <br>
-
-  <h2>숙소 시설</h2>
   <div>
-    수용인원 <input type="number" name="capacity" value="0">
+    임시 지역 값: <input type="text" name="region_no" value="2">
   </div>
   <div>
-    침실 <input type="number" name="bedRoom" value="0">
+    임시 주소 값: <input type="text" name="address" value="대한민국 제주도 제주 중앙로 304">
   </div>
   <div>
-    침대 <input type="number" name="bed" value="0">
+    임시 위도 값: <input type="text" name="lat" value="33.493496809557">
   </div>
   <div>
-    욕실 <input type="number" name="bathRoom" value="0">
+    임시 경도 값: <input type="text" name="lon" value="126.534302173485">
   </div>
-
   <br>
   <br>
   <br>
@@ -63,26 +51,13 @@
   <h2>숙소 사진</h2>
 
   <div>
-    썸네일(최대 5장) 자바스크립트 사용 <input multiple name="rentalHomePhotos" id='thumbNail' type='file'> <br/>
+    <input multiple name="photos" type='file'><br/>
+
     <textarea readonly>파일 리스트 + 각 사진에 대한 설명 추가</textarea>
   </div>
+
   <div>
     사진 설명 자바스크립트 사용
-  </div>
-
-  <br>
-  <br>
-  <br>
-
-  <h2>숙소 기본 정보</h2>
-  <div>
-    숙소명 <input type="number" name="homeDescription">
-  </div>
-  <div>
-    숙소 설명 <input type="number" name="homeDescription">
-  </div>
-  <div>
-    숙소 이용규칙 <textarea name="homeRule"></textarea>
   </div>
 
   <br>
@@ -94,28 +69,35 @@
     function calc() {
       const price = Number(document.getElementById("price").value);
       const cleanFee = Number(document.getElementById("cleanFee").value)
-      document.getElementById("income").value = (price + cleanFee) * 0.97
+      document.getElementById("income").value = Math.round((price + cleanFee) * 0.97)
     }
   </script>
-  <form name="form1">
     <div>
-    이용요금(주 기준)  <input type="text" id="price" onkeyup="calc(this.value)">
+    이용요금(주 기준)  <input type="text" name="price" id="price" onkeyup="calc(this.value)">
     </div>
     <div>
-    청소비  <input type="text" id="cleanFee" onkeyup="calc(this.value)">
+    청소비  <input type="text" name="cleanFee" id="cleanFee" onkeyup="calc(this.value)">
     </div>
     <div>
     정산금액 <input type="text" id="income">
     </div>
-  </form>
+
 
   <br>
   <br>
   <br>
+
+  <h2>호스팅 기간</h2>
+  <div>
+    호스팅 시작일: <input name='hostingStartDate' type='date'>
+  </div>
+  <div>
+    호스팅 종료일: <input name='hostingEndDate' type='date'>
+  </div>
 
   <h2>본인 인증</h2>
   <div>
-    <button type="button">휴대폰인증</button>
+    휴대폰인증
   </div>
 
   <br>
@@ -123,10 +105,11 @@
   <br>
 
   <div>
-    <button>다음(보류)</button>
+    <button type="submit">다음</button>
   </div>
 
-
+  <br>
+  <br>
 
 </form>
 </div>

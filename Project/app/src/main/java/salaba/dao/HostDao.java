@@ -5,10 +5,13 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import salaba.vo.host.HostReservation;
 import salaba.vo.rentalHome.RentalHome;
+import salaba.vo.rentalHome.RentalHomeTheme;
 
 @Mapper
 public interface HostDao {
   void addHome(RentalHome rentalHome);
+
+  List<RentalHomeTheme> findAllTheme();
 
   List<HostReservation> findAllReservation(int hostNo);
 

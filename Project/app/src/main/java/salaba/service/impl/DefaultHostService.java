@@ -10,6 +10,7 @@ import salaba.dao.HostDao;
 import salaba.service.HostService;
 import salaba.vo.host.HostReservation;
 import salaba.vo.rentalHome.RentalHome;
+import salaba.vo.rentalHome.RentalHomeTheme;
 
 //호스트 예약관리 서비스 구현체
 @RequiredArgsConstructor
@@ -25,6 +26,11 @@ public class DefaultHostService implements HostService {
     hostDao.addHome(rentalHome);
   }
 
+  @Override
+  public List<RentalHomeTheme> themeList() {
+    return hostDao.findAllTheme();
+  }
+
   // DB에서 해당 회원번호가 가진 모든 예약정보를 받아오는 메서드
   @Override
   public List<HostReservation> list(int hostNo) {
@@ -37,6 +43,7 @@ public class DefaultHostService implements HostService {
   public int stateUpdate(int state, int reservationNo) {
     return hostDao.stateUpdate(state, reservationNo);
   }
+
 
 
 }

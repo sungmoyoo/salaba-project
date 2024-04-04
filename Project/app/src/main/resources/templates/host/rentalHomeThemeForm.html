@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>숙소 테마 입력 폼</title>
+</head>
+<body>
+
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+
+<div align="center">
+
+<form action="themeAdd" data-th-action="@{rentalHomeThemeAdd}"  method='post'>
+  <br>
+  <br>
+  <br>
+  <h2>숙소 타입</h2>
+  <div>
+    <table border="1">
+      <thead>
+      <th>유형</th>
+      <th>선택</th>
+      </thead>
+      <tbody>
+      <tr data-th-if="${rentalHomeTheme.themeNo < 10}"
+          data-th-each="rentalHomeTheme : ${themeList}" data-th-object="${rentalHomeTheme}">
+        <td data-th-text="*{themeName}">모텔</td>
+        <td><input type="radio" data-th-value="*{themeNo}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 테마</h2>
+  <div data-th-if="${rentalHomeTheme.themeNo >= 10}"
+       data-th-each="rentalHomeTheme : ${themeList}" data-th-object="${rentalHomeTheme}">
+    <a data-th-text="*{themeName}"></a>
+    <input type="checkbox" data-th-value="*{themeNo}">
+  </div>
+  <br>
+  <br>
+  <br>
+
+  <div>
+    <button>다음</button>
+  </div>
+
+
+
+</form>
+</div>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+
+</body>
+</html>

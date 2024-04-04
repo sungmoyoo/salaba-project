@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>숙소 시설 입력 폼</title>
+</head>
+<body>
+
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+
+<div align="center">
+
+<form action="add" data-th-action="@{rentalHomeFacilityAdd}" method='post'>
+
+  <h2>숙소 시설</h2>
+  <div>
+    수용인원 <input type="number" name="capacity" value="0">
+  </div>
+  <div>
+    침실 <input type="number" name="bedRoom" value="0">
+  </div>
+  <div>
+    침대 <input type="number" name="bed" value="0">
+  </div>
+  <div>
+    욕실 <input type="number" name="bathRoom" value="0">
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 편의시설</h2>
+  
+
+
+  <div>
+    <button>다음</button>
+  </div>
+
+
+
+</form>
+</div>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+
+</body>
+</html>
