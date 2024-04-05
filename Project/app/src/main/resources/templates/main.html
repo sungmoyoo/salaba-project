@@ -30,6 +30,7 @@
   <section class="slider-container">
     <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
       <div class="card">
+        <a th:href="@{/rentalHome/view(rentalHomeNo=${rentalHome.rentalHomeNo})}">aaa</a>
         <img data-th-each="photo : ${rentalHome.rentalHomePhotos}"
              data-th-src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rental_home/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
         <div class="card">

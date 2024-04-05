@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<main>
+  <section>
+    <div class="search-container">
+      <h1>어디로 여행 가시나요?</h1>
+      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
+        <input type="text" name="regionName" id="location" placeholder="장소 입력">
+        <input type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
+        <input type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
+        <input type="number" name="capacity" id="guests" placeholder="인원">
+        <button type="submit">검색</button>
+      </form>
+    </div>
+  </section>
+  <section>
+    <h1 data-th-text="${rentalHome.name}">숙소 이름</h1>
+    <div data-th-each="rentalHome : ${rentalHome.rentalHomePhotos}">
+      <img data-th-each=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rental_home/' + ${rentalHome.uuidPhotoName}}" alt="숙소 이미지" >
+    </div>
+    <h3 data-th-text="${rentalHome.explanation}" >설명</h3>
+    <h3 data-th-text="${rentalHome.address}">숙소 주소</h3>
+    <h3 data-th-text="${rentalHome.price}">가격</h3>
+    <div data-th-each="facility : ${rentalHome.rentalHomeFacilities}" >
+      <h6 data-th-text="facility.name">시설 이름</h6>
+      <h6 data-th-text="facility.count">시설 갯수</h6>
+    </div>
+  </section>
+</main>
+<link rel="stylesheet" th:href="@{/mainStyle.css}" />
+
+</body>
+</html>

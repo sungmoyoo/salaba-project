@@ -26,48 +26,42 @@ public class RentalHomeController {
 
   @GetMapping("/search")
   public String rentalHomeMain( HttpSession httpSession, Model model,
-      @RequestParam( value = "regionName", defaultValue = "") String regionName,
+      @RequestParam( value = "regionName", defaultValue = "all") String regionName,
       @RequestParam( value = "checkInDate", required = false)
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkInDate,
       @RequestParam( value = "checkOutDate", required = false )
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
-      @RequestParam( value = "capacity", defaultValue = "1") int capacity){ // 메인화면
+      @RequestParam( value = "capacity", defaultValue = "1") int capacity) throws Exception{ // 메인화면
     Member loginUser = (Member) httpSession.getAttribute("loginUser");
 
     // LogIn User Check
-    if( ( loginUser == null || loginUser.getThemes() == null ) &&
-        ( (regionName == null || regionName.equals("")) &&
+    if( ( loginUser == null  ) &&
+        ( regionName.equalsIgnoreCase("all") &&
         checkInDate == null && checkOutDate == null && capacity == 1 ) ){
 
       // 로그인하지 않은 경우 기본 숙소 목록 출력 검색 하지 않은 경우
       model.addAttribute("rentalHomeList", rentalHomeService.getRentalHomeMain());
+      log.debug("ccc");
     }
     else if(
          loginUser != null && loginUser.getThemes() != null &&
-        regionName == null && regionName.equals("") &&
+         regionName.equalsIgnoreCase("all") &&
         checkInDate == null && checkOutDate == null && capacity == 1 ){
       // 로그인한 유저 중 선호 사항을 고른 유저의 경우
       // 선호사항으로 숙소 목록 출력
+      log.debug("bbbb");
       model.addAttribute("rentalHomeList",
           rentalHomeService.getRentalHomeMainForLoginUser(loginUser.getThemes()));
     }
     else{
+      log.debug("aaa");
       // 숙소 검색
       model.addAttribute("rentalHomeList",
           rentalHomeService.getRentalHomeConditionSearch(regionName,checkInDate,checkOutDate,capacity));
+
     }
     return "main";
   }
-
-//  @GetMapping("conditionSearch")
-//  public void rentalHomeSearch( Model model,
-//      @RequestParam( name = "region_name", required = false) String regionName,
-//      @RequestParam( name = "check_in", required = false) Date checkInDate,
-//      @RequestParam( name = "check_out", required = false ) Date checkOutDate,
-//      @RequestParam( name = "capacity", required = false ) int capacity){ // 숙소 검색
-//    model.addAttribute("rentalHomeList",
-//        rentalHomeService.getRentalHomeConditionSearch(regionName,checkInDate,checkOutDate,capacity));
-//  }
 
 //  @GetMapping
   public void rentalHomeThemeSearch( Model model, String themeName ){
@@ -75,7 +69,7 @@ public class RentalHomeController {
         rentalHomeService.getRentalHomeThemeSearch(themeName));
   }
 
-//  @GetMapping("")
+  @GetMapping("/view")
   public void rentalHomeView( int rentalHomeNo, Model model){ // 숙소 상세 조회
     model.addAttribute("rentalHome", rentalHomeService.getRentalHomeDetailView(rentalHomeNo));
   }
@@ -90,7 +84,7 @@ public class RentalHomeController {
 //  @GetMapping("")
   public void rentalHomeReviewList( int rentalHomeNo, Model model ){
     // 숙소 리뷰 조회
-    model .addAttribute("rentalHomeReviewList",
+    model.addAttribute("rentalHomeReviewList",
         rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
   }
 

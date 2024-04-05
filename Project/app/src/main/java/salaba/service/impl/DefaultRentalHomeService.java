@@ -33,11 +33,13 @@ public class DefaultRentalHomeService implements RentalHomeService {
   @Override
   public List<RentalHome> getRentalHomeConditionSearch(String regionName, Date checkInDate,
       Date checkOutDate, int capacity) { // 숙소 조건 검색
+    System.out.printf("check in date impl = %s\n", checkInDate);
+    System.out.printf("check out date impl = %s\n", checkOutDate);
     return rentalHomeDao.rentalHomeConditionSelect(regionName,checkInDate,checkOutDate,capacity);
   }
 
   @Override
-  public RentalHome getRentalHomeThemeSearch(String themeName) {
+  public RentalHome getRentalHomeThemeSearch(String themeName) { // 테마 검색
     return rentalHomeDao.rentalHomeThemeSelect(themeName);
   }
 
