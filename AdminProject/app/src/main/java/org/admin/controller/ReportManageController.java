@@ -1,9 +1,8 @@
 package org.admin.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.admin.constant.ReportType;
+import org.admin.util.ReportType;
 import org.admin.domain.Report;
-import org.admin.service.MemberService;
 import org.admin.service.RentalReportService;
 import org.admin.service.TextReportService;
 import org.apache.commons.logging.Log;

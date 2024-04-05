@@ -1,4 +1,4 @@
-package org.admin.constant;
+package org.admin.util;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -16,6 +16,7 @@ public class Member {
     private String tel;
     private int gradeNo;
     private char state;
+    private String stateStr;
     private String address;
     private char sex;
     private Date joinDate;

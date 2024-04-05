@@ -1,4 +1,4 @@
-package org.admin.constant;
+package org.admin.util;
 
 public final class Const {
 

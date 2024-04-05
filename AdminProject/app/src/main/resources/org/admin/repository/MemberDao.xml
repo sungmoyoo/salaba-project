@@ -46,8 +46,19 @@
             m.tel_no,
             m.join_date,
             m.state,
-            count(rh.rental_home_no) as rental_count
+            (
+            select
+            count(rh.rental_home_no)
+            from
+            rental_home rh
+            where m.member_no = rh.member_no
+            ) as rental_count
         FROM member m
-        INNER JOIN rental_home rh on m.member_no = rh.member_no
+        WHERE
+        (
+            SELECT COUNT(rh.rental_home_no)
+            FROM rental_home rh
+            WHERE m.member_no = rh.member_no
+        ) > 0;
     </select>
 </mapper>

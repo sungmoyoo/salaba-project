@@ -11,6 +11,7 @@ public class Qna {
     private String title;
     private String content;
     private char state;
+    private String stateStr;
     private Date regDate;
     private String answer;
     private Date ansDate;

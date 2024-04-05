@@ -22,6 +22,7 @@ public class Report {
     private String categoryName;
     private String content;
     private char state;
+    private String stateStr;
     private Date reportDate;
     private int targetNo; //신고당한 숙소번호, 게시물, 댓글, 답글 번호
     private char targetType;

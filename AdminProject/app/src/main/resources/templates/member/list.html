@@ -33,7 +33,7 @@
         <td data-th-text="*{email}">이메일</td>
         <td data-th-text="*{tel}">연락처</td>
         <td data-th-text="*{joinDate}">가입일</td>
-        <td data-th-if="${#strings.equals(menuName, '회원 목록')}" data-th-text="*{state}">상태</td>
+        <td data-th-if="${#strings.equals(menuName, '회원 목록')}" data-th-text="*{stateStr}">상태</td>
         <td data-th-if="${#strings.equals(menuName, '호스트 목록')}" data-th-text="*{rentalCount}">등록 숙소 수</td>
     </tr>
     </tbody>

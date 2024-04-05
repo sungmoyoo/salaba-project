@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.admin.domain.Rental;
 import org.admin.repository.RentalDao;
 import org.admin.service.RentalService;
+import org.admin.util.Translator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,19 @@ public class DefaultRentalService implements RentalService {
 
     @Override
     public List<Rental> getAll() {
-        return rentalDao.findAll();
+        List<Rental> rentals = rentalDao.findAll();
+        for(Rental rental : rentals) {
+            rental.setStateStr(Translator.rentalState.get(rental.getState()));
+        }
+        return rentals;
     }
 
     @Override
     public List<Rental> getAppliedRentals() {
-        return rentalDao.findApplied();
+        List<Rental> rentals = rentalDao.findApplied();
+        for(Rental rental : rentals) {
+            rental.setStateStr(Translator.rentalState.get(rental.getState()));
+        }
+        return rentals;
     }
 }

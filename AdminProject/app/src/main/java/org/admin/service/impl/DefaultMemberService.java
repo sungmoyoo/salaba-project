@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.admin.domain.Member;
 import org.admin.repository.MemberDao;
 import org.admin.service.MemberService;
+import org.admin.util.Translator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +15,19 @@ public class DefaultMemberService implements MemberService {
     private final MemberDao memberDao;
     @Override
     public List<Member> getAll() {
-        return memberDao.findAll();
+        List<Member> members = memberDao.findAll();
+        for (Member member : members) {
+            member.setStateStr(Translator.memberState.get(member.getState()));
+        }
+        return members;
     }
 
     @Override
     public List<Member> getAllHosts() {
-        return memberDao.findAllHosts();
+        List<Member> members = memberDao.findAllHosts();
+        for (Member member : members) {
+            member.setStateStr(Translator.memberState.get(member.getState()));
+        }
+        return members;
     }
 }
