@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.Mapping;
+import salaba.vo.rentalHome.RentalHomeFacility;
 import salaba.vo.rentalHome.RentalHomePhoto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import salaba.service.HostService;
 import salaba.service.StorageService;
 import salaba.vo.host.HostReservation;
 import salaba.vo.rentalHome.RentalHome;
-import salaba.vo.rentalHome.RentalHomeTheme;
+import salaba.vo.rentalHome.Theme;
 
 //호스트 페이지 컨트롤러
 @RequiredArgsConstructor
@@ -38,17 +38,50 @@ public class HostController {
   public void hostStart() {
   }
 
-  @GetMapping("rentalHomeForm")
+  @GetMapping("rentalHomeForm") // 호스트 숙소등록 기본정보 폼
   public void rentalHomeForm() {
   }
 
+  @PostMapping("rentalHomeSave") // 호스트 숙소 기본정보 저장
+  public String rentalHomeSave(HttpSession session, RentalHome rentalHome) {
+    session.setAttribute("rentalHome",rentalHome);
+    return "redirect:themeForm";
+  }
+
+  @GetMapping("themeForm") // 호스트 숙소 테마 폼
+  public void themeForm(Model model){
+    model.addAttribute("themeList", hostService.themeList());
+  }
+
+  @PostMapping("themeSave") // 호스트 숙소 테마 저장
+  public String themeSave(HttpSession session, Theme theme) {
+    session.setAttribute("theme",theme);
+    return "redirect:rentalHomeFacilityForm";
+  }
+
+  @GetMapping("rentalHomeFacilityForm") // 호스트 숙소 시설 폼
+  public void rentalHomeFacilityForm(Model model){
+    model.addAttribute("facilityList", hostService.facilityList());
+  }
+
+  @PostMapping("rentalHomeFacilitySave") // 호스트 숙소 시설 저장
+  public String rentalHomeFacilitySave(HttpSession session, RentalHomeFacility rentalHomeFacility) {
+    session.setAttribute("rentalHomeFacility", rentalHomeFacility);
+    return "redirect:rentalHomeConfirm";
+  }
+
+  @GetMapping("rentalHomeConfirm") // 호스트 숙소 등록 최종 확인
+  public void rentalHomeConfirm(HttpSession session) {
+  }
+
   @Transactional
-  @PostMapping("rentalHomeAdd") // 숙소 인서트
-  public String rentalHomeAdd(
-      RentalHome rentalHome,
+  @GetMapping("rentalHomeAdd") // DB에 숙소 등록
+  public void rentalHomeAdd(
       MultipartFile[] photos,
       Model model,
       HttpSession session) throws Exception {
+
+    RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
 
     // 숙소 사진 추가하는 메서드
     ArrayList<RentalHomePhoto> files = new ArrayList<>();
@@ -75,21 +108,8 @@ public class HostController {
 
     hostService.rentalHomeAdd(rentalHome);
 
-    model.addAttribute("themeList", hostService.themeList());
+
     session.setAttribute("rentalHome", rentalHome);
-
-    return "host/rentalHomeThemeForm";
-  }
-
-  @GetMapping("rentalHomeThemeForm")
-  public void rentalHomeThemeForm(Model model, HttpSession session) {
-    RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
-  }
-
-
-  @PostMapping("rentalHomeThemeAdd")
-  public String rentalHomeThemeAdd(RentalHomeTheme rentalHomeTheme) {
-    return null;
   }
 
   // 예약 내역 리스트

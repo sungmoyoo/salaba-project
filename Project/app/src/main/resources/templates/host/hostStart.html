@@ -3,24 +3,23 @@
 <head>
   <meta charset='UTF-8'>
   <title>호스트 숙소등록 시작</title>
+
+  <style>
+    .left-box {
+      float: left;
+      width: 50%;
+    }
+    .right-box {
+      float: right;
+      width: 50%;
+    }
+    body {
+      padding-left: 100px;
+      padding-right: 100px;
+    }
+  </style>
 </head>
 <body>
-
-<style>
-  .left-box {
-    float: left;
-    width: 50%;
-  }
-  .right-box {
-    float: right;
-    width: 50%;
-  }
-  body {
-    padding-left: 100px;
-    padding-right: 100px;
-  }
-</style>
-
 
 <div class="left-box">
   <h1>
@@ -32,7 +31,7 @@
 
   <br>
 
-  <p><button type="button" onclick="location.href='rentalHomeForm.html'">시작하기</button></p>
+  <a data-th-href="@{rentalHomeForm}" href="form" type="button">시작하기</a>
 </div>
 
 <div class="right-box">

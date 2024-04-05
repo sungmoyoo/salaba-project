@@ -48,7 +48,7 @@ public class RentalHome implements Serializable { // 숙소
 
   List<RentalHomePhoto> rentalHomePhotos; // 숙소 사진
 
-  List<RentalHomeTheme> RentalHomeThemes; // 숙소 테마
+  List<Theme> RentalHomeThemes; // 숙소 테마
 
   List<RentalHomeReview> rentalHomeReviews; // 숙소 리뷰
 

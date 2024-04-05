@@ -17,7 +17,12 @@
     <result column="payment_date" property="paymentDate"/>
   </resultMap>
 
-  <resultMap id="ThemeMap" type="RentalHomeTheme">
+  <resultMap id="FacilityMap" type="RentalHomeFacility">
+    <id column="facility_no" property="facilityNo"/>
+    <result column="facility_name" property="facilityName"/>
+  </resultMap>
+
+  <resultMap id="ThemeMap" type="Theme">
     <id column="theme_no" property="themeNo"/>
     <result column="theme_name" property="themeName"/>
   </resultMap>
@@ -78,6 +83,14 @@
       theme_name
     from
       theme
+  </select>
+
+  <select id="findAllFacility" resultMap="FacilityMap">
+    select
+    facility_no,
+    facility_name
+    from
+    rental_home_facility
   </select>
 
   <select id="findAllReservation" resultMap="HostReservationMap" parameterType="int">

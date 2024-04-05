@@ -11,7 +11,7 @@
 
 <div align="center">
 
-<form action="themeAdd" data-th-action="@{rentalHomeThemeAdd}"  method='post'>
+<form action="themeForm" data-th-action="@{rentalHomeThemeSave}"  method='post'>
   <br>
   <br>
   <br>
@@ -26,7 +26,7 @@
       <tr data-th-if="${rentalHomeTheme.themeNo < 10}"
           data-th-each="rentalHomeTheme : ${themeList}" data-th-object="${rentalHomeTheme}">
         <td data-th-text="*{themeName}">모텔</td>
-        <td><input type="radio" data-th-value="*{themeNo}"></td>
+        <td><input type="radio" name="theme" data-th-value="*{themeNo}"></td>
       </tr>
       </tbody>
     </table>
@@ -39,11 +39,11 @@
   <br>
 
   <h2>숙소 테마</h2>
-  <div data-th-if="${rentalHomeTheme.themeNo >= 10}"
+  <p data-th-if="${rentalHomeTheme.themeNo >= 10}"
        data-th-each="rentalHomeTheme : ${themeList}" data-th-object="${rentalHomeTheme}">
     <a data-th-text="*{themeName}"></a>
     <input type="checkbox" data-th-value="*{themeNo}">
-  </div>
+  </p>
   <br>
   <br>
   <br>

@@ -11,7 +11,7 @@
 
 <div align="center">
 
-<form action="add" data-th-action="@{rentalHomeFacilityAdd}" method='post'>
+<form action="facilityForm" data-th-action="@{rentalHomeFacilitySave}" method='post'>
 
   <h2>숙소 시설</h2>
   <div>
@@ -32,7 +32,10 @@
   <br>
 
   <h2>숙소 편의시설</h2>
-  
+  <p data-th-each="rentalHomeFacility : ${facilityList}" data-th-object="${rentalHomeFacility}">
+    <a data-th-text="*{facilityName}"></a>
+    <input type="checkbox" data-th-value="*{FacilityNo}">
+  </p>
 
 
   <div>
