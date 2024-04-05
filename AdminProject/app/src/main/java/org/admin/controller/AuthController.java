@@ -32,7 +32,7 @@ public class AuthController {
         log.debug("login");
         if (loginUser != null) {
             session.setAttribute("loginUser", loginUser);
-            return "redirect:manage/list?menu=1";
+            return "redirect:report/list?menu=1";
         } else {
             return "redirect:/";
         }

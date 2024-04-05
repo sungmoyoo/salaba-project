@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div data-th-replace="header :: header">헤더</div>
+<h3 data-th-text="${menuName}">메뉴 이름</h3>
+<table border="1">
+    <thead>
+    <tr>
+        <th>No</th>
+        <th>제목</th>
+        <th>진행 상태</th>
+        <th>접수일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-each="qna : ${qnaList}" data-th-object="${qna}">
+        <td data-th-text="*{questionNo}">1</td>
+        <td data-th-text="*{title}">제목</td>
+        <td data-th-text="*{state}">진행 상태</td>
+        <td data-th-text="*{regDate}">접수일</td>
+    </tr>
+    </tbody>
+</table>
+<div data-th-replace="footer :: footer">풋터</div>
+
+</body>
+</html>

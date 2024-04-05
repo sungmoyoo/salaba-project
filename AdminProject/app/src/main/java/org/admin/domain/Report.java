@@ -13,14 +13,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Report {
-    private int reportNo;
+    // 숙소신고 테이블의 칼럼을 게시물, 댓글, 답글 신고 테이블이 대부분 포함하고 있기 때문에
+    // 하나의 클래스로 관리
+    // => thymeleaf에서 데이터를 보여주기에도 용이하다.
+    private int reportNo; //숙소신고는 pk칼럼이 없어서 비어있는 상태
     private int memberNo;
     private int category;
     private String categoryName;
     private String content;
     private char state;
     private Date reportDate;
-    private int targetNo;
+    private int targetNo; //신고당한 숙소번호, 게시물, 댓글, 답글 번호
     private char targetType;
 
     private List<ReportFile> reportFiles;

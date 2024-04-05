@@ -2,6 +2,8 @@ package org.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.admin.constant.ReportType;
+import org.admin.domain.Report;
+import org.admin.service.MemberService;
 import org.admin.service.RentalReportService;
 import org.admin.service.TextReportService;
 import org.apache.commons.logging.Log;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,13 +22,13 @@ public class ReportManageController {
     private static final Log log = LogFactory.getLog(ReportManageController.class);
     private final RentalReportService rentalReportService;
     private final TextReportService textReportService;
-    @GetMapping("manage/list")
-    public String rentalRepo(@RequestParam("menu") int menu,
+    @GetMapping("report/list")
+    public String reportList(@RequestParam("menu") int menu,
                              HttpSession session,
                              Model model) {
-        log.debug("관리자 - manage/list");
+        log.debug("관리자 - report/list");
         if (session.getAttribute("loginUser") == null) {
-            return "auth/login";
+            return "redirect:/";
         }
         switch (menu) {
             case 1:
@@ -37,23 +40,21 @@ public class ReportManageController {
                 model.addAttribute("menuName", "게시글 신고내역");
                 break;
             case 3:
-                model.addAttribute("commentList", textReportService.getAllBy(ReportType.COMMENT.getValue()));
+                // 댓글과 답글리스트를 합쳐서 model에 담는다.
+                List<Report> comments = textReportService.getAllBy(ReportType.COMMENT.getValue());
+                List<Report> replies = textReportService.getAllBy(ReportType.REPLY.getValue());
+                comments.addAll(replies);
+                model.addAttribute("list", comments);
                 model.addAttribute("menuName", "댓글 신고내역");
                 break;
-//            case 4:
-//                model.addAttribute("name", "1:1 문의내역");
-//                break;
-//            case 5:
-//                model.addAttribute("name", "일반 회원목록");
-//                break;
-//            case 6:
-//                model.addAttribute("name", "호스트 목록");
-//                break;
-//            case 7:
-//                model.addAttribute("name", "호스트 등록심사");
-//                break;
+            case 4:
+                model.addAttribute("menuName", "1:1 문의내역");
+                break;
+
         }
-        return "manage/list";
+        return "report/list";
     }
+
+
 
 }

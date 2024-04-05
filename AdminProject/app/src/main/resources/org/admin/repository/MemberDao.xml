@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.admin.repository.MemberDao">
+    <resultMap id="MemberMap" type="Member">
+        <id column="member_no" property="memberNo"/>
+        <result column="nation_no" property="nationNo"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="nickname" property="nickname"/>
+        <result column="birthday" property="birthday"/>
+        <result column="tel_no" property="tel"/>
+        <result column="grade_no" property="gradeNo"/>
+        <result column="state" property="state"/>
+        <result column="address" property="address"/>
+        <result column="sex" property="sex"/>
+        <result column="join_date" property="joinDate"/>
+        <result column="last_login_date" property="lastLoginDate"/>
+        <result column="exit_date" property="exitDate"/>
+        <result column="warning_count" property="warningCount"/>
+        <result column="photo" property="photo"/>
+        <result column="rental_count" property="rentalCount"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="MemberMap">
+        SELECT
+            member_no,
+            name,
+            email,
+            nickname,
+            tel_no,
+            join_date,
+            state
+        FROM member
+    </select>
+
+    <select id="findAllHosts" resultMap="MemberMap">
+        SELECT
+            m.member_no,
+            m.name,
+            m.email,
+            m.nickname,
+            m.tel_no,
+            m.join_date,
+            m.state,
+            count(rh.rental_home_no) as rental_count
+        FROM member m
+        INNER JOIN rental_home rh on m.member_no = rh.member_no
+    </select>
+</mapper>

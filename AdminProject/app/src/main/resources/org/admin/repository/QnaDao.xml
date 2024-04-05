@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.admin.repository.QnaDao">
+    <resultMap id="QnaMap" type="Qna">
+        <id column="question_no" property="questionNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="state" property="state"/>
+        <result column="register_date" property="regDate"/>
+        <result column="answer" property="answer"/>
+        <result column="answer_date" property="ansDate"/>
+    </resultMap>
+
+    <select id="findAllQ" resultMap="QnaMap">
+        SELECT
+            question_no,
+            title,
+            content,
+            state,
+            register_date
+        FROM question
+    </select>
+</mapper>

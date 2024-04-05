@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div data-th-replace="header :: header">헤더</div>
+<h3 data-th-text="${menuName}">메뉴 이름</h3>
+<table border="1">
+    <thead>
+    <tr>
+        <th>No</th>
+        <th>숙소명</th>
+        <th data-th-if="${#strings.equals(menuName, '숙소 등록 심사')}">신청인</th>
+        <th data-th-if="${#strings.equals(menuName, '등록된 숙소 목록')}">호스트명</th>
+        <th>등록일</th>
+        <th>상태</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-each="rental : ${rentalList}" data-th-object="${rental}">
+        <td data-th-text="*{rentalNo}">1</td>
+        <td data-th-text="*{name}">이름</td>
+        <td data-th-text="*{hostName}">호스트명</td>
+        <td data-th-text="*{regDate}">등록일</td>
+        <td data-th-text="*{state}">상태</td>
+    </tr>
+    </tbody>
+</table>
+<div data-th-replace="footer :: footer">풋터</div>
+
+</body>
+</html>
