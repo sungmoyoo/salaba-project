@@ -2,7 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+    <script type="text/javascript">
+        function popUp(row) {
+            var cells = row.getElementsByTagName("td");
+            var cellValues = [];
+            for (var i = 0; i < cells.length; i++) {
+                cellValues.push(cells[i].textContent);
+            }
+            window.open("detail.html", "", "width=300px, height=300");
+        }
+    </script>
+
 </head>
+
 <body>
 <div data-th-replace="header :: header">헤더</div>
 <h3 data-th-text="${menuName}">메뉴 이름</h3>
@@ -16,7 +29,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr data-th-each="report : ${list}" data-th-object="${report}">
+    <tr onclick="popUp(this);" data-th-each="report : ${list}" data-th-object="${report}">
         <td data-th-text="*{memberNo}">1</td>
         <td data-th-text="*{categoryName}">신고 유형</td>
         <td data-th-text="*{stateStr}">처리 여부</td>
