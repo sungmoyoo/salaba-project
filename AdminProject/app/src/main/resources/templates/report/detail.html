@@ -2,9 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
 </head>
 <body>
-디테일
+<h2>신고 보기</h2>
+
+<br>
+
+
+<form action="" data-th-action="" method="post" data-th-object="${report}">
+    <h4 data-th-text="${name}">신고 대상</h4>
+    해당 글 : <input readonly type="text" data-th-value="*{reportTarget.content}">
+    작성자: <input readonly type="text" data-th-value="*{writer.name}">
+    작성일: <input readonly type="text" data-th-value="*{reportTarget.createdDate}">
+    <h4>신고 내용</h4>
+    <br>
+    신고자: <input readonly type="text" data-th-value="*{reporter.name}">
+    신고일: <input readonly type="text" data-th-value="*{reportDate}">
+    신고 유형: <input readonly type="text" data-th-value="*{categoryName}">
+    신고 내용: <input readonly type="text" data-th-value="*{content}">
+    처리 상태: <input readonly type="text" data-th-value="*{stateStr}">
+
+    <select name="처리" id="result">
+        <option value="warn">경고 조치</option>
+        <option value="ban">영구 정지</option>
+    </select>
+    <button>신고 처리</button>
+    <button>신고 무시</button>
+</form>
 </body>
 </html>

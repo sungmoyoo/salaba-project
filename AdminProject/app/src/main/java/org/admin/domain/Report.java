@@ -17,7 +17,6 @@ public class Report {
     // 하나의 클래스로 관리
     // => thymeleaf에서 데이터를 보여주기에도 용이하다.
     private int reportNo; //숙소신고는 pk칼럼이 없어서 비어있는 상태
-    private int memberNo;
     private int category;
     private String categoryName;
     private String content;
@@ -26,6 +25,9 @@ public class Report {
     private Date reportDate;
     private int targetNo; //신고당한 숙소번호, 게시물, 댓글, 답글 번호
     private char targetType;
+    private Member reporter;
+    private Member writer;
+    private ReportTarget reportTarget;
 
     private List<ReportFile> reportFiles;
 }

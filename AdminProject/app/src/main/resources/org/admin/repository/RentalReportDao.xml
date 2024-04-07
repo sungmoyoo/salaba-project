@@ -6,17 +6,29 @@
 <mapper namespace="org.admin.repository.RentalReportDao">
     <resultMap id="RentalReportMap" type="Report">
         <result column="rental_home_no" property="targetNo"/>
-        <result column="member_no" property="memberNo"/>
         <result column="report_category_no" property="category"/>
         <result column="category_name" property="categoryName"/>
         <result column="content" property="content"/>
         <result column="state" property="state"/>
         <result column="created_date" property="reportDate"/>
+
+        <association property="reporter" javaType="Member">
+            <id column="reporter_no" property="memberNo"/>
+            <result column="reporter_name" property="name"/>
+        </association>
+
+        <association property="writer" javaType="Member">
+            <id column="writer_no" property="memberNo"/>
+            <result column="writer_name" property="name"/>
+        </association>
+
     </resultMap>
+
+
 
     <select id="findAll" resultMap="RentalReportMap">
         SELECT t1.rental_home_no,
-        t1.member_no,
+        t1.member_no as reporter_no,
         t1.report_category_no,
         t1.state,
         t1.created_date,
@@ -29,7 +41,7 @@
 
     <select id="findBy" resultMap="RentalReportMap">
         SELECT t1.rental_home_no,
-        t1.member_no,
+        t1.member_no as reporter_no,
         t1.report_category_no,
         t1.content,
         t1.state,

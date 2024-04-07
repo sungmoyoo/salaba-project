@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -52,6 +53,19 @@ public class ReportManageController {
 
         }
         return "report/list";
+    }
+
+
+    @GetMapping("report/detail")
+    public String reportDetail(@RequestParam("no") int no,
+                               @RequestParam("type") char type,
+                               @RequestParam("mno") int memberNo,
+                               Model model) {
+        Report report = textReportService.getBy(type, no, memberNo);
+        log.debug(report);
+        model.addAttribute("report", report);
+        return "report/detail";
+
     }
 
 

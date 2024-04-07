@@ -14,22 +14,89 @@
         <result column="report_target_no" property="targetNo"/>
         <result column="report_target_type" property="targetType"/>
         <result column="report_category_name" property="categoryName"/>
+
+        <association property="reporter" javaType="Member">
+            <id column="reporter_no" property="memberNo"/>
+            <result column="reporter_name" property="name"/>
+        </association>
+
+        <association property="writer" javaType="Member">
+            <id column="writer_no" property="memberNo"/>
+            <result column="writer_name" property="name"/>
+        </association>
+
+        <association property="reportTarget" javaType="ReportTarget">
+            <result column="content" property="content"/>
+            <result column="created_date" property="createdDate"/>
+        </association>
+
+        
+        <collection property="reportFiles" ofType="ReportFile">
+            <result column="ori_file_name" property="originalName"/>
+            <result column="uuid_file_name" property="uuidName"/>
+        </collection>
+
     </resultMap>
 
     <select id="findAllBy" resultMap="TextReportMap">
         SELECT
-            brd.report_no,
-            brd.member_no,
-            brd.report_category_no,
-            brd.report_date,
-            brd.state,
-            brd.report_target_no,
-            brd.report_target_type,
-            brc.report_category_name
+        brd.report_no,
+        brd.member_no as reporter_no,
+        brd.report_category_no,
+        brd.report_date,
+        brd.state,
+        brd.report_target_no,
+        brd.report_target_type,
+        brc.report_category_name
         FROM board_report_detail brd
         INNER JOIN board_report_category brc on brd.report_category_no = brc.report_category_no
         WHERE brd.report_target_type= #{targetType}
 
     </select>
-    
+
+    <select id="findBy" resultMap="TextReportMap">
+        SELECT
+            m.member_no as reporter_no,
+            m.name as reporter_name,
+            m2.member_no as writer_no,
+            m2.name as writer_name,
+            brd.report_no,
+            brd.report_date,
+            brd.state,
+            brd.content,
+            brd.member_no,
+            brd.state,
+            brc.report_category_name,
+            brf.uuid_file_name,
+        <if test="type == '0'">
+            b.board_no,
+            b.title as content,
+            b.created_date
+            FROM board_report_detail brd
+            INNER JOIN board b ON brd.report_target_no = b.board_no
+        </if>
+        <if test="type == '1'">
+            c.comment_no,
+            c.content,
+            c.created_date
+            FROM board_report_detail brd
+            INNER JOIN comment c ON brd.report_target_no = c.comment_no
+        </if>
+        <if test="type == '2'">
+            r.reply_no,
+            r.content,
+            r.created_date
+            FROM board_report_detail brd
+            INNER JOIN reply r ON brd.report_target_no = r.reply_no
+        </if>
+        INNER JOIN member m ON brd.member_no = m.member_no
+        INNER JOIN member m2 ON b.member_no = m2.member_no
+        INNER JOIN board_report_file brf ON brd.report_no = brf.report_no
+        INNER JOIN board_report_category brc ON brd.report_category_no = brc.report_category_no
+        WHERE brd.report_target_no = #{no}
+        AND brd.report_target_type = #{type}
+        AND brd.member_no = #{memberNo};
+
+    </select>
+
 </mapper>

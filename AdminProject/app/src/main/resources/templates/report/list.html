@@ -2,18 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <script type="text/javascript">
-        function popUp(row) {
-            var cells = row.getElementsByTagName("td");
-            var cellValues = [];
-            for (var i = 0; i < cells.length; i++) {
-                cellValues.push(cells[i].textContent);
-            }
-            window.open("detail.html", "", "width=300px, height=300");
-        }
-    </script>
-
 </head>
 
 <body>
@@ -29,9 +17,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr onclick="popUp(this);" data-th-each="report : ${list}" data-th-object="${report}">
-        <td data-th-text="*{memberNo}">1</td>
-        <td data-th-text="*{categoryName}">신고 유형</td>
+    <tr data-th-each="report : ${list}" data-th-object="${report}">
+        <td data-th-text="*{reportNo}">1</td>
+        <td ><a data-th-href="@{/report/detail(no=*{targetNo},type=*{targetType},mno=*{memberNo})}" data-th-text="*{categoryName}">신고 유형</a></td>
         <td data-th-text="*{stateStr}">처리 여부</td>
         <td data-th-text="*{reportDate}">접수일</td>
     </tr>

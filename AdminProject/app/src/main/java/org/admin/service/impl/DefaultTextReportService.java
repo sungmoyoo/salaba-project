@@ -24,9 +24,10 @@ public class DefaultTextReportService implements TextReportService {
     }
 
     @Override
-    public Report getBy(char type, int no) {
-        Report report = textReportDao.findBy(type,no);
+    public Report getBy(char type, int no, int memberNo) {
+        Report report = textReportDao.findBy(type,no,memberNo);
         report.setStateStr(Translator.dealState.get(report.getState()));
+        System.out.println("abcdef: " + report);
         return report;
     }
 }
