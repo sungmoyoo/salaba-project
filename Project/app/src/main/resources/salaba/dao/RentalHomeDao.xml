@@ -20,13 +20,12 @@
     <result column="state" property="state"/>
     <result column="rental_home_rule" property="rentalHomeRule"/>
     <result column="like_count" property="rentalHomeLikeCount"/>
-    <result column="start_date" property="checkInDate"/>
-    <result column="end_date" property="checkOutDate"/>
 
     <association property="region" javaType="Region">
       <id column="region_no" property="regionNo"/>
       <result column="region_name" property="regionName"/>
     </association>
+
     <collection property="rentalHomePhotos" ofType="RentalHomePhoto">
       <id column="photo_no" property="photoNo"/>
       <result column="ori_photo_name" property="oriPhotoName"/>
@@ -34,18 +33,28 @@
       <result column="photo_explanation" property="photoExplanation"/>
       <result column="photo_order" property="photoOrder"/>
     </collection>
+
+
     <collection property="rentalHomeFacilities" ofType="RentalHomeFacility">
       <id column="facility_no" property="facilityNo"/>
       <result column="facility_name" property="facilityName"/>
       <result column="facility_count" property="facilityCount"/>
     </collection>
+
     <collection property="themes" ofType="Theme">
       <id column="theme_no" property="themeNo"/>
       <result column="theme_name" property="themeName"/>
     </collection>
-    <collection property="rentalHomeReviews" resultMap="rentalHomeReview"/>
+
+    <collection property="rentalHomeReviews" ofType="RentalHomeReview">
+      <id column="reservation_no" property="reservationNo"/>
+      <result column="created_date" property="createdDate"/>
+      <result column="score" property="score"/>
+      <result column="review" property="review"/>
+    </collection>
+
   </resultMap>
-  
+
   <resultMap id="rentalHomeReview" type="RentalHomeReview">
     <id column="reservation_no" property="reservationNo"/>
     <result column="created_date" property="createdDate"/>
@@ -64,6 +73,33 @@
       <result column="uuid_photo_name" property="uuidPhotoName"/>
       <result column="photo_order" property="photoOrder"/>
     </collection>
+  </resultMap>
+
+  <resultMap id="rentalHomeView" type="RentalHome">
+    <id column="rental_home_no" property="rentalHomeNo"/>
+    <result column="name" property="name"/>
+    <result column="price" property="price"/>
+    <result column="explanation" property="explanation"/>
+    <result column="capacity" property="capacity"/>
+    <result column="lat" property="lat"/>
+    <result column="lon" property="lon"/>
+    <result column="state" property="state"/>
+    <result column="hosting_start_date" property="hostingStartDate"/>
+    <result column="hosting_end_date" property="hostingEndDate"/>
+    <result column="registe_date" property="registeDate"/>
+
+    <association property="region" javaType="Region">
+      <id column="region_no" property="regionNo"/>
+    </association>
+
+    <collection property="rentalHomePhotos" ofType="RentalHomePhoto">
+      <id column="photo_no" property="photoNo"/>
+      <result column="ori_photo_name" property="oriPhotoName"/>
+      <result column="uuid_photo_name" property="uuidPhotoName"/>
+      <result column="photo_explanation" property="photoExplanation"/>
+      <result column="photo_order" property="photoOrder"/>
+    </collection>
+
   </resultMap>
 
   <!-- 숙소 목록 검색(추천수) -->
@@ -215,7 +251,7 @@
   </select>
 
   <!-- 숙소 상세 조회 -->
-  <select id="rentalHomeDetailSelect" resultType="RentalHome">
+  <select id="rentalHomeDetailSelect" resultMap="RentalHomeMap">
     select
       t1.region_no,
       t1.name,
@@ -237,6 +273,7 @@
       t3.facility_no,
       t3.facility_count,
       t4.facility_name,
+      t6.reservation_no,
       t6.created_date,
       t6.score,
       t6.review

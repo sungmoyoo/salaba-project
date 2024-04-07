@@ -3,8 +3,12 @@ package salaba.vo.rental_home;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class RentalHome implements Serializable { // 숙소
   private static final long serialVersionUID = 100L;
@@ -38,14 +42,14 @@ public class RentalHome implements Serializable { // 숙소
   private String rentalHomeRule; // 숙소 이용 규칙
   
   private int cleanFee; // 청소비
-  
-  List<RentalHomeFacility> rentalHomeFacilities; // 숙소 편의 시설
-  
-  List<RentalHomePhoto> rentalHomePhotos; // 숙소 사진
-  
-  List<Theme> themes; // 숙소 테마
-  
-  List<RentalHomeReview> rentalHomeReviews; // 숙소 리뷰
+
+  private List<RentalHomeFacility> rentalHomeFacilities; // 숙소 편의 시설
+
+  private List<RentalHomePhoto> rentalHomePhotos; // 숙소 사진
+
+  private List<Theme> themes; // 숙소 테마
+
+  private List<RentalHomeReview> rentalHomeReviews; // 숙소 리뷰
   
   private int rentalHomeLikeCount; // 숙소 추천수
   

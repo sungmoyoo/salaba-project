@@ -1,6 +1,7 @@
 package salaba.controller;
 
 import java.sql.Date;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
+import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeFacility;
+import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
 
@@ -71,7 +75,8 @@ public class RentalHomeController {
 
   @GetMapping("/view")
   public void rentalHomeView( int rentalHomeNo, Model model){ // 숙소 상세 조회
-    model.addAttribute("rentalHome", rentalHomeService.getRentalHomeDetailView(rentalHomeNo));
+    RentalHome rentalHome = rentalHomeService.getRentalHomeDetailView(rentalHomeNo);
+    model.addAttribute("rentalHome", rentalHome);
   }
 
 
