@@ -17,24 +17,26 @@
   <div>
     수용인원 <input type="number" name="capacity" value="0">
   </div>
-  <div>
-    침실 <input type="number" name="bedRoom" value="0">
+  <div data-th-if="${facility.facilityNo < 4} " data-th-each="facility : ${facilityList}"
+       data-th-object="${facility}">
+    <a data-th-text="*{facilityName}">시설</a>
+    <input type="text" name="facilityCount" value="0"/>
+    <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+    <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
   </div>
-  <div>
-    침대 <input type="number" name="bed" value="0">
-  </div>
-  <div>
-    욕실 <input type="number" name="bathRoom" value="0">
-  </div>
+
 
   <br>
   <br>
   <br>
 
   <h2>숙소 편의시설</h2>
-  <p data-th-each="rentalHomeFacility : ${facilityList}" data-th-object="${rentalHomeFacility}">
+  <p data-th-if="${facility.facilityNo >= 10}"
+       data-th-each="facility : ${facilityList}" data-th-object="${facility}">
     <a data-th-text="*{facilityName}"></a>
-    <input type="checkbox" data-th-value="*{FacilityNo}">
+    <input type="checkbox" name="facilityCount" value="1" />;
+    <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+    <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
   </p>
 
 
