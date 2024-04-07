@@ -1,3 +1,5 @@
+package salaba.vo;
+
 public class ConstVO {
   
   // 상태 ( 결제, 예약 내역, 문의 내역, 알림 내역, 게시판 신고 )

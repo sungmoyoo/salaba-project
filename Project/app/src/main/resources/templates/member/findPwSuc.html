@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+<script>
+  function fn_save(){
+    var password = cps.password.value;
+    var repassword = cps.repassword.value;
+    if(password == ""){
+      alert("비밀번호를 입력하세요.");
+      cps.password.focus();
+      return;
+    }
+    if(repassword == ""){
+      alert("비밀번호 확인을 입력하세요.");
+      cps.repassword.focus();
+      return;
+    }
+    if(password != repassword){
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    cps.submit();
+  }
+
+</script>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+
+<form name="cps" action="chgPwSave" data-th-action="@{chgPwSave}" method='post' data-th-object="${member}" onsubmit="return false;">
+  <input name='no' type='hidden' data-th-value='*{no}' />
+  <table width="300">
+    <tr>
+      <td>비밀번호</td>
+      <td><input name='password' type='password'></td>
+    </tr>
+    <tr>
+      <td>비밀번호 확인</td>
+      <td><input name='repassword' type='password'></td>
+    </tr>
+    <tr>
+      <td colspan="2"><button onclick="fn_save();">비밀번호 변경 완료</button></td>
+    </tr>
+  </table>
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

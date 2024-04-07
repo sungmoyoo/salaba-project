@@ -14,9 +14,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.StorageService;
 
+@Service
 public class NcpStorageService implements StorageService, InitializingBean {
 
   private static Log log = LogFactory.getLog(NcpStorageService.class);
@@ -90,8 +92,7 @@ public class NcpStorageService implements StorageService, InitializingBean {
   @Override
   public void delete(String bucketName, String path, String objectName) throws Exception {
     s3.deleteObject(bucketName, path + objectName);
-
+    
     log.debug(String.format("Object %s has been deleted.\n", objectName));
   }
-
 }

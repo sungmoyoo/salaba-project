@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+<body>
+
+<header data-th-fragment="header">
+  <img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png'>
+    <a data-th-href="@{/member/myinfo}" data-th-if="${session.loginUser != null}" href="myinfo">내 정보</a>
+    <a data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
+    <a data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
+
+</header>
+
+</body>
+</html>
