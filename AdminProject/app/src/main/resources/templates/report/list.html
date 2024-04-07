@@ -19,7 +19,7 @@
     <tbody>
     <tr data-th-each="report : ${list}" data-th-object="${report}">
         <td data-th-text="*{reportNo}">1</td>
-        <td ><a data-th-href="@{/report/detail(no=*{targetNo},type=*{targetType},mno=*{memberNo})}" data-th-text="*{categoryName}">신고 유형</a></td>
+        <td ><a data-th-href="@{/report/detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}" data-th-text="*{categoryName}">신고 유형</a></td>
         <td data-th-text="*{stateStr}">처리 여부</td>
         <td data-th-text="*{reportDate}">접수일</td>
     </tr>

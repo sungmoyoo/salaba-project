@@ -6,7 +6,6 @@
 <mapper namespace="org.admin.repository.TextReportDao">
     <resultMap id="TextReportMap" type="Report">
         <id column="report_no" property="reportNo"/>
-        <result column="member_no" property="memberNo"/>
         <result column="report_category_no" property="category"/>
         <result column="content" property="content"/>
         <result column="report_date" property="reportDate"/>
@@ -26,7 +25,7 @@
         </association>
 
         <association property="reportTarget" javaType="ReportTarget">
-            <result column="content" property="content"/>
+            <result column="report_content" property="content"/>
             <result column="created_date" property="createdDate"/>
         </association>
 
@@ -62,7 +61,6 @@
             m2.name as writer_name,
             brd.report_no,
             brd.report_date,
-            brd.state,
             brd.content,
             brd.member_no,
             brd.state,
@@ -70,28 +68,31 @@
             brf.uuid_file_name,
         <if test="type == '0'">
             b.board_no,
-            b.title as content,
+            b.title as report_content,
             b.created_date
             FROM board_report_detail brd
             INNER JOIN board b ON brd.report_target_no = b.board_no
+            INNER JOIN member m2 ON b.member_no = m2.member_no
         </if>
         <if test="type == '1'">
             c.comment_no,
-            c.content,
+            c.content as report_content,
             c.created_date
             FROM board_report_detail brd
             INNER JOIN comment c ON brd.report_target_no = c.comment_no
+            INNER JOIN member m2 ON c.member_no = m2.member_no
         </if>
         <if test="type == '2'">
             r.reply_no,
-            r.content,
+            r.content as report_content,
             r.created_date
             FROM board_report_detail brd
             INNER JOIN reply r ON brd.report_target_no = r.reply_no
+            INNER JOIN member m2 ON r.member_no = m2.member_no
         </if>
         INNER JOIN member m ON brd.member_no = m.member_no
-        INNER JOIN member m2 ON b.member_no = m2.member_no
-        INNER JOIN board_report_file brf ON brd.report_no = brf.report_no
+
+        LEFT JOIN board_report_file brf ON brd.report_no = brf.report_no
         INNER JOIN board_report_category brc ON brd.report_category_no = brc.report_category_no
         WHERE brd.report_target_no = #{no}
         AND brd.report_target_type = #{type}

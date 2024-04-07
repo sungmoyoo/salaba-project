@@ -64,6 +64,11 @@ public class ReportManageController {
         Report report = textReportService.getBy(type, no, memberNo);
         log.debug(report);
         model.addAttribute("report", report);
+        if (type == '0') {
+            model.addAttribute("name","게시글 신고");
+        } else if (type == '1' || type == '2') {
+            model.addAttribute("name", "댓글 신고");
+        }
         return "report/detail";
 
     }

@@ -6,21 +6,40 @@
 <body>
 <h2>신고 보기</h2>
 
-<br>
-
-
-<form action="" data-th-action="" method="post" data-th-object="${report}">
+<form action="report/detail/update" data-th-action="@{report/detail/update}" method="post" data-th-object="${report}">
     <h4 data-th-text="${name}">신고 대상</h4>
-    해당 글 : <input readonly type="text" data-th-value="*{reportTarget.content}">
-    작성자: <input readonly type="text" data-th-value="*{writer.name}">
-    작성일: <input readonly type="text" data-th-value="*{reportTarget.createdDate}">
-    <h4>신고 내용</h4>
+    <div>
+        해당 글 : <input readonly type="text" data-th-value="*{reportTarget.content}">
+    </div>
+    <div>
+        작성자: <input readonly type="text" data-th-value="*{writer.name}">
+    </div>
+    <div>
+        작성일: <input readonly type="text" data-th-value="*{reportTarget.createdDate}">
+    </div>
+
     <br>
+
+    <h4>신고 내용</h4>
+    <div>
     신고자: <input readonly type="text" data-th-value="*{reporter.name}">
+    </div>
+    <div>
     신고일: <input readonly type="text" data-th-value="*{reportDate}">
+    </div>
+    <div>
     신고 유형: <input readonly type="text" data-th-value="*{categoryName}">
+    </div>
+    <div>
     신고 내용: <input readonly type="text" data-th-value="*{content}">
+    </div>
+    <div>
     처리 상태: <input readonly type="text" data-th-value="*{stateStr}">
+    </div>
+
+    <br>
+
+    <br>
 
     <select name="처리" id="result">
         <option value="warn">경고 조치</option>

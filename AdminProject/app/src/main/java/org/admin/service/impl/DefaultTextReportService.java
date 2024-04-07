@@ -25,9 +25,14 @@ public class DefaultTextReportService implements TextReportService {
 
     @Override
     public Report getBy(char type, int no, int memberNo) {
+
         Report report = textReportDao.findBy(type,no,memberNo);
         report.setStateStr(Translator.dealState.get(report.getState()));
-        System.out.println("abcdef: " + report);
+        if (report == null) {
+            System.out.println("nullllllll");
+        } else {
+            System.out.println("abcdef: " + report);
+        }
         return report;
     }
 }
