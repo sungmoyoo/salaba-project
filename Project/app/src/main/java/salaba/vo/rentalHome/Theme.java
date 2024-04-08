@@ -8,6 +8,8 @@ public class Theme implements Serializable { // 지역
 
   private static final long serialVersionUID = 100L;
 
+  private int rentalHomeNo;
+
   private int themeNo;
 
   private String themeName;

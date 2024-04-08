@@ -2,24 +2,26 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="salaba.dao.HostDao">
+<mapper namespace="salaba.dao.FacilityDao">
 
   <resultMap id="FacilityMap" type="RentalHomeFacility">
     <id column="facility_no" property="facilityNo"/>
     <result column="facility_name" property="facilityName"/>
   </resultMap>
 
-  <insert id="addFacility" parameterType="RentalHomeDetail">
+  <insert id="addFacility" parameterType="RentalHomeFacility">
     insert into rental_home_detail(
       rental_home_no,
       facility_no,
       facility_count
     ) values
-    (
-      #{rentalHomeNo},
-      #{facilityNo},
-      #{facilityCount}
-    );
+    <foreach collection="list" item="item" separator=",">
+      (
+      #{item.rentalHomeNo},
+      #{item.facilityNo},
+      #{item.facilityCount}
+      )
+    </foreach>
   </insert>
 
   <select id="findAllFacility" resultMap="FacilityMap">

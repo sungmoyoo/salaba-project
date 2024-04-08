@@ -2,8 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="salaba.dao.HostDao">
-
+<mapper namespace="salaba.dao.ThemeDao">
 
   <resultMap id="ThemeMap" type="Theme">
     <id column="theme_no" property="themeNo"/>
@@ -13,7 +12,9 @@
   <insert id="addTheme">
     insert into rental_home_theme(rental_home_no, theme_no)
     values
-    (#{rentalHomeNo}, #{themeNo});
+    <foreach collection="list" item="item" separator=",">
+      (#{item.rentalHomeNo}, #{item.themeNo})
+    </foreach>
   </insert>
 
   <select id="findAllTheme" resultMap="ThemeMap">

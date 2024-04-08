@@ -22,4 +22,6 @@ public class RentalHomePhoto implements Serializable { // 숙소 사진
   private String photoExplanation; // 사진 설명
 
   private int photoOrder; // 사진순서
+
+  private int rentalHomeNo; // 숙소 번호
 }

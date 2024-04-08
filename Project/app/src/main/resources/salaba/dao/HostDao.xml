@@ -36,8 +36,8 @@
 
     <collection property="rentalHomeFacilities" ofType="RentalHomeFacility">
       <id column="facility_no" property="facilityNo"/>
-      <result column="facility_name" property="facilityName"/>
       <result column="facility_count" property="facilityCount"/>
+      <result column="facility_name" property="facilityName"/>
     </collection>
 
     <collection property="rentalHomePhotos" ofType="RentalHomePhoto">
@@ -93,7 +93,7 @@
     );
   </insert>
 
-  <insert id="addHomeDetail" parameterType="RentalHomeDetail">
+  <insert id="addHomeDetail" parameterType="Facility">
     insert into rental_home_detail(
     rental_home_no,
     facility_no,
@@ -127,10 +127,7 @@
 
   <select id="findByRentalHomeNo" resultMap="RentalHomeMap" parameterType="int">
     select
-      rp.photo_no,
-      rp.ori_photo_name,
-      rp.uuid_photo_name,
-      rp.photo_explanation,
+      r.rental_home_no,
       r.region_no,
       r.name,
       r.explanation,
@@ -142,10 +139,24 @@
       r.state,
       r.hosting_start_date,
       r.hosting_end_date,
-      r.registe_date
+      r.registe_date,
+      rp.photo_no,
+      rp.ori_photo_name,
+      rp.uuid_photo_name,
+      rp.photo_explanation,
+      rd.facility_no,
+      rd.facility_count,
+      rt.theme_no,
+      f.facility_name,
+      t.theme_name
     from rental_home r
       inner join rental_home_photo rp on rp.rental_home_no = r.rental_home_no
-      inner join rental_home_facility rf on
+      inner join rental_home_detail rd on rd.rental_home_no = r.rental_home_no
+      inner join rental_home_theme rt on rt.rental_home_no = r.rental_home_no
+      inner join rental_home_facility f on rd.facility_no = f.facility_no
+      inner join theme t on rt.theme_no = t.theme_no
+    where
+      r.rental_home_no=#{value}
   </select>
 
   <select id="findAllReservation" resultMap="HostReservationMap" parameterType="int">

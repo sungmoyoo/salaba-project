@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>비트캠프 데브옵스 5기</title>
+</head>
+<body>
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+
+<h1>숙소 상세</h1>
+
+<div align="center">
+  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data' method='post'
+        data-th-object="${rentalHome}">
+
+    <h2>숙소 상태 관리</h2>
+    <p>현재 상태 관리</p>
+    <label>
+      <select id="statusSelect">
+        <option value="0">등록 대기</option>
+        <option value="1">운영중</option>
+        <option value="2">중지</option>
+      </select>
+    </label>
+
+    <script>
+      // JavaScript로 DB에서 가져온 값을 사용하여 기본값 설정
+      document.addEventListener('DOMContentLoaded', function() {
+          // 서버에서 가져온 DB 값으로 기본값 설정 (예: PHP, Python 등 사용)
+          var dbValue = 1; // 여기에 DB에서 가져온 값으로 설정
+
+          // select 요소를 가져오기
+          var selectElement = document.getElementById('statusSelect');
+
+          // DB에서 가져온 값과 일치하는 option을 선택
+          for (var i = 0; i < selectElement.options.length; i++) {
+              if (selectElement.options[i].value == dbValue) {
+                  selectElement.options[i].selected = true;
+                  break;
+              }
+          }
+      });
+    </script>
+
+
+    <h2>숙소 사진</h2>
+    <input multiple name='rentalHomePhotos' type='file'>
+<!--    <ul data-th-if="*{rentalHomePhotos[0].uuidFileName}">-->
+      <li data-th-each="photo : ${rentalHomePhotos}" data-th-object="${rentalHomePhoto}">
+        <img src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + *{uuidFileName}}"
+           data-th-text="*{oriFileName}" alt="?"/>
+        <!--        [<a data-th-href="@{file/delete(category=${category},no=*{no})}"-->
+        <!--            href="file-delete.html">삭제</a>]-->
+      </li>
+    </ul>
+
+    <h2>숙소 기본 정보</h2>
+    <div>
+      숙소명: <input readonly data-th-value="${name}" name='name' type='text' value="호텔">
+    </div>
+    <div>
+      숙소 설명: <textarea data-th-value="${explanation}" name="explanation"></textarea>
+    </div>
+    <div>
+      숙소 이용규칙: <textarea data-th-value="${rentalHomeRule}" name="rentalHomeRule"></textarea>
+    </div>
+
+    <h2>숙소 위치</h2>
+    <div>
+      지도 API
+    </div>
+
+
+
+    <h2>요금 설정</h2>
+    <script>
+      function calc() {
+        const price = Number(document.getElementById("price").value);
+        const cleanFee = Number(document.getElementById("cleanFee").value)
+        document.getElementById("income").value = Math.round((price + cleanFee) * 0.97)
+      }
+    </script>
+    <div>
+      이용요금(주 기준) <input type="text" data-th-value="*{price}" name="price"
+                        id="price" onkeyup="calc(this.value)"/>
+    </div>
+    <div>
+      청소비  <input type="text" data-th-value="*{cleanFee}" name="cleanFee"
+                  id="cleanFee" onkeyup="calc(this.value)"/>
+    </div>
+    <div>
+      정산금액 <input type="text" id="income"/>
+    </div>
+
+    <h2>호스팅 기간</h2>
+    <div>
+      호스팅 시작일: <input data-th-value='*{hostingStartDate}' name="hostingStartDate" type='date'>
+    </div>
+    <div>
+      호스팅 종료일: <input data-th-value='*{hostingEndDate}' name="hostingEndDate" type='date'>
+    </div>
+
+    <h2>숙소 타입</h2>
+    <span data-th-if="${theme.themeNo < 10}" data-th-each="theme : ${themeList}" data-th-object="${theme}">
+      <a data-th-text="*{themeName}">모텔</a>
+    </span>
+
+    <span data-th-each="rentalHomeTheme : ${rentalHome.rentalHomeThemes}"
+      data-th-object="${rentalHomeTheme}">
+      <label data-th-if="*{themeNo != null}">
+        <input type="radio" checked data-th-name="type" data-th-value="${themeNo} + ',' + ${themeName}"/>
+      </label>
+      <label data-th-unless="*{themeNo != null}">
+        <input type="radio" data-th-name="type" data-th-value="${themeNo} + ',' + ${themeName}"/>
+      </label>
+    </span>
+
+
+
+    <h2>숙소 테마</h2>
+    <div>
+      <p data-th-if="${theme.themeNo >= 10}"
+         data-th-each="theme : ${rentalHomeThemes}" data-th-object="${rentalHomeTheme}">
+        <a data-th-text="*{themeName}"></a>
+
+        <label data-th-if="theme">
+          <input type="checkbox" name="themeNos" data-th-value="*{themeNo}"/>
+        </label>
+        <label>
+          <input type="hidden" name="themeNames" data-th-value="*{themeName}"/>
+        </label>
+      </p>
+    </div>
+
+
+
+    <div>
+      <button>저장</button> <button>취소</button>
+  <!--    <a data-th-href="@{delete(category=${category},no=*{no})}">[삭제]</a>-->
+    </div>
+  </form>
+</div>
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+</body>
+</html>

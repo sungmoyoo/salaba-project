@@ -16,6 +16,8 @@ public interface HostDao {
 
   List<RentalHome> findAllRentalHome(int hostNo); // 숙소 정보 리스트(기본정보,시설,테마 모두)
 
+  RentalHome findByRentalHomeNo(int rentalHomeNo); // 숙소 번호로 찾기
+
   // 예약 상태 업데이트
   int stateUpdate(
       @Param("state")int state,

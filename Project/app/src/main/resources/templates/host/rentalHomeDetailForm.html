@@ -34,7 +34,7 @@
   <p data-th-if="${facility.facilityNo >= 10}"
        data-th-each="facility : ${facilityList}" data-th-object="${facility}">
     <a data-th-text="*{facilityName}"></a>
-    <input type="checkbox" name="facilityCount" value="1" />;
+    <input type="checkbox" name="facilityCount" value="1" />
     <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
     <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
   </p>
