@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
+  <script th:inline="javascript">
+    const sessionMemberNo = /*[[${session.memberNo}]]*/ null;
+    const rentalHomeNoModel = /*[[${rentalHome.rentalHomeNo}]]*/ null;
+  </script>
 </head>
 <body>
 <main>
@@ -23,19 +26,113 @@
   </section>
   <section>
     <h1 data-th-text="${rentalHome.name}">숙소 이름</h1>
-    <div data-th-each="photo : ${rentalHome.rentalHomePhotos}">
+    <button id="reportButton">신고하기</button>
+
+    <div id="reportModal" style="display: none;">
+      <h2>숙소 신고</h2>
+      <form id="reportForm">
+        <select id="category">
+          <option value="1">부정확하거나 틀린 정보가 있어요</option>
+          <option value="2">실제 숙소가 아닙니다</option>
+          <option value="3">사기입니다</option>
+          <option value="4">불쾌합니다</option>
+          <option value="5">기타</option>
+        </select>
+        <br>
+        <input type="text" id="content" placeholder="신고 사유를 입력하세요">
+        <br>
+        <button type="submit">신고하기</button>
+        <button type="button" id="cancelButton">취소</button>
+      </form>
+    </div>
+
+    <h2 data-th-text="${rentalHome.explanation}">숙소 소개</h2>
+    <div data-th-each="photo : ${rentalHomePhoto}" data-th-object="${rentalHomePhoto}">
       <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rental_home/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
     </div>
-    <h3 data-th-text="${rentalHome.explanation}" >설명</h3>
     <h3 data-th-text="${rentalHome.address}">숙소 주소</h3>
     <h3 data-th-text="${rentalHome.price}">가격</h3>
-    <div data-th-each="facility : ${rentalHome.rentalHomeFacilities}" >
-      <h6 data-th-text="facility.name">시설 이름</h6>
-      <h6 data-th-text="facility.count">시설 갯수</h6>
+    <div data-th-each="facility : ${rentalHomeFacility}" data-th-object="${rentalHomeFacility}">
+      <h6 data-th-text="${facility.facilityName}">시설 이름</h6>
+      <h6 data-th-text="${facility.facilityCount}">시설 갯수</h6>
+    </div>
+  </section>
+  <section>
+    <h3>숙소 리뷰</h3>
+    <div data-th-each="review : ${rentalHomeReview}" data-th-object="${rentalHomeReview}">
+      <h4>평점</h4>
+      <div>
+        <tr data-th-text="${review.review}">리뷰 내용</tr>
+        <tr data-th-text="${review.createdDate}">작성 일시</tr>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div>
+      <h3 data-th-text="${rentalHome.cleanFee}">청소비</h3>
+      <h3 data-th-text="${rentalHome.rentalHomeRule}">숙소 규칙</h3>
     </div>
   </section>
 </main>
 <link rel="stylesheet" th:href="@{/mainStyle.css}" />
+
+<script>
+  const reportModal = document.getElementById("reportModal");
+  const reportButton = document.getElementById("reportButton");
+  const cancelButton = document.getElementById("cancelButton");
+
+  // 신고 버튼 클릭 시
+  reportButton.addEventListener("click",()=>{
+    reportModal.style.display = "block";
+  });
+
+  // 취소 버튼 클릭 시
+  cancelButton.addEventListener("click", ()=>{
+    reportModal.style.display = "none";
+  });
+
+  // 외부 클릭스 닫기
+  window.addEventListener("click",(event)=>{
+    if( event.target == reportModal ){
+      reportModal.style.display = "none";
+    }
+  });
+
+  // form 제출 시 데이터 전송 AJAX 사용
+  document.getElementById("reportForm").addEventListener("submit",(event)=>{
+    event.preventDefault(); // 동작 취소
+
+    const category = document.getElementById("category").value;
+    const content = document.getElementById("content").value;
+    const memberNo = sessionMemberNo;
+    const rentalHomeNo = rentalHomeNoModel;
+
+    // RentalHomeReport 객체 생성
+    const rentalHomeReport = {
+      rentalHomeNo: rentalHomeNo,
+      memberNo: memberNo,
+      content: content,
+      reportCategoryNo: category
+    }
+
+    // Ajax 요청 보내기
+    const xhr = new XMLHttpRequest();
+    xhr.open( "POST", "/rentalHome/report", true );
+    xhr.setRequestHeader( "Content-type", "application/json" );
+    xhr.onreadystatechange = () => {
+      if( xhr.readyState === XMLHttpRequest.DONE ){
+        if( xhr.status === 200 ){
+          alert("신고가 접수되었습니다.");
+          // 신고 닫기
+          reportModal.style.display = "none";
+        }else{
+          alert("오류가 발생했습니다. 다시 시도해주세요.");
+        }
+      }
+    };
+    xhr.send(JSON.stringify(rentalHomeReport));
+  });
+</script>
 
 </body>
 </html>

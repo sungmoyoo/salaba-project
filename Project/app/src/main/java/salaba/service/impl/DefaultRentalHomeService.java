@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import salaba.dao.RentalHomeDao;
 import salaba.service.RentalHomeService;
 import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeFacility;
+import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
 import salaba.vo.rental_home.Theme;
@@ -33,8 +35,6 @@ public class DefaultRentalHomeService implements RentalHomeService {
   @Override
   public List<RentalHome> getRentalHomeConditionSearch(String regionName, Date checkInDate,
       Date checkOutDate, int capacity) { // 숙소 조건 검색
-    System.out.printf("check in date impl = %s\n", checkInDate);
-    System.out.printf("check out date impl = %s\n", checkOutDate);
     return rentalHomeDao.rentalHomeConditionSelect(regionName,checkInDate,checkOutDate,capacity);
   }
 
@@ -55,11 +55,27 @@ public class DefaultRentalHomeService implements RentalHomeService {
 
   @Override
   public void addRentalHomeReport(RentalHomeReport rentalHomeReport) { // 숙소 신고
+    log.debug(String.format("rentalHomeReport : %s", rentalHomeReport.toString()));
+    log.debug(String.format("rentalHomeNo : %s", rentalHomeReport.getRentalHomeNo()));
+    log.debug(String.format("memberNo : %s", rentalHomeReport.getMemberNo()));
+    log.debug(String.format("content : %s", rentalHomeReport.getContent()));
+    log.debug(String.format("reportCategoryNo : %s", rentalHomeReport.getReportCategoryNo()));
+
     rentalHomeDao.rentalHomeReportAdd(rentalHomeReport);
   }
 
   @Override
   public List<RentalHomeReview> getRentalHomeReviewList(int rentalHomeNo) { // 숙소 리뷰 조회
     return rentalHomeDao.rentalHomeReviewSelect(rentalHomeNo);
+  }
+
+  @Override
+  public List<RentalHomePhoto> getRentalHomePhotos(int rentalHomeNo) { // 숙소 사진 조회
+    return rentalHomeDao.rentalHomePhotoSelect(rentalHomeNo);
+  }
+
+  @Override
+  public List<RentalHomeFacility> getRentalHomeFacilities(int rentalHomeNo) { // 숙소 시설 조회
+    return rentalHomeDao.rentalHomeFacilitySelect(rentalHomeNo);
   }
 }

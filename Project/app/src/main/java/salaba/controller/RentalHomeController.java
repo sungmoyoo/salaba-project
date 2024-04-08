@@ -1,6 +1,7 @@
 package salaba.controller;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -10,15 +11,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
-import salaba.vo.rental_home.RentalHome;
-import salaba.vo.rental_home.RentalHomeFacility;
-import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
+import salaba.vo.rental_home.Theme;
 
 @RequiredArgsConstructor
 @Controller
@@ -36,7 +37,13 @@ public class RentalHomeController {
       @RequestParam( value = "checkOutDate", required = false )
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
       @RequestParam( value = "capacity", defaultValue = "1") int capacity) throws Exception{ // 메인화면
-    Member loginUser = (Member) httpSession.getAttribute("loginUser");
+//    Member loginUser = (Member) httpSession.getAttribute("loginUser");
+    Member loginUser = new Member();
+    List<Theme> list = new ArrayList<>();
+    Theme theme = new Theme(1,"호텔");
+    list.add(theme);
+    loginUser.setThemes(list);
+    loginUser.setMemberNo(1);
 
     // LogIn User Check
     if( ( loginUser == null  ) &&
@@ -45,7 +52,6 @@ public class RentalHomeController {
 
       // 로그인하지 않은 경우 기본 숙소 목록 출력 검색 하지 않은 경우
       model.addAttribute("rentalHomeList", rentalHomeService.getRentalHomeMain());
-      log.debug("ccc");
     }
     else if(
          loginUser != null && loginUser.getThemes() != null &&
@@ -53,12 +59,10 @@ public class RentalHomeController {
         checkInDate == null && checkOutDate == null && capacity == 1 ){
       // 로그인한 유저 중 선호 사항을 고른 유저의 경우
       // 선호사항으로 숙소 목록 출력
-      log.debug("bbbb");
       model.addAttribute("rentalHomeList",
           rentalHomeService.getRentalHomeMainForLoginUser(loginUser.getThemes()));
     }
     else{
-      log.debug("aaa");
       // 숙소 검색
       model.addAttribute("rentalHomeList",
           rentalHomeService.getRentalHomeConditionSearch(regionName,checkInDate,checkOutDate,capacity));
@@ -75,8 +79,10 @@ public class RentalHomeController {
 
   @GetMapping("/view")
   public void rentalHomeView( int rentalHomeNo, Model model){ // 숙소 상세 조회
-    RentalHome rentalHome = rentalHomeService.getRentalHomeDetailView(rentalHomeNo);
-    model.addAttribute("rentalHome", rentalHome);
+    model.addAttribute("rentalHome", rentalHomeService.getRentalHomeDetailView(rentalHomeNo));
+    model.addAttribute("rentalHomeReview", rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
+    model.addAttribute("rentalHomePhoto", rentalHomeService.getRentalHomePhotos(rentalHomeNo));
+    model.addAttribute("rentalHomeFacility", rentalHomeService.getRentalHomeFacilities(rentalHomeNo));
   }
 
 
@@ -93,11 +99,11 @@ public class RentalHomeController {
         rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
   }
 
-//  @PostMapping("")
-  public String rentalHomeReportAdd( RentalHomeReport rentalHomeReport){
+  @PostMapping("/report")
+  public String rentalHomeReportAdd( @RequestBody RentalHomeReport rentalHomeReport){
     rentalHomeService.addRentalHomeReport(rentalHomeReport); // 숙소 신고
 
-    return ""; // 작성전 페이지로 돌아가기
+    return "redirect:view?rentalHomeNo="+ rentalHomeReport.getRentalHomeNo(); // 작성전 페이지로 돌아가기
   }
 
 }

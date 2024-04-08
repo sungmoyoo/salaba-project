@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeFacility;
+import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
 import salaba.vo.rental_home.Theme;
@@ -29,10 +31,16 @@ public interface RentalHomeDao {
       @Param("capacity") int capacity );
   
   // 숙소 상세 조회
-  RentalHome rentalHomeDetailSelect( @Param("rental_home_no") int rentalHomeNo );
+  RentalHome rentalHomeDetailSelect( int rentalHomeNo );
   
   // 숙소 리뷰 조회
   List<RentalHomeReview> rentalHomeReviewSelect( @Param("rental_home_no") int rentalHomeNo );
+
+  // 숙소 시설 조회
+  List<RentalHomeFacility> rentalHomeFacilitySelect(int rentalHomeNo);
+
+  // 숙소 사진 조회
+  List<RentalHomePhoto> rentalHomePhotoSelect( int rentalHomeNo );
 
   // 숙소 리뷰 작성
   void rentalHomeReviewAdd( RentalHomeReview rentalHomeReview );
