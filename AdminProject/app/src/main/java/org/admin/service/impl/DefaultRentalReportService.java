@@ -17,6 +17,8 @@ public class DefaultRentalReportService implements RentalReportService {
     public List<Report> getAll() {
         List<Report> reports = rentalReportDao.findAll();
         for (Report report : reports) {
+            //하나의 객체에 숙소신고와 게시글,댓글,답글을 다루기 때문에 숙소 신고에대해 type을 소스에서 지정해준다.
+            report.setTargetType('3');
             report.setStateStr(Translator.dealState.get(report.getState()));
         }
         return reports;
@@ -25,6 +27,7 @@ public class DefaultRentalReportService implements RentalReportService {
     @Override
     public Report get(int rentalNo, int memberNo) {
         Report report = rentalReportDao.findBy(rentalNo, memberNo);
+        report.setTargetType('3');
         report.setStateStr(Translator.dealState.get(report.getState()));
         return report;
     }

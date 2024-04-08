@@ -2,6 +2,7 @@ package org.admin.repository;
 
 import org.admin.domain.Report;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
 public interface RentalReportDao {
     public List<Report> findAll();
 
-    public Report findBy(int rentalNo, int memberNo);
+    public Report findBy(@Param("rentalNo") int rentalNo,
+                         @Param("memberNo") int memberNo);
 
 }

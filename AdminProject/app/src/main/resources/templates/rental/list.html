@@ -22,7 +22,7 @@
     <tr data-th-each="rental : ${rentalList}" data-th-object="${rental}">
         <td data-th-text="*{rentalNo}">1</td>
         <td data-th-text="*{name}">이름</td>
-        <td data-th-text="*{hostName}">호스트명</td>
+        <td data-th-text="*{host.name}">호스트명</td>
         <td data-th-text="*{regDate}">등록일</td>
         <td data-th-text="*{stateStr}">상태</td>
     </tr>

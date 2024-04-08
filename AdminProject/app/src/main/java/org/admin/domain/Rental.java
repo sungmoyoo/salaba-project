@@ -6,10 +6,7 @@ import java.sql.Date;
 
 @Data
 public class Rental {
-    private int hostNo;
-    private String hostName;
     private int rentalNo;
-    private int memberNo;
     private int regionNo;
     private String name;
     private String explanation;
@@ -20,5 +17,7 @@ public class Rental {
     private char state;
     private String stateStr;
     private Date regDate;
+    private Member host;
+    private Member reporter;
 
 }

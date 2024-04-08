@@ -6,7 +6,6 @@
 <mapper namespace="org.admin.repository.RentalDao">
     <resultMap id="RentalMap" type="Rental">
         <id column="rental_home_no" property="rentalNo"/>
-        <result column="member_no" property="memberNo"/>
         <result column="region_no" property="regionNo"/>
         <result column="name" property="name"/>
         <result column="explanation" property="explanation"/>
@@ -16,9 +15,14 @@
         <result column="capacity" property="capacity"/>
         <result column="state" property="state"/>
         <result column="registe_date" property="regDate"/>
-        <result column="host_name" property="hostName"/>
-        <result column="host_no" property="hostNo"/>
+
+        <association property="host" javaType="Member">
+            <id column="host_no" property="memberNo"/>
+            <result column="host_name" property="name"/>
+        </association>
     </resultMap>
+
+
 
     <select id="findAll" resultMap="RentalMap">
         SELECT
@@ -37,7 +41,7 @@
         SELECT
             rh.rental_home_no,
             rh.name,
-            m.name as host_name,
+            m.name as host_name ,
             m.member_no as host_no,
             rh.registe_date,
             rh.state

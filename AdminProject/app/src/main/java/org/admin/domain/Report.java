@@ -27,7 +27,8 @@ public class Report {
     private char targetType;
     private Member reporter;
     private Member writer;
-    private ReportTarget reportTarget;
+    private ReportTarget reportTarget; //게시글, 댓글
+    private Rental targetRental; //숙소
 
     private List<ReportFile> reportFiles;
 }

@@ -28,7 +28,7 @@
     <tbody>
     <tr data-th-each="member : ${memberList}" data-th-object="${member}">
         <td data-th-text="*{memberNo}">1</td>
-        <td data-th-text="*{name}">이름</td>
+        <td><a data-th-text="*{name}" data-th-href="@{detail(mno=*{memberNo})}" href="detail">이름</a></td>
         <td data-th-text="*{nickname}">닉네임</td>
         <td data-th-text="*{email}">이메일</td>
         <td data-th-text="*{tel}">연락처</td>

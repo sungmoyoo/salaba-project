@@ -61,13 +61,22 @@ public class ReportManageController {
                                @RequestParam("type") char type,
                                @RequestParam("mno") int memberNo,
                                Model model) {
-        Report report = textReportService.getBy(type, no, memberNo);
-        log.debug(report);
-        model.addAttribute("report", report);
+        model.addAttribute("type", type);
         if (type == '0') {
+            Report report = textReportService.getBy(type, no, memberNo);
+            log.debug(report);
+            model.addAttribute("report", report);
             model.addAttribute("name","게시글 신고");
         } else if (type == '1' || type == '2') {
+            Report report = textReportService.getBy(type, no, memberNo);
+            log.debug(report);
+            model.addAttribute("report", report);
             model.addAttribute("name", "댓글 신고");
+        } else {
+            Report report = rentalReportService.get(no, memberNo);
+            log.debug("abcdefg: " + report);
+            model.addAttribute("report", report);
+            model.addAttribute("name", "숙소 신고");
         }
         return "report/detail";
 

@@ -5,8 +5,8 @@
 
 <mapper namespace="org.admin.repository.RentalReportDao">
     <resultMap id="RentalReportMap" type="Report">
-        <result column="rental_home_no" property="targetNo"/>
         <result column="report_category_no" property="category"/>
+        <result column="rental_home_no" property="targetNo"/>
         <result column="category_name" property="categoryName"/>
         <result column="content" property="content"/>
         <result column="state" property="state"/>
@@ -20,6 +20,14 @@
         <association property="writer" javaType="Member">
             <id column="writer_no" property="memberNo"/>
             <result column="writer_name" property="name"/>
+        </association>
+
+        <association property="targetRental" javaType="Rental">
+            <id column="rental_home_no" property="rentalNo"/>
+            <result column="name" property="name"/>
+            <result column="rental_state" property="state"/>
+            <result column="address" property="address"/>
+            <result column="registe_date" property="regDate"/>
         </association>
 
     </resultMap>
@@ -40,17 +48,28 @@
     </select>
 
     <select id="findBy" resultMap="RentalReportMap">
-        SELECT t1.rental_home_no,
-        t1.member_no as reporter_no,
-        t1.report_category_no,
-        t1.content,
-        t1.state,
-        t1.created_date,
-        t2.rental_home_report_name
-        FROM rental_home_report t1
-        INNER JOIN rental_home_report_category t2 on t1.report_category_no = t2.rental_home_report_no
-        order by
-        t1.created_date
+        SELECT
+            rhr.rental_home_no,
+            rhr.member_no as reporter_no,
+            m.name as reporter_name,
+            rhr.report_category_no,
+            rhrc.rental_home_report_name as category_name,
+            rhr.created_date,
+            rhr.content,
+            rhr.state,
+            rh.member_no as writer_no,  <!-- 게시물,댓글,답글과 vo를 공유하므로 host=writer-->
+            m2.name as writer_name,
+            rh.name,
+            rh.address,
+            rh.state as rental_state,
+            rh.registe_date
+        FROM rental_home_report rhr
+        INNER JOIN rental_home_report_category rhrc ON rhr.report_category_no = rhrc.rental_home_report_no
+        INNER JOIN rental_home rh ON rhr.rental_home_no = rh.rental_home_no
+        INNER JOIN member m ON rhr.member_no = m.member_no
+        INNER JOIN member m2 ON rh.member_no = m2.member_no
+        WHERE rhr.rental_home_no = #{rentalNo}
+        AND rhr.member_no = #{memberNo}
     </select>
 </mapper>
 
