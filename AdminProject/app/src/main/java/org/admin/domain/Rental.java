@@ -3,6 +3,7 @@ package org.admin.domain;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 public class Rental {
@@ -19,5 +20,6 @@ public class Rental {
     private Date regDate;
     private Member host;
     private Member reporter;
+    private List<Theme> themes;
 
 }

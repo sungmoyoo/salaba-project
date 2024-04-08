@@ -3,6 +3,7 @@ package org.admin.domain;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 public class Member {
@@ -15,6 +16,7 @@ public class Member {
     private Date birthDay;
     private String tel;
     private int gradeNo;
+    private String gradeName;
     private char state;
     private String stateStr;
     private String address;
@@ -25,4 +27,5 @@ public class Member {
     private int warningCount;
     private String photo;
     private int rentalCount;
+    private List<Rental> rentals;
 }

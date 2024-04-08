@@ -1,6 +1,7 @@
 package org.admin.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.admin.domain.Member;
 import org.admin.service.MemberService;
 import org.admin.service.RentalReportService;
 import org.admin.service.TextReportService;
@@ -31,16 +32,43 @@ public class UserManageController {
                 log.debug(memberService.getAll());
                 model.addAttribute("memberList", memberService.getAll());
                 model.addAttribute("menuName", "회원 목록");
+                model.addAttribute("menu", menu);
                 break;
             case 2:
                 log.debug(memberService.getAllHosts());
                 model.addAttribute("memberList", memberService.getAllHosts());
                 model.addAttribute("menuName", "호스트 목록");
-                break;
-            case 3:
-                model.addAttribute("menuName", "호스트 등록심사");
+                model.addAttribute("menu", menu);
                 break;
         }
         return "member/list";
+    }
+
+
+    @GetMapping("user/detail")
+    public String userDetail(@RequestParam("mno") int memberNo,
+                             @RequestParam("menu") int menu,
+                             HttpSession session,
+                             Model model) {
+        System.out.println("abcdef" + memberNo);
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+        switch (menu) {
+            case 1:
+                log.debug(memberService.getMemberBy(memberNo));
+                model.addAttribute("member", memberService.getMemberBy(memberNo));
+                model.addAttribute("menuName", "회원 상세");
+                model.addAttribute("menu", menu);
+                break;
+            case 2:
+                Member host = memberService.getHostBy(memberNo);
+                log.debug("abcdef" + host);
+                model.addAttribute("member", host);
+                model.addAttribute("menuName", "호스트 상세");
+                model.addAttribute("menu", menu);
+                break;
+        }
+        return "member/detail";
     }
 }

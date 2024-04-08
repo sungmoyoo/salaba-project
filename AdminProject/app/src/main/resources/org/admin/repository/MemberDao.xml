@@ -14,6 +14,7 @@
         <result column="birthday" property="birthday"/>
         <result column="tel_no" property="tel"/>
         <result column="grade_no" property="gradeNo"/>
+        <result column="grade_name" property="gradeName"/>
         <result column="state" property="state"/>
         <result column="address" property="address"/>
         <result column="sex" property="sex"/>
@@ -23,6 +24,20 @@
         <result column="warning_count" property="warningCount"/>
         <result column="photo" property="photo"/>
         <result column="rental_count" property="rentalCount"/>
+
+        <collection property="rentals" ofType="Rental">
+            <id column="rental_home_no" property="rentalNo"/>
+            <result column="rental_name" property="name"/>
+            <result column="address" property="address"/>
+            <result column="price" property="price"/>
+            <result column="state" property="state"/>
+            <result column="registe_date" property="regDate"/>
+
+            <collection property="themes" ofType="Theme">
+                <id column="theme_no" property="themeNo"/>
+                <result column="theme_name" property="themeName"/>
+            </collection>
+        </collection>
     </resultMap>
 
     <select id="findAll" resultMap="MemberMap">
@@ -60,5 +75,51 @@
             FROM rental_home rh
             WHERE m.member_no = rh.member_no
         ) > 0;
+    </select>
+
+    <select id="findMemberBy" resultMap="MemberMap">
+        SELECT
+            m.member_no,
+            m.name,
+            m.nickname,
+            m.email,
+            m.join_date,
+            m.grade_no,
+            g.grade_name,
+            m.state,
+            m.warning_count
+        FROM member m
+        INNER JOIN grade g ON m.grade_no = g.grade_no
+        WHERE member_no = #{memberNo}
+    </select>
+
+    <select id="findHostBy" resultMap="MemberMap">
+    <![CDATA[
+        SELECT
+            m.member_no,
+            m.name,
+            m.nickname,
+            m.email,
+            m.join_date,
+            m.grade_no,
+            g.grade_name,
+            m.state,
+            m.warning_count,
+            rh.rental_home_no,
+            rh.name as rental_name,
+            rh.address,
+            rh.price,
+            rh.state,
+            rh.registe_date,
+            rht.theme_no,
+            t.theme_name
+        FROM member m
+        INNER JOIN grade g ON m.grade_no = g.grade_no
+        INNER JOIN rental_home rh ON m.member_no = rh.member_no
+        INNER JOIN rental_home_theme rht ON rh.rental_home_no = rht.rental_home_no
+        INNER JOIN theme t ON rht.theme_no = t.theme_no
+        WHERE m.member_no = #{memberNo}
+        AND rht.theme_no < 10;
+    ]]>
     </select>
 </mapper>

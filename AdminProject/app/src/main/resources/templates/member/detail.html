@@ -5,31 +5,61 @@
 </head>
 <body>
 <h2>회원 상세 보기</h2>
-<h4 data-th-text="${name}">일반회원 or 호스트</h4>
+<h4 data-th-text="${menuName}">일반회원 or 호스트</h4>
 <form data-th-action="@{detail}" method="post" data-th-object="${member}">
     <div>
         회원 번호: <input data-th-value="*{memberNo}" readonly type="text">
     </div>
     <div>
-        이름: <input data-th-value="*{memberNo}" readonly type="text">
+        이름: <input data-th-value="*{name}" readonly type="text">
     </div>
     <div>
-        닉네임: <input data-th-value="*{memberNo}" readonly type="text">
+        닉네임: <input data-th-value="*{nickname}" readonly type="text">
     </div>
     <div>
-        이메일: <input data-th-value="*{memberNo}" readonly type="text">
+        이메일: <input data-th-value="*{email}" readonly type="text">
     </div>
     <div>
-        가입일: <input data-th-value="*{memberNo}" readonly type="text">
+        가입일: <input data-th-value="*{joinDate}" readonly type="text">
+    </div>
+    <div data-th-if="${menu == 1}">
+        등급: <input data-th-value="*{gradeName}" readonly type="text">
     </div>
     <div>
-        등급: <input data-th-value="*{memberNo}" readonly type="text">
+        상태: <input data-th-value="*{stateStr}" readonly type="text">
     </div>
     <div>
-        상태: <input data-th-value="*{memberNo}" readonly type="text">
+        누적 신고 횟수: <input data-th-value="*{warningCount}" readonly type="text">
     </div>
-    <div>
-        누적 신고 횟수: <input data-th-value="*{memberNo}" readonly type="text">
+    <div data-th-if="${menu == 1}">
+    <select name="등급" id="grade" >
+        <option value="1">브론즈</option>
+        <option value="2">실버</option>
+        <option value="3">골드</option>
+        <option value="4">플래티넘</option>
+        <option value="5">다이아</option>
+    </select>
+    <button>등급 변경</button>
+    </div>
+
+
+    <br>
+    <p>-------------------------------------------------------------------------------------</p>
+    <div data-th-if="${menu == 2}" data-th-each="rental : ${member.rentals}" data-th-object="${rental}">
+        <span>숙소 번호: </span><span data-th-text="*{rentalNo}"></span>
+        <br>
+        <span>숙소 이름: </span><span data-th-text="*{name}"></span>
+        <br>
+        <span>숙소 주소: </span><span data-th-text="*{address}"></span>
+        <br>
+        <span>숙소 등록일: </span><span data-th-text="*{regDate}"></span>
+        <br>
+        <span>숙소 가격: </span><span data-th-text="*{price}"></span>
+        <br>
+        <span>숙소 상태: </span><span data-th-text="*{stateStr}"></span>
+        <p>-------------------------------------------------------------------------------------</p>
+        <br>
+<!--        숙소 유형: <span data-th-text="${themes}"></span>-->
     </div>
 </form>
 </body>
