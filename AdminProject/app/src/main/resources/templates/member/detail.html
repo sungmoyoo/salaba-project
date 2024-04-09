@@ -57,6 +57,11 @@
         <span>숙소 가격: </span><span data-th-text="*{price}"></span>
         <br>
         <span>숙소 상태: </span><span data-th-text="*{stateStr}"></span>
+        <br>
+        <span>숙소 테마:</span>
+        <div data-th-each="theme : ${rental.themes}" data-th-object="${theme}">
+            <span data-th-text="*{themeName}">테마</span>
+        </div>
         <p>-------------------------------------------------------------------------------------</p>
         <br>
 <!--        숙소 유형: <span data-th-text="${themes}"></span>-->

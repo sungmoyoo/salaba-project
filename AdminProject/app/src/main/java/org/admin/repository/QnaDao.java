@@ -8,5 +8,6 @@ import java.util.List;
 @Mapper
 public interface QnaDao {
     List<Qna> findAllQ();
+    Qna findBy(int qnaNo);
 
 }

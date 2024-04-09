@@ -12,6 +12,7 @@ public class Rental {
     private String name;
     private String explanation;
     private String address;
+    private String rule;
     private int price;
     private int cleanFee;
     private int capacity;
@@ -19,7 +20,7 @@ public class Rental {
     private String stateStr;
     private Date regDate;
     private Member host;
-    private Member reporter;
     private List<Theme> themes;
-
+    private List<Facility> facilities;
+    private List<Photo> photos;
 }

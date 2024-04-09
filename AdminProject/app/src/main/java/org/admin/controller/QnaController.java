@@ -28,4 +28,14 @@ public class QnaController {
         model.addAttribute("menuName", "1:1 문의 답변");
     return "qna/list";
     }
+
+    @GetMapping("qna/detail")
+    public String qnaDetail(HttpSession session,
+                            @RequestParam("qno") int qnaNo,
+                            Model model) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("qna", qnaService.getBy());
+    }
 }

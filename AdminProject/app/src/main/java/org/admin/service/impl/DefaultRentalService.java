@@ -32,4 +32,11 @@ public class DefaultRentalService implements RentalService {
         }
         return rentals;
     }
+
+    @Override
+    public Rental getBy(int rentalNo) {
+        Rental rental = rentalDao.findBy(rentalNo);
+        rental.setStateStr(Translator.rentalState.get(rental.getState()));
+        return rental;
+    }
 }
