@@ -21,7 +21,7 @@ public interface RentalHomeDao {
   List<RentalHome> rentalHomeSelectForMember( List<Theme> themes );
 
   // 숙소 테마별 조회
-  RentalHome rentalHomeThemeSelect( @Param("theme_name") String themeName);
+  List<RentalHome> rentalHomeThemeSelect( @Param("theme_name") String themeName);
 
   // 숙소 지역,기간,인원수 조회
   List<RentalHome> rentalHomeConditionSelect(

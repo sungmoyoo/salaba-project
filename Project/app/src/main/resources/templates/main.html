@@ -5,6 +5,113 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    input, button {
+      padding: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .listing-container {
+      margin: 20px auto; /* 중앙 정렬 */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start; /* 왼쪽 정렬 */
+    }
+
+    .listing-item {
+      width: calc(25% - 20px); /* 이미지 아이템의 너비 설정 */
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .listing-item img {
+      width: 265.417px; /* 이미지의 너비 조절 */
+      height: 252.15px; /* 이미지의 높이 조절 */
+      object-fit: cover;
+    }
+
+    .listing-slider {
+      position: relative;
+    }
+
+    .slick-arrow {
+      position: absolute;
+      top: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .slick-prev {
+      left: 0; /* 사진의 왼쪽에 배치 */
+      transform: translateY(-50%);
+    }
+
+    .slick-next {
+      right: 0; /* 사진의 오른쪽에 배치 */
+      transform: translateY(-50%);
+    }
+
+    .slick-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .slide-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      z-index: 2; /* 다른 요소 위에 나타나도록 설정 */
+      font-size: 20px; /* 버튼 크기 조절 */
+    }
+  </style>
 </head>
 <body>
 <main>
@@ -28,25 +135,44 @@
     </div>
   </section>
   <section class="slider-container">
-    <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
-      <div class="card">
-        <a th:href="@{/rentalHome/view(rentalHomeNo=${rentalHome.rentalHomeNo})}">aaa</a>
-        <img data-th-each="photo : ${rentalHome.rentalHomePhotos}"
-             data-th-src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rental_home/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
-        <div class="card">
-          <h3 data-th-text="*{name}">숙소이름</h3>
-          <p data-th-text="'가격: ' + *{price}" >가격</p>
+    <div class="listing-container">
+      <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
+        <div class="listing-slider">
+          <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
+               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+          <button class="slide-button prev-button slick-prev">&#10094;</button>
+          <button class="slide-button next-button slick-next">&#10095;</button>
         </div>
       </div>
     </div>
   </section>
 </main>
-<link rel="stylesheet" th:href="@{/mainStyle.css}" />
-<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css}" />
-<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css}" />
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script>
+  // 각 숙소의 이미지 슬라이더 처리
+  $('.listing-item').each(function () {
+    const $slideImages = $(this).find('.slide-image');
+    let currentIndex = 0;
 
+    function showSlide(index) {
+      $slideImages.hide().eq(index).show();
+    }
+
+    function showNextSlide() {
+      currentIndex = (currentIndex + 1) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    function showPreviousSlide() {
+      currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    $(this).find('.next-button').click(showNextSlide);
+    $(this).find('.prev-button').click(showPreviousSlide);
+
+    showSlide(currentIndex);
+  });
+</script>
 </body>
 </html>

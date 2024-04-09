@@ -58,7 +58,7 @@
     <result column="review" property="review"/>
   </resultMap>
 
-  <resultMap id="conditionSearch" type="RentalHome">
+  <resultMap id="rentalHomeSearch" type="RentalHome">
     <id column="rental_home_no" property="rentalHomeNo"/>
     <result column="name" property="name"/>
     <result column="price" property="price"/>
@@ -113,7 +113,7 @@
   </select>
 
   <!-- 숙소 테마 검색(선호 사항 선택한 유저의 숙소 출력) -->
-  <select id="rentalHomeSelectForMember" resultType="RentalHome" parameterType="java.util.List">
+  <select id="rentalHomeSelectForMember" resultMap="rentalHomeSearch" parameterType="java.util.List">
     select
       t2.uuid_photo_name,
       t1.rental_home_no,
@@ -140,8 +140,8 @@
       from
         theme
       where
-        theme_name REGEXP
-        <foreach collection="list" item="item" open="('" close="')" separator="|">
+        theme_name =
+        <foreach collection="list" item="item" separator="OR">
           #{item.themeName}
         </foreach>
       )
@@ -184,7 +184,7 @@
   </select>
 
   <!-- 숙소 위치&날짜&수용인원 검색 -->
-  <select id="rentalHomeConditionSelect" resultMap="conditionSearch">
+  <select id="rentalHomeConditionSelect" resultMap="rentalHomeSearch">
     select
       t2.uuid_photo_name,
       t2.photo_no,

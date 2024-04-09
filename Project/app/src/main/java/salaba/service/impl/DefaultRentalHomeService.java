@@ -39,7 +39,7 @@ public class DefaultRentalHomeService implements RentalHomeService {
   }
 
   @Override
-  public RentalHome getRentalHomeThemeSearch(String themeName) { // 테마 검색
+  public List<RentalHome> getRentalHomeThemeSearch(String themeName) { // 테마 검색
     return rentalHomeDao.rentalHomeThemeSelect(themeName);
   }
 

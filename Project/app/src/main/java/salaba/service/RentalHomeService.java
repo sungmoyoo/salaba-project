@@ -20,7 +20,7 @@ public interface RentalHomeService {
   List<RentalHome> getRentalHomeConditionSearch(
       String regionName, Date checkInDate, Date checkOutDate, int capacity);
 
-  RentalHome getRentalHomeThemeSearch( String themeName );
+  List<RentalHome> getRentalHomeThemeSearch( String themeName );
 
   List<RentalHomePhoto> getRentalHomePhotos( int rentalHomeNo );
 

@@ -8,6 +8,7 @@
   <script th:inline="javascript">
     const sessionMemberNo = /*[[${session.memberNo}]]*/ null;
     const rentalHomeNoModel = /*[[${rentalHome.rentalHomeNo}]]*/ null;
+    const rentalHomeReviewModel = /*[[${rentalHomeReview}]]*/ null;
   </script>
 </head>
 <body>
@@ -58,14 +59,10 @@
     </div>
   </section>
   <section>
-    <h3>숙소 리뷰</h3>
-    <div data-th-each="review : ${rentalHomeReview}" data-th-object="${rentalHomeReview}">
-      <h4>평점</h4>
-      <div>
-        <tr data-th-text="${review.review}">리뷰 내용</tr>
-        <tr data-th-text="${review.createdDate}">작성 일시</tr>
-      </div>
+    <div id="reviewsContainer">
+      <h3>숙소 리뷰</h3>
     </div>
+    <button id="showMoreReview">리뷰 더 보기</button>
   </section>
   <section>
     <div>
@@ -91,7 +88,7 @@
     reportModal.style.display = "none";
   });
 
-  // 외부 클릭스 닫기
+  // 외부 클릭시 닫기
   window.addEventListener("click",(event)=>{
     if( event.target == reportModal ){
       reportModal.style.display = "none";
@@ -100,7 +97,7 @@
 
   // form 제출 시 데이터 전송 AJAX 사용
   document.getElementById("reportForm").addEventListener("submit",(event)=>{
-    event.preventDefault(); // 동작 취소
+    event.preventDefault(); // 기본 동작 취소
 
     const category = document.getElementById("category").value;
     const content = document.getElementById("content").value;
@@ -132,6 +129,54 @@
     };
     xhr.send(JSON.stringify(rentalHomeReport));
   });
+
+  let startIndex = 0;
+const batchSize = 5;
+let rentalHomeReviews = rentalHomeReviewModel;
+
+function showNextBatchOfReview() {
+  const reviewsContainer = document.getElementById('reviewsContainer');
+  const endIndex = Math.min(startIndex + batchSize, rentalHomeReviews.length);
+  for (let i = startIndex; i < endIndex; i++) {
+    const review = rentalHomeReviews[i];
+    const reviewElement = document.createElement('div');
+    reviewElement.innerHTML = '<div>' +
+      '<h4>평점</h4>' +
+      '<p>' + review.review + '</p>' + // 리뷰 내용
+      '<p>' + review.createdDate + '</p>' + // 작성일시
+      '</div>';
+    reviewsContainer.appendChild(reviewElement);
+  }
+  startIndex = endIndex;
+  if (startIndex >= rentalHomeReviews.length) {
+    document.getElementById('showMoreReview').style.display = 'none';
+  }
+}
+
+// 리뷰 더 보기 버튼 클릭 시
+document.getElementById('showMoreReview').addEventListener('click', function() {
+  showNextBatchOfReview();
+});
+
+// 초기에 최초의 2개 리뷰 표시
+window.addEventListener('DOMContentLoaded', function() {
+  const reviewsContainer = document.getElementById('reviewsContainer');
+  for (let i = 0; i < Math.min(2, rentalHomeReviews.length); i++) {
+    const review = rentalHomeReviews[i];
+    const reviewElement = document.createElement('div');
+    reviewElement.innerHTML = '<div>' +
+      '<h4>평점</h4>' +
+      '<p>' + review.review + '</p>' + // 리뷰 내용
+      '<p>' + review.createdDate + '</p>' + // 작성일시
+      '</div>';
+    reviewsContainer.appendChild(reviewElement);
+  }
+  startIndex = 2;
+  if (rentalHomeReviews.length <= 2) {
+    document.getElementById('showMoreReview').style.display = 'none'; // 버튼 숨기기
+  }
+});
+
 </script>
 
 </body>

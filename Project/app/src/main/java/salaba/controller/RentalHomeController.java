@@ -37,17 +37,10 @@ public class RentalHomeController {
       @RequestParam( value = "checkOutDate", required = false )
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
       @RequestParam( value = "capacity", defaultValue = "1") int capacity) throws Exception{ // 메인화면
-//    Member loginUser = (Member) httpSession.getAttribute("loginUser");
-    Member loginUser = new Member();
-    List<Theme> list = new ArrayList<>();
-    Theme theme = new Theme(1,"호텔");
-    list.add(theme);
-    loginUser.setThemes(list);
-    loginUser.setMemberNo(1);
+    Member loginUser = (Member) httpSession.getAttribute("loginUser");
 
     // LogIn User Check
-    if( ( loginUser == null  ) &&
-        ( regionName.equalsIgnoreCase("all") &&
+    if(  loginUser == null   && ( regionName.equalsIgnoreCase("all") &&
         checkInDate == null && checkOutDate == null && capacity == 1 ) ){
 
       // 로그인하지 않은 경우 기본 숙소 목록 출력 검색 하지 않은 경우
