@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,8 +55,10 @@
     }
 
     .listing-item {
-      width: calc(25% - 20px); /* 이미지 아이템의 너비 설정 */
-      margin-bottom: 20px;
+      width: 265px; /* 수정된 부분: listing-item의 너비를 265px로 지정 */
+      height: 300px; /* 수정된 부분: listing-item의 높이를 300px로 지정 */
+      margin-right: 20px; /* 수정된 부분: 우측 여백 추가 */
+      margin-bottom: 20px; /* 수정된 부분: 하단 여백 추가 */
       border: 1px solid #ddd;
       border-radius: 8px;
       overflow: hidden;
@@ -65,15 +66,19 @@
     }
 
     .listing-item img {
-      width: 265.417px; /* 이미지의 너비 조절 */
-      height: 252.15px; /* 이미지의 높이 조절 */
+      /* width: 100%; div에 맞추어 이미지의 너비 조절 */
+      /* height: 100%; div에 맞추어 이미지의 높이 조절 */
       object-fit: cover;
     }
 
     .listing-slider {
       position: relative;
+      width: 100%; /* 수정된 부분: slider의 너비를 100%로 지정 */
+      height: 100%; /* 수정된 부분: slider의 높이를 100%로 지정 */
     }
 
+
+    /* 여기부터 사진에 있는 버튼 부분 */
     .slick-arrow {
       position: absolute;
       top: 50%;
@@ -84,32 +89,45 @@
       z-index: 1;
     }
 
-    .slick-prev {
-      left: 0; /* 사진의 왼쪽에 배치 */
-      transform: translateY(-50%);
-    }
-
+    .slick-prev,
     .slick-next {
-      right: 0; /* 사진의 오른쪽에 배치 */
-      transform: translateY(-50%);
-    }
-
-    .slick-arrow svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .slide-button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
-      padding: 5px 10px;
-      border-radius: 20px;
+      border-radius: 50%;
       cursor: pointer;
-      z-index: 2; /* 다른 요소 위에 나타나도록 설정 */
-      font-size: 20px; /* 버튼 크기 조절 */
+      z-index: 2;
+      font-size: 20px;
+      line-height: 30px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .slick-prev {
+      left: 10px;
+    }
+
+    .slick-next {
+      right: 10px;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      content: '<';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .slick-next:before {
+      content: '>';
+      left: initial;
+      right: 50%;
+      transform: translate(50%, -50%);
     }
   </style>
 </head>
@@ -140,8 +158,10 @@
         <div class="listing-slider">
           <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
                data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
-          <button class="slide-button prev-button slick-prev">&#10094;</button>
-          <button class="slide-button next-button slick-next">&#10095;</button>
+          <button class="slide-button prev-button slick-prev"></button>
+          <button class="slide-button next-button slick-next"></button>
+          <span data-th-text="${rentalHome.name}">숙소 이름</span>
+          <span data-th-text="${rentalHome.price}">숙소 가격</span>
         </div>
       </div>
     </div>
