@@ -3,6 +3,7 @@ package org.admin.domain;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 public class Qna {
@@ -15,4 +16,6 @@ public class Qna {
     private Date regDate;
     private String answer;
     private Date ansDate;
+    private List<Photo> photos;
+    private Member writer;
 }

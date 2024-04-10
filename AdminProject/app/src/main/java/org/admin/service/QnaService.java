@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface QnaService {
     List<Qna> getAllQ();
+    Qna getBy(int qnaNo);
 }

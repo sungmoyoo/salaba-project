@@ -2,12 +2,13 @@ package org.admin.repository;
 
 import org.admin.domain.Qna;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface QnaDao {
     List<Qna> findAllQ();
-    Qna findBy(int qnaNo);
+    Qna findBy(@Param("qnaNo") int qnaNo);
 
 }

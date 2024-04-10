@@ -13,6 +13,17 @@
         <result column="register_date" property="regDate"/>
         <result column="answer" property="answer"/>
         <result column="answer_date" property="ansDate"/>
+
+        <association property="writer" javaType="Member">
+            <id column="member_no" property="memberNo"/>
+            <result column="name" property="name"/>
+        </association>
+
+        <collection property="photos" ofType="Photo">
+            <id column="question_file_no" property="no"/>
+            <result column="ori_file_name" property="originalName"/>
+            <result column="uuid_file_name" property="uuidName"/>
+        </collection>
     </resultMap>
 
     <select id="findAllQ" resultMap="QnaMap">
@@ -23,5 +34,27 @@
             state,
             register_date
         FROM question
+    </select>
+
+    <select id="findBy" resultMap="QnaMap">
+        SELECT
+        q.question_no,
+        q.member_no,
+        q.title,
+        q.content,
+        q.state,
+        q.register_date,
+        qn.answer,
+        qn.answer_date,
+        qf.question_file_no,
+        qf.ori_file_name,
+        qf.uuid_file_name,
+        m.name,
+        m.member_no
+        FROM question q
+        LEFT JOIN qna qn ON q.question_no = qn.question_no
+        LEFT JOIN question_file qf ON q.question_no = qf.question_no
+        INNER JOIN member m ON q.member_no = m.member_no
+        WHERE q.question_no = #{qnaNo};
     </select>
 </mapper>

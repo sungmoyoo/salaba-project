@@ -24,4 +24,11 @@ public class DefaultQnaService implements QnaService {
         }
         return qnas;
     }
+
+    @Override
+    public Qna getBy(int qnaNo) {
+        Qna qna = qnaDao.findBy(qnaNo);
+        qna.setStateStr(Translator.dealState.get(qna.getState()));
+        return qna;
+    }
 }

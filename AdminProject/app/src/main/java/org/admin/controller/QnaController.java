@@ -36,6 +36,7 @@ public class QnaController {
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
-        model.addAttribute("qna", qnaService.getBy());
+        model.addAttribute("qna", qnaService.getBy(qnaNo));
+        return "qna/detail";
     }
 }
