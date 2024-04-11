@@ -26,6 +26,8 @@ public interface RentalHomeService {
 
   List<RentalHomeFacility> getRentalHomeFacilities( int rentalHomeNo );
 
+  List<Theme> getAllThemes();
+
   void addRentalHomeReview( RentalHomeReview rentalHomeReview);
 
   void addRentalHomeReport( RentalHomeReport rentalHomeReport);

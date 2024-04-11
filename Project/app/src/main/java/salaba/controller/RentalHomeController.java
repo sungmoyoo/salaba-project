@@ -1,7 +1,6 @@
 package salaba.controller;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
+import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
-import salaba.vo.rental_home.Theme;
 
 @RequiredArgsConstructor
 @Controller
@@ -38,6 +38,10 @@ public class RentalHomeController {
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
       @RequestParam( value = "capacity", defaultValue = "1") int capacity) throws Exception{ // 메인화면
     Member loginUser = (Member) httpSession.getAttribute("loginUser");
+
+    if(httpSession.getAttribute("themeList") == null ){
+      httpSession.setAttribute("themeList", rentalHomeService.getAllThemes());
+    }
 
     // LogIn User Check
     if(  loginUser == null   && ( regionName.equalsIgnoreCase("all") &&
@@ -61,6 +65,24 @@ public class RentalHomeController {
           rentalHomeService.getRentalHomeConditionSearch(regionName,checkInDate,checkOutDate,capacity));
 
     }
+    return "main";
+  }
+
+  @GetMapping("/theme")
+  public String rentalHomeTheme( @RequestParam( value = "themeName") String themeName, Model model ){
+    log.debug(String.format("테마명 : %s", themeName));
+    List<RentalHome> rentalHome = rentalHomeService.getRentalHomeThemeSearch(themeName);
+    model.addAttribute("rentalHomeList", rentalHome);
+
+    for( RentalHome rh : rentalHome ){
+      log.debug(String.format("rentalHome : %s", rh.getRentalHomeNo()));
+      log.debug(String.format("rentalHome : %s", rh.getName()));
+      for( RentalHomePhoto rp : rh.getRentalHomePhotos() ){
+        log.debug(String.format("rentalHomePhoto : %s", rp.getPhotoNo()));
+        log.debug(String.format("rentalHomePhoto : %s", rp.getUuidPhotoName()));
+      }
+    }
+
     return "main";
   }
 

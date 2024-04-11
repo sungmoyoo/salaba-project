@@ -47,6 +47,12 @@
       background-color: #0056b3;
     }
 
+    .theme-icon-container{
+      width: 56px;
+      height: 48px;
+      border: 1px solid #ddd;
+    }
+
     .listing-container {
       margin: 20px auto; /* 중앙 정렬 */
       display: flex;
@@ -146,10 +152,12 @@
     </div>
   </section>
   <section>
-    <div>
-      <form action="/rentalHome/search" data-th-action="@{search}" method="get">
-        <p>아이콘 및 필터</p>
-      </form>
+    <div data-th-each="theme : ${session.themeList}">
+      <div class="theme-icon-container">
+        <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
+          <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
+        </a>
+      </div>
     </div>
   </section>
   <section class="slider-container">
@@ -193,6 +201,46 @@
 
     showSlide(currentIndex);
   });
+
+ function updateRentalHomeList(newRentalHomeList){
+  let listContainer = $('.listing-container');
+  listContainer.empty();
+
+  newRentalHomeList.forEach(function(rentalHomeList){
+    let listItem = $( '<div class="listing-item">' );
+    let sliderDiv = $( '<div class="listing-slider">' );
+    
+    rentalHomeList.forEach(function(photos){
+      let image = $( '<img class="slide-image">' )
+      .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + photos.uuidPhotoName )
+      .attr( 'alt', '숙소이미지' );
+      sliderDiv.append(image);
+    });
+    let nameSpan = $('<span>').text(rentalHomeList.name);
+    let priceSpan = $('<span>').text(rentalHomeList.price);
+
+    sliderDiv.append(nameSpan);
+    sliderDiv.append(priceSpan);
+    listItem.append(sliderDiv);
+
+    listContainer.append(listItem);
+  });
+ }
+
+ function handleNewRentalHomeList(newRentalHomeList){
+  updateRentalHomeList(newRentalHomeList);
+ }
+ $.ajax({
+    url: '/theme',
+    type: 'GET',
+    success : function(response){
+      handleNewRentalHomeList(response);
+    },
+    error: function(xhr, status, error){
+      console.error(error);
+    }
+ })
+
 </script>
 </body>
 </html>

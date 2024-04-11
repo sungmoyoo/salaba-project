@@ -78,4 +78,9 @@ public class DefaultRentalHomeService implements RentalHomeService {
   public List<RentalHomeFacility> getRentalHomeFacilities(int rentalHomeNo) { // 숙소 시설 조회
     return rentalHomeDao.rentalHomeFacilitySelect(rentalHomeNo);
   }
+
+  @Override
+  public List<Theme> getAllThemes() { // 테마 전체 조회
+    return rentalHomeDao.getAllThemes();
+  }
 }

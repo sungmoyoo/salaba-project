@@ -24,7 +24,7 @@
 
     <association property="region" resultMap="region"/>
     <collection property="rentalHomePhotos" resultMap="rentalHomePhotos" javaType="java.util.List"/>
-    <collection property="themes" resultMap="themes" javaType="java.util.List"/>
+    <collection property="themes" resultMap="themeMap" javaType="java.util.List"/>
   </resultMap>
 
   <resultMap id="rentalHomeFacilityMap" type="RentalHomeFacility">
@@ -46,7 +46,7 @@
     <result column="region_name" property="regionName"/>
   </resultMap>
 
-  <resultMap id="themes" type="Theme">
+  <resultMap id="themeMap" type="Theme">
     <id column="theme_no" property="themeNo"/>
     <result column="theme_name" property="themeName"/>
   </resultMap>
@@ -63,6 +63,8 @@
     <result column="name" property="name"/>
     <result column="price" property="price"/>
     <result column="like_count" property="rentalHomeLikeCount"/>
+    <result column="lat" property="lat"/>
+    <result column="lon" property="lon"/>
 
     <collection property="rentalHomePhotos" resultMap="rentalHomePhotos"/>
   </resultMap>
@@ -89,7 +91,7 @@
   </resultMap>
 
   <!-- 숙소 목록 검색(추천수) -->
-  <select id="rentalHomeDefaultSelect" resultMap="RentalHomeMap">
+  <select id="rentalHomeDefaultSelect" resultMap="rentalHomeSearch">
     select
       t1.rental_home_no,
       t1.name,
@@ -97,6 +99,8 @@
       t2.uuid_photo_name,
       t2.photo_no,
       t2.photo_order,
+      t1.lat,
+      t1.lon,
       (
         select
           count(*)
@@ -121,6 +125,8 @@
       t2.photo_order,
       t1.name,
       t1.price,
+      t1.lat,
+      t1.lon,
       (
         select
           count(*)
@@ -132,7 +138,6 @@
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
-      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
       inner join rental_home_theme t4 on t4.rental_home_no = t1.rental_home_no
     where (t4.theme_no) in (
       select
@@ -150,7 +155,7 @@
   </select>
 
   <!-- 숙소 테마 검색 -->
-  <select id="rentalHomeThemeSelect" resultType="RentalHome" parameterType="String">
+  <select id="rentalHomeThemeSelect" resultMap="rentalHomeSearch" parameterType="String">
     select
       t2.uuid_photo_name,
       t1.rental_home_no,
@@ -158,6 +163,8 @@
       t2.photo_order,
       t1.name,
       t1.price,
+      t1.lat,
+      t1.lon,
       (
         select
           count(*)
@@ -169,7 +176,6 @@
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
-      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
       inner join rental_home_theme t4 on t4.rental_home_no = t1.rental_home_no
     where (t4.theme_no) in (
       select
@@ -177,7 +183,7 @@
       from
         theme
       where
-        theme_name like '%#{theme_name}%'
+        theme_name = #{themeName}
       )
     order by
       like_count desc
@@ -192,6 +198,8 @@
       t1.rental_home_no,
       t1.name,
       t1.price,
+      t1.lat,
+      t1.lon,
       (
         select
           count(*)
@@ -203,7 +211,6 @@
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
-      inner join rental_home_like t3 on t3.rental_home_no = t1.rental_home_no
       inner join region t4 on t4.region_no = t1.region_no
     where
       (t4.region_no) in (
@@ -236,6 +243,62 @@
       like_count desc
   </select>
 
+  <!-- 필터 검색 -->
+  <select id="rentalHomeFilterSelect" resultMap="rentalHomeSearch">
+    select
+      t1.rental_home_no,
+      t1.name,
+      t1.price,
+      t1.lat,
+      t1.lon,
+      t2.photo_no,
+      t2.uuid_photo_name,
+      t2.photo_order,
+      (
+        select
+        count(*)
+        from
+        rental_home_like
+        where
+        t1.rental_home_no = rental_home_no
+      ) as like_count
+      from
+        rental_home t1
+        inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      where
+      <if test="theme != null">
+        t1.rental_home_no in (
+          select
+            t4.rental_home_no
+          from
+            rental_home_theme t4
+          where
+            t4.theme_no = (
+              select
+                theme_no
+              from
+                theme
+              where
+                theme_name =
+          )
+        )
+      </if>
+      <if test="minPrice != null and maxPrice != null">
+        ( t1.price between #{minPrice} and #{maxPrice} ) and
+      </if>
+      <if test="checkInDate != null and checkOutDate != null">
+        1 <![CDATA[ > ]]>
+        ( select
+        count(*)
+        from
+        reservation
+        where
+        <![CDATA[ start_date <= #{checkOutDate} ]]> and
+        <![CDATA[ end_date >= #{checkInDate} ]]>
+        )
+      </if>
+
+  </select>
   <!-- 숙소 상세 조회 -->
   <select id="rentalHomeDetailSelect" resultMap="rentalHomeView" parameterType="int">
     select
@@ -302,6 +365,17 @@
       inner join rental_home_facility t4 on t4.facility_no = t3.facility_no
     where
       t3.rental_home_no = #{rental_home_no}
+  </select>
+
+  <!-- 테마 전체 검색 -->
+  <select id="getAllThemes" resultMap="themeMap">
+    select
+      theme_no,
+      theme_name
+    from
+      theme
+    order by
+      theme_no
   </select>
 
   <!-- 숙소 리뷰 작성 -->
