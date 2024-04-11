@@ -5,19 +5,17 @@
   <title>테스트</title>
 </head>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script><!--중복체크 메시지를 위해 필요함>-->
 <script>
-  $(document).ready(function() {//화면이 전부 로딩 된 후 자동으로 실행되는 함수
-  alert("1");
-    var nickNameChkYn = "[[${nickNameChkYn}]]";
-    alert(nickNameChkYn);
-    if(nickNameChkYn == "Y"){
+  $(document).ready(function() { // 화면이 전부 로딩 된 후 자동으로 실행되는 함수
+    var nickcheck = "[[${nickcheck}]]";
+    if(nickcheck == "Y"){
       alert("이미 사용중인 닉네임 입니다.");
     }
   });
 
 
-  function fn_save(){
+  function fn_save(){ // submit하기 전에 확인하는 옵션
 
     var name = frm.name.value;
     var nickname = frm.nickname.value;

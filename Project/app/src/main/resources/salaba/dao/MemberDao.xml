@@ -9,6 +9,7 @@
     <id column="member_no" property="no"/>
     <result column="email" property="email"/>
     <result column="name" property="name"/>
+    <result column="password" property="password"/>
     <result column="nickname" property="nickname"/>
     <result column="birthday" property="birthday"/>
     <result column="tel_no" property="telNo"/>
@@ -18,12 +19,12 @@
     <result column="photo" property="photo"/>
   </resultMap>
 
-  <resultMap id="NationMap" type="Nation">
+  <resultMap id="NationMap" type="Nation"><!--국가선택 준비-->
     <id column="nation_no" property="nationNo"/>
     <result column="nation_name" property="nationName"/>
   </resultMap>
 
-  <insert id="add" parameterType="Member"> <!--회원가입>-->
+  <insert id="add" parameterType="Member"><!--회원가입>-->
     insert into member(
       name,
       nickname,
@@ -33,7 +34,7 @@
     values(
       #{name},
       #{nickname},
-      STR_TO_DATE(#{birthday}, '%Y-%m-%d'),
+      STR_TO_DATE(#{birthday}, '%Y-%m-%d'), <!--생년월일 입력형식을 바꿔주는 sql문법-->
       #{email},
       sha2(#{password},256))
   </insert>
@@ -56,7 +57,7 @@
       member_no=#{value}
   </select>
 
-  <select id="getNation" resultMap="NationMap" >
+  <select id="getNation" resultMap="NationMap" ><!--국가선택>-->
     select
       nation_no,
       nation_name
@@ -81,7 +82,7 @@
       member_no=#{no}
   </update>
 
-  <select id="checkNickname" resultMap="MemberMap" parameterType="String">
+  <select id="checkNickname" resultMap="MemberMap" parameterType="String"><!--닉넴 중복체크>-->
     select
       nickname
     from
@@ -146,5 +147,15 @@
     where
       member_no=#{no}
   </update>
+
+  <select id="chkPw" resultMap="MemberMap"><!--비밀번호 확인>-->
+    select
+      password
+    from
+      member
+    where
+      member_no=#{no}
+      and password = sha2(#{password},256)
+  </select>
 
 </mapper>

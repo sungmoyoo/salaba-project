@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta content="1;url=/auth/form" data-th-if="${session.loginUser == null}">
+  <title>테스트</title>
+</head>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1>로그아웃</h1>
+<table width="300">
+  <tr>
+    <td>로그아웃 되었습니다.</td>
+  </tr>
+  <tr>
+    <td><a data-th-href="@{/home}" href="home"><button>홈으로</button></a></td>
+  </tr>
+</table>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

@@ -5,7 +5,7 @@ import lombok.Data;
 
 
 @Data
-public class Nation implements Serializable { // 회원
+public class Nation implements Serializable { // 국가
 
   private static final long serialVersionUID = 100L;
 

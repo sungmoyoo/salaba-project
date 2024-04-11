@@ -31,4 +31,7 @@ public interface MemberDao {
 
   public void chgPwSave(Member member);
 
+  public Member chkPw(Member member);
+
+
 }

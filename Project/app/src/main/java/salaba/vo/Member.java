@@ -15,7 +15,7 @@ public class Member implements Serializable { // 회원
   private String password; // 비밀번호
   private String name; // 이름
   private String nickname; // 닉네임
-  private String oldNickname; // old닉네임
+  private String oldNickname; // 변경 전 닉네임
   private String birthday; // 생년월일
   private int nationNo; // 국가번호
   private String telNo; // 전화번호

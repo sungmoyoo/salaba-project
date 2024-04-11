@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var pwcheck = "[[${pwcheck}]]";
+      if(pwcheck == "Y"){
+        alert("비밀번호가 일치하지 않습니다.");
+      }
+    });
+  </script>
+</head>
+
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1>비밀번호 확인</h1>
+
+<form name="frm" action="chkPw" data-th-action="@{checkPw}" method='post'>
+  <table width="300">
+    <tr>
+      <td>비밀번호</td>
+      <td><input name='password' type='password'></td>
+    </tr>
+    <tr>
+      <td><button>확인</button></td>
+    </tr>
+  </table>
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

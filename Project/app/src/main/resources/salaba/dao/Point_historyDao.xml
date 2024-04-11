@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.Point_historyDao">
+
+  <resultMap id="Point_historyMap" type="Point_history">
+    <id column="member_no" property="no"/>
+    <result column="save_content" property="saveContent"/>
+    <result column="save_point" property="savePoint"/>
+    <result column="save_date" property="saveDate"/>
+  </resultMap>
+
+  <select id="findAll" resultMap="Point_historyMap">
+      select
+        member_no,
+        save_content,
+        save_point,
+        save_date
+      from
+        point_history
+      where
+        member_no=#{no}
+      order by
+        save_date desc
+    </select>
+</mapper>

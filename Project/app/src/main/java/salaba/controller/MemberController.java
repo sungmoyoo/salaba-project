@@ -1,6 +1,7 @@
 package salaba.controller;
 
 import java.util.List;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +48,8 @@ public class MemberController implements InitializingBean {
       Model model,
       HttpServletRequest request) throws Exception {
 
-    String nickNameChkYn = request.getParameter("nickNameChkYn");
-    model.addAttribute("nickNameChkYn", nickNameChkYn);
+    String nickcheck = request.getParameter("nickcheck");
+    model.addAttribute("nickcheck", nickcheck);
   }
 
   @PostMapping("add")
@@ -56,9 +57,9 @@ public class MemberController implements InitializingBean {
 
     //닉네임 중복체크
     Member check = memberService.checkNickname(member.getNickname());
-    if(check != null){//닉네임이 중복된 데이터가 발생한 경우
-      String nickNameChkYn = "Y";
-      return "redirect:form?nickNameChkYn="+nickNameChkYn;
+    if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
+      String nickcheck = "Y";
+      return "redirect:form?nickcheck=" + nickcheck;
     }
 
     memberService.add(member);
@@ -70,17 +71,20 @@ public class MemberController implements InitializingBean {
       Model model,
       HttpServletRequest request,
       HttpSession session) throws Exception { // 내정보 조회
-    //db에서 로그인 사용자의 상세정보를 조회
-    Member sessionInfo = (Member)session.getAttribute("loginUser");
+    //로그인 사용자의 상세정보를 조회
+    Member sessionInfo = (Member) session.getAttribute("loginUser");
     Member member = memberService.get(sessionInfo.getNo());
+
+    //국가 리스트를 받아옴
     List<Nation> nationList = memberService.getNation();
 
-    String nickNameChkYn = request.getParameter("nickNameChkYn");
+    //닉네임 중복체크
+    String nickcheck = request.getParameter("nickcheck");
 
     //조회한 결과 model 에 add
     model.addAttribute("member", member);
     model.addAttribute("nationList", nationList);
-    model.addAttribute("nickNameChkYn", nickNameChkYn);
+    model.addAttribute("nickcheck", nickcheck);
   }
 
   @PostMapping("myinfoUpdate")
@@ -89,19 +93,19 @@ public class MemberController implements InitializingBean {
     String oldNickname = member.getOldNickname();//수정전 닉네임
     String nickname = member.getNickname();//수정후 닉네임
     //닉네임이 수정되었을 경우에만 중복체크를 한다.
-    if(!oldNickname.equals(nickname)){
+    if (!oldNickname.equals(nickname)) { //문자열 비교 시에는 .equals()
       //닉네임 중복체크
       Member check = memberService.checkNickname(member.getNickname());
-      if(check != null){//닉네임이 중복된 데이터가 발생한 경우
-        String nickNameChkYn = "Y";
-        return "redirect:myinfo?nickNameChkYn="+nickNameChkYn;
+      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
+        String nickcheck = "Y";
+        return "redirect:myinfo?nickcheck=" + nickcheck;
       }
     }
-
     Member old = memberService.get(member.getNo());
 
     if (file.getSize() > 0) {
       String filename = storageService.upload(this.bucketName, this.uploadDir, file);
+      System.out.println(filename);
       member.setPhoto(filename);
       storageService.delete(this.bucketName, this.uploadDir, old.getPhoto());
     } else {
@@ -112,7 +116,7 @@ public class MemberController implements InitializingBean {
   }
 
   @GetMapping("delete")
-  public String delete(Member member) throws Exception {
+  public String delete(Member member) throws Exception { // 회원 탈퇴
     memberService.delete(member);
     return "redirect:/auth/logout";
   }
@@ -128,9 +132,9 @@ public class MemberController implements InitializingBean {
   @PostMapping("schEmail")
   public String schEmail(Member member, Model model) throws Exception { // 이메일 조회
     Member info = memberService.findEmail(member);
-    if(info == null){
+    if (info == null) {
       return "/member/findEmailFail";
-    }else{
+    } else {
       model.addAttribute("member", info);
       return "/member/findEmailSuc";
     }
@@ -139,9 +143,9 @@ public class MemberController implements InitializingBean {
   @PostMapping("schPw")
   public String schPw(Member member, Model model) throws Exception { // 비밀번호 조회
     Member info = memberService.findPw(member);
-    if(info == null){
+    if (info == null) {
       return "/member/findPwFail";
-    }else{
+    } else {
       model.addAttribute("member", info);
       return "/member/findPwSuc";
     }
@@ -153,4 +157,24 @@ public class MemberController implements InitializingBean {
     return "redirect:/auth/form";
   }
 
+  @GetMapping("chkPw")
+  public void chkPw(Member member, Model model, HttpServletRequest request) throws Exception {
+    String pwcheck = request.getParameter("pwcheck");
+    model.addAttribute("pwcheck", pwcheck);
+  }
+
+  @PostMapping("checkPw")
+  public String checkPw(Member member, Model model, HttpSession session)
+      throws Exception { // 비밀번호 확인
+    Member sessionInfo = (Member) session.getAttribute("loginUser");
+    member.setNo(sessionInfo.getNo());
+
+    Member info = memberService.chkPw(member);
+    if (info == null) {
+      String pwcheck = "Y";
+      return "redirect:chkPw?pwcheck=" + pwcheck;
+    } else {
+      return "redirect:myinfo";
+    }
+  }
 }

@@ -1,6 +1,5 @@
 package salaba.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -72,4 +71,8 @@ public class DefaultMemberService implements MemberService {
     memberDao.chgPwSave(member);
   }
 
+  @Override
+  public Member chkPw(Member member) {
+    return memberDao.chkPw(member);
+  }
 }
