@@ -9,6 +9,10 @@ import java.util.List;
 @Mapper
 public interface QnaDao {
     List<Qna> findAllQ();
-    Qna findBy(@Param("qnaNo") int qnaNo);
+    Qna findBy(@Param("questionNo") int questionNo);
+
+    void addAnswer(Qna qna);
+
+    int updateState(Qna qna);
 
 }

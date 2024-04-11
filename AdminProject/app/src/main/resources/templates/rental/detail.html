@@ -7,7 +7,10 @@
 <body>
 <form data-th-action="@{rental/detail/update}" method="post" data-th-object="${rental}">
     <h4>숙소 사진</h4>
-
+    <div data-th-each="photo : ${rental.photos}" data-th-object="${photo}">
+        <img data-th-src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + *{uuidName}(type=f,w=100,h=100,ttype=jpg)}">
+        <p data-th-text="*{explanation}"></p>
+    </div>
     <h4>숙소 기본 정보</h4>
     <div>
         숙소 번호: <input type="text" readonly data-th-value="*{rentalNo}">
@@ -35,10 +38,9 @@
         수용 인원: <input type="text" readonly data-th-value="*{capacity}">
     </div>
     <div data-th-each="facility : ${rental.facilities}" data-th-object="${facility}">
-        <span data-th-if="*{facilityNo < 4}" data-th-value="*{name}"></span >
+        <span data-th-if="*{facilityNo < 4}" data-th-text="*{name}"></span >
         <span data-th-if="*{facilityNo < 4}"> - </span >
-        <input type="text" readonly data-th-if="*{facilityNo < 4}" data-th-value="*{name}">
-
+        <input type="text" readonly data-th-if="*{facilityNo < 4}" data-th-value="*{count}">
 
     </div>
 

@@ -6,6 +6,7 @@ import org.admin.repository.QnaDao;
 import org.admin.service.QnaService;
 import org.admin.util.Translator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,9 +27,17 @@ public class DefaultQnaService implements QnaService {
     }
 
     @Override
-    public Qna getBy(int qnaNo) {
-        Qna qna = qnaDao.findBy(qnaNo);
+    public Qna getBy(int questionNo) {
+        Qna qna = qnaDao.findBy(questionNo);
         qna.setStateStr(Translator.dealState.get(qna.getState()));
         return qna;
     }
+
+    @Transactional
+    @Override
+    public void addAnswer(Qna qna) {
+        qnaDao.addAnswer(qna);
+        qnaDao.updateState(qna);
+    }
+
 }

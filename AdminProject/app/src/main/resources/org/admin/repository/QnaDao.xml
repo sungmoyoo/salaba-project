@@ -55,6 +55,14 @@
         LEFT JOIN qna qn ON q.question_no = qn.question_no
         LEFT JOIN question_file qf ON q.question_no = qf.question_no
         INNER JOIN member m ON q.member_no = m.member_no
-        WHERE q.question_no = #{qnaNo};
+        WHERE q.question_no = #{questionNo};
     </select>
+
+    <insert id="addAnswer" parameterType="Qna">
+        INSERT INTO qna(question_no, answer) VALUES(#{questionNo}, #{answer});
+    </insert>
+
+    <update id="updateState" parameterType="Qna">
+        update question set state = '1' WHERE question_no = #{questionNo};
+    </update>
 </mapper>

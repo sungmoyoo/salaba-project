@@ -1,12 +1,15 @@
 package org.admin.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.admin.domain.Qna;
 import org.admin.service.QnaService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -38,5 +41,16 @@ public class QnaController {
         }
         model.addAttribute("qna", qnaService.getBy(qnaNo));
         return "qna/detail";
+    }
+
+    @PostMapping("qna/update")
+    @Transactional
+    public String addAnswer(HttpSession session,
+                            Qna qna) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+        qnaService.addAnswer(qna);
+        return "redirect:list";
     }
 }

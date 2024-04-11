@@ -7,6 +7,9 @@
 <form data-th-action="@{update}" method="post" data-th-object="${qna}">
     <h4>문의 내용</h4>
     <div>
+        문의번호 : <input name="questionNo" data-th-value="*{questionNo}" readonly type="text">
+    </div>
+    <div>
         작성자 : <input data-th-value="*{writer.name}" readonly type="text">
     </div>
     <div>
@@ -21,7 +24,7 @@
     <h4>첨부 파일</h4>
 
     <div>
-        답변 : <textarea name="answer" type="textarea" data-th-value="*{answer}"></textarea>
+        답변 : <textarea name="answer" type="textarea" data-th-text="*{answer}"></textarea>
     </div>
     <div data-th-if="${!#strings.equals(qna.state, '0')}">
         답변 날짜 : <input type="text" readonly data-th-value="*{ansDate}">
@@ -29,7 +32,7 @@
     <div>
         처리 상태 : <input type="text" readonly data-th-value="*{stateStr}">
     </div>
-    <button>답변</button>
+    <button data-th-unless="${!#strings.equals(qna.state, '0')}">답변</button>
 </form>
 
 </body>
