@@ -29,7 +29,7 @@
             <result column="created_date" property="createdDate"/>
         </association>
 
-        
+
         <collection property="reportFiles" ofType="ReportFile">
             <result column="ori_file_name" property="originalName"/>
             <result column="uuid_file_name" property="uuidName"/>
@@ -64,9 +64,11 @@
             brd.content,
             brd.member_no,
             brd.state,
+            brd.report_target_no,
+            brd.report_target_type,
             brc.report_category_name,
             brf.uuid_file_name,
-        <if test="type == '0'">
+        <if test='type.equals("0")'>
             b.board_no,
             b.title as report_content,
             b.created_date
@@ -74,7 +76,7 @@
             INNER JOIN board b ON brd.report_target_no = b.board_no
             INNER JOIN member m2 ON b.member_no = m2.member_no
         </if>
-        <if test="type == '1'">
+        <if test='type.equals("1")'>
             c.comment_no,
             c.content as report_content,
             c.created_date
@@ -82,7 +84,7 @@
             INNER JOIN comment c ON brd.report_target_no = c.comment_no
             INNER JOIN member m2 ON c.member_no = m2.member_no
         </if>
-        <if test="type == '2'">
+        <if test='type.equals("2")'>
             r.reply_no,
             r.content as report_content,
             r.created_date
@@ -99,5 +101,25 @@
         AND brd.member_no = #{memberNo};
 
     </select>
+
+    <update id="updateState">
+        UPDATE board_report_detail SET state = '1'
+        WHERE report_no = #{reportNo}
+    </update>
+
+    <update id="updateBoardState">
+        <if test='report.targetType.equals("0")'>
+            UPDATE board set state = #{boardState}
+            WHERE board_no = #{report.targetNo}
+        </if>
+        <if test='report.targetType.equals("1")'>
+            UPDATE comment set state = #{boardState}
+            WHERE comment_no = #{report.targetNo}
+        </if>
+        <if test='report.targetType.equals("2")'>
+            UPDATE reply set state = #{boardState}
+            WHERE reply_no = #{report.targetNo}
+        </if>
+    </update>
 
 </mapper>

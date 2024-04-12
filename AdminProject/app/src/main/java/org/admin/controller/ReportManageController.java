@@ -1,6 +1,7 @@
 package org.admin.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.admin.service.MemberService;
 import org.admin.util.ReportType;
 import org.admin.domain.Report;
 import org.admin.service.RentalReportService;
@@ -8,6 +9,7 @@ import org.admin.service.TextReportService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ public class ReportManageController {
     private static final Log log = LogFactory.getLog(ReportManageController.class);
     private final RentalReportService rentalReportService;
     private final TextReportService textReportService;
+    private final MemberService memberService;
     @GetMapping("report/list")
     public String reportList(@RequestParam("menu") int menu,
                              HttpSession session,
@@ -58,7 +61,7 @@ public class ReportManageController {
 
     @GetMapping("report/detail")
     public String reportDetail(@RequestParam("no") int no,
-                               @RequestParam("type") char type,
+                               @RequestParam("type") String type,
                                @RequestParam("mno") int memberNo,
                                HttpSession session,
                                Model model) {
@@ -68,12 +71,12 @@ public class ReportManageController {
         }
 
         model.addAttribute("type", type);
-        if (type == '0') {
+        if (type.equals("0")) {
             Report report = textReportService.getBy(type, no, memberNo);
             log.debug(report);
             model.addAttribute("report", report);
             model.addAttribute("name","게시글 신고");
-        } else if (type == '1' || type == '2') {
+        } else if (type.equals("1")|| type.equals("2")) {
             Report report = textReportService.getBy(type, no, memberNo);
             log.debug(report);
             model.addAttribute("report", report);
@@ -88,14 +91,21 @@ public class ReportManageController {
 
     }
 
+    @Transactional
     @PostMapping("report/update")
     public String dealReport(@RequestParam("selection") String selection,
+                             Report report,
                              HttpSession session) {
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
 
-        return "redirect:report/list";
+        textReportService.updateState(report.getReportNo());
+        memberService.updateWarningCount(report.getReportNo());
+        textReportService.updateBoardState(report, selection);
+
+
+        return "redirect:list";
 
     }
 

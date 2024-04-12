@@ -20,7 +20,7 @@ public class Member {
     private char state;
     private String stateStr;
     private String address;
-    private char sex;
+    private String sex;
     private Date joinDate;
     private Date lastLoginDate;
     private Date exitDate;

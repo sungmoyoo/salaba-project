@@ -20,11 +20,11 @@ public class Report {
     private int category;
     private String categoryName;
     private String content;
-    private char state;
+    private String state;
     private String stateStr;
     private Date reportDate;
     private int targetNo; //신고당한 숙소번호, 게시물, 댓글, 답글 번호
-    private char targetType;
+    private String targetType;
     private Member reporter;
     private Member writer;
     private ReportTarget reportTarget; //게시글, 댓글

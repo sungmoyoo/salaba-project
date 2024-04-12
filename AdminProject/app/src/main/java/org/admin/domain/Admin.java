@@ -9,6 +9,6 @@ public class Admin {
     private int no;
     private String id;
     private String password;
-    private char authority;
+    private String authority;
     private Date regDate;
 }

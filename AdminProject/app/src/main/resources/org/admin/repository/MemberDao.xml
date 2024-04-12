@@ -122,4 +122,14 @@
         AND rht.theme_no < 10;
     ]]>
     </select>
+
+    <update id="updateWarningCount">
+        UPDATE member
+        SET warning_count = warning_count + 1
+        WHERE member_no = (
+        SELECT member_no
+        FROM board_report_detail
+        WHERE report_no = #{reportNo}
+        );
+    </update>
 </mapper>

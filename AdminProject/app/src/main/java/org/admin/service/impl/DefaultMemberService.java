@@ -48,4 +48,9 @@ public class DefaultMemberService implements MemberService {
         }
         return member;
     }
+
+    @Override
+    public int updateWarningCount(int reportNo) {
+        return memberDao.updateWarningCount(reportNo);
+    }
 }

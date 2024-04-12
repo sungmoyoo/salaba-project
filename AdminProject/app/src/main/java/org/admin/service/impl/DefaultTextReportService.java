@@ -15,7 +15,7 @@ public class DefaultTextReportService implements TextReportService {
 
     private final TextReportDao textReportDao;
     @Override
-    public List<Report> getAllBy(char type) {
+    public List<Report> getAllBy(String type) {
         List<Report> reports = textReportDao.findAllBy(type);
         for (Report report : reports) {
             report.setStateStr(Translator.dealState.get(report.getState()));
@@ -24,7 +24,7 @@ public class DefaultTextReportService implements TextReportService {
     }
 
     @Override
-    public Report getBy(char type, int no, int memberNo) {
+    public Report getBy(String type, int no, int memberNo) {
 
         Report report = textReportDao.findBy(type,no,memberNo);
         report.setStateStr(Translator.dealState.get(report.getState()));
@@ -34,5 +34,15 @@ public class DefaultTextReportService implements TextReportService {
             System.out.println("abcdef: " + report);
         }
         return report;
+    }
+
+    @Override
+    public int updateState(int reportNo) {
+        return textReportDao.updateState(reportNo);
+    }
+
+    @Override
+    public int updateBoardState(Report report, String boardState) {
+        return textReportDao.updateBoardState(report, boardState);
     }
 }

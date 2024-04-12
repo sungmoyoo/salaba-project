@@ -15,4 +15,6 @@ public interface MemberDao {
     Member findMemberBy(@Param("memberNo") int memberNo);
 
     Member findHostBy(@Param("memberNo") int memberNo);
+
+    int updateWarningCount(@Param("reportNo") int reportNo);
 }
