@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1>비밀번호 재설정</h1>
+
+<form name="frm" action="schPw" data-th-action="@{schPw}" method='post'>
+  <table width="300">
+    <tr>
+      <td>이름</td>
+      <td><input name='name' type='text'></td>
+    </tr>
+    <tr>
+      <td>이메일</td>
+      <td><input name='email' type='text'></td>
+    </tr>
+    <tr>
+      <td colspan="2">가입하신 이메일을 정확히 기입해주세요.</td>
+    </tr>
+    <tr>
+      <td><button>확인</button></td>
+    </tr>
+  </table>
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

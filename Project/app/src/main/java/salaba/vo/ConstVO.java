@@ -1,6 +1,10 @@
 package salaba.vo;
 
+<<<<<<< HEAD
+public class ConstVO {
+=======
 public final class ConstVO {
+>>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1
   
   // 상태 ( 결제, 예약 내역, 문의 내역, 알림 내역, 게시판 신고 )
   public static final char state_no = '0'; // 미완료

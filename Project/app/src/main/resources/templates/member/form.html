@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script><!--중복체크 메시지를 위해 필요함>-->
+<script>
+  $(document).ready(function() { // 화면이 전부 로딩 된 후 자동으로 실행되는 함수
+    var nickcheck = "[[${nickcheck}]]";
+    if(nickcheck == "Y"){
+      alert("이미 사용중인 닉네임 입니다.");
+    }
+  });
+
+
+  function fn_save(){ // submit하기 전에 확인하는 옵션
+
+    var name = frm.name.value;
+    var nickname = frm.nickname.value;
+    var birthday = frm.birthday.value;
+    var email = frm.email.value;
+    var password = frm.password.value;
+    var repassword = frm.repassword.value;
+
+    if(name == ""){
+      alert("이름을 입력하세요.");
+      frm.name.focus();
+      return;
+    }
+    if(nickname == ""){
+      alert("닉네임을 입력하세요.");
+      frm.nickname.focus();
+      return;
+    }
+    if(birthday == ""){
+      alert("생년월일을 입력하세요.");
+      frm.birthday.focus();
+      return;
+    }
+    if(email == ""){
+      alert("이메일을 입력하세요.");
+      frm.eamil.focus();
+      return;
+    }
+    if(password == ""){
+      alert("비밀번호를 입력하세요.");
+      frm.password.focus();
+      return;
+    }
+    if(repassword == ""){
+      alert("비밀번호 확인을 입력하세요.");
+      frm.repassword.focus();
+      return;
+    }
+    if(password != repassword){
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    frm.submit();
+  }
+
+</script>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1>테스트</h1>
+
+<h2>회원가입</h2>
+
+<form name="frm" action="add" data-th-action="@{add}" method='post' onsubmit="return false;">
+  <table width="300">
+    <tr>
+      <td>이름</td>
+      <td><input name='name' type='text'></td>
+    </tr>
+    <tr>
+      <td>닉네임</td>
+      <td><input name='nickname' type='text'></td>
+    </tr>
+    <tr>
+      <td>생년월일</td>
+      <td><input name='birthday' type='date'></td>
+    </tr>
+    <tr>
+      <td>이메일</td>
+      <td><input name='email' type='text'></td>
+    </tr>
+    <tr>
+      <td>비밀번호</td>
+      <td><input name='password' type='password'></td>
+    </tr>
+    <tr>
+      <td>비밀번호 확인</td>
+      <td><input name='repassword' type='password'></td>
+    </tr>
+    <tr>
+      <!--onclick은 클릭 했을때 실행되는 이벤트다.
+      버튼 오브젝트는 클릭시 자동으로 form 에 submit 가 발동된다.-->
+      <td><button onclick="fn_save()">가입</button></td>
+    </tr>
+  </table>
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+
+  <!-- include libraries(jQuery, bootstrap) -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- include summernote css/js -->
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"
+        rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+  <style>
+    body {
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1 data-th-text="${boardName}">고객센터</h1>
+
+<form action="questionAdd" data-th-action="@{questionAdd}" enctype='multipart/form-data' method='post'>
+  <div>
+    <input name='title' type='text'>
+  </div>
+  <div>
+    <textarea id="summernote" name='content'></textarea>
+  </div>
+<!--  <div>-->
+<!--    첨부파일: <input multiple name='attachedFiles' type='file'>-->
+<!--  </div>-->
+
+  <div>
+    <button>전송</button>
+  </div>
+</form>
+
+<table border='1'>
+  <thead>
+  <tr>
+    <th>제목</th>
+    <th>진행 상태</th>
+    <th>작성일</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr data-th-each="question : ${questionList}" data-th-object="${question}">
+    <td><a data-th-text="*{title}" href="questionView.html"></a></td>
+    <td data-th-text="*{state}"></td>
+    <td data-th-text="${#dates.format(question.registerDate,'yyyy.MM.dd')}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+<script>
+  $(document).ready(function() {
+
+    $('#summernote').summernote({
+      height: 300,
+      width: 500
+    });
+
+  });
+
+</script>
+
+</body>
+</html>

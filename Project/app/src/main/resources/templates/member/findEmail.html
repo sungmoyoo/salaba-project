@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1>이메일 찾기</h1>
+
+<form name="frm" action="findEmail" data-th-action="@{schEmail}" method='post'>
+  <table width="300">
+    <tr>
+      <td>이름</td>
+      <td><input name='name' type='text'></td>
+    </tr>
+    <tr>
+      <td>생년월일</td>
+      <td><input name='birthday' type='date'></td>
+    </tr>
+    <tr>
+      <td><button>이메일 찾기</button></td>
+    </tr>
+  </table>
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

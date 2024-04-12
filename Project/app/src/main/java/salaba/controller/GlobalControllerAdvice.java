@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.ModelAndView;
+<<<<<<< HEAD
+=======
 import salaba.vo.rentalHome.RentalHomeFacility;
+>>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1
 
 @ControllerAdvice
 public class GlobalControllerAdvice {

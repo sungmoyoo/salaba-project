@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<form data-th-object="${member}" method='post'>
+  <table width="300">
+    <tr>
+      <td colspan="2"><label data-th-text="*{name}"></label>님의 가입하신 이메일은 <label data-th-text="*{email}"></label> 입니다.</td>
+    </tr>
+    <tr>
+      <td><a data-th-href="@{/auth/form}" href="form">확인</a></td>
+      <td><a data-th-href="@{/member/findPw}" href="findPw">비밀번호 찾기</a></td>
+    </tr>
+  </table>
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>
