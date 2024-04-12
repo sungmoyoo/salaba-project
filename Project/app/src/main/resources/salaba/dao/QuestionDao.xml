@@ -31,4 +31,18 @@
     order by
       register_date desc
   </select>
+
+  <select id="findBy" resultMap="QuestionMap" parameterType="int">
+    select
+      member_no,
+      title,
+      register_date,
+      question_no,
+      answer,
+      answerDate
+    from
+      question
+    where
+      member_no=#{no}
+  </select>
 </mapper>
