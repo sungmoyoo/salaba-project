@@ -4,6 +4,7 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -14,6 +15,7 @@ public class Theme implements Serializable { // 테마
   private static final long serialVersionUID = 100L;
 
   private int themeNo; // 테마번호
-  
+
+  @EqualsAndHashCode.Exclude
   private String themeName; // 테마명
 }
