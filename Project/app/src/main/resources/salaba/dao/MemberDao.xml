@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.MemberDao">
+
+  <resultMap id="MemberMap" type="Member">
+    <id column="member_no" property="no"/>
+    <result column="email" property="email"/>
+    <result column="name" property="name"/>
+    <result column="password" property="password"/>
+    <result column="nickname" property="nickname"/>
+    <result column="birthday" property="birthday"/>
+    <result column="tel_no" property="telNo"/>
+    <result column="nation_no" property="nationNo"/>
+    <result column="address" property="address"/>
+    <result column="sex" property="sex"/>
+    <result column="photo" property="photo"/>
+  </resultMap>
+
+  <resultMap id="NationMap" type="Nation"><!--국가선택 준비-->
+    <id column="nation_no" property="nationNo"/>
+    <result column="nation_name" property="nationName"/>
+  </resultMap>
+
+  <insert id="add" parameterType="Member"><!--회원가입>-->
+    insert into member(
+      name,
+      nickname,
+      birthday,
+      email,
+      password)
+    values(
+      #{name},
+      #{nickname},
+      STR_TO_DATE(#{birthday}, '%Y-%m-%d'), <!--생년월일 입력형식을 바꿔주는 sql문법-->
+      #{email},
+      sha2(#{password},256))
+  </insert>
+
+  <select id="selectMemberInfo" resultMap="MemberMap" parameterType="int"><!--내정보>-->
+    select
+      member_no,
+      name,
+      nickname,
+      email,
+      tel_no,
+      birthday,
+      nation_no,
+      sex,
+      address,
+      photo
+    from
+      member
+    where
+      member_no=#{value}
+  </select>
+
+  <select id="getNation" resultMap="NationMap" ><!--국가선택>-->
+    select
+      nation_no,
+      nation_name
+    from nation
+    order by nation_name
+  </select>
+
+  <update id="myinfoUpdate" parameterType="Member"><!--내정보 저장>-->
+    update
+      member
+    set
+      name=#{name},
+      nickname=#{nickname},
+      email=#{email},
+      tel_no=#{telNo},
+      birthday=#{birthday},
+      sex=#{sex},
+      address=#{address},
+      photo=#{photo},
+      nation_no=#{nationNo}
+    where
+      member_no=#{no}
+  </update>
+
+  <select id="checkNickname" resultMap="MemberMap" parameterType="String"><!--닉넴 중복체크>-->
+    select
+      nickname
+    from
+      member
+    where
+      nickname=#{value}
+  </select>
+
+  <update id="delete" parameterType="Member"><!--회원탈퇴>-->
+    update
+      member
+    set
+      state=#{state},
+      exit_date=now()
+    where
+      member_no=#{no}
+  </update>
+
+  <select id="findByEmailAndPassword" resultMap="MemberMap"><!--로그인>-->
+    select
+      member_no,
+      name,
+      nickname,
+      birthday,
+      email
+    from
+      member
+    where
+      email= #{email}
+      and password=sha2(#{password},256)
+      and state='0'
+  </select>
+
+  <select id="findEmail" resultMap="MemberMap"><!--이메일 찾기>-->
+    select
+      email,
+      name
+    from
+      member
+    where
+      name= #{name}
+      and birthday=#{birthday}
+      and state='0'
+  </select>
+
+  <select id="findPw" resultMap="MemberMap"><!--비밀번호 찾기>-->
+    select
+      member_no
+    from
+      member
+    where
+      email= #{email}
+      and name= #{name}
+      and state='0'
+  </select>
+
+  <update id="chgPwSave" parameterType="Member"><!--비밀번호 변경>-->
+    update
+      member
+    set
+      password = sha2(#{password},256)
+    where
+      member_no=#{no}
+  </update>
+
+  <select id="chkPw" resultMap="MemberMap"><!--비밀번호 확인>-->
+    select
+      password
+    from
+      member
+    where
+      member_no=#{no}
+      and password = sha2(#{password},256)
+  </select>
+
+</mapper>

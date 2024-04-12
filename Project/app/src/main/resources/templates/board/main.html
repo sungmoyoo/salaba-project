@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비트캠프 데브옵스 5기</title>
+</head>
+<body>
+
+<style>
+  /* 스타일링 CSS */
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+
+  #search-form {
+      display: inline-block;
+      margin-right: 20px;
+  }
+  #search-input {
+      padding: 5px;
+      width: 200px;
+  }
+  #search-button {
+      padding: 5px 10px;
+      background-color: #35C5B3; // 로고 색상 사용
+      border: none;
+      color: white;
+      cursor: pointer;
+  }
+   body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+  .card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        width: 20%; /* 각 카드의 너비를 조절하여 한 줄에 4개의 카드가 들어가도록 설정 */
+        margin-right: 2%; /* 각 카드 사이의 간격을 설정 */
+        margin-bottom: 20px; /* 카드 아래 여백을 설정 */
+        display: inline-block; /* 카드들이 일렬로 표시되도록 설정 */
+        vertical-align: top; /* 카드들을 위쪽 정렬하여 표시되도록 설정 */
+    }
+  .card:last-child {
+        margin-right: 0; /* 마지막 카드는 오른쪽 여백을 없애줌 */
+    }
+  .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+     .card-thumbnail {
+        width: 100%;
+        height: auto;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+  .card-thumbnail-container {
+        position: relative;
+    }
+  .card-region {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 8px 20px;
+        font-size: 12px;
+        border-radius: 3px;
+        color: black;
+    }
+  .card-body {
+            padding: 10px;
+    }
+</style>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<div id="header">
+  <button type="button" name="review" onclick="location.href='/board/list?categoryNo=0'">후기게시판</button>
+  <button type="button" name="inform" onclick="location.href='/board/list?categoryNo=1'">정보공유게시판</button>
+  <button type="button" name="community" onclick="location.href='/board/list?categoryNo=2'">자유게시판</button>
+</div>
+
+<!-- 후기게시판 -->
+<h1>후기게시판</h1>
+<tr>
+  <div class="container">
+    <div class="card-deck">
+      <div data-th-each="board : ${main}" data-th-object="${board}" class="card">
+        <div class="card-thumbnail-container">
+<!--          <div class="card-region" data-th-text="${board.region.regionName}">지역명</div>-->
+          <div class="card-region" data-th-text="${board.region != null ? board.region.regionName : 'Unknown'}">지역명</div>
+          <img src='https://content.skyscnr.com/m/41acfff761f8ea1a/original/GettyImages-519763361.jpg?resize=1800px:1800px&quality=100' class="card-thumbnail" alt="Thumbnail Image">
+        </div>
+        <div class="card-body">
+          <h3><a  data-th-href="@{view(categoryNo=0,boardNo=*{boardNo})}" data-th-text="*{title}"
+                  href="view.html">제목:제목입니다.</a></h3>
+          <p class="card-text">작성자: <span data-th-text="${board.writer.nickname}">홍길동</span></p>
+          <p class="card-text">작성일: <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
+          <p class="card-text">추천수: <span data-th-text="*{likeCount}">20</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</tr>
+</thead>
+</table>
+
+
+<!-- 정보공유게시판 -->
+<h1>정보공유게시판</h1>
+<table border='1'>
+  <thead>
+  <tr>
+    <th>분류</th>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+    <th>추천수</th>
+    <th>조회수</th>
+    <th>첨부파일</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr data-th-if="${categoryNo == 1}" data-th-each="board : ${list}" data-th-object="${board}">
+    <td data-th-text="*{headNo}">공지</td>
+    <td><a data-th-href="@{view(categoryNo=1,boardNo=*{boardNo})}" data-th-text="*{title}"
+           href="view.html">제목입니다.</a></td>
+    <td data-th-text="*{writer.nickname}">홍길동</td>
+    <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
+    <td data-th-text="*{likeCount}">20</td>
+    <td data-th-text="*{viewCount}">50</td>
+    <td data-th-text="*{fileCount}">5</td>
+  </tr>
+  </tbody>
+</table>
+
+
+<!-- 자유게시판 -->
+<h1>자유게시판</h1>
+<table border='1'>
+  <thead>
+  <tr>
+    <th>분류</th> <!-- headName -->
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+    <th>추천수</th>
+    <th>조회수</th> <!-- 목록에서는 정보공유 게시판과 자유 게시판에서만 표시됨 -->
+    <th>첨부파일</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr data-th-if="${categoryNo == 2}" data-th-each="board : ${list}" data-th-object="${board}">
+    <td data-th-text="*{headNo}">공지</td>
+    <td><a data-th-href="@{view(categoryNo=2,boardNo=*{boardNo})}" data-th-text="*{title}"
+           href="view.html">제목입니다.</a></td>
+    <td data-th-text="*{writer.nickname}">홍길동</td>
+    <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
+    <td data-th-text="*{likeCount}">20</td>
+    <td data-th-text="*{viewCount}">50</td>
+    <td data-th-text="*{fileCount}">5</td>
+  </tr>
+  </tbody>
+</table>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+ </body>
+</html>

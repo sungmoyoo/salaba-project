@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1>문의 내용 보기</h1>
+
+<form action="update" data-th-action="@{update}" data-th-object="${question}" method='post'>
+  <div>
+    문의 제목: <input data-th-value="*{title}" name='title'>
+  </div>
+  <div>
+    문의 내용: <textarea data-th-text="*{content}" name='content'></textarea>
+  </div>
+  <div>
+    작성일: <input data-th-value="*{registerDate}" name='registerDate' readonly type='date'>
+  </div>
+  <div>
+    <button>변경</button>
+  </div>
+  <div>
+    답변: <textarea data-th-text="*{answer}" name='answer'></textarea>
+  </div>
+  <div>
+    답변일: <input data-th-value="*{answerDate}" name='answerDate' readonly type='date'>
+  </div>
+
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

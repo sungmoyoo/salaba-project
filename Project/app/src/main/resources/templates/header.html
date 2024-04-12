@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+<<<<<<< HEAD
+  <title>테스트</title>
+=======
+  <title>비트캠프 데브옵스 5기</title>
+>>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1
+</head>
+<body>
+
+<header data-th-fragment="header">
+<<<<<<< HEAD
+  <img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png'>
+    <a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="member/chkPw">내 정보</a>
+    <a data-th-href="@{/point_history/pointList}" data-th-if="${session.loginUser != null}" href="point_history/pointList">포인트내역</a>
+    <a data-th-href="@{/question/questionForm}" data-th-if="${session.loginUser != null}" href="question/questionForm">고객센터</a>
+    <a data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
+    <a data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
+=======
+<!-- 로고 사진 넣기 -->
+  <a data-th-href="@{/board}" href="/board">한달살기</a>
+  <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
+
+  <span data-th-if="${session.loginUser != null}"
+        data-th-text="${session.loginUser.name}">홍길동</span>
+  <a data-th-href="@{/member/list}" href="member/list">회원</a>
+  <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">로그아웃</a>
+  <a data-th-if="${session.loginUser == null}" data-th-href="@{/auth/form}" href="auth/form">로그인</a>
+>>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1
+
+</header>
+
+</body>
+<<<<<<< HEAD
+</html>
+=======
+</html>
+
+>>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1

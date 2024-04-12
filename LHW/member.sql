@@ -1,138 +1,124 @@
---회원
-insert into 
+--회원가입
+insert into
 member(
   member_no,
-  national_no,
-  email,
-  password,
   name,
   nickname,
   birthday,
-  tel_no,
-  state,
-  address,
-  sex,
-  join_date,
-  last_login_date,
-  exit_date,
-  warning_count,
-  photo
-  )
+  email,
+  password
+)
 values
   (
     1,
-    82,
-    'user1.test.com',
-    sha2('1111',256),
-    '이름1',
-    '회원1',
+    '이름',
+    '닉네임',
     '2000-01-01',
-    '010-1111-1111',
-    '0',
-    '주소1',
-    '1',
-    '2024-03-20',
-    '2024-03-21',
-    null,
-    'a.gif'
-    )
+    'user1@test.com',
+    sha2('1111',256)
+  );
+insert into member(member_no,name,nickname,birthday,email,password)
+values(2,'이름2','닉네임2','2000-01-01','user2@test.com',sha2('1111',256));
+insert into member(member_no,name,nickname,birthday,email,password)
+values(3,'이름3','닉네임3','2000-01-01','user3@test.com',sha2('1111',256));
 
-insert into member(member_no,national_no,email,password,name,nickname,birthday,tel_no,state,address,
-sex,join_date,last_login_date,exit_date,warning_count,photo)
-values(2,82,'user2.test.com',sha2('1111',256),'이름2','회원2','2000-02-02','010-2222-2222','0','주소2',
-'1','2024-03-21','2024-03-22',null,'b.gif')
-insert into member(member_no,national_no,email,password,name,nickname,birthday,tel_no,state,address,
-sex,join_date,last_login_date,exit_date,warning_count,photo)
-values(3,82,'user3.test.com',sha2('1111',256),'이름3','회원3','2000-03-03','010-3333-3333','0','주소3',
-'2','2024-03-22','2024-03-23','2','c.gif')
-insert into member(member_no,national_no,email,password,name,nickname,birthday,tel_no,state,address,
-sex,join_date,last_login_date,exit_date,warning_count,photo)
-values(4,81,'user4.test.com',sha2('1111',256),'이름4','회원4','2000-04-04','010-4444-4444','1','주소4',
-'2','2024-03-20','2024-03-21','1','d.gif')
-insert into member(member_no,national_no,email,password,name,nickname,birthday,tel_no,state,address,
-sex,join_date,last_login_date,exit_date,warning_count,photo)
-values(4,86,'user5.test.com',sha2('1111',256),'이름5','회원5','2000-05-05','010-5555-5555','0','주소5',
-'2','2024-03-20','2024-03-21',null,'.gif')
-
--- 수정
-
--- 회원 정보 조회
+--개인정보 조회
 select
-  member_no,
-  national_no,
-  email,
-  password,
-  name,
-  nickname,
-  birthday,
-  tel_no,
-  state,
-  address,
-  sex,
-  join_date,
-  last_login_date,
-  exit_date,
-  warning_count,
-  photo
- from
-  member;
+  n.nation_name,
+  m.name,
+  m.nickname,
+  m.email,
+  m.tel_no,
+  m.birthday,
+  m.sex,
+  m.address,
+  m.photo
+from
+  member m
+  inner join nation n on m.nation_no=n.nation_no
+where m.member_no='3';
 
---포인트 내역
-insert into 
-  point_history
-  (
-    member_no,
-    save_content,
-    save_point,
-    save_date
-  )
-values
-  (
-    1,
-    '숙소 리뷰 작성',
-    '200',
-    '2024-03-21'
-  )
+--개인정보 수정
+update
+  member
+set
+  name='이름33',
+  nickname='닉네임33',
+  email='user33@test.com',
+  tel_no='010-1111-2222',
+  birthday='2020-01-01',
+  nation_no=82,
+  sex='남',
+  address='주소',
+  photo='a.gif'
+where
+  member_no='3';
 
-insert into point_history(member_no,save_content,save_point,save_date)
-values(1,'댓글작성','50','2024-03-21')
-insert into point_history(member_no,save_content,save_point,save_date)
-values(2,'숙소 리뷰 작성','200','2024-03-21')
-insert into point_history(member_no,save_content,save_point,save_date)
-values(2,'숙소 리뷰 작성','200','2024-03-22')
-insert into point_history(member_no,save_content,save_point,save_date)
-values(2,'댓글 작성','50','2024-03-22')
-insert into point_history(member_no,save_content,save_point,save_date)
-values(3,'숙소 리뷰 작성','200','2024-03-23')
+--개인정보 삭제
+update
+  member
+set
+  state='',
+  exit_date=''
+where
+  member_no='';
 
--- 포인트 조회 1
-
-
-insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
-values(101,1,'숙소 리뷰 작성','200','2024-03-21')
-insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
-values(102,1,'댓글작성','50','2024-03-21')
-insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
-values(103,2,'숙소 리뷰 작성','200','2024-03-21')
-insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
-values(104,2,'숙소 리뷰 작성','200','2024-03-22')
-insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
-values(105,2,'댓글 작성','50','2024-03-22')
-insert into point_history(point_history_no,member_no,save_content,save_point,save_date)
-values(106,3,'숙소 리뷰 작성','200','2024-03-23')
-
--- 포인트 조회 2
+--로그인
 select
-  member_no,
+  password
+from
+  member
+where
+  email='';
+
+--이메일 찾기
+select
+  email
+from
+  member
+where
+  name='이름33' and
+  birthday='2020-01-01';
+
+--비밀번호 찾기
+select
+  password
+from
+  member
+where
+  name='이름33' and
+  email='user33@test.com';
+
+--비밀번호 변경
+update
+  member
+set
+  password=sha2('1111',256)
+where
+  member_no;
+
+----------------------------------------------------------------------
+--샘플 포인트내역 데이터
+insert into point_history(member_no,save_content,save_point,save_date)
+values(1,'aa','500','2020-01-01');
+insert into point_history(member_no,save_content,save_point,save_date)
+values(1,'aa','500','2020-01-01');
+insert into point_history(member_no,save_content,save_point,save_date)
+values(2,'aa','500','2020-01-01');
+insert into point_history(member_no,save_content,save_point,save_date)
+values(3,'aa','500','2020-01-01');
+----------------------------------------------------------------------
+--포인트 내역 조회
+select
   save_content,
   save_point,
   save_date
 from
   point_history
+where
+  member_no='1'
 order by
-  save_date
-
---------------------------------------------------------------------------------------
+  p.save_date;
 
 -- 예약 내역
 insert into 

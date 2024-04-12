@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>비트캠프 데브옵스 5기</title>
+  </head>
+
+<div data-th-replace="header :: header">머리말</div>
+<h1>신고 내용 보기</h1>
+
+</head>
+<body>
+
+<form action="update" data-th-action="@{update}" data-th-object="${boardReport}" enctype='multipart/form-data' method='post'>
+  <input data-th-value="${typeNo}" name='typeNo' type='hidden'>
+  <div>
+    신고 유형: <select name="categoryNo">
+    <option value="1">스팸홍보/도배</option>
+    <option value="2">음란물입니다.</option>
+    <option value="3">불법정보를 포함하고 있습니다.</option>
+    <option value="4">욕설/혐오적 표현입니다.</option>
+  </select>
+  </div>
+  <div>
+    신고일:<input data-th-value="${#dates.format(boardReport.createdDate,'yyyy-MM-dd')}" readonly
+               type='text' value="2024-03-27">
+  </div>
+  <div>
+    내용: <textarea id="text" data-th-text="*{content}" readonly
+                  type='text' name='content'>스팸 신고.</textarea>
+  </div>
+  <form action="submit_response" method="post">
+    <div>
+      첨부 파일: <a href="link_to_previous_file">파일명.pdf</a>
+    </div>
+    <div>
+      관리자 답변: <textarea id="admin_response" name="admin_response">답변드립니다.</textarea>
+    </div>
+  </form>
+
+  <div>
+    <button>확인</button>
+  </div>
+</form>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+</body>
+</html>

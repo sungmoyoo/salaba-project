@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+<h1>포인트 내역</h1>
+
+<table border='1'>
+  <thead>
+  <tr>
+    <th>포인트 적립내용</th>
+    <th>적립 포인트</th>
+<!--    <th>누적 포인트</th>-->
+    <th>적립 날짜</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr data-th-each="point_history : ${pointList}" data-th-object="${point_history}">
+    <td data-th-text="*{saveContent}"></td>
+    <td data-th-text="*{savePoint}"></td>
+    <td data-th-text="${#dates.format(point_history.saveDate,'yyyy.MM.dd')}"></td>
+  </tr>
+  </tbody>
+</table>
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

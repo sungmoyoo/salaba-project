@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+
+
+  <table width="300">
+    <tr>
+      <td>가입하신 이메일이 조회되지 않습니다.</td>
+    </tr>
+    <tr>
+      <td><a data-th-href="@{/member/findEmail}" href="findEmail"><button>돌아가기</button></a></td>
+    </tr>
+  </table>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>
