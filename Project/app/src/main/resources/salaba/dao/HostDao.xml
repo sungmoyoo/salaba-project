@@ -48,7 +48,7 @@
       <result column="photo_order" property="photoOrder"/>
     </collection>
 
-    <collection property="rentalHomeThemes" ofType="Theme">
+    <collection property="themes" ofType="Theme">
       <id column="theme_no" property="themeNo"/>
       <result column="theme_name" property="themeName"/>
     </collection>

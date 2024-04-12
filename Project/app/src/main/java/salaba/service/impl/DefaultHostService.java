@@ -12,10 +12,9 @@ import salaba.dao.PhotoDao;
 import salaba.dao.ThemeDao;
 import salaba.service.HostService;
 import salaba.vo.host.HostReservation;
-import salaba.vo.rentalHome.RentalHome;
-import salaba.vo.rentalHome.RentalHomeFacility;
-import salaba.vo.rentalHome.RentalHomePhoto;
-import salaba.vo.rentalHome.Theme;
+import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeFacility;
+import salaba.vo.rental_home.Theme;
 
 //호스트 예약관리 서비스 구현체
 @RequiredArgsConstructor

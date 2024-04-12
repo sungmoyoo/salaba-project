@@ -2,10 +2,9 @@ package salaba.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import salaba.vo.host.HostReservation;
-import salaba.vo.rentalHome.RentalHome;
-import salaba.vo.rentalHome.RentalHomeFacility;
+import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeFacility;
+
 
 @Mapper
 public interface FacilityDao {

@@ -1,12 +1,9 @@
 package salaba.dao;
 
-import java.io.File;
-import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.expression.spel.ast.Literal;
-import salaba.vo.rentalHome.RentalHome;
-import salaba.vo.rentalHome.RentalHomePhoto;
-import salaba.vo.rentalHome.Theme;
+import salaba.vo.rental_home.RentalHome;
+
 
 @Mapper
 public interface PhotoDao {

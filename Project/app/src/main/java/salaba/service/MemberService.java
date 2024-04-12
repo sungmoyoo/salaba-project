@@ -1,6 +1,8 @@
 package salaba.service;
 
 import java.util.List;
+import salaba.vo.Member;
+import salaba.vo.Nation;
 
 public interface MemberService {
 

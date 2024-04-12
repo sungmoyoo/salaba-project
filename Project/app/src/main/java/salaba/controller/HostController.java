@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import salaba.vo.rentalHome.RentalHomeFacility;
-import salaba.vo.rentalHome.RentalHomePhoto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 import salaba.service.HostService;
 import salaba.service.StorageService;
 import salaba.vo.host.HostReservation;
-import salaba.vo.rentalHome.RentalHome;
-import salaba.vo.rentalHome.Theme;
+import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeFacility;
+import salaba.vo.rental_home.RentalHomePhoto;
+import salaba.vo.rental_home.Theme;
+
 
 //호스트 페이지 컨트롤러
 @RequiredArgsConstructor
@@ -121,7 +122,7 @@ public class HostController {
       themes.add(theme);
     }
 
-    rentalHome.setRentalHomeThemes(themes);
+    rentalHome.setThemes(themes);
     model.addAttribute("rentalHome", rentalHome);
 
     return "redirect:rentalHomeFacilityForm";
@@ -261,7 +262,7 @@ public class HostController {
       themes.add(theme);
     }
 
-    rentalHome.setRentalHomeThemes(themes);
+    rentalHome.setThemes(themes);
 
     List<RentalHomeFacility> facilityList = new ArrayList<>();
 

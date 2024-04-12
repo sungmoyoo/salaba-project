@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/salaba.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/salaba.app.main.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/salaba.iml" filepath="$PROJECT_DIR$/.idea/modules/salaba.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/salaba.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/salaba.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/salaba.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/salaba.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/salaba.app.test.iml" filepath="$PROJECT_DIR$/.idea/modules/app/salaba.app.test.iml" />
->>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1
     </modules>
   </component>
 </project>
