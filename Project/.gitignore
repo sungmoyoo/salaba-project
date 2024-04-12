@@ -2,6 +2,7 @@
 *.exe
 temp/
 *workspace.xml
+*.properties
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,visualstudiocode,eclipse,intellij,java,c++,c,node,gradle,maven
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,linux,visualstudiocode,eclipse,intellij,java,c++,c,node,gradle,maven
@@ -238,7 +239,7 @@ fabric.properties
 .idea/**/sonarlint/
 
 # SonarQube Plugin
-# https://plugins.jetbrains.com/plugin/7238-sonarqube-board-plugin
+# https://plugins.jetbrains.com/plugin/7238-sonarqube-community-plugin
 .idea/**/sonarIssues.xml
 
 # Markdown Navigator plugin
@@ -563,8 +564,5 @@ gradle-app.setting
 
 # etc
 gradle.txt
-
-
-ncp-secret.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,linux,visualstudiocode,eclipse,intellij,java,c++,c,node,gradle,maven
