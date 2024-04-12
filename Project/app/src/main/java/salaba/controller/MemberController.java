@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
+import salaba.vo.Member;
+import salaba.vo.Nation;
 
 @RequiredArgsConstructor
 @Controller

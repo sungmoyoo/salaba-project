@@ -2,7 +2,9 @@ package salaba.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
+import salaba.vo.rental_home.Theme;
 
 
 @Data
@@ -25,4 +27,6 @@ public class Member implements Serializable { // 회원
   private String photo; // 사진
   private char state; // 상태
   private Date exitDate; // 회원탈퇴 날짜
+
+  private List<Theme> themes; // 테마
 }
