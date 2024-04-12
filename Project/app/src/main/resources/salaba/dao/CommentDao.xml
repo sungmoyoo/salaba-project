@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.CommentDao">
+
+  <!-- 댓글 -->
+  <resultMap id="CommentMap" type="Comment">
+    <id column="comment_no" property="commentNo"/>
+    <result column="content" property="content"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="state" property="state"/>
+
+    <!-- 회원정보 가져오기 -->
+   <association property="writer" javaType="Member">
+     <id column="member_no" property="no"/>
+     <result column="nickname" property="nickname"/>
+   </association>
+  </resultMap>
+
+  <insert id="add" parameterType="Comment"
+    useGeneratedKeys="true" keyColumn="comment_no" keyProperty="commentNo">
+    insert into comment(content,writer)
+    values(#{content},#{writer.no})
+  </insert>
+
+  <!-- 댓글 삭제 -->
+  <delete id="delete" parameterType="int">
+    update
+    comment
+    set
+    state=${state};
+    where
+    comment_no=${commentNo}
+    content=${content};
+  </delete>
+
+  <!-- 게시판 번호로 댓글 찾기 -->
+  <select id="findAll" resultMap="CommentMap">
+    select
+      b.board_no,
+      c.comment_no,
+      c.content,
+      c.created_date,
+      m.member_no,
+      m.nickname,
+      m.photo
+    from
+     comment c
+    inner join member m on c.member_no=m.member_no
+    left join board b on c.board_no=b.board_no
+    where
+      b.board_no=#{boardNo}
+    order by
+      c.created_date desc;
+  </select>
+
+  <update id="update" parameterType="Comment">
+    update board set
+    state=${state};
+    where
+    comment_no=${commentNo}
+    content=${content};
+  </update>
+
+</mapper>

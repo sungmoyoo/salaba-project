@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>숙소 기본 입력 폼</title>
+</head>
+
+<style>
+  .image-container {
+    display: inline-block;
+    text-align: center;
+    margin-right: 20px;
+    margin-top: 30px;
+    position: relative;
+  }
+  .image-item {
+    width: 265px;
+    height: 252px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    position: relative; /* 이미지 상대 위치 설정 */
+  }
+
+  .image-description {
+      width: 100%;
+      box-sizing: border-box;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: 0;
+      padding: 5px;
+  }
+
+  .delete-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      position: absolute;
+      top: 0; /* 이미지의 위쪽 여백 */
+      right: 0; /* 이미지의 오른쪽 여백 */
+      transform: translate(50%, -50%); /* 삭제 버튼을 이미지의 오른쪽 상단에 정확히 위치시키기 위해 */
+  }
+  .input-file-button{
+    padding: 6px 25px;
+    background-color:#FF6600;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+  }
+</style>
+<body>
+
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+
+<div align="center">
+<form action="themeForm" data-th-action="@{rentalHomeSave}" enctype="multipart/form-data" method='post'>
+  <br>
+
+  <h2>숙소 기본 정보</h2>
+  <div>
+     <input type="text" name="name" placeholder="숙소명">
+  </div>
+  <div>
+     <textarea name="explanation" placeholder="숙소 설명"></textarea>
+  </div>
+  <div>
+     <textarea name="rentalHomeRule" placeholder="숙소 이용규칙"></textarea>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 위치</h2>
+  <div>
+    지도 API 들어감
+  </div>
+  <div>
+    임시 지역 값: <input type="text" name="region_no" value="2">
+  </div>
+  <div>
+    임시 주소 값: <input type="text" name="address" value="대한민국 제주도 제주 중앙로 304">
+  </div>
+  <div>
+    임시 위도 값: <input type="text" name="lat" value="33.493496809557">
+  </div>
+  <div>
+    임시 경도 값: <input type="text" name="lon" value="126.534302173485">
+  </div>
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 사진</h2>
+
+
+  <script>
+    function submitForm() {
+        var form = document.querySelector('form');
+        form.submit();
+    }
+
+    function photoCountAndDisplay(files) {
+      var imageContainer = document.getElementById('imageContainer');
+      var form = document.querySelector('form'); // 폼 요소를 가져옵니다.
+      var filesArray = []; // 배열에 선택된 파일을 저장합니다.
+
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+
+        // FileReader 객체를 사용하여 파일을 읽습니다.
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          var container = document.createElement('div');
+          container.classList.add('image-container'); // 이미지와 설명을 감싸는 컨테이너에 CSS 클래스를 추가합니다.
+
+          var imgElement = document.createElement('img');
+          imgElement.classList.add('image-item'); // 이미지에 CSS 클래스를 추가합니다.
+
+          // 이미지를 화면에 표시합니다.
+          imgElement.src = e.target.result;
+          container.appendChild(imgElement); // 이미지를 컨테이너에 추가합니다.
+
+          // 이미지 설명을 입력할 수 있는 입력 필드를 생성합니다.
+          var descriptionInput = document.createElement('input');
+          descriptionInput.type = 'text';
+          descriptionInput.placeholder = '이미지 설명';
+          descriptionInput.classList.add('image-description'); // 입력 필드에 CSS 클래스를 추가합니다.
+          descriptionInput.name = 'photoExplanations'; // form을 통해 보낼 데이터 이름 지정
+          container.appendChild(descriptionInput); // 입력 필드를 컨테이너에 추가합니다.
+
+          // 삭제 버튼을 생성합니다.
+          var deleteButton = document.createElement('button');
+          deleteButton.textContent = 'X';
+          deleteButton.classList.add('delete-button');
+          deleteButton.onclick = function() {
+            // 해당 이미지의 파일을 배열에서 삭제하고 해당 이미지를 화면에서도 제거합니다.
+            var index = filesArray.indexOf(file);
+            if (index > -1) {
+              filesArray.splice(index, 1);
+              container.remove();
+            }
+          };
+          container.appendChild(deleteButton); // 삭제 버튼을 컨테이너에 추가합니다.
+
+          imageContainer.appendChild(container); // 컨테이너를 이미지 컨테이너에 추가합니다.
+        };
+
+        reader.readAsDataURL(file); // 파일을 데이터 URL로 읽습니다.
+
+        // 파일을 배열에 추가합니다.
+        filesArray.push(file);
+      }
+
+      // 폼 제출 시 파일을 함께 제출합니다.
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 제출 동작을 막습니다.
+
+        // FormData 객체를 생성합니다.
+        var formData = new FormData(form);
+
+        // 배열에 있는 파일을 FormData 객체에 추가합니다.
+        filesArray.forEach(function(file, index) {
+          formData.append('photos', file); // 파일들을 'photos'라는 이름으로 FormData에 추가합니다.
+        });
+
+        // FormData 객체를 서버로 전송합니다.
+        fetch(form.action, {
+          method: form.method,
+          body: formData
+        })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+      });
+    }
+  </script>
+  <div>
+    <label class="input-file-button" for="photoInput">사진 추가</label>
+    <input type="file" id="photoInput" name="photos" style="display:none;"
+            onchange="photoCountAndDisplay(this.files)"/>
+
+    <div id="imageContainer"></div>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <h2>요금설정</h2>
+  <script>
+    function calc() {
+      const price = Number(document.getElementById("price").value);
+      const cleanFee = Number(document.getElementById("cleanFee").value)
+      document.getElementById("income").value = Math.round((price + cleanFee) * 0.97)
+    }
+  </script>
+    <div>
+      <input type="text" name="price" id="price" placeholder="이용요금(주 기준)" onkeyup="calc(this.value)">
+    </div>
+    <div>
+      <input type="text" name="cleanFee" id="cleanFee" placeholder="청소비" onkeyup="calc(this.value)">
+    </div>
+    <div>
+     <input readonly type="text" id="income" placeholder="정산금액">
+    </div>
+
+
+  <br>
+  <br>
+  <br>
+
+  <h2>호스팅 기간</h2>
+  <div>
+    호스팅 시작일: <input name='hostingStartDate' type='date'>
+  </div>
+  <div>
+    호스팅 종료일: <input name='hostingEndDate' type='date'>
+  </div>
+
+  <h2>본인 인증</h2>
+  <div>
+    휴대폰인증
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <div>
+    <button type="submit" onclick="submitForm()">다음</button>
+  </div>
+
+  <br>
+  <br>
+
+</form>
+</div>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+
+</body>
+</html>

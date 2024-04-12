@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    input, button {
+      padding: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .theme-icon-container{
+      width: 56px;
+      height: 48px;
+      border: 1px solid #ddd;
+    }
+
+    .listing-container {
+      margin: 20px auto; /* 중앙 정렬 */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start; /* 왼쪽 정렬 */
+    }
+
+    .listing-item {
+      width: 265px; /* 수정된 부분: listing-item의 너비를 265px로 지정 */
+      height: 300px; /* 수정된 부분: listing-item의 높이를 300px로 지정 */
+      margin-right: 20px; /* 수정된 부분: 우측 여백 추가 */
+      margin-bottom: 20px; /* 수정된 부분: 하단 여백 추가 */
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .listing-item img {
+      /* width: 100%; div에 맞추어 이미지의 너비 조절 */
+      /* height: 100%; div에 맞추어 이미지의 높이 조절 */
+      object-fit: cover;
+    }
+
+    .listing-slider {
+      position: relative;
+      width: 100%; /* 수정된 부분: slider의 너비를 100%로 지정 */
+      height: 100%; /* 수정된 부분: slider의 높이를 100%로 지정 */
+    }
+
+
+    /* 여기부터 사진에 있는 버튼 부분 */
+    .slick-arrow {
+      position: absolute;
+      top: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .slick-prev,
+    .slick-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 2;
+      font-size: 20px;
+      line-height: 30px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .slick-prev {
+      left: 10px;
+    }
+
+    .slick-next {
+      right: 10px;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      content: '<';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .slick-next:before {
+      content: '>';
+      left: initial;
+      right: 50%;
+      transform: translate(50%, -50%);
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="search-container">
+      <h1>어디로 여행 가시나요?</h1>
+      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
+        <input type="text" name="regionName" id="location" placeholder="장소 입력">
+        <input type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
+        <input type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
+        <input type="number" name="capacity" id="guests" placeholder="인원">
+        <button type="submit">검색</button>
+      </form>
+    </div>
+  </section>
+  <section>
+    <div data-th-each="theme : ${session.themeList}">
+      <div class="theme-icon-container">
+        <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
+          <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="slider-container">
+    <div class="listing-container">
+      <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
+        <div class="listing-slider">
+          <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
+               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+          <button class="slide-button prev-button slick-prev"></button>
+          <button class="slide-button next-button slick-next"></button>
+          <span data-th-text="${rentalHome.name}">숙소 이름</span>
+          <span data-th-text="${rentalHome.price}">숙소 가격</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // 각 숙소의 이미지 슬라이더 처리
+  $('.listing-item').each(function () {
+    const $slideImages = $(this).find('.slide-image');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      $slideImages.hide().eq(index).show();
+    }
+
+    function showNextSlide() {
+      currentIndex = (currentIndex + 1) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    function showPreviousSlide() {
+      currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    $(this).find('.next-button').click(showNextSlide);
+    $(this).find('.prev-button').click(showPreviousSlide);
+
+    showSlide(currentIndex);
+  });
+
+ function updateRentalHomeList(newRentalHomeList){
+  let listContainer = $('.listing-container');
+  listContainer.empty();
+
+  newRentalHomeList.forEach(function(rentalHomeList){
+    let listItem = $( '<div class="listing-item">' );
+    let sliderDiv = $( '<div class="listing-slider">' );
+    
+    rentalHomeList.forEach(function(photos){
+      let image = $( '<img class="slide-image">' )
+      .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + photos.uuidPhotoName )
+      .attr( 'alt', '숙소이미지' );
+      sliderDiv.append(image);
+    });
+    let nameSpan = $('<span>').text(rentalHomeList.name);
+    let priceSpan = $('<span>').text(rentalHomeList.price);
+
+    sliderDiv.append(nameSpan);
+    sliderDiv.append(priceSpan);
+    listItem.append(sliderDiv);
+
+    listContainer.append(listItem);
+  });
+ }
+
+ function handleNewRentalHomeList(newRentalHomeList){
+  updateRentalHomeList(newRentalHomeList);
+ }
+ $.ajax({
+    url: '/theme',
+    type: 'GET',
+    success : function(response){
+      handleNewRentalHomeList(response);
+    },
+    error: function(xhr, status, error){
+      console.error(error);
+    }
+ })
+
+</script>
+</body>
+</html>

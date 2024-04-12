@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+</head>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+<h1>로그인</h1>
+
+<form action="login" data-th-action="@{login}" method='post'>
+  <table width="300">
+    <tr>
+      <td width="80">email</td>
+      <td><input data-th-value='${email}' name='email' type='text' placeholder="email" style="width:199px;"/></td>
+    </tr>
+    <tr>
+      <td>password</td>
+      <td><input name='password' type='password' placeholder="password"  style="width:199px;"/></td>
+    </tr>
+  </table>
+  <table width="300">
+    <tr>
+      <td><input name='saveEmail' type='checkbox'> 이메일 저장</td>
+      <td align="right"><button>로그인</button></td>
+    </tr>
+  </table>
+</form>
+<table width="300">
+  <tr>
+    <td>
+      <a  href="form"><button style="width:100px;">google 로그인</button></a>
+    </td>
+    <td align="right">
+      <a data-th-href="@{/member/form}" href="form"><button style="width:100px;">회원가입</button></a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a  href="form"><button style="width:100px;">kakao 로그인</button></a>
+    </td>
+    <td align="right">
+      <a data-th-href="@{/member/findEmail}" href="findEmail"><button style="width:100px;">이메일 찾기</button></a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a  href="form"><button style="width:100px;">naver 로그인</button></a>
+    </td>
+    <td align="right">
+      <a data-th-href="@{/member/findPw}" href="findPw"><button style="width:100px;">비밀번호 찾기</button></a>
+    </td>
+  </tr>
+</table>
+
+
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>

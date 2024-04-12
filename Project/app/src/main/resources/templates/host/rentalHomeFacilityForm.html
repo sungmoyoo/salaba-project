@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>숙소 시설 입력 폼</title>
+</head>
+<body>
+
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+
+<div align="center">
+
+<form action="facilityForm" data-th-action="@{rentalHomeFacilitySave}" method='post'>
+
+  <h2>숙소 시설</h2>
+  <div>
+    수용인원 <input type="number" name="capacity" value="0">
+  </div>
+  <div data-th-if="${facility.facilityNo < 4} " data-th-each="facility : ${facilityList}"
+       data-th-object="${facility}">
+    <a data-th-text="*{facilityName}">시설</a>
+    <input type="text" name="facilityCount" value="0"/>
+    <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+    <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+  </div>
+
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 편의시설</h2>
+  <p data-th-if="${facility.facilityNo >= 10}"
+       data-th-each="facility : ${facilityList}" data-th-object="${facility}">
+    <a data-th-text="*{facilityName}"></a>
+    <input type="checkbox" name="facilityCount" value="1" />
+    <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+    <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+  </p>
+
+
+  <div>
+    <button>다음</button>
+  </div>
+
+
+
+</form>
+</div>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+
+</body>
+</html>

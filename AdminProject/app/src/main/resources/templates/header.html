@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salaba 관리자 시스템</title>
+</head>
+<body>
+<header data-th-fragment="header">
+    <h2>Salaba 관리자 시스템</h2>
+
+
+    <p>신고관리</p>
+    <ul>
+        <li><a data-th-href="@{/report/list(menu=1)}" href="list">숙소 신고 내역</a></li>
+        <li><a data-th-href="@{/report/list(menu=2)}" href="list">게시글 신고 내역</a></li>
+        <li><a data-th-href="@{/report/list(menu=3)}" href="list">댓글 신고 내역</a></li>
+    </ul>
+
+    <p>회원 관리</p>
+    <ul>
+        <li><a data-th-href="@{/user/list(menu=1)}" href="list">회원 목록</a></li>
+        <li><a data-th-href="@{/user/list(menu=2)}" href="list">호스트 목록</a></li>
+    </ul>
+    <p>숙소 관리</p>
+    <ul>
+        <li><a data-th-href="@{/rental/list(menu=1)}" href="list">등록된 숙소 목록</a></li>
+        <li><a data-th-href="@{/rental/list(menu=2)}" href="list">숙소 등록 심사</a></li>
+    </ul>
+
+    <p>문의 관리</p>
+    <ul>
+        <li><a data-th-href="@{/qna/list}" href="qna">1:1 문의 내역</a></li>
+    </ul>
+
+</header>
+</body>
+</html>
