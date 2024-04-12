@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.admin.repository.RentalDao">
+    <resultMap id="RentalMap" type="Rental">
+        <id column="rental_home_no" property="rentalNo"/>
+        <result column="region_no" property="regionNo"/>
+        <result column="name" property="name"/>
+        <result column="explanation" property="explanation"/>
+        <result column="address" property="address"/>
+        <result column="price" property="price"/>
+        <result column="clean_fee" property="cleanFee"/>
+        <result column="capacity" property="capacity"/>
+        <result column="state" property="state"/>
+        <result column="registe_date" property="regDate"/>
+        <result column="rental_home_rule" property="rule"/>
+
+        <association property="host" javaType="Member">
+            <id column="host_no" property="memberNo"/>
+            <result column="host_name" property="name"/>
+        </association>
+
+        <collection property="facilities" ofType="Facility">
+            <id column="facility_no" property="facilityNo"/>
+            <result column="facility_name" property="name"/>
+            <result column="facility_count" property="count"/>
+        </collection>
+
+        <collection property="themes" ofType="Theme">
+            <id column="theme_no" property="themeNo"/>
+            <result column="theme_name" property="themeName"/>
+        </collection>
+
+        <collection property="photos" ofType="Photo">
+            <id column="photo_no" property="no"/>
+            <result column="ori_photo_name" property="originalName"/>
+            <result column="uuid_photo_name" property="uuidName"/>
+            <result column="photo_explanation" property="explanation"/>
+            <result column="photo_order" property="order"/>
+
+        </collection>
+    </resultMap>
+
+
+
+    <select id="findAll" resultMap="RentalMap">
+        SELECT
+            rh.rental_home_no,
+            rh.name,
+            m.name as host_name,
+            m.member_no as host_no,
+            rh.registe_date,
+            rh.state
+        FROM rental_home rh
+        INNER JOIN member m ON rh.member_no = m.member_no
+        WHERE rh.state != '0'
+    </select>
+
+    <select id="findApplied" resultMap="RentalMap">
+        SELECT
+            rh.rental_home_no,
+            rh.name,
+            m.name as host_name ,
+            m.member_no as host_no,
+            rh.registe_date,
+            rh.state
+        FROM rental_home rh
+        INNER JOIN member m ON rh.member_no = m.member_no
+        WHERE rh.state = '0'
+    </select>
+
+    <select id="findBy" resultMap="RentalMap">
+        select
+            rh.rental_home_no,
+            rh.name,
+            rh.price,
+            rh.clean_fee,
+            rh.explanation,
+            rh.rental_home_rule,
+            concat(r.region_name,rh.address) as address,
+            rh.state,
+            rh.capacity,
+            rh.hosting_start_date,
+            rh.hosting_end_date,
+            rh.registe_date,
+            rhd.facility_count,
+            rhf.facility_no,
+            rhf.facility_name,
+            t.theme_no,
+            t.theme_name,
+            rhp.photo_no,
+            rhp.uuid_photo_name,
+            rhp.photo_explanation,
+            rhp.photo_order
+        from rental_home rh
+            INNER JOIN region r ON rh.region_no = r.region_no
+            LEFT JOIN rental_home_detail rhd ON rh.rental_home_no = rhd.rental_home_no
+            INNER JOIN rental_home_facility rhf ON rhd.facility_no = rhf.facility_no
+            INNER JOIN rental_home_theme rht ON rh.rental_home_no = rht.rental_home_no
+            INNER JOIN theme t ON rht.theme_no = t.theme_no
+            LEFT JOIN rental_home_photo rhp ON rh.rental_home_no = rhp.rental_home_no
+        WHERE
+            rh.rental_home_no = #{rentalNo}
+    </select>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.admin.repository.TextReportDao">
+    <resultMap id="TextReportMap" type="Report">
+        <id column="report_no" property="reportNo"/>
+        <result column="report_category_no" property="category"/>
+        <result column="content" property="content"/>
+        <result column="report_date" property="reportDate"/>
+        <result column="state" property="state"/>
+        <result column="report_target_no" property="targetNo"/>
+        <result column="report_target_type" property="targetType"/>
+        <result column="report_category_name" property="categoryName"/>
+
+        <association property="reporter" javaType="Member">
+            <id column="reporter_no" property="memberNo"/>
+            <result column="reporter_name" property="name"/>
+        </association>
+
+        <association property="writer" javaType="Member">
+            <id column="writer_no" property="memberNo"/>
+            <result column="writer_name" property="name"/>
+        </association>
+
+        <association property="reportTarget" javaType="ReportTarget">
+            <result column="report_content" property="content"/>
+            <result column="created_date" property="createdDate"/>
+        </association>
+
+
+        <collection property="reportFiles" ofType="ReportFile">
+            <result column="ori_file_name" property="originalName"/>
+            <result column="uuid_file_name" property="uuidName"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="findAllBy" resultMap="TextReportMap">
+        SELECT
+        brd.report_no,
+        brd.member_no as reporter_no,
+        brd.report_category_no,
+        brd.report_date,
+        brd.state,
+        brd.report_target_no,
+        brd.report_target_type,
+        brc.report_category_name
+        FROM board_report_detail brd
+        INNER JOIN board_report_category brc on brd.report_category_no = brc.report_category_no
+        WHERE brd.report_target_type= #{targetType}
+
+    </select>
+
+    <select id="findBy" resultMap="TextReportMap">
+        SELECT
+            m.member_no as reporter_no,
+            m.name as reporter_name,
+            m2.member_no as writer_no,
+            m2.name as writer_name,
+            brd.report_no,
+            brd.report_date,
+            brd.content,
+            brd.member_no,
+            brd.state,
+            brd.report_target_no,
+            brd.report_target_type,
+            brc.report_category_name,
+            brf.uuid_file_name,
+        <if test='type.equals("0")'>
+            b.board_no,
+            b.title as report_content,
+            b.created_date
+            FROM board_report_detail brd
+            INNER JOIN board b ON brd.report_target_no = b.board_no
+            INNER JOIN member m2 ON b.member_no = m2.member_no
+        </if>
+        <if test='type.equals("1")'>
+            c.comment_no,
+            c.content as report_content,
+            c.created_date
+            FROM board_report_detail brd
+            INNER JOIN comment c ON brd.report_target_no = c.comment_no
+            INNER JOIN member m2 ON c.member_no = m2.member_no
+        </if>
+        <if test='type.equals("2")'>
+            r.reply_no,
+            r.content as report_content,
+            r.created_date
+            FROM board_report_detail brd
+            INNER JOIN reply r ON brd.report_target_no = r.reply_no
+            INNER JOIN member m2 ON r.member_no = m2.member_no
+        </if>
+        INNER JOIN member m ON brd.member_no = m.member_no
+
+        LEFT JOIN board_report_file brf ON brd.report_no = brf.report_no
+        INNER JOIN board_report_category brc ON brd.report_category_no = brc.report_category_no
+        WHERE brd.report_target_no = #{no}
+        AND brd.report_target_type = #{type}
+        AND brd.member_no = #{memberNo};
+
+    </select>
+
+    <update id="updateState">
+        UPDATE board_report_detail SET state = '1'
+        WHERE report_no = #{reportNo}
+    </update>
+
+    <update id="updateBoardState">
+        <if test='report.targetType.equals("0")'>
+            UPDATE board set state = #{boardState}
+            WHERE board_no = #{report.targetNo}
+        </if>
+        <if test='report.targetType.equals("1")'>
+            UPDATE comment set state = #{boardState}
+            WHERE comment_no = #{report.targetNo}
+        </if>
+        <if test='report.targetType.equals("2")'>
+            UPDATE reply set state = #{boardState}
+            WHERE reply_no = #{report.targetNo}
+        </if>
+    </update>
+
+</mapper>
