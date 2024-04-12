@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>숙소 테마 입력 폼</title>
+</head>
+<body>
+
+
+<div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+
+<div align="center">
+
+<form action="themeForm" data-th-action="@{themeSave}"  method='post'>
+  <br>
+  <br>
+  <br>
+
+
+
+  <h2>숙소 타입</h2>
+  <div>
+    <table border="1">
+      <thead>
+      <th>유형</th>
+      <th>선택</th>
+      </thead>
+      <tbody>
+      <tr data-th-if="${theme.themeNo < 10}" data-th-each="theme : ${themeList}"
+          data-th-object="${theme}">
+        <td data-th-text="*{themeName}">모텔</td>
+        <td>
+          <input type="radio" data-th-name="type" data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
+        </td>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <br>
+  <br>
+  <br>
+
+  <h2>숙소 테마</h2>
+  <p data-th-if="${theme.themeNo >= 10}"
+       data-th-each="theme : ${themeList}" data-th-object="${theme}">
+    <a data-th-text="*{themeName}"></a>
+    <input type="checkbox" name="themeNos" data-th-value="*{themeNo}"/>
+    <input type="hidden" name="themeNames" data-th-value="*{themeName}"/>
+  </p>
+  <br>
+  <br>
+  <br>
+
+  <div>
+    <button>다음</button>
+  </div>
+
+
+
+</form>
+</div>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+
+
+</body>
+</html>
