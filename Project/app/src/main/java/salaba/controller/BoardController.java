@@ -96,7 +96,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
   }
 
   @PostMapping("addBoard")
-  public String addBoard(  // 게시글 작성
+  public String addBoard(  // 게시글 작성/
       Board board,
       @RequestParam("scopeNo") int scopeNo, // 공개범위
       @RequestParam("headNo") int headNo, // 말머리
