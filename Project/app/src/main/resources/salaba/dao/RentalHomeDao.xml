@@ -280,24 +280,24 @@
                 theme
               where
                 theme_name =
+              <foreach collection="list" item="item" separator="OR">
+                #{item.themeName}
+              </foreach>
           )
         )
       </if>
+      <if test="theme != null and ((minPrice > 0 and maxPrice > 0 ) or capacity > 0 )">
+        and
+      </if>
       <if test="minPrice != null and maxPrice != null">
-        ( t1.price between #{minPrice} and #{maxPrice} ) and
+        ( t1.price between #{minPrice} and #{maxPrice} )
       </if>
-      <if test="checkInDate != null and checkOutDate != null">
-        1 <![CDATA[ > ]]>
-        ( select
-        count(*)
-        from
-        reservation
-        where
-        <![CDATA[ start_date <= #{checkOutDate} ]]> and
-        <![CDATA[ end_date >= #{checkInDate} ]]>
-        )
+      <if test="theme != null and ((minPrice > 0 and maxPrice > 0 ) or capacity > 0 )">
+        and
       </if>
-
+      <if test="capacity > 0">
+        <![CDATA[ t1.capacity >= #{capacity} ]]>
+      </if>
   </select>
   <!-- 숙소 상세 조회 -->
   <select id="rentalHomeDetailSelect" resultMap="rentalHomeView" parameterType="int">

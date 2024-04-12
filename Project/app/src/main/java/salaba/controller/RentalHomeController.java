@@ -20,6 +20,7 @@ import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
+import salaba.vo.rental_home.Theme;
 
 @RequiredArgsConstructor
 @Controller
@@ -86,10 +87,16 @@ public class RentalHomeController {
     return "main";
   }
 
-//  @GetMapping
-  public void rentalHomeThemeSearch( Model model, String themeName ){
+  @GetMapping("/filter")
+  public String rentalHomeFilterSearch( Model model,
+      @RequestParam Theme theme,
+      @RequestParam int minPrice,
+      @RequestParam int maxPrice,
+      @RequestParam int capacity){
     model.addAttribute("rentalHomeList",
-        rentalHomeService.getRentalHomeThemeSearch(themeName));
+        rentalHomeService.getRentalHomeFilterSearch(theme,minPrice,maxPrice,capacity));
+
+    return "main";
   }
 
   @GetMapping("/view")

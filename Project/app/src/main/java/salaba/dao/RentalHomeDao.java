@@ -32,6 +32,13 @@ public interface RentalHomeDao {
   
   // 숙소 상세 조회
   RentalHome rentalHomeDetailSelect( int rentalHomeNo );
+
+  // 숙소 필터 조회
+  List<RentalHome> rentalHomeFilterSelect(
+      @Param("theme") Theme theme,
+      @Param("minPrice") int minPrice,
+      @Param("maxPrice") int maxPrice,
+      @Param("capacity") int capacity);
   
   // 숙소 리뷰 조회
   List<RentalHomeReview> rentalHomeReviewSelect( @Param("rental_home_no") int rentalHomeNo );

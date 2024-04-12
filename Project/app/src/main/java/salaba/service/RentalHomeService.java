@@ -22,6 +22,8 @@ public interface RentalHomeService {
 
   List<RentalHome> getRentalHomeThemeSearch( String themeName );
 
+  List<RentalHome> getRentalHomeFilterSearch( Theme theme, int minPrice, int maxPrice, int capacity );
+
   List<RentalHomePhoto> getRentalHomePhotos( int rentalHomeNo );
 
   List<RentalHomeFacility> getRentalHomeFacilities( int rentalHomeNo );
