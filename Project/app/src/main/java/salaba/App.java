@@ -3,13 +3,19 @@
  */
 package salaba;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
+@PropertySource("classpath:config/ncp.properties")
 public class App {
+
+    private final static Log log = LogFactory.getLog(App.class);
     public static void main(String[] args) {
         SpringApplication.run(App.class,args);
     }
