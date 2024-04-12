@@ -60,7 +60,13 @@ public class ReportManageController {
     public String reportDetail(@RequestParam("no") int no,
                                @RequestParam("type") char type,
                                @RequestParam("mno") int memberNo,
+                               HttpSession session,
                                Model model) {
+
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+
         model.addAttribute("type", type);
         if (type == '0') {
             Report report = textReportService.getBy(type, no, memberNo);
@@ -79,6 +85,17 @@ public class ReportManageController {
             model.addAttribute("name", "숙소 신고");
         }
         return "report/detail";
+
+    }
+
+    @PostMapping("report/update")
+    public String dealReport(@RequestParam("selection") String selection,
+                             HttpSession session) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+
+        return "redirect:report/list";
 
     }
 

@@ -62,19 +62,6 @@ public class RentalManageController {
         }
 
         Rental rental = rentalService.getBy(rentalNo);
-        // 이미지가 있는경로의 파일들의 이름을 전부 가져온다.
-//        List<String> rentalImageList = Arrays.stream(new File(rentalImgPath).list()).toList();
-        // db에서 가져온 uuid_name과 이미지디렉토리를 비교하여 해당 이름의 파일이 없으면 다운로드 한다.
-//        for (Photo photo : rental.getPhotos()) {
-//            String uuid = photo.getUuidName();
-//            if (!rentalImageList.contains(uuid)) {
-//                try {
-//                    storageService.download(bucketName, uuid, rentalImgPath);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
 
         log.debug(rental);
         model.addAttribute("rental", rental);

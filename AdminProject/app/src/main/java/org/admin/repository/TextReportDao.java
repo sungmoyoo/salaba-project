@@ -14,4 +14,6 @@ public interface TextReportDao {
                          @Param("no") int no,
                          @Param("memberNo") int memberNo);
 
+    public int updateState(Report report);
+
 }
