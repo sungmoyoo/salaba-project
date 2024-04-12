@@ -395,8 +395,6 @@ where (r.region_no) in (
 )
 limit 1;
 
-
-
 ------------------------------------------------------------------------------------------------------------
 
 -- 한달살기 - 지도
@@ -405,33 +403,50 @@ limit 1;
 
 -- 한달살기 - 숙소 상세
 select
-    rp.photo_no,
-    rp.ori_photo_name,
-    rp.uuid_photo_name,
-    rp.photo_explanation,
-    rh.region_no,
-    rh.name,
-    rh.explanation,
-    rh.address,
-    rh.price,
-    rh.capacity,
-    rh.lat,
-    rh.lon,
-    rh.state,
-    rh.hosting_start_date,
-    rh.hosting_end_date,
-    rh.registe_date
-from rental_home rh
-inner join rental_home_photo rp on rp.rental_home_no = rh.rental_home_no
-order by rp.photo_no desc;
+    t1.region_no,
+    t1.name,
+    t1.explanation,
+    t1.address,
+    t1.price,
+    t1.capacity,
+    t1.lat,
+    t1.lon,
+    t1.state,
+    t1.hosting_start_date,
+    t1.hosting_end_date,
+    t1.registe_date,
+    t2.photo_no,
+    t2.ori_photo_name,
+    t2.uuid_photo_name,
+    t2.photo_explanation,
+    t2.photo_order,
+    t3.facility_no,
+    t3.facility_count,
+    t4.facility_name,
+    t6.created_date,
+    t6.score,
+    t6.review
+from 
+    rental_home t1
+    inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+    inner join rental_home_detail t3 on t3.rental_home_no = t1.rental_home_no
+    inner join rental_home_facility t4 on t4.facility_no = t3.facility_no
+    left outer join reservation t5 on t5.rental_home_no = t1.rental_home_no
+    left outer join rental_home_review t6 on t6.reservation_no = t5.reservation_no 
+where
+    t1.rental_home_no = #{rental_home_no} and
+    t6.state = '0'
+order by 
+    t2.photo_order asc,
+    t6.created_date desc;
 
--- 숙소 편의시설
-select
-    rhf.facility_name,
-    rhd.facility_count
-from rental_home_facility rhf
-inner join rental_home_detail rhd on rhf.facility_no = rhd.facility_no
-where rhd.rental_home_no = 1;
+-- -- 숙소 편의시설
+-- select
+--     rhf.facility_name,
+--     rhd.facility_count
+-- from rental_home_facility rhf
+-- inner join rental_home_detail rhd on rhf.facility_no = rhd.facility_no
+-- where rhd.rental_home_no = 1;
 
 -- 숙소 리뷰 남기기
 insert into rental_home_review(reservation_no, created_date, score, review, state) values(3, '2024-03-28', 4, '추천해요', '1');

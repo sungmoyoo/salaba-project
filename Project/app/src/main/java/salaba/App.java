@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 @EnableTransactionManagement
+<<<<<<< HEAD
+=======
+@PropertySource({
+    "classpath:config/ncp.properties",
+    "classpath:config/ncp-secret.properties"
+})
+>>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1
 @Controller
 public class App {
 
@@ -22,5 +29,12 @@ public class App {
 
     @GetMapping("/home")
     public void home() {
+<<<<<<< HEAD
+=======
+    }
+
+    @GetMapping("/about")
+    public void about() {
+>>>>>>> ec5f381085fc7be6c91345a11d9923fe80148ce1
     }
 }

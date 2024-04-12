@@ -2,6 +2,7 @@
 *.exe
 temp/
 *workspace.xml
+*.properties
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,visualstudiocode,eclipse,intellij,java,c++,c,node,gradle,maven
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,linux,visualstudiocode,eclipse,intellij,java,c++,c,node,gradle,maven
