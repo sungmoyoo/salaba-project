@@ -30,8 +30,8 @@ public class NcpStorageService implements StorageService, InitializingBean {
   final AmazonS3 s3;
 
   public NcpStorageService(
-      @Value("${ncp.endpoint}") String endPoint,
-      @Value("${ncp.regionname}") String regionName,
+      @Value("${ncp.ss.endpoint}") String endPoint,
+      @Value("${ncp.ss.regionname}") String regionName,
       @Value("${ncp.accesskey}") String accessKey,
       @Value("${ncp.secretkey}") String secretKey) {
 
@@ -92,8 +92,7 @@ public class NcpStorageService implements StorageService, InitializingBean {
   @Override
   public void delete(String bucketName, String path, String objectName) throws Exception {
     s3.deleteObject(bucketName, path + objectName);
-
+    
     log.debug(String.format("Object %s has been deleted.\n", objectName));
   }
-
 }

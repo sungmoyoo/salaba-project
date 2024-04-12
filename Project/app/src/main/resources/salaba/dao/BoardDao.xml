@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.BoardDao">
+
+  <!-- 게시판 -->
+  <resultMap id="BoardMap" type="Board">
+    <id column="board_no" property="boardNo"/>
+    <result column="title" property="title"/>
+    <result column="head_no" property="headNo"/>
+    <result column="head_content" property="headContent"/>
+    <result column="content" property="content"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="file_count" property="fileCount"/>
+    <result column="category_no" property="categoryNo"/>
+    <result column="scope_no" property="scopeNo"/>
+
+    <!-- 회원 정보 가져오기 -->
+    <association property="writer" javaType="Member">
+      <id column="member_no" property="no"/>
+      <result column="nickname" property="nickname"/>
+    </association>
+
+    <!-- 지역 정보 가져오기 -->
+    <association property="region" javaType="Region">
+      <id column="region_no" property="regionNo"/>
+      <result column="region_name" property="regionName"/>
+    </association>
+
+    <!-- 첨부 파일 -->
+    <collection property="fileList" ofType="BoardFile">
+      <id column="file_no" property="fileNo"/>
+      <result column="board_no" property="boardNo"/>
+      <result column="ori_file_name" property="oriFileName"/>
+      <result column="uuid_file_name" property="uuidFileName"/>
+    </collection>
+
+    <!-- 댓글 -->
+    <collection property="commentList" ofType="Comment">
+      <id column="comment_no" property="commentNo"/>
+      <result column="content" property="content"/>
+      <result column="created_date" property="createdDate"/>
+      <result column="state" property="state"/>
+    </collection>
+
+    <!-- 답글 -->
+    <collection property="replyList" ofType="Reply">
+      <id column="reply_no" property="replyNo"/>
+      <result column="content" property="content"/>
+      <result column="created_date" property="createdDate"/>
+      <result column="state" property="state"/>
+    </collection>
+  </resultMap>
+
+  <insert id="add" parameterType="Board"
+    useGeneratedKeys="true" keyColumn="board_no" keyProperty="boardNo">
+    insert into board(head_no,head_content,title,content,writer,category_no)
+    values(#{headNo},#{headContent},#{title},#{content},#{writer.no},#{categoryNo})
+  </insert>
+
+  <delete id="delete" parameterType="int">
+    delete from board
+    where board_no=#{value}
+  </delete>
+
+  <select id="findAll" resultMap="BoardMap">
+    select
+    b.board_no,
+    b.title,
+    b.created_date,
+    count(bl.member_no) as like_count,
+    m.member_no,
+    m.nickname,
+    h.head_no,
+    h.head_content,
+    r.region_no,
+    r.region_name,
+    bf.file_no,
+    bf.uuid_file_name
+    from
+    board b
+    inner join head h on b.head_no=h.head_no
+    inner join member m on b.member_no=m.member_no
+    left join board_like bl on b.board_no=bl.board_no
+    left join board_file bf on b.board_no=bf.board_no
+    left join region r on b.region_no=r.region_no
+    where
+    b.board_category_no=#{categoryNo}
+    group by
+    b.board_no
+    order by
+    like_count desc;
+  </select>
+
+  <select id="main" resultMap="BoardMap">    select
+    b.board_no,
+    b.title,
+    b.created_date,
+    count(bl.member_no) like_count,
+    m.member_no,
+    m.nickname,
+    h.head_no,
+    h.head_content,
+    bf.file_no,
+    bf.uuid_file_name,
+    r.region_no,
+    r.region_name
+    from
+    board b
+    inner join head h on b.head_no=h.head_no
+    inner join member m on b.member_no=m.member_no
+    left join board_like bl on b.board_no=bl.board_no
+    left join board_file bf on b.board_no=bf.board_no
+    left join region r on b.region_no=r.region_no
+    group by
+    b.board_no
+    order by
+    like_count desc;
+  </select>
+
+  <select id="findBy" resultMap="BoardMap">
+    select
+    b.board_no,
+    b.title,
+    b.view_count,
+    b.created_date,
+    h.head_no,
+    h.head_content,
+    r.region_no,
+    r.region_name,
+    bs.scope_name,
+    m.member_no,
+    m.nickname,
+    (select count(*) from board_like where board_no=b.board_no) as like_count
+    from
+    board b
+    inner join head h on b.head_no=h.head_no
+    inner join board_scope bs on b.scope_no=bs.scope_no
+    inner join member m on b.member_no=m.member_no
+    left outer join comment c on b.board_no = c.board_no
+    left outer join reply rp on c.comment_no = rp.comment_no
+    left join region r on b.region_no=r.region_no
+    where
+    b.board_no= #{boardNo}
+    order by
+    b.created_date
+  </select>
+
+  <update id="update" parameterType="Board">
+    update board set
+    title=#{title},
+    content=#{content}
+    where
+    board_no=#{boardNo}
+  </update>
+
+  <select id="countAll" resultType="int" parameterType="int">
+    select count(*) from board where board_no=#{value}
+  </select>
+</mapper>

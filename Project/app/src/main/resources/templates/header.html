@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>비트캠프 데브옵스 5기</title>
+</head>
+<body>
+
+<header data-th-fragment="header">
+<!-- 로고 사진 넣기 -->
+  <a data-th-href="@{/board}" href="/board">한달살기</a>
+  <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
+
+  <span data-th-if="${session.loginUser != null}"
+        data-th-text="${session.loginUser.name}">홍길동</span>
+  <a data-th-href="@{/member/list}" href="member/list">회원</a>
+  <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">로그아웃</a>
+  <a data-th-if="${session.loginUser == null}" data-th-href="@{/auth/form}" href="auth/form">로그인</a>
+
+</header>
+
+</body>
+</html>
+

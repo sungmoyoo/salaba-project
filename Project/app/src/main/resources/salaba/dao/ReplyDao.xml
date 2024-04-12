@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.ReplyDao">
+
+  <resultMap id="ReplyMap" type="Reply">
+    <id column="reply_no" property="replyNo"/>
+    <result column="content" property="content"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="state" property="state"/>
+
+    <association property="writer" javaType="Member">
+     <id column="member_no" property="no"/>
+     <result column="name" property="name"/>
+   </association>
+
+  </resultMap>
+
+
+  <insert id="add" parameterType="Reply"
+    useGeneratedKeys="true" keyColumn="reply_no" keyProperty="replyNo">
+    insert into reply(content,writer)
+    values(#{content},#{writer.no})
+  </insert>
+
+  <delete id="delete" parameterType="int">
+    update
+    board
+    set
+    state=${state};
+    where
+    reply_no=${replyNo}
+    content=${content};
+  </delete>
+
+  <select id="findAll" resultMap="ReplyMap">
+    select
+    c.comment_no,
+    r.reply_no,
+    r.content,
+    r.created_date,
+    m.name,
+    m.photo
+    from
+    reply r
+    inner join member m on r.member_no=m.member_no
+    left join comment c on r.comment_no=c.comment_no
+    where
+    c.comment_no=#{commentNo}
+    order by
+    r.created_date desc;
+  </select>
+
+  <update id="update" parameterType="Reply">
+    update board set
+    state=${state};
+    where
+    reply_no=${replyNo}
+    content=${content};
+  </update>
+
+</mapper>

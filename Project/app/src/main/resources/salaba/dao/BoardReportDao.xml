@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.BoardReportDao">
+
+  <resultMap id="BoardReportMap" type="BoardReport">
+    <id column="report_no" property="reportNo"/>
+    <result column="category_no" property="categoryNo"/>
+    <result column="content" property="content"/>
+    <result column="report_date" property="reportDate"/>
+    <result column="state" property="state"/>
+    <result column="target_no" property="targetNo"/>
+    <result column="target_type" property="targetType"/>
+
+  <association property="writer" javaType="Member">
+    <id column="member_no" property="no"/>
+    <result column="name" property="name"/>
+  </association>
+
+  <collection property="fileList" ofType="BoardFile">
+    <id column="file_no" property="fileNo"/>
+    <result column="ori_file_name" property="oriFileName"/>
+    <result column="uuid_file_name" property="uuidFileName"/>
+  </collection>
+  </resultMap>
+
+  <insert id="add" parameterType="BoardReport"
+    useGeneratedKeys="true" keyColumn="report_no" keyProperty="reportNo">
+    insert into boardReport(content,writer,category_no)
+    values(#{content},#{writer.no},#{categoryNo})
+  </insert>
+
+  <select id="findAll" resultMap="BoardReportMap">
+    select
+    report_no,
+    content,
+    state,
+    report_date,
+    report_target_type
+    from
+    board_report_detail
+    where
+    report_target_type = #{reportTargetType}
+    order by
+    report_date desc
+  </select>
+
+  <select id="findBy" resultMap="BoardReportMap" parameterType="int">
+    select
+    t1.report_no,
+    t1.member_no,
+    t1.content,
+    t1.report_date,
+    t1.report_target_no,
+    t1.state,
+    t2.uuid_file_name,
+    t2.ori_file_name,
+    t3.report_type
+    from
+    board_report_detail t1,
+    board_report_file t2,
+    board_report_category t3
+    where
+    t1.report_no = #{reportNo} and
+    t1.report_no = t2.report_no and
+    t1.report_category_no = t3.report_category_no
+  </select>
+
+  <update id="update" parameterType="BoardReport">
+    update board_report_detail set
+    state=#{state}
+    where
+    report_no=#{reportNo}
+  </update>
+
+  <select id="countAll" resultType="int" parameterType="int">
+    select count(*) from board_report_detail where category_no=#{value}
+  </select>
+</mapper>
