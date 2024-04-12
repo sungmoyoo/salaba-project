@@ -1,7 +1,6 @@
 package salaba.controller;
 
 import salaba.service.MemberService;
-import salaba.vo.Member;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

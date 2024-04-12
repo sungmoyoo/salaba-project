@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import salaba.service.QuestionService;
 import salaba.service.StorageService;
-import salaba.vo.Member;
 import salaba.vo.Question;
 
 @RequiredArgsConstructor

@@ -11,4 +11,7 @@ public interface QuestionDao {
 
   List<Question> findAll(Question question);
 
+  Question findBy(int no);
+
+  int questionUpdate(Question question);
 }

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import salaba.dao.MemberDao;
 import salaba.service.MemberService;
 import salaba.vo.ConstVO;
-import salaba.vo.Member;
-import salaba.vo.Nation;
 
 @RequiredArgsConstructor
 @Service
