@@ -3,7 +3,33 @@
 <head>
   <meta charset='UTF-8'>
   <title>비트캠프 데브옵스 5기</title>
+
+  <style>
+    .image-item {
+      width: 265px; /* 원하는 너비를 지정합니다. */
+      height: 252px; /* 원하는 높이를 지정합니다. */
+      object-fit: cover; /* 이미지를 화면에 꽉 차게 표시하되, 비율은 유지합니다. */
+      margin-bottom: 10px; /* 이미지 간의 간격을 설정합니다. */
+    }
+    .image-container {
+      display: inline-block; /* 요소를 인라인 블록 요소로 설정하여 너비를 이미지에 맞춥니다. */
+      text-align: center; /* 이미지와 설명을 가운데 정렬합니다. */
+      margin-right: 20px; /* 이미지 컨테이너 간의 간격을 설정합니다. */
+      margin-top: 30px; /* 이미지 컨테이너와 선택 버튼 간격 설정 */
+      position: relative; /* 상대 위치 설정 */
+    }
+    .image-description {
+      width: 100%; /* 설명 입력 필드를 이미지의 너비에 맞춰 설정합니다. */
+      box-sizing: border-box; /* 경계 상자 크기를 너비와 높이에 포함합니다. */
+      position: absolute; /* 절대 위치 설정 */
+      bottom: 0; /* 아래쪽에 정렬 */
+      left: 0; /* 왼쪽에 정렬 */
+      margin: 0; /* 마진 초기화 */
+      padding: 5px; /* 패딩 추가 */
+    }
+  </style>
 </head>
+
 <body>
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
@@ -11,59 +37,132 @@
 <h1>숙소 상세</h1>
 
 <div align="center">
-  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data' method='post'
+  <form action="update" data-th-action="@{StateUpdate}" enctype='multipart/form-data' method='post'
         data-th-object="${rentalHome}">
 
-    <h2>숙소 상태 관리</h2>
-    <p>현재 상태 관리</p>
-    <label>
-      <select id="statusSelect">
-        <option value="0">등록 대기</option>
-        <option value="1">운영중</option>
-        <option value="2">중지</option>
-      </select>
-    </label>
 
     <script>
       // JavaScript로 DB에서 가져온 값을 사용하여 기본값 설정
       document.addEventListener('DOMContentLoaded', function() {
-          // 서버에서 가져온 DB 값으로 기본값 설정 (예: PHP, Python 등 사용)
-          var dbValue = 1; // 여기에 DB에서 가져온 값으로 설정
+          // 서버에서 가져온 DB 값으로 기본값 설정
+          var stateElement = document.getElementById('state').value;
 
           // select 요소를 가져오기
           var selectElement = document.getElementById('statusSelect');
 
           // DB에서 가져온 값과 일치하는 option을 선택
           for (var i = 0; i < selectElement.options.length; i++) {
-              if (selectElement.options[i].value == dbValue) {
+              if (selectElement.options[i].value == stateElement) {
                   selectElement.options[i].selected = true;
                   break;
               }
           }
       });
     </script>
+    <h2>숙소 상태 관리</h2>
+    <p>현재 상태 관리</p>
+    <label>
+      <input type="hidden" id="state" value="0" data-th-value="${rentalHome.state}"/>
+      <select id="statusSelect" name="state">
+        <option value="0">등록 대기</option>
+        <option value="1">운영중</option>
+        <option value="2">중지</option>
+      </select>
+      <button>상태 변경</button>
+    </label>
+  </form>
 
 
+
+    <br>
+    <br>
+    <br>
+
+
+  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data' method='post'
+  data-th-object="${rentalHome}">
+
+    <script>
+      function photoCountAndDisplay(files, existFiles) {
+        var fileInput = document.getElementById('photoInput');
+        var files = photoInput.files
+        var existInput = document.getElementById('existInput');
+        var existFiles = existInput.files
+        var minFileCount = 3; // 최소 필요한 파일 개수
+
+        if ((files.length + existFiles.length) < minFileCount) {
+          alert('등록해야 할 사진의 개수는 최소 ' + minFileCount + '입니다.');
+          return; // 파일 개수가 최소 요구 개수보다 적으면 함수를 종료합니다.
+        }
+
+        var imageContainer = document.getElementById('imageContainer');
+        imageContainer.innerHTML = ''; // 이미지를 표시하기 전에 이전에 표시된 이미지를 모두 제거합니다.
+
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+
+          // FileReader 객체를 사용하여 파일을 읽습니다.
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+            var container = document.createElement('div');
+            container.classList.add('image-container'); // 이미지와 설명을 감싸는 컨테이너에 CSS 클래스를 추가합니다.
+
+            var imgElement = document.createElement('img');
+            imgElement.classList.add('image-item'); // 이미지에 CSS 클래스를 추가합니다.
+
+            // 이미지를 화면에 표시합니다.
+            imgElement.src = e.target.result;
+            container.appendChild(imgElement); // 이미지를 컨테이너에 추가합니다.
+
+            // 이미지 설명을 입력할 수 있는 입력 필드를 생성합니다.
+            var descriptionInput = document.createElement('input');
+            descriptionInput.type = 'text';
+            descriptionInput.placeholder = '이미지 설명';
+            descriptionInput.classList.add('image-description'); // 입력 필드에 CSS 클래스를 추가합니다.
+            descriptionInput.name = 'photoExplanations'; // form을 통해 보낼 데이터 이름 지정
+            container.appendChild(descriptionInput); // 입력 필드를 컨테이너에 추가합니다.
+
+            imageContainer.appendChild(container); // 컨테이너를 이미지 컨테이너에 추가합니다.
+          };
+
+          reader.readAsDataURL(file); // 파일을 데이터 URL로 읽습니다.
+        }
+      }
+    </script>
     <h2>숙소 사진</h2>
-    <input multiple name='rentalHomePhotos' type='file'>
-<!--    <ul data-th-if="*{rentalHomePhotos[0].uuidFileName}">-->
-      <li data-th-each="photo : ${rentalHomePhotos}" data-th-object="${rentalHomePhoto}">
-        <img src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + *{uuidFileName}}"
-           data-th-text="*{oriFileName}" alt="?"/>
+    <input multiple name='rentalHomePhotos' id="photoInput" type='file'
+           onchange="photoCountAndDisplay(this.files, ${rentalHome.rentalHomePhotos})"/>
+    <div id="imageContainer"></div>
+    <div>
+      <div class="image-container"
+           data-th-each="photo : ${rentalHome.rentalHomePhotos}" data-th-object="${rentalHomePhoto}">
+        <img class="image-item"
+            data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}"
+            src="/home1.jpg"/>
         <!--        [<a data-th-href="@{file/delete(category=${category},no=*{no})}"-->
         <!--            href="file-delete.html">삭제</a>]-->
-      </li>
-    </ul>
+        <input class="image-description" type="text" placeholder="이미지 설명" name="photoExplanation"
+               data-th-value="${photo.photoExplanation}"/>
+      </div>
+
+    </div>
+
+
+    <br>
+    <br>
+    <br>
+
 
     <h2>숙소 기본 정보</h2>
     <div>
-      숙소명: <input readonly data-th-value="${name}" name='name' type='text' value="호텔">
+      숙소명: <input readonly data-th-value="*{name}" type='text' value="호텔">
     </div>
     <div>
-      숙소 설명: <textarea data-th-value="${explanation}" name="explanation"></textarea>
+      숙소 설명: <textarea data-th-text="*{explanation}" name="explanation"></textarea>
     </div>
     <div>
-      숙소 이용규칙: <textarea data-th-value="${rentalHomeRule}" name="rentalHomeRule"></textarea>
+      숙소 이용규칙: <textarea data-th-text="*{rentalHomeRule}" name="rentalHomeRule"></textarea>
     </div>
 
     <h2>숙소 위치</h2>
@@ -71,68 +170,123 @@
       지도 API
     </div>
 
-
+    <br>
+    <br>
+    <br>
 
     <h2>요금 설정</h2>
     <script>
       function calc() {
         const price = Number(document.getElementById("price").value);
-        const cleanFee = Number(document.getElementById("cleanFee").value)
-        document.getElementById("income").value = Math.round((price + cleanFee) * 0.97)
+        const cleanFee = Number(document.getElementById("cleanFee").value);
+        document.getElementById("income").value = Math.round((price + cleanFee) * 0.97);
       }
+
+      window.onload = calc;
     </script>
     <div>
-      이용요금(주 기준) <input type="text" data-th-value="*{price}" name="price"
-                        id="price" onkeyup="calc(this.value)"/>
+      이용요금(주 기준) <input type="text" data-th-value="*{price}" value="10000" name="price"
+                        id="price"/>
     </div>
     <div>
-      청소비  <input type="text" data-th-value="*{cleanFee}" name="cleanFee"
-                  id="cleanFee" onkeyup="calc(this.value)"/>
+      청소비  <input type="text" data-th-value="*{cleanFee}" value="100" name="cleanFee"
+                  id="cleanFee"/>
     </div>
     <div>
-      정산금액 <input type="text" id="income"/>
+      정산금액 <input readonly type="text" id="income"/>
     </div>
+
+    <br>
+    <br>
+    <br>
 
     <h2>호스팅 기간</h2>
     <div>
-      호스팅 시작일: <input data-th-value='*{hostingStartDate}' name="hostingStartDate" type='date'>
+      호스팅 시작일: <input data-th-value='*{hostingStartDate}' value="2024-03-24" name="hostingStartDate" type='date'>
     </div>
     <div>
-      호스팅 종료일: <input data-th-value='*{hostingEndDate}' name="hostingEndDate" type='date'>
+      호스팅 종료일: <input data-th-value='*{hostingEndDate}' value="2024-03-24" name="hostingEndDate" type='date'>
     </div>
 
+    <br>
+    <br>
+    <br>
+
     <h2>숙소 타입</h2>
-    <span data-th-if="${theme.themeNo < 10}" data-th-each="theme : ${themeList}" data-th-object="${theme}">
-      <a data-th-text="*{themeName}">모텔</a>
-    </span>
+    <div id="rentalHomeType">
+      <div style="display: flex; flex-wrap: wrap;">
+        <div data-th-if="${theme.themeNo < 10}"
+             data-th-each="theme : ${themeList}" style="width: 25%;">
+            <span style="display: inline-block;">
+              <label data-th-text="${theme.themeName}"></label>
+              <input type="radio" data-th-name="type"
+                     data-th-checked="${rentalHome.rentalHomeThemes.indexOf(theme) != -1}"
+                     data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
+        </span>
+          </div>
+        </div>
+      </div>
 
-    <span data-th-each="rentalHomeTheme : ${rentalHome.rentalHomeThemes}"
-      data-th-object="${rentalHomeTheme}">
-      <label data-th-if="*{themeNo != null}">
-        <input type="radio" checked data-th-name="type" data-th-value="${themeNo} + ',' + ${themeName}"/>
-      </label>
-      <label data-th-unless="*{themeNo != null}">
-        <input type="radio" data-th-name="type" data-th-value="${themeNo} + ',' + ${themeName}"/>
-      </label>
-    </span>
-
+    <br>
+    <br>
+    <br>
 
 
     <h2>숙소 테마</h2>
-    <div>
-      <p data-th-if="${theme.themeNo >= 10}"
-         data-th-each="theme : ${rentalHomeThemes}" data-th-object="${rentalHomeTheme}">
-        <a data-th-text="*{themeName}"></a>
-
-        <label data-th-if="theme">
-          <input type="checkbox" name="themeNos" data-th-value="*{themeNo}"/>
-        </label>
-        <label>
-          <input type="hidden" name="themeNames" data-th-value="*{themeName}"/>
-        </label>
-      </p>
+    <div id="rentalHomeTheme">
+      <div style="display: flex; flex-wrap: wrap;">
+        <!-- themeList 반복 -->
+        <div data-th-if="${theme.themeNo >= 10}" data-th-each="theme : ${themeList}" style="width: 25%;">
+      <span style="display: inline-block;">
+        <label data-th-text="${theme.themeName}"></label>
+        <input type="checkbox" data-th-value="${theme.themeNo}" data-th-checked="${rentalHome.rentalHomeThemes.indexOf(theme) != -1}"/><br>
+      </span>
+        </div>
+      </div>
     </div>
 
+    <br>
+    <br>
+    <br>
+
+    <h2>숙소 시설</h2>
+    <div id="rentalHomeFacility">
+      <div data-th-if="${rentalHomeFacility.facilityNo < 4}" style="width: 20%;"
+           data-th-each="rentalHomeFacility : ${rentalHome.rentalHomeFacilities}">
+        <div style="display: inline-block;">
+          <label data-th-text="${rentalHomeFacility.facilityName}"></label>
+          <input type="text" value="2" name="facilityCount"
+                     data-th-value="${rentalHomeFacility.facilityCount}"/><br>
+          <input type="hidden" name="facilityNames" data-th-value="${rentalHomeFacility.facilityName}"/>
+          <input type="hidden" name="facilityNos" data-th-value="${rentalHomeFacility.facilityNo}"/>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <h2>숙소 편의시설</h2>
+    <div id="rentalHomeConvenience">
+      <div style="display: flex; flex-wrap: wrap;">
+        <div data-th-if="${facility.facilityNo >= 4}"
+             data-th-each="facility : ${facilityList}" style="width: 20%;">
+            <span style="display: inline-block;">
+              <label data-th-text="${facility.facilityName}"></label>
+              <input type="checkbox" name="facilityCount" value="1"
+                     data-th-checked="${rentalHome.rentalHomeFacilities.indexOf(facility)} != -1"/>
+              <input type="hidden" name="facilityNos" data-th-value="${facility.facilityNo}"/>
+              <input type="hidden" name="facilityNames" data-th-value="${facility.facilityName}"/>
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+    <br>
+    <br>
+    <br>
 
 
     <div>

@@ -4,6 +4,52 @@
   <meta charset='UTF-8'>
   <title>숙소 기본 입력 폼</title>
 </head>
+
+<style>
+  .image-container {
+    display: inline-block;
+    text-align: center;
+    margin-right: 20px;
+    margin-top: 30px;
+    position: relative;
+  }
+  .image-item {
+    width: 265px;
+    height: 252px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    position: relative; /* 이미지 상대 위치 설정 */
+  }
+
+  .image-description {
+      width: 100%;
+      box-sizing: border-box;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: 0;
+      padding: 5px;
+  }
+
+  .delete-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      position: absolute;
+      top: 0; /* 이미지의 위쪽 여백 */
+      right: 0; /* 이미지의 오른쪽 여백 */
+      transform: translate(50%, -50%); /* 삭제 버튼을 이미지의 오른쪽 상단에 정확히 위치시키기 위해 */
+  }
+  .input-file-button{
+    padding: 6px 25px;
+    background-color:#FF6600;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+  }
+</style>
 <body>
 
 
@@ -15,13 +61,13 @@
 
   <h2>숙소 기본 정보</h2>
   <div>
-    숙소명 <input type="text" name="name">
+     <input type="text" name="name" placeholder="숙소명">
   </div>
   <div>
-    숙소 설명 <textarea name="explanation"></textarea>
+     <textarea name="explanation" placeholder="숙소 설명"></textarea>
   </div>
   <div>
-    숙소 이용규칙 <textarea name="rentalHomeRule"></textarea>
+     <textarea name="rentalHomeRule" placeholder="숙소 이용규칙"></textarea>
   </div>
 
   <br>
@@ -50,14 +96,95 @@
 
   <h2>숙소 사진</h2>
 
-  <div>
-    <input multiple name="photos" type='file'><br/>
 
-    <textarea readonly>파일 리스트 + 각 사진에 대한 설명 추가</textarea>
-  </div>
+  <script>
+    function submitForm() {
+        var form = document.querySelector('form');
+        form.submit();
+    }
 
+    function photoCountAndDisplay(files) {
+      var imageContainer = document.getElementById('imageContainer');
+      var form = document.querySelector('form'); // 폼 요소를 가져옵니다.
+      var filesArray = []; // 배열에 선택된 파일을 저장합니다.
+
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+
+        // FileReader 객체를 사용하여 파일을 읽습니다.
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          var container = document.createElement('div');
+          container.classList.add('image-container'); // 이미지와 설명을 감싸는 컨테이너에 CSS 클래스를 추가합니다.
+
+          var imgElement = document.createElement('img');
+          imgElement.classList.add('image-item'); // 이미지에 CSS 클래스를 추가합니다.
+
+          // 이미지를 화면에 표시합니다.
+          imgElement.src = e.target.result;
+          container.appendChild(imgElement); // 이미지를 컨테이너에 추가합니다.
+
+          // 이미지 설명을 입력할 수 있는 입력 필드를 생성합니다.
+          var descriptionInput = document.createElement('input');
+          descriptionInput.type = 'text';
+          descriptionInput.placeholder = '이미지 설명';
+          descriptionInput.classList.add('image-description'); // 입력 필드에 CSS 클래스를 추가합니다.
+          descriptionInput.name = 'photoExplanations'; // form을 통해 보낼 데이터 이름 지정
+          container.appendChild(descriptionInput); // 입력 필드를 컨테이너에 추가합니다.
+
+          // 삭제 버튼을 생성합니다.
+          var deleteButton = document.createElement('button');
+          deleteButton.textContent = 'X';
+          deleteButton.classList.add('delete-button');
+          deleteButton.onclick = function() {
+            // 해당 이미지의 파일을 배열에서 삭제하고 해당 이미지를 화면에서도 제거합니다.
+            var index = filesArray.indexOf(file);
+            if (index > -1) {
+              filesArray.splice(index, 1);
+              container.remove();
+            }
+          };
+          container.appendChild(deleteButton); // 삭제 버튼을 컨테이너에 추가합니다.
+
+          imageContainer.appendChild(container); // 컨테이너를 이미지 컨테이너에 추가합니다.
+        };
+
+        reader.readAsDataURL(file); // 파일을 데이터 URL로 읽습니다.
+
+        // 파일을 배열에 추가합니다.
+        filesArray.push(file);
+      }
+
+      // 폼 제출 시 파일을 함께 제출합니다.
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 제출 동작을 막습니다.
+
+        // FormData 객체를 생성합니다.
+        var formData = new FormData(form);
+
+        // 배열에 있는 파일을 FormData 객체에 추가합니다.
+        filesArray.forEach(function(file, index) {
+          formData.append('photos', file); // 파일들을 'photos'라는 이름으로 FormData에 추가합니다.
+        });
+
+        // FormData 객체를 서버로 전송합니다.
+        fetch(form.action, {
+          method: form.method,
+          body: formData
+        })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+      });
+    }
+  </script>
   <div>
-    사진 설명 자바스크립트 사용
+    <label class="input-file-button" for="photoInput">사진 추가</label>
+    <input type="file" id="photoInput" name="photos" style="display:none;"
+            onchange="photoCountAndDisplay(this.files)"/>
+
+    <div id="imageContainer"></div>
   </div>
 
   <br>
@@ -73,13 +200,13 @@
     }
   </script>
     <div>
-    이용요금(주 기준)  <input type="text" name="price" id="price" onkeyup="calc(this.value)">
+      <input type="text" name="price" id="price" placeholder="이용요금(주 기준)" onkeyup="calc(this.value)">
     </div>
     <div>
-    청소비  <input type="text" name="cleanFee" id="cleanFee" onkeyup="calc(this.value)">
+      <input type="text" name="cleanFee" id="cleanFee" placeholder="청소비" onkeyup="calc(this.value)">
     </div>
     <div>
-    정산금액 <input type="text" id="income">
+     <input readonly type="text" id="income" placeholder="정산금액">
     </div>
 
 
@@ -105,7 +232,7 @@
   <br>
 
   <div>
-    <button type="submit">다음</button>
+    <button type="submit" onclick="submitForm()">다음</button>
   </div>
 
   <br>

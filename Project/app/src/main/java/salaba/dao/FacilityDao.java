@@ -9,7 +9,9 @@ import salaba.vo.rentalHome.RentalHomeFacility;
 
 @Mapper
 public interface FacilityDao {
-  void addFacility(List<RentalHomeFacility> facilities);
+  void addFacility(RentalHome rentalHome);
+
+  int deleteAllFacility(int rentalHomeNo);
 
   List<RentalHomeFacility> findAllFacility();
 

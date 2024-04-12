@@ -13,7 +13,7 @@
     <result column="rental_home_no" property="rentalHomeNo"/>
   </resultMap>
 
-  <insert id="addPhoto" parameterType="RentalHomePhoto">
+  <insert id="addPhoto" parameterType="RentalHome">
     insert into rental_home_photo(
       ori_photo_name,
       uuid_photo_name,
@@ -21,15 +21,21 @@
       photo_order,
       rental_home_no
     ) values
-    <foreach collection="list" item="item" separator=",">
+    <foreach collection="rentalHomePhotos" item="item" separator=",">
       (
       #{item.oriPhotoName},
       #{item.uuidPhotoName},
-      "임시임시값",
+      #{item.photoExplanation},
       #{item.photoOrder},
-      #{item.rentalHomeNo}
+      #{rentalHomeNo}
       )
     </foreach>
   </insert>
+
+  <delete id="deletePhoto" parameterType="int">
+    delete from
+      rental_home_photo
+    where photo_no=#{value}
+  </delete>
 
 </mapper>

@@ -3,20 +3,47 @@
 <head>
   <meta charset='UTF-8'>
   <title>호스트모드 헤더</title>
+  <style>
+    .parent-box {
+        display: flex;
+        width: 90%;
+        justify-content: space-between; /* 요소들을 좌우로 최대한 분산 정렬 */
+    }
 
+    .left-box, .center-box, .right-box {
+        flex: 1;
+        margin: 10px;
+    }
+
+    .center-box {
+        display: flex;
+        justify-content: space-around; /* 가운데 정렬되도록 수정 */
+    }
+
+    .right-box {
+        flex: 1;
+        text-align: right;
+        margin: 10px;
+    }
+  </style>
 </head>
 <body>
 <header data-th-fragment="hostHeader" class="header-container">
-  <div class="left-box">
-    <img src="../../static/img/homeRegister1.png">
-  </div>
-  <div class="right-box">
-    <a data-th-href="@{/hostReservation/list(memberNo=1)}" href="list">예약관리</a>
-    <a data-th-href="@{/}" href="hostHome/list">숙소관리</a>
-    <a data-th-href="@{/}" href="hostChat/list">채팅</a>
-    <a data-th-href="@{/}" href="Income/list">정산</a>
-    <button type="button" onclick="location.href='home'">돌아가기</button>
-  </div>
+  <div class="parent-box">
+    <div class="left-box">
+      <img src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo2.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png">
+    </div>
+    </div>
+    <div class="center-box">
+      <a data-th-href="@{/hostReservation/list(memberNo=1)}" href="list">예약관리</a>
+      <a data-th-href="@{/}" href="hostHome/list">숙소관리</a>
+      <a data-th-href="@{/}" href="hostChat/list">채팅</a>
+      <a data-th-href="@{/}" href="Income/list">정산</a>
+    </div>
+    <div class="right-box">
+      <button type="button" onclick="location.href='home'">돌아가기</button>
+    </div>
+    </div>
 </header>
 </body>
 </html>

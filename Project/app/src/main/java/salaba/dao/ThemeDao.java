@@ -10,7 +10,11 @@ import salaba.vo.rentalHome.Theme;
 
 @Mapper
 public interface ThemeDao {
-  void addTheme(List<Theme> themes); // 숙소 테마 추가
+  void addTheme(RentalHome rentalHome); // 숙소 테마 추가
+
+  int deleteAllTheme(int rentalHomeNo); // 숙소 테마 전체 삭제
 
   List<Theme> findAllTheme(); // 전체 테마 리스트
+
+
 }

@@ -93,18 +93,7 @@
     );
   </insert>
 
-  <insert id="addHomeDetail" parameterType="Facility">
-    insert into rental_home_detail(
-    rental_home_no,
-    facility_no,
-    facility_count
-    ) values
-    (
-    #{rentalHomeNo},
-    #{facilityNo},
-    #{facilityCount}
-    );
-  </insert>
+
 
   <select id="findAllRentalHome" resultMap="RentalHomeMap" parameterType="int">
     select
@@ -131,8 +120,10 @@
       r.region_no,
       r.name,
       r.explanation,
+      r.rental_home_rule,
       r.address,
       r.price,
+      r.clean_fee,
       r.capacity,
       r.lat,
       r.lon,
@@ -185,10 +176,16 @@
       rv.start_date asc;
   </select>
 
-  <update id="stateUpdate">
+  <update id="reservationStateUpdate" parameterType="int">
     update reservation
     set state = #{state}
     where reservation_no = #{reservationNo};
   </update>
+
+  <delete id="deleteRentalHome" parameterType="int">
+    delete from
+      rental_home
+    where rental_home_no = #{rentalHomeNo}
+  </delete>
 
 </mapper>

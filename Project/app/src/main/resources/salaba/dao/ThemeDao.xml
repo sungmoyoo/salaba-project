@@ -9,11 +9,11 @@
     <result column="theme_name" property="themeName"/>
   </resultMap>
 
-  <insert id="addTheme">
+  <insert id="addTheme" parameterType="RentalHome">
     insert into rental_home_theme(rental_home_no, theme_no)
     values
-    <foreach collection="list" item="item" separator=",">
-      (#{item.rentalHomeNo}, #{item.themeNo})
+    <foreach collection="rentalHomeThemes" item="item" separator=",">
+      (#{rentalHomeNo}, #{item.themeNo})
     </foreach>
   </insert>
 
@@ -25,6 +25,11 @@
       theme
   </select>
 
+  <delete id="deleteAllTheme" parameterType="int">
+    delete from
+      rental_home_theme
+    where rental_home_no=#{rentalHomeNo}
+  </delete>
 
 
 

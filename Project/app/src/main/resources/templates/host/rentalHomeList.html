@@ -28,7 +28,12 @@
         <td data-th-text="*{capacity}">2</td>
         <td data-th-text="*{address}">제주 서귀포시 ...</td>
         <td data-th-text="*{price} + '/주'">100000/주</td>
-        <td data-th-text="*{state}">0</td>
+        <td>
+          <select id="statusSelect">
+            <option value="0">등록 대기</option>
+            <option value="1">운영중</option>
+            <option value="2">중지</option>
+          </select></td>
         <td data-th-text="${#dates.format(rentalHome.hostingStartDate,'yyyy-MM-dd')}">2024-04-06</td>
       </tr>
     </tbody>

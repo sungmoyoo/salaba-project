@@ -9,15 +9,16 @@
     <result column="facility_name" property="facilityName"/>
   </resultMap>
 
-  <insert id="addFacility" parameterType="RentalHomeFacility">
+
+  <insert id="addFacility" parameterType="RentalHome">
     insert into rental_home_detail(
       rental_home_no,
       facility_no,
       facility_count
     ) values
-    <foreach collection="list" item="item" separator=",">
+    <foreach collection="rentalHomeFacilities" item="item" separator=",">
       (
-      #{item.rentalHomeNo},
+      #{rentalHomeNo},
       #{item.facilityNo},
       #{item.facilityCount}
       )
@@ -32,5 +33,10 @@
     rental_home_facility
   </select>
 
+  <delete id="deleteAllFacility" parameterType="int">
+    delete from
+      rental_home_detail
+    where rental_home_no=#{rentalHomeNo}
+  </delete>
 
 </mapper>

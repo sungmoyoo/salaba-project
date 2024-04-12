@@ -33,23 +33,11 @@ public class DefaultHostService implements HostService {
   public void rentalHomeAdd(RentalHome rentalHome) {
     hostDao.addHome(rentalHome);
 
-
+    // ParameterType을 사용해서 rentalHome 객체 자체를 파라미터로 넘겨 처리
     // Null 검사는 안함 -> 모두 N.N이기 때문
-    // 사진,시설,테마 객체리스트에 숙소번호 추가하여 insert
-    for (RentalHomePhoto rentalHomePhoto : rentalHome.getRentalHomePhotos()) {
-      rentalHomePhoto.setRentalHomeNo(rentalHome.getRentalHomeNo());
-    }
-    photoDao.addPhoto(rentalHome.getRentalHomePhotos());
-
-    for (Theme theme : rentalHome.getRentalHomeThemes()) {
-      theme.setRentalHomeNo(rentalHome.getRentalHomeNo());
-    }
-    themeDao.addTheme(rentalHome.getRentalHomeThemes());
-
-    for (RentalHomeFacility rentalHomeFacility : rentalHome.getRentalHomeFacilities()) {
-      rentalHomeFacility.setRentalHomeNo(rentalHome.getRentalHomeNo());
-    }
-    facilityDao.addFacility(rentalHome.getRentalHomeFacilities());
+    photoDao.addPhoto(rentalHome);
+    themeDao.addTheme(rentalHome);
+    facilityDao.addFacility(rentalHome);
   }
 
   @Override
@@ -75,19 +63,40 @@ public class DefaultHostService implements HostService {
     return hostDao.findAllRentalHome(hostNo);
   }
 
+  @Override
+  public int rentalHomeUpdate(RentalHome rentalHome) {
+    int count = hostDao.updateRentalHome(rentalHome);
+    photoDao.addPhoto(rentalHome);
+
+    themeDao.deleteAllTheme(rentalHome.getRentalHomeNo());
+    themeDao.addTheme(rentalHome);
+
+    facilityDao.deleteAllFacility(rentalHome.getRentalHomeNo());
+    facilityDao.addFacility(rentalHome);
+
+    return count;
+  }
+
   // 호스트의 전체 예약정보를 가져오는 메서드
   @Override
-  public List<HostReservation> list(int hostNo) {
+  public List<HostReservation> reservationList(int hostNo) {
     return hostDao.findAllReservation(hostNo);
   }
 
   // 예약내역을 업데이트하는 DAO 호출하는 메서드
   @Transactional
   @Override
-  public int stateUpdate(int state, int reservationNo) {
-    return hostDao.stateUpdate(state, reservationNo);
+  public int reservationStateUpdate(int state, int reservationNo) {
+    return hostDao.reservationStateUpdate(state, reservationNo);
   }
 
+  @Override
+  public int delete(int rentalHomeNo) {
+    return hostDao.deleteRentalHome(rentalHomeNo);
+  }
 
-
+  @Override
+  public int deleteRentalHomePhoto(int photoNo) {
+    return photoDao.deletePhoto(photoNo);
+  }
 }

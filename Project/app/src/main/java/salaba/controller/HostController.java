@@ -53,7 +53,10 @@ public class HostController {
   @PostMapping("rentalHomeSave")
   public String rentalHomeSave(
       Model model, RentalHome rentalHome,
-      MultipartFile[] photos) throws Exception {
+      MultipartFile[] photos,
+      String[] photoExplanations) throws Exception {
+
+    System.out.println(photoExplanations[0]);
 
     // 숙소 사진 추가하는 메서드
     ArrayList<RentalHomePhoto> files = new ArrayList<>();
@@ -69,13 +72,17 @@ public class HostController {
               .oriPhotoName(file.getOriginalFilename()) // ori_file_name
               .photoOrder(order)
               .build());
-      // 사진 설명 추가하는 부분은 고민중..
       order++;
     }
-
-    if (files.size() > 0) {
-      rentalHome.setRentalHomePhotos(files);
+    for (int i = 0; i < photoExplanations.length; i++) {
+      if (photoExplanations[i] != null || photoExplanations[i].length() > 0) {
+        files.get(i).setPhotoExplanation(photoExplanations[i]);
+      } else {
+        files.get(i).setPhotoExplanation("사진설명 기본값");
+      }
     }
+    rentalHome.setRentalHomePhotos(files);
+
 
     model.addAttribute("rentalHome", rentalHome);
     return "redirect:themeForm";
@@ -111,7 +118,6 @@ public class HostController {
       Theme theme = new Theme();
       theme.setThemeNo(themeNos.get(i));
       theme.setThemeName(themeNames.get(i));
-      theme.setRentalHomeNo(rentalHome.getRentalHomeNo());
       themes.add(theme);
     }
 
@@ -175,7 +181,7 @@ public class HostController {
     // 숙소 등록 후 임시 정보 값 제거
     sessionStatus.setComplete();
 
-    return "host/reservationList?" + rentalHome.getMemberNo();
+    return "host/rentalHomeList?hostNo=1";
   }
 
   // 숙소 관리 리스트
@@ -188,29 +194,112 @@ public class HostController {
     model.addAttribute("list", list);
   }
 
+  // 숙소 상세(수정)
   @GetMapping("rentalHomeView")
   public void rentalHomeView(int rentalHomeNo, Model model) throws Exception {
-
     RentalHome rentalHome = hostService.getRentalHome(rentalHomeNo);
-    System.out.println("숙소번호: " + rentalHome.getRentalHomeNo());
-    System.out.println("숙소설명: " + rentalHome.getExplanation());
-    System.out.println("숙소규칙: " + rentalHome.getRentalHomeRule());
 
     model.addAttribute("themeList", hostService.themeList());
     model.addAttribute("facilityList", hostService.facilityList());
     model.addAttribute("rentalHome", rentalHome);
   }
 
+  @PostMapping("rentalHomeUpdate")
+  public String rentalHomeUpdate(RentalHome rentalHome,
+      MultipartFile[] photos,
+      String[] photoExplanations,
+      @RequestParam List<Integer> themeNos,
+      @RequestParam List<String> themeNames,
+      @RequestParam String type,
+      @RequestParam int capacity,
+      @RequestParam List<Integer> facilityCount,
+      @RequestParam List<Integer> facilityNos,
+      @RequestParam List<String> facilityNames,
+      SessionStatus sessionStatus
+      ) throws Exception{
+
+    // 숙소 사진 추가하는 메서드
+    ArrayList<RentalHomePhoto> files = new ArrayList<>();
+    int order = 1;  // 사진 순서
+    for (MultipartFile file : photos) {
+      if (file.getSize() == 0) {
+        continue;
+      }
+      String filename = storageService.upload(this.bucketName, this.uploadDir, file); // uuid_file_name
+      files.add(
+          RentalHomePhoto.builder()
+              .uuidPhotoName(filename)
+              .oriPhotoName(file.getOriginalFilename()) // ori_file_name
+              .photoOrder(order)
+              .build());
+      order++;
+    }
+    for (int i = 0; i < photoExplanations.length; i++) {
+      if (photoExplanations[i] != null) {
+        files.get(i).setPhotoExplanation(photoExplanations[i]);
+      } else {
+        files.get(i).setPhotoExplanation("사진설명 기본값");
+      }
+    }
+
+    rentalHome.setRentalHomePhotos(files);
+
+    List<Theme> themes = new ArrayList<>();
+    String[] typeArr = type.split(",");
+
+    Theme typeTheme = new Theme();
+
+    typeTheme.setThemeNo(Integer.parseInt(typeArr[0]));
+    typeTheme.setThemeName(typeArr[1]);
+
+    themes.add(typeTheme);
+
+    for (int i = 0; i < themeNos.size(); i++) {
+      Theme theme = new Theme();
+      theme.setThemeNo(themeNos.get(i));
+      theme.setThemeName(themeNames.get(i));
+      themes.add(theme);
+    }
+
+    rentalHome.setRentalHomeThemes(themes);
+
+    List<RentalHomeFacility> facilityList = new ArrayList<>();
+
+    for (int i = 0; i < facilityCount.size(); i++) {
+      RentalHomeFacility rentalHomeFacility = new RentalHomeFacility();
+      rentalHomeFacility.setFacilityNo(facilityNos.get(i));
+      rentalHomeFacility.setFacilityName(facilityNames.get(i));
+      rentalHomeFacility.setFacilityCount(facilityCount.get(i));
+
+      facilityList.add(rentalHomeFacility);
+    }
+
+    rentalHome.setRentalHomeFacilities(facilityList);
+    rentalHome.setCapacity(capacity);
+
+    hostService.rentalHomeUpdate(rentalHome);
+
+    // 숙소 수정 후 임시 정보 값 제거
+    sessionStatus.setComplete();
+    return "redirect:rentalHomeList?hostNo=1";
+  }
+
+  @GetMapping("photoDelete")
+  public String delete(int rentalHomeNo) {
+
+    return  "redirect:rentalHomeList?hostNo=1";
+  }
+
   // 예약 내역 리스트
   @GetMapping("reservationList")
   public void reservationList(Model model, int hostNo) {
-    model.addAttribute("list", hostService.list(hostNo));
+    model.addAttribute("list", hostService.reservationList(hostNo));
   }
 
   // 예약 상태 업데이트
   @PostMapping("reservationCheck")
-  public String stateUpdate(HostReservation hostReservation) {
-    hostService.stateUpdate(hostReservation.getState(),
+  public String reservationStateUpdate(HostReservation hostReservation) {
+    hostService.reservationStateUpdate(hostReservation.getState(),
         hostReservation.getReservationNo());
     return "redirect:reservationList?hostNo=" + hostReservation.getHostNo();
   }
