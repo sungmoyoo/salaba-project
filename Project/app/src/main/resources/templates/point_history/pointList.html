@@ -20,11 +20,10 @@
   </tr>
   </thead>
   <tbody>
-  <tr data-th-each="point_history : ${list}" data-th-object="${point_history}">
+  <tr data-th-each="point_history : ${pointList}" data-th-object="${point_history}">
     <td data-th-text="*{saveContent}"></td>
     <td data-th-text="*{savePoint}"></td>
-<!--    <td data-th-text="*{totalpoint}"></td>-->
-    <td data-th-text="*{saveDate}"></td>
+    <td data-th-text="${#dates.format(point_history.saveDate,'yyyy.MM.dd')}"></td>
   </tr>
   </tbody>
 </table>

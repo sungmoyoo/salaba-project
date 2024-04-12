@@ -21,10 +21,9 @@ public class PointHistoryController {
 
   private static final Log log = LogFactory.getLog(PointHistoryController.class);
   private final Point_historyService point_historyService;
-  private  final MemberService memberService;
 
-  @GetMapping("list")
-  public void list(
+  @GetMapping("pointList")
+  public void pointList(
       Point_history pointHistory,
       Model model,
       HttpSession session) throws Exception {
@@ -32,7 +31,7 @@ public class PointHistoryController {
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     pointHistory.setNo(sessionInfo.getNo());
 
-    model.addAttribute("list", point_historyService.list(pointHistory));
+    model.addAttribute("pointList", point_historyService.pointList(pointHistory));
 
   }
 }
