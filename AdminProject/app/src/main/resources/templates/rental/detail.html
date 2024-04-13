@@ -59,13 +59,12 @@
         <input type="text" readonly data-th-if="*{themeNo >= 10}" data-th-value="*{themeName}">
     </div>
     <div data-th-if="${menu == 2}">
-<!--        <button onclick="regist(*{rentalNo})">등록 승인</button>-->
-<!--        <button onclick="reject(*{rentalNo})">등록 거부</button>-->
+        <button onclick="approveOrReject('1')">등록 승인</button>
+        <button onclick="approveOrReject('4')">등록 거부</button>
     </div>
 
 </form>
-<button onclick="approveOrReject('1')">등록 승인</button>
-<button onclick="approveOrReject('4')">등록 거부</button>
+
 
 </body>
 </html>

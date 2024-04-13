@@ -82,7 +82,7 @@ public class RentalManageController {
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
-
+        rentalService.updateState(rentalNo, value);
         return "redirect:list?menu=2";
     }
 }
