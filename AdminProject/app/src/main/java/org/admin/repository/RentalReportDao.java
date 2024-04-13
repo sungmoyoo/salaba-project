@@ -13,4 +13,7 @@ public interface RentalReportDao {
     public Report findBy(@Param("rentalNo") int rentalNo,
                          @Param("memberNo") int memberNo);
 
+    public int updateState(@Param("rentalNo") int rentalNo,
+                         @Param("memberNo") int memberNo);
+
 }

@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form data-th-action="@{rental/detail/update}" method="post" data-th-object="${rental}">
+<form data-th-action="@{update}" method="post" data-th-object="${rental}">
     <h4>숙소 사진</h4>
     <div data-th-each="photo : ${rental.photos}" data-th-object="${photo}">
         <img data-th-src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + *{uuidName}(type=f,w=100,h=100,ttype=jpg)}">
@@ -13,7 +13,7 @@
     </div>
     <h4>숙소 기본 정보</h4>
     <div>
-        숙소 번호: <input type="text" readonly data-th-value="*{rentalNo}">
+        숙소 번호: <input name="rentalNo" type="text" readonly data-th-value="*{rentalNo}">
     </div>
     <div>
         숙소 이름: <input type="text" readonly data-th-value="*{name}">
@@ -59,10 +59,27 @@
         <input type="text" readonly data-th-if="*{themeNo >= 10}" data-th-value="*{themeName}">
     </div>
     <div data-th-if="${menu == 2}">
-        <button>등록 승인</button>
-        <button>등록 거부</button>
+<!--        <button onclick="regist(*{rentalNo})">등록 승인</button>-->
+<!--        <button onclick="reject(*{rentalNo})">등록 거부</button>-->
     </div>
 
 </form>
+<button onclick="approveOrReject('1')">등록 승인</button>
+<button onclick="approveOrReject('4')">등록 거부</button>
+
 </body>
 </html>
+
+<script>
+function approveOrReject(value) {
+    let form = document.querySelector('form');
+    let rentalNo = document.querySelector('input[name="rentalNo"]').value;
+    let valueInput = document.createElement('input')
+    valueInput.type = 'hidden';
+    valueInput.name = 'value';
+    valueInput.value = value;
+    form.appendChild(valueInput);
+    form.submit();
+}
+
+</script>

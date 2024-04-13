@@ -39,4 +39,9 @@ public class DefaultRentalService implements RentalService {
         rental.setStateStr(Translator.rentalState.get(rental.getState()));
         return rental;
     }
+
+    @Override
+    public int updateState(int rentalNo, String rentalState) {
+        return rentalDao.updateState(rentalNo, rentalState);
+    }
 }

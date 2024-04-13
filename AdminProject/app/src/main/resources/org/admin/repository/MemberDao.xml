@@ -123,7 +123,7 @@
     ]]>
     </select>
 
-    <update id="updateWarningCount">
+    <update id="updateWarningCountBy">
         UPDATE member
         SET warning_count = warning_count + 1
         WHERE member_no = (
@@ -131,5 +131,11 @@
         FROM board_report_detail
         WHERE report_no = #{reportNo}
         );
+    </update>
+
+    <update id="updateWarningCount">
+        UPDATE member
+        SET warning_count = warning_count + 1
+        WHERE member_no = #{memberNo};
     </update>
 </mapper>

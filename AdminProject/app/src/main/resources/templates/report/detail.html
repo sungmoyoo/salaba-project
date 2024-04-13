@@ -6,7 +6,8 @@
 <body>
 <h2>신고 보기</h2>
 <!--게시글, 댓글, 답글 신고-->
-<form data-th-if="${!#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post" data-th-object="${report}">
+<form data-th-if="${!#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post"
+      data-th-object="${report}">
     <h4 data-th-text="${name}">신고 대상</h4>
 
     <div>
@@ -28,31 +29,32 @@
     <input name="targetNo" type="hidden" data-th-value="*{targetNo}">
     <input name="targetType" type="hidden" data-th-value="*{targetType}">
     <div>
-    신고자: <input readonly type="text" data-th-value="*{reporter.name}">
+        신고자: <input readonly type="text" data-th-value="*{reporter.name}">
     </div>
     <div>
-    신고일: <input readonly type="text" data-th-value="*{reportDate}">
+        신고일: <input readonly type="text" data-th-value="*{reportDate}">
     </div>
     <div>
-    신고 유형: <input readonly type="text" data-th-value="*{categoryName}">
+        신고 유형: <input readonly type="text" data-th-value="*{categoryName}">
     </div>
     <div>
-    신고 내용: <input readonly type="text" data-th-value="*{content}">
+        신고 내용: <input readonly type="text" data-th-value="*{content}">
     </div>
     <div>
-    처리 상태: <input readonly type="text" data-th-value="*{stateStr}">
+        처리 상태: <input readonly type="text" data-th-value="*{stateStr}">
     </div>
 
     <br>
 
     <br>
-
-    <select name="selection" id="selection">
-        <option value="2">경고 조치</option>
-        <option value="1">영구 정지</option>
-        <option value="0">무시</option>
-    </select>
-    <button onclick="submitForm()">신고 처리</button>
+    <div data-th-if="*{state == '0'}">
+        <select name="selection1" id="selection">
+            <option value="2">경고 조치</option>
+            <option value="1">영구 정지</option>
+            <option value="0">무시</option>
+        </select>
+        <button onclick="submitForm()">신고 처리</button>
+    </div>
 </form>
 <script>
     function submitForm() {
@@ -68,16 +70,18 @@
 </script>
 
 <!--숙소 신고-->
-<form data-th-if="${#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post" data-th-object="${report}">
+<form data-th-if="${#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post"
+      data-th-object="${report}">
     <h4 data-th-text="${name}">신고 대상</h4>
     <div>
-        <input type="hidden" data-th-value="*{targetNo}">
+        <input name="targetNo" type="hidden" data-th-value="*{targetNo}">
         숙소명: <input readonly type="text" data-th-value="*{targetRental.name}">
     </div>
     <div>
         주소: <input readonly type="text" data-th-value="*{targetRental.address}">
     </div>
     <div>
+        <input name="writerNo" readonly type="hidden" data-th-value="*{writer.memberNo}">
         호스트: <input readonly type="text" data-th-value="*{writer.name}">
     </div>
     <div>
@@ -106,13 +110,14 @@
     <br>
 
     <br>
-
-    <select name="selection" id="result2">
-        <option value="2">경고 조치</option>
-        <option value="1">영구 정지</option>
-        <option value="0">무시</option>
-    </select>
-    <button>신고 처리</button>
+    <div data-th-if="*{state == '0'}">
+        <select name="selection2" id="result2">
+            <option value="5">경고 조치</option>
+            <option value="2">영구 정지</option>
+            <option value="1">무시</option>
+        </select>
+        <button>신고 처리</button>
+    </div>
 </form>
 </body>
 </html>

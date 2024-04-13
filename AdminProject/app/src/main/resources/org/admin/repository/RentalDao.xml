@@ -104,4 +104,9 @@
         WHERE
             rh.rental_home_no = #{rentalNo}
     </select>
+
+    <update id="updateState">
+        UPDATE rental_home SET state=#{rentalState}
+        WHERE rental_home_no = #{rentalNo}
+    </update>
 </mapper>

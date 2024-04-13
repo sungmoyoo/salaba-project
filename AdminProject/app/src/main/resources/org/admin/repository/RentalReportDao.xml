@@ -71,5 +71,10 @@
         WHERE rhr.rental_home_no = #{rentalNo}
         AND rhr.member_no = #{memberNo}
     </select>
+
+    <update id="updateState">
+        UPDATE rental_home_report set state = '1'
+        WHERE rental_home_no = #{rentalNo} AND member_no = #{memberNo};
+    </update>
 </mapper>
 

@@ -50,7 +50,12 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public int updateWarningCount(int reportNo) {
+    public int updateWarningCount(int writerNo) {
+        return memberDao.updateWarningCount(writerNo);
+    }
+
+    @Override
+    public int updateWarningCountBy(int reportNo) {
         return memberDao.updateWarningCount(reportNo);
     }
 }

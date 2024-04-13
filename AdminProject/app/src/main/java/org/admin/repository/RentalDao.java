@@ -12,4 +12,7 @@ public interface RentalDao {
     List<Rental> findApplied();
 
     Rental findBy(@Param("rentalNo") int rentalNo);
+
+    int updateState(@Param("rentalNo") int rentalNo,
+                    @Param("rentalState") String rentalState);
 }

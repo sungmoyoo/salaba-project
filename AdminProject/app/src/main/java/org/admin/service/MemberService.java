@@ -14,5 +14,6 @@ public interface MemberService {
 
     Member getHostBy(int memberNo);
 
-    int updateWarningCount(int reportNo);
+    int updateWarningCountBy(int reportNo);
+    int updateWarningCount(int writerNo);
 }

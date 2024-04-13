@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -22,10 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RentalManageController {
     private final RentalService rentalService;
-    private final StorageService storageService;
-    private final String rentalImgPath = "static/img/rental";
-    @Value("${ncp.ss.bucketname}")
-    private String bucketName;
     private static final Log log = LogFactory.getLog(RentalManageController.class);
     @GetMapping("rental/list")
     public String rentalList(@RequestParam("menu") int menu,
@@ -76,5 +73,16 @@ public class RentalManageController {
                 break;
         }
         return "rental/detail";
+    }
+
+    @PostMapping("rental/update")
+    public String rentalUpdate(@RequestParam("value") String value,
+                               @RequestParam("rentalNo") int rentalNo,
+                               HttpSession session) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+
+        return "redirect:list?menu=2";
     }
 }
