@@ -84,9 +84,6 @@ public class UserManageController {
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
-        System.out.println(keyword);
-        System.out.println(filter);
-        System.out.println(menu);
         //일반 회원 목룍
         if (menu == 1) {
             model.addAttribute("menu", menu);

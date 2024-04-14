@@ -6,6 +6,16 @@
 <body>
 <div data-th-replace="header :: header">헤더</div>
 <h3 data-th-text="${menuName}">메뉴 이름</h3>
+<form data-th-action='@{/rental/list/search}' method="post" data-th-if="${#strings.equals(menuName, '등록된 숙소 목록')}">
+    <div>
+        <select name="filter">
+            <option value="0">숙소명</option>
+            <option value="1">호스트명</option>
+        </select>
+        <input name='keyword' type='text' placeholder='검색'>
+        <button>검색</button>
+    </div>
+</form>
 <table border="1">
     <thead>
     <tr>
@@ -21,7 +31,7 @@
     <tbody>
     <tr data-th-each="rental : ${rentalList}" data-th-object="${rental}">
         <td data-th-text="*{rentalNo}">1</td>
-        <td><a data-th-text="*{name}" data-th-href="@{detail(menu=${menu},rno=*{rentalNo})}">이름</a></td>
+        <td><a data-th-text="*{name}" data-th-href="@{/rental/detail(menu=${menu},rno=*{rentalNo})}">이름</a></td>
         <td data-th-text="*{host.name}">호스트명</td>
         <td data-th-text="*{regDate}">등록일</td>
         <td data-th-text="*{stateStr}">상태</td>

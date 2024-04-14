@@ -16,5 +16,9 @@ public interface RentalService {
 
     int updateState(int rentalNo, String rentalState);
 
+    List<Rental> getAllByName(String keyword);
+    List<Rental> getAllByHostName(String keyword);
+
+
 
 }

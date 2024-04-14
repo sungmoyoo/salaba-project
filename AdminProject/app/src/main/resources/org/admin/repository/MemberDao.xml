@@ -188,7 +188,7 @@
         FROM rental_home rh
         WHERE m.member_no = rh.member_no
         ) > 0
-        AND name like '%' || #{keyword} || '%'
+        AND name like '%${keyword}%'
     </select>
 
     <select id="findHostByEmail" resultMap="MemberMap">
@@ -214,7 +214,7 @@
         FROM rental_home rh
         WHERE m.member_no = rh.member_no
         ) > 0
-        AND email like '%' || #{keyword} || '%'
+        AND email like '%${keyword}%'
     </select>
 
     <update id="updateGrade">
