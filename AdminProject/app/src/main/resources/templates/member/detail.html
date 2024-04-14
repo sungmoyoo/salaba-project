@@ -6,9 +6,9 @@
 <body>
 <h2>회원 상세 보기</h2>
 <h4 data-th-text="${menuName}">일반회원 or 호스트</h4>
-<form data-th-action="@{detail}" method="post" data-th-object="${member}">
+<form data-th-action="@{update}" method="post" data-th-object="${member}">
     <div>
-        회원 번호: <input data-th-value="*{memberNo}" readonly type="text">
+        회원 번호: <input name="memberNo" data-th-value="*{memberNo}" readonly type="text">
     </div>
     <div>
         이름: <input data-th-value="*{name}" readonly type="text">
@@ -32,7 +32,7 @@
         누적 신고 횟수: <input data-th-value="*{warningCount}" readonly type="text">
     </div>
     <div data-th-if="${menu == 1}">
-    <select name="등급" id="grade" >
+    <select name="grade">
         <option value="1">브론즈</option>
         <option value="2">실버</option>
         <option value="3">골드</option>

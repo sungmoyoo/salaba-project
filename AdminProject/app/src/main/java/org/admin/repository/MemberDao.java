@@ -19,4 +19,13 @@ public interface MemberDao {
     int updateWarningCountBy(@Param("reportNo") int reportNo);
 
     int updateWarningCount(@Param("memberNo") int memberNo);
+
+    List<Member> findMemberByName(@Param("keyword") String keyword);
+    List<Member> findMemberByEmail(@Param("keyword") String keyword);
+
+    List<Member> findHostByName(@Param("keyword") String keyword);
+    List<Member> findHostByEmail(@Param("keyword") String keyword);
+
+    int updateGrade(@Param("grade") String grade,
+                    @Param("memberNo") int memberNo);
 }
