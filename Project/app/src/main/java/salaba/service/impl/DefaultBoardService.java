@@ -61,9 +61,7 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
-  public List<BoardFile> getBoardFiles(int boardNo) {
-    return boardFileDao.findAllByBoardNo(boardNo);
-  }
+  public List<BoardFile> getBoardFiles(int boardNo) { return boardFileDao.findAllByBoardNo(boardNo); }
 
   @Override
   public BoardFile getBoardFile(int fileNo) {
@@ -73,7 +71,7 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   @Override
   public int deleteBoardFile(int fileNo) {
     return boardFileDao.delete(fileNo);
-  }
+  } // 게시글 첨부파일 삭제
 
   @Override
   public int countAll(int categoryNo) {

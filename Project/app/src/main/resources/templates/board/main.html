@@ -8,7 +8,7 @@
 <body>
 
 <style>
-  /* 스타일링 CSS */
+  /* 스타일링  */
     th, td {
         border: 1px solid black;
         padding: 8px;
@@ -91,10 +91,9 @@
 <tr>
   <div class="container">
     <div class="card-deck">
-      <div data-th-each="board : ${main}" data-th-object="${board}" class="card">
+      <div data-th-each="board : ${review}" data-th-object="${board}" class="card">
         <div class="card-thumbnail-container">
-<!--          <div class="card-region" data-th-text="${board.region.regionName}">지역명</div>-->
-          <div class="card-region" data-th-text="${board.region != null ? board.region.regionName : 'Unknown'}">지역명</div>
+          <div class="card-region" data-th-text="${board.region != null ? board.region.regionName : '미정'}">지역명</div>
           <img src='https://content.skyscnr.com/m/41acfff761f8ea1a/original/GettyImages-519763361.jpg?resize=1800px:1800px&quality=100' class="card-thumbnail" alt="Thumbnail Image">
         </div>
         <div class="card-body">
@@ -122,12 +121,12 @@
     <th>작성자</th>
     <th>작성일</th>
     <th>추천수</th>
-    <th>조회수</th>
+    <th>조회수</th>  <!-- 목록에서는 정보공유 게시판과 자유 게시판에서만 표시됨 -->
     <th>첨부파일</th>
   </tr>
   </thead>
   <tbody>
-  <tr data-th-if="${categoryNo == 1}" data-th-each="board : ${list}" data-th-object="${board}">
+  <tr data-th-each="board : ${information}" data-th-object="${board}">
     <td data-th-text="*{headNo}">공지</td>
     <td><a data-th-href="@{view(categoryNo=1,boardNo=*{boardNo})}" data-th-text="*{title}"
            href="view.html">제목입니다.</a></td>
@@ -146,7 +145,7 @@
 <table border='1'>
   <thead>
   <tr>
-    <th>분류</th> <!-- headName -->
+    <th>분류</th> <!-- 말머리 headName -->
     <th>제목</th>
     <th>작성자</th>
     <th>작성일</th>
@@ -156,7 +155,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr data-th-if="${categoryNo == 2}" data-th-each="board : ${list}" data-th-object="${board}">
+  <tr data-th-each="board : ${community}" data-th-object="${board}">
     <td data-th-text="*{headNo}">공지</td>
     <td><a data-th-href="@{view(categoryNo=2,boardNo=*{boardNo})}" data-th-text="*{title}"
            href="view.html">제목입니다.</a></td>

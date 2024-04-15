@@ -13,27 +13,31 @@
 
     <association property="writer" javaType="Member">
      <id column="member_no" property="no"/>
-     <result column="name" property="name"/>
+     <result column="nickname" property="nickname"/>
+     <result column="photo" property="photo"/>
    </association>
 
+    <association property="comment" javaType="Comment">
+      <id column="comment_no" property="commentNo"/>
+    </association>
   </resultMap>
 
-
-  <insert id="add" parameterType="Reply"
+  <!-- 답글 작성-->
+  <insert id="addComment" parameterType="Reply"
     useGeneratedKeys="true" keyColumn="reply_no" keyProperty="replyNo">
-    insert into reply(content,writer)
-    values(#{content},#{writer.no})
+    insert into reply(comment_no,writer,content)
+    values(#{commentNo},#{writer.no},#{content})
   </insert>
 
-  <delete id="delete" parameterType="int">
+  <!-- 답글 삭제-->
+  <update id="deleteComment">
     update
-    board
+    reply
     set
-    state=${state};
+    state='1'
     where
-    reply_no=${replyNo}
-    content=${content};
-  </delete>
+    reply_no=#{replyNo}
+  </update>
 
   <select id="findAll" resultMap="ReplyMap">
     select
@@ -41,7 +45,8 @@
     r.reply_no,
     r.content,
     r.created_date,
-    m.name,
+    m.member_no,
+    m.nickname,
     m.photo
     from
     reply r
@@ -50,15 +55,14 @@
     where
     c.comment_no=#{commentNo}
     order by
-    r.created_date desc;
+    r.created_date desc
   </select>
 
   <update id="update" parameterType="Reply">
     update board set
-    state=${state};
+    content=${content}
     where
     reply_no=${replyNo}
-    content=${content};
   </update>
 
 </mapper>

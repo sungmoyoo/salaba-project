@@ -16,25 +16,29 @@
    <association property="writer" javaType="Member">
      <id column="member_no" property="no"/>
      <result column="nickname" property="nickname"/>
+     <result column="photo" property="photo"/>
+   </association>
+
+    <!-- 게시판 정보 가져오기 -->
+   <association property="board" javaType="Board">
+    <id column="board_no" property="boardNo"/>
    </association>
   </resultMap>
 
-  <insert id="add" parameterType="Comment"
+  <!-- 댓글 작성 -->
+  <insert id="addComment" parameterType="Comment"
     useGeneratedKeys="true" keyColumn="comment_no" keyProperty="commentNo">
-    insert into comment(content,writer)
-    values(#{content},#{writer.no})
+    insert into comment(writer,content,board_no)
+    values(#{writer.no},#{content},#{boardNo})
   </insert>
 
   <!-- 댓글 삭제 -->
-  <delete id="delete" parameterType="int">
-    update
-    comment
-    set
-    state=${state};
+  <update id="deleteComment">
+    update comment set
+    state='1'
     where
-    comment_no=${commentNo}
-    content=${content};
-  </delete>
+    comment_no=#{commentNo}
+  </update>
 
   <!-- 게시판 번호로 댓글 찾기 -->
   <select id="findAll" resultMap="CommentMap">
@@ -53,15 +57,15 @@
     where
       b.board_no=#{boardNo}
     order by
-      c.created_date desc;
+      c.created_date desc
   </select>
+
 
   <update id="update" parameterType="Comment">
     update board set
-    state=${state};
+    content=${content}
     where
     comment_no=${commentNo}
-    content=${content};
   </update>
 
 </mapper>

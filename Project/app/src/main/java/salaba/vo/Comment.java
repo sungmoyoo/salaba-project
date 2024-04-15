@@ -13,6 +13,7 @@ public class Comment implements Serializable { // 댓글
   private int commentNo;  // 댓글 번호
   private String content;  // 내용
   private Member writer;  // 댓글 작성자
+  private Member photo; // 직성자 프로필 사진
   private Date createdDate; // 작성일
   private char state; // 상태
 

@@ -2,6 +2,7 @@ package salaba.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -32,7 +32,6 @@ import salaba.vo.Reply;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/board")
 @SessionAttributes("boardFiles") // boardFiles 로 저장되는 객체는 세션에 보관한다.
 public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤러
 
@@ -47,56 +46,23 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
   @Value("${ncp.bucketname}")
   private String bucketName;
 
-  @GetMapping("main") // 게시글 전체 메인화면
-  public void mainBoard(
-      @RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "5") int pageSize,
-      HttpSession session,
-      Model model) throws Exception {
+  @GetMapping("board/main") // 게시글 전체 메인화면
+  public void mainBoard(Model model) throws Exception {
+    model.addAttribute("review", boardService.listBoard(0, 1, 5));
+    model.addAttribute("information", boardService.listBoard(1, 1, 5));
+    model.addAttribute("community", boardService.listBoard(2, 1, 5));
 
-    Member loginuser = (Member) session.getAttribute("loginUser");
-    model.addAttribute("loginUser", loginuser);
-
-    if (pageSize < 3 || pageSize > 20) {  // 페이지 설정
-      pageSize = 5;
-    }
-
-    if (pageNo < 1) {
-      pageNo = 1;
-    }
-
-    int totalNumOfRecord = 0;
-    List<Board> allBoards = new ArrayList<>();
-
-    // 전체 카테고리의 게시글을 가져옴
-    for (int i = 0; i < 3; i++) {
-      int numOfRecord = boardService.countAll(i);
-      totalNumOfRecord += numOfRecord;
-      allBoards.addAll(boardService.listBoard(i, pageNo, pageSize));
-    }
-
-    int numOfPage = totalNumOfRecord / pageSize + ((totalNumOfRecord % pageSize) > 0 ? 1 : 0);
-
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
-    }
-
-    model.addAttribute("boardName", "전체 게시판");
-    model.addAttribute("main", allBoards);
-    model.addAttribute("pageNo", pageNo);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("numOfPage", numOfPage);
   }
 
-    @GetMapping("form") // 게시글 폼
+    @GetMapping("board/form") // 게시글 폼
   public void form(int categoryNo, Model model) throws Exception {
     model.addAttribute("boardName", categoryNo == 0 ? "후기게시판" :
         (categoryNo == 1 ? "정보공유게시판" : "자유게시판")); // 카테고리 별 분류 - 0 : 후기 / 1 : 정보공유 / 2 : 자유
     model.addAttribute("categoryNo", categoryNo);
   }
 
-  @PostMapping("addBoard")
-  public String addBoard(  // 게시글 작성/
+  @PostMapping("board/add")
+  public String addBoard(  // 게시글 작성
       Board board,
       @RequestParam("scopeNo") int scopeNo, // 공개범위
       @RequestParam("headNo") int headNo, // 말머리
@@ -111,19 +77,19 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     board.setScopeNo(scopeNo); // 공개범위 설정
     board.setHeadNo(headNo); // 말머리 설정
 
-    // 게시글 등록 시 삽입한 이미지 목록을 세션에서 가져온다.
-    List<BoardFile> boardFiles = (List<BoardFile>) session.getAttribute("boardFiles");
+    // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
+    List<BoardFile> boardFiles = (List<BoardFile>) session.getAttribute("attachedFiles");
 
-      for (int i = boardFiles.size() - 1; i >= 0; i--) {
-        BoardFile boardFile = boardFiles.get(i);
-        if (board.getContent().indexOf(boardFile.getUuidFileName()) == -1) {
-          // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
-          storageService.delete(this.bucketName, this.uploadDir, boardFile.getUuidFileName());
-          log.debug(String.format("%s 파일 삭제!", boardFile.getUuidFileName()));
-          boardFiles.remove(i);
-        }
+    for (int i = boardFiles.size() - 1; i >= 0; i--) {
+      BoardFile boardFile = boardFiles.get(i);
+      if (board.getContent().indexOf(boardFile.getOriFileName()) == -1) {
+        // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
+        storageService.delete(this.bucketName, this.uploadDir, boardFile.getOriFileName());
+        log.debug(String.format("%s 파일 삭제!", boardFile.getOriFileName()));
+        boardFiles.remove(i);
       }
-    if (boardFiles.size() > 0) { // 파일이 한 개 이상일 경우 저장
+    }
+    if (boardFiles.size() > 0) {
       board.setFileList(boardFiles);
     }
 
@@ -135,7 +101,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     return "redirect:list?categoryNo=" + board.getCategoryNo();
   }
 
-  @GetMapping("list")  // 게시글 목록
+  @GetMapping("board/list")  // 게시글 목록
   public void listBoard(
       @RequestParam int categoryNo,
       @RequestParam(defaultValue = "1") int pageNo,
@@ -169,7 +135,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     model.addAttribute("numOfPage", numOfPage);
   }
 
-  @GetMapping("view")  // 게시글 조회
+  @GetMapping("board/view")  // 게시글 조회
   public void viewBoard(
       @RequestParam("categoryNo") int categoryNo, // 카테고리 번호
       @RequestParam("boardNo") int boardNo, // 게시글 번호
@@ -177,7 +143,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
       Model model) throws Exception {
 
     Board board = boardService.getBoard(boardNo);
-    log.debug("abcdefg"+ board);
+    //log.debug("abcdefg"+ board);
     if (board == null) {
       throw new Exception("번호가 유효하지 않습니다.");
     }
@@ -195,7 +161,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
   }
 
 
-  @PostMapping("updateBoard")
+  @PostMapping("board/update")
   public String updateBoard( // 게시글 수정
       Board board,
       HttpSession session,
@@ -245,8 +211,11 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
 
     }
 
-  @GetMapping("deleteBoard")  // 게시글 삭제
-  public String deleteBoard(int categoryNo, int boardNo, HttpSession session) throws Exception {
+  @GetMapping("board/delete")  // 게시글 삭제 (상태만 변경)
+  public String deleteBoard(
+      int categoryNo,
+      int boardNo,
+      HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -265,7 +234,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     boardService.deleteBoard(boardNo);
 
     for (BoardFile file : files) {
-      storageService.delete(this.bucketName, this.uploadDir, file.getUuidFileName());
+      storageService.delete(this.bucketName, this.uploadDir, file.getOriFileName());
     }
 
     return "redirect:list?categoryNo=" + categoryNo;
@@ -329,36 +298,44 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     return "redirect:../view?categoryNo=" + categoryNo + "&boardNo=" + file.getBoardNo();
   }
 
-  @PostMapping("addComment") // 댓글 또는 답글 작성
-  public String addComment(
-      @ModelAttribute("reply") Reply reply,
-      @ModelAttribute("comment") Comment comment,
-      Board board,
-      HttpSession session) throws Exception {
-
-    Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인 요청
+  @PostMapping("board/addComment") // 댓글 또는 답글 작성
+  public String addComment(HttpServletRequest request, HttpSession session) throws Exception {
+    Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인하시기 바랍니다!");
     }
-    board.setWriter(loginUser);
 
-    if (reply != null) { // 답글인 경우
-      reply.setWriter(loginUser);
-      System.out.println(reply);
-      replyService.addComment(reply);
-    } else if (comment != null) { // 댓글인 경우
-      comment.setWriter(loginUser);
-      System.out.println(comment);
-      commentService.addComment(comment);
+    // 댓글 또는 답글의 내용
+    String content = request.getParameter("comment");
+
+    // 이미지 경로(photo) - 폼에서 제출하지 않은 경우 적절한 방법으로 가져와야 함
+    //String photo = "";
+
+    // 댓글 또는 답글에 해당하는지 확인하여 처리
+    if (content != null && !content.isEmpty()) {
+      String type = request.getParameter("type");
+      if (type != null && type.equals("reply")) { // 답글인 경우
+        Reply reply = new Reply();
+        reply.setContent(content);
+        reply.setWriter(loginUser);
+     //   reply.setPhoto(photo); // 이미지 경로 설정
+        replyService.addComment(reply);
+      } else { // 댓글인 경우
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setWriter(loginUser);
+      //  comment.setPhoto(photo);
+        commentService.addComment(comment);
+      }
     } else {
       throw new IllegalArgumentException("댓글 또는 답글을 작성해주세요.");
     }
 
-    return "redirect:list";
+    return "redirect:list"; // 적절한 경로로 리다이렉트
   }
 
 
-  @PostMapping("updateComment") // 답글 또는 댓글 수정
+  @PostMapping("comment/update") // 답글 또는 댓글 수정
   public String updateComment(
       @ModelAttribute("reply") Reply reply,
       @ModelAttribute("comment") Comment comment,
@@ -392,7 +369,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     return "redirect:list";
   }
 
-  @GetMapping("deleteComment") // 댓글 또는 답글 삭제
+  @GetMapping("comment/delete") // 댓글 또는 답글 삭제 - 상태 1로 변경
   public String deleteComment(
       @RequestParam(required = false) Integer replyNo,
       @RequestParam(required = false) Integer commentNo,
@@ -427,7 +404,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     return "redirect:list";
   }
 
-  @PostMapping("addReport") // 신고 작성
+  @PostMapping("report/add") // 신고 작성
   public String addReport(
       BoardReport boardReport,
       MultipartFile[] boardFiles,
@@ -455,5 +432,11 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
     boardReportService.addReport(boardReport);
 
     return "redirect:list?categoryNo="+ boardReport.getCategoryNo();
+  }
+
+  @GetMapping("report/form")
+  public void report(@RequestParam("type") String targetType,
+      Model model) throws Exception { // 신고 폼
+    model.addAttribute("type", targetType);
   }
 }

@@ -17,7 +17,7 @@ public class BoardReport implements Serializable { // 게시판 신고
   private Date reportDate; // 신고 접수일시
   private char state;  // 상태
   private int targetNo; // 신고대상 번호
-  private char targetType; // 신고대상 타입
+  private String targetType; // 신고대상 타입
   private List<BoardFile> fileList; // 게시글 (신고) 첨부파일
 
 }

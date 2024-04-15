@@ -10,7 +10,7 @@ public interface BoardDao {  // 게시판 인터페이스
 
   void addBoard(Board board); // 게시글 작성
 
-  int deleteBoard(int boardNo); // 글 삭제
+  int deleteBoard(@Param("boardNo") int boardNo); // 글 삭제
 
   List<Board> findAll( // 조회
       @Param("categoryNo") int categoryNo,

@@ -28,21 +28,6 @@ public class DefaultBoardReportService implements BoardReportService { // 게시
       boardFiledao.addAll(boardReport.getFileList());
     }
   }
-
-  @Override  // 사용자가 신고한 내역 조회
-  public List<BoardReport> list(int categoryNo, int pageNo, int pageSize) {
-    return boardReportDao.findAll(categoryNo, pageSize * (pageNo - 1), pageSize);
-  }
-
-  @Override // 상세 조회
-  public BoardReport get(int reportNo) {
-    return boardReportDao.findBy(reportNo);
-  }
-
-  @Override // 신고 파일 조회 - 신고 번호로 조회
-  public List<BoardFile> getBoardFiles(int reportNo) {
-    return boardFiledao.findAllByReportNo(reportNo);
-  }
 }
 
 
