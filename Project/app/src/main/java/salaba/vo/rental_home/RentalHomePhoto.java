@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
-public class RentalHomePhoto { // 숙소 사진
+public class RentalHomePhoto implements Serializable { // 숙소 사진
+  private static final long serialVersionUID = 100L;
+
   private int photoNo; // 사진 번호
 
   private String oriPhotoName; // 사진이름(Ori)
