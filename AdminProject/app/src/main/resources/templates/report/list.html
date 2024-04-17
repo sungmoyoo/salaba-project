@@ -6,6 +6,7 @@
 
 <body>
 <div data-th-replace="header :: header">헤더</div>
+<div data-th-replace="sidebar :: sidebar">사이드바</div>
 <h3 data-th-text="${menuName}">메뉴 이름</h3>
 <table border="1">
     <thead>
@@ -14,6 +15,7 @@
         <th>신고유형</th>
         <th>처리여부</th>
         <th>접수일</th>
+        <th>상세 보기</th>
     </tr>
     </thead>
     <tbody>
@@ -22,10 +24,63 @@
         <td ><a data-th-href="@{/report/detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}" data-th-text="*{categoryName}">신고 유형</a></td>
         <td data-th-text="*{stateStr}">처리 여부</td>
         <td data-th-text="*{reportDate}">접수일</td>
+        <td><button class="view">view</button></td>
     </tr>
     </tbody>
+    <tfoot>
+    <td colspan="5" class="tablefoot"></td>
+    </tfoot>
 </table>
 <div data-th-replace="footer :: footer">풋터</div>
+
+<style>
+
+    table {
+    width: 700px;
+    text-align: center;
+    border: 1px solid #fff;
+    border-spacing: 1px;
+    font-family: 'Cairo', sans-serif;
+  margin: auto;
+}
+
+
+
+table td {
+    padding: 10px;
+    background-color: #eee;
+}
+
+table th {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+
+
+.view,
+.delete {
+    border: none;
+    padding: 5px 10px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.view {
+    background-color: #03A9F4;
+}
+
+.delete {
+    background-color: #E91E63;
+}
+
+.tablefoot {
+    padding: 0;
+    border-bottom: 3px solid #009688;
+}
+
+</style>
 
 </body>
 </html>

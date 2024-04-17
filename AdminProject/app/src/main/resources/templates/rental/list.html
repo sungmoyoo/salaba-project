@@ -5,17 +5,8 @@
 </head>
 <body>
 <div data-th-replace="header :: header">헤더</div>
+<div data-th-replace="sidebar :: sidebar">사이드바</div>
 <h3 data-th-text="${menuName}">메뉴 이름</h3>
-<form data-th-action='@{/rental/list/search}' method="post" data-th-if="${#strings.equals(menuName, '등록된 숙소 목록')}">
-    <div>
-        <select name="filter">
-            <option value="0">숙소명</option>
-            <option value="1">호스트명</option>
-        </select>
-        <input name='keyword' type='text' placeholder='검색'>
-        <button>검색</button>
-    </div>
-</form>
 <table border="1">
     <thead>
     <tr>
@@ -25,20 +16,74 @@
         <th data-th-if="${#strings.equals(menuName, '등록된 숙소 목록')}">호스트명</th>
         <th>등록일</th>
         <th>상태</th>
+        <th>상세 보기</th>
 
     </tr>
     </thead>
     <tbody>
     <tr data-th-each="rental : ${rentalList}" data-th-object="${rental}">
         <td data-th-text="*{rentalNo}">1</td>
-        <td><a data-th-text="*{name}" data-th-href="@{/rental/detail(menu=${menu},rno=*{rentalNo})}">이름</a></td>
+        <td><a data-th-text="*{name}" data-th-href="@{detail(menu=${menu},rno=*{rentalNo})}">이름</a></td>
         <td data-th-text="*{host.name}">호스트명</td>
         <td data-th-text="*{regDate}">등록일</td>
         <td data-th-text="*{stateStr}">상태</td>
+        <td><button class="view">view</button></td>
     </tr>
     </tbody>
+    <tfoot>
+    <td colspan="5" class="tablefoot"></td>
+    </tfoot>
 </table>
 <div data-th-replace="footer :: footer">풋터</div>
 
+<style>
+
+    table {
+    width: 700px;
+    text-align: center;
+    border: 1px solid #fff;
+    border-spacing: 1px;
+    font-family: 'Cairo', sans-serif;
+  margin: auto;
+}
+
+
+
+table td {
+    padding: 10px;
+    background-color: #eee;
+}
+
+table th {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+
+
+.view,
+.delete {
+    border: none;
+    padding: 5px 10px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.view {
+    background-color: #03A9F4;
+}
+
+.delete {
+    background-color: #E91E63;
+}
+
+.tablefoot {
+    padding: 0;
+    border-bottom: 3px solid #009688;
+}
+
+</style>
 </body>
 </html>
+

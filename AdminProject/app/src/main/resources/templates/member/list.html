@@ -5,6 +5,7 @@
 </head>
 <body>
 <div data-th-replace="header :: header">헤더</div>
+<div data-th-replace="sidebar :: sidebar">사이드바</div>
 <h3 data-th-text="${menuName}">메뉴 이름</h3>
 <form data-th-action='@{/user/list/search}' method="post">
     <input name="menu" type="hidden" data-th-value="${menu}">

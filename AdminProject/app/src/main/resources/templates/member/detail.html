@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
 </head>
 <body>
+<div data-th-replace="header :: header">헤더</div>
+<div data-th-replace="sidebar :: sidebar">사이드바</div>
 <h2>회원 상세 보기</h2>
 <h4 data-th-text="${menuName}">일반회원 or 호스트</h4>
 <form data-th-action="@{update}" method="post" data-th-object="${member}">
