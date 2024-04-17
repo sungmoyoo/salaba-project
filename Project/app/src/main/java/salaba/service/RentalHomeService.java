@@ -22,7 +22,7 @@ public interface RentalHomeService {
 
   List<RentalHome> getRentalHomeThemeSearch( String themeName );
 
-  List<RentalHome> getRentalHomeFilterSearch( Theme theme, int minPrice, int maxPrice, int capacity );
+  List<RentalHome> getRentalHomeFilterSearch( List<Theme> theme, int minPrice, int maxPrice, int capacity, List<RentalHomeFacility> rentalHomeFacilities );
 
   List<RentalHomePhoto> getRentalHomePhotos( int rentalHomeNo );
 

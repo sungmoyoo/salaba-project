@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
 import salaba.vo.rental_home.RentalHome;
+import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
@@ -89,12 +90,13 @@ public class RentalHomeController {
 
   @GetMapping("/filter")
   public String rentalHomeFilterSearch( Model model,
-      @RequestParam Theme theme,
+      @RequestParam List<Theme> theme,
       @RequestParam int minPrice,
       @RequestParam int maxPrice,
-      @RequestParam int capacity){
+      @RequestParam int capacity,
+      @RequestParam List<RentalHomeFacility> rentalHomeFacilities){
     model.addAttribute("rentalHomeList",
-        rentalHomeService.getRentalHomeFilterSearch(theme,minPrice,maxPrice,capacity));
+        rentalHomeService.getRentalHomeFilterSearch(theme,minPrice,maxPrice,capacity,rentalHomeFacilities));
 
     return "main";
   }

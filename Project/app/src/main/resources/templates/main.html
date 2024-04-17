@@ -47,10 +47,18 @@
       background-color: #0056b3;
     }
 
+    .theme-container{
+      display: flex;
+      overflow-x: auto;
+      white-space: nowrap;
+      align-items: center;
+    }
+
     .theme-icon-container{
       width: 56px;
       height: 48px;
       border: 1px solid #ddd;
+      flex-shrink: 0;
     }
 
     .listing-container {
@@ -135,6 +143,43 @@
       right: 50%;
       transform: translate(50%, -50%);
     }
+    
+    /* 팝업 스타일 */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .popup-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    
+    .close-button {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -152,12 +197,17 @@
     </div>
   </section>
   <section>
-    <div data-th-each="theme : ${session.themeList}">
-      <div class="theme-icon-container">
+    <div class="theme-container">
+      <button onclick="scrollThemes(-100)">&lt;</button>
+      <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
         <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
           <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
         </a>
       </div>
+      <button class="scroll-right-button" onclick="scrollThemes(100)">&gt;</button>
+    </div>
+    <div class="filter">
+      <button class="filter-button" onclick="openFilterPopup()">필터</button>
     </div>
   </section>
   <section class="slider-container">
@@ -175,8 +225,48 @@
     </div>
   </section>
 </main>
+<div id="filterPopup" class="popup">
+  <div class="popup-content">
+    <span class="close-button" onclick="closeFilterPopup()">&times;</span>
+
+    <!-- 필터 폼 -->
+    <label for="theme"></label>
+    <select id="theme" name="theme">
+
+    </select>
+    <label for="minPrice">최소 가격:</label>
+    <input type="number" id="minPrice" name="minPrice">
+    <label for="maxPrice">최대 가격:</label>
+    <input type="number" id="maxPrice" name="maxPrice">
+    <label for="rentalHomeFacilities"></label>
+    <select id="rentalHomeFacilities" name="rentalHomeFacilities">
+      
+    </select>
+    <button class="apply-filter-button" onclick="getFilterData()">찾기</button>
+  </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+  function openFilterPopup(){
+    document.getElementById("filterPopup").style.display = "block";
+  }
+  function closeFilterPopup(){
+    document.getElementById("filterPopup").style.display = "none";
+  }
+  function getFilterData(){
+    const theme = document.getElementById('theme').value;
+    const minPrice = document.getElementById('minPirce').value;
+    const maxPrice = document.getElementById('maxPrice').value;
+
+    closeFilterPopup();
+  }
+
+  function scrollThemes(offset) {
+    const container = document.querySelector('.theme-container');
+
+    container.scrollLeft += offset;
+  }
   // 각 숙소의 이미지 슬라이더 처리
   $('.listing-item').each(function () {
     const $slideImages = $(this).find('.slide-image');

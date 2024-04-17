@@ -280,7 +280,7 @@
                 theme
               where
                 theme_name =
-              <foreach collection="list" item="item" separator="OR">
+              <foreach collection="theme" item="item" separator="OR">
                 #{item.themeName}
               </foreach>
           )
@@ -298,6 +298,29 @@
       <if test="capacity > 0">
         <![CDATA[ t1.capacity >= #{capacity} ]]>
       </if>
+    <if test="theme != null and ((minPrice > 0 and maxPrice > 0 ) or capacity > 0 ) and rentalHomeFacilities != null">
+      and
+    </if>
+    <if test="rentalHomeFacilities != null">
+      t1.rental_home_no in (
+        select
+          t5.rental_home_no
+        from
+          rental_home_detail t5
+        where
+          t5.facility_no = (
+            select
+              facility_no
+            from
+              rental_home_facility
+            where
+              rental_home_facility =
+            <foreach collection="rentalHomeFacilities" item="item" separator="OR">
+              #{item.facilityName}
+            </foreach>
+        )
+      )
+    </if>
   </select>
   <!-- 숙소 상세 조회 -->
   <select id="rentalHomeDetailSelect" resultMap="rentalHomeView" parameterType="int">
