@@ -65,7 +65,6 @@ public class RentalHomeController {
       // 숙소 검색
       model.addAttribute("rentalHomeList",
           rentalHomeService.getRentalHomeConditionSearch(regionName,checkInDate,checkOutDate,capacity));
-
     }
     return "main";
   }

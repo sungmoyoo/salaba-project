@@ -196,6 +196,10 @@
       </form>
     </div>
   </section>
+  <div>
+    
+    </div>
+  </div>
   <section>
     <div class="theme-container">
       <button onclick="scrollThemes(-100)">&lt;</button>
@@ -230,10 +234,11 @@
     <span class="close-button" onclick="closeFilterPopup()">&times;</span>
 
     <!-- 필터 폼 -->
-    <label for="theme"></label>
-    <select id="theme" name="theme">
-
-    </select>
+    <div class="filter-options-theme" data-th-each="theme : ${session.themeList}">
+      <label class="theme-checkbox-label">
+        <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}">
+      </label>
+    </div>
     <label for="minPrice">최소 가격:</label>
     <input type="number" id="minPrice" name="minPrice">
     <label for="maxPrice">최대 가격:</label>
@@ -242,25 +247,59 @@
     <select id="rentalHomeFacilities" name="rentalHomeFacilities">
       
     </select>
-    <button class="apply-filter-button" onclick="getFilterData()">찾기</button>
+    <button class="apply-filter-button" onclick="getFilterData()" th:text="${rentalHomeList.size + '개의 숙소 보기'}">버튼</button>
   </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+  const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
+</script>
 <script>
+  
   function openFilterPopup(){
     document.getElementById("filterPopup").style.display = "block";
   }
   function closeFilterPopup(){
     document.getElementById("filterPopup").style.display = "none";
   }
+  
+  // 버튼의 텍스트를 업데이트
+  function updateButtonLabel(count){
+    const button = document.querySelector(".apply-filter-button");
+    button.textContent = '(${count})개의 숙소 보기';
+  }
+  
+  let filteredRentalHomeList = rentalHomeList;
   function getFilterData(){
-    const theme = document.getElementById('theme').value;
-    const minPrice = document.getElementById('minPirce').value;
-    const maxPrice = document.getElementById('maxPrice').value;
+    let themes = [];
+    let checkboxes = document.querySelectorAll('input[name="theme"]:checked');
+    checkboxes.forEach(checkbox => {
+      themes.push(checkbox.value);
+    });
+    let minPrice = document.getElementById('minPrice').value;
+    let maxPrice = document.getElementById('maxPrice').value;
+    // 숙소List filter
+    filteredRentalHomeList = Object.values(rentalHomeList).filter(function(rentalHome){
+      if( themes != null ){
+        return rentalHome.themes.some(theme => themes.includes(theme.themeName)) && rentalHome.price >= minPrice && rentalHome.price <= maxPrice;
+      }
+      if( themes == null ){
+        return rentalHome.price >= minPrice && rentalHome.price <= maxPrice;
+      }
+    });
+    
+    // 필터링된 숙소의 갯수 업데이트
+    updateButtonLabel( filteredRentalHomeList.length );
 
+    // 필터링된 숙소 리스트 업데이트
+    updateRentalHomeList(filteredRentalHomeList);
+
+    // 팝업 닫기
     closeFilterPopup();
   }
+
+
 
   function scrollThemes(offset) {
     const container = document.querySelector('.theme-container');
@@ -296,19 +335,23 @@
   let listContainer = $('.listing-container');
   listContainer.empty();
 
-  newRentalHomeList.forEach(function(rentalHomeList){
+  newRentalHomeList.forEach(function(rentalHome){
     let listItem = $( '<div class="listing-item">' );
     let sliderDiv = $( '<div class="listing-slider">' );
     
-    rentalHomeList.forEach(function(photos){
+      rentalHome.rentalHomePhotos.forEach(function(photos){
       let image = $( '<img class="slide-image">' )
-      .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + photos.uuidPhotoName )
+      .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + photos.uuidPhotoName + '?type=f&w=265&h=252&faceopt=false&ttype=jpg' )
       .attr( 'alt', '숙소이미지' );
       sliderDiv.append(image);
     });
-    let nameSpan = $('<span>').text(rentalHomeList.name);
-    let priceSpan = $('<span>').text(rentalHomeList.price);
-
+    let imageLeftButton = $('<button class="slide-button prev-button slick-prev"></button>');
+    let imageRightButton = $('<button class="slide-button next-button slick-next"></button>');
+    let nameSpan = $('<span>').text(rentalHome.name);
+    let priceSpan = $('<span>').text(rentalHome.price);
+    
+    sliderDiv.append(imageLeftButton);
+    sliderDiv.append(imageRightButton);
     sliderDiv.append(nameSpan);
     sliderDiv.append(priceSpan);
     listItem.append(sliderDiv);

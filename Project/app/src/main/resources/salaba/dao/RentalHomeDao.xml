@@ -67,6 +67,7 @@
     <result column="lon" property="lon"/>
 
     <collection property="rentalHomePhotos" resultMap="rentalHomePhotos"/>
+    <collection property="themes" resultMap="themeMap"/>
   </resultMap>
 
   <resultMap id="rentalHomeView" type="RentalHome">
@@ -108,10 +109,14 @@
           rental_home_like
         where
           t1.rental_home_no = rental_home_no
-      ) as like_count
+      ) as like_count,
+      t3.theme_no,
+      t4.theme_name
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_theme t3 on t3.rental_home_no = t1.rental_home_no
+      inner join theme t4 on t4.theme_no = t3.theme_no
     order by
       like_count desc
   </select>
