@@ -21,7 +21,6 @@ import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
-import salaba.vo.rental_home.Theme;
 
 @RequiredArgsConstructor
 @Controller
@@ -40,9 +39,15 @@ public class RentalHomeController {
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
       @RequestParam( value = "capacity", defaultValue = "1") int capacity) throws Exception{ // 메인화면
     Member loginUser = (Member) httpSession.getAttribute("loginUser");
-
+    
+    // 세션에 테마가 없는 경우 세션에 테마 저장
     if(httpSession.getAttribute("themeList") == null ){
       httpSession.setAttribute("themeList", rentalHomeService.getAllThemes());
+    }
+    
+    // 세션에 편의시설이 없는 경우 세션에 편의시설 저장
+    if(httpSession.getAttribute("facilityList") == null){
+      httpSession.setAttribute("facilityList", rentalHomeService.getAllFacilities());
     }
 
     // LogIn User Check
@@ -83,19 +88,6 @@ public class RentalHomeController {
         log.debug(String.format("rentalHomePhoto : %s", rp.getUuidPhotoName()));
       }
     }
-
-    return "main";
-  }
-
-  @GetMapping("/filter")
-  public String rentalHomeFilterSearch( Model model,
-      @RequestParam List<Theme> theme,
-      @RequestParam int minPrice,
-      @RequestParam int maxPrice,
-      @RequestParam int capacity,
-      @RequestParam List<RentalHomeFacility> rentalHomeFacilities){
-    model.addAttribute("rentalHomeList",
-        rentalHomeService.getRentalHomeFilterSearch(theme,minPrice,maxPrice,capacity,rentalHomeFacilities));
 
     return "main";
   }

@@ -28,7 +28,8 @@
       flex-wrap: wrap;
     }
 
-    input, button {
+    .search-input,
+    .search-button {
       padding: 10px;
       margin-right: 10px;
       margin-bottom: 10px;
@@ -36,14 +37,14 @@
       border-radius: 4px;
     }
 
-    button {
+    .search-button {
       background-color: #007bff;
       color: #fff;
       border: none;
       cursor: pointer;
     }
 
-    button:hover {
+    .search-button:hover {
       background-color: #0056b3;
     }
 
@@ -93,18 +94,8 @@
 
 
     /* 여기부터 사진에 있는 버튼 부분 */
-    .slick-arrow {
-      position: absolute;
-      top: 50%;
-      background: rgba(255, 255, 255, 0.5);
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      z-index: 1;
-    }
-
-    .slick-prev,
-    .slick-next {
+    .prev-button,
+    .next-button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -120,15 +111,15 @@
       color: rgba(0, 0, 0, 0.54);
     }
 
-    .slick-prev {
+    .prev-button {
       left: 10px;
     }
 
-    .slick-next {
+    .next-button {
       right: 10px;
     }
 
-    .slick-prev:before,
+    /* .slick-prev:before,
     .slick-next:before {
       content: '<';
       position: absolute;
@@ -143,7 +134,8 @@
       right: 50%;
       transform: translate(50%, -50%);
     }
-    
+     */
+     
     /* 팝업 스타일 */
     .popup {
       display: none;
@@ -188,18 +180,14 @@
     <div class="search-container">
       <h1>어디로 여행 가시나요?</h1>
       <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
-        <input type="text" name="regionName" id="location" placeholder="장소 입력">
-        <input type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
-        <input type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
-        <input type="number" name="capacity" id="guests" placeholder="인원">
-        <button type="submit">검색</button>
+        <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
+        <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
+        <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
+        <input class="search-input" type="number" name="capacity" id="guests" placeholder="인원">
+        <button class="search-button" type="submit">검색</button>
       </form>
     </div>
   </section>
-  <div>
-    
-    </div>
-  </div>
   <section>
     <div class="theme-container">
       <button onclick="scrollThemes(-100)">&lt;</button>
@@ -220,8 +208,8 @@
         <div class="listing-slider">
           <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
                data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
-          <button class="slide-button prev-button slick-prev"></button>
-          <button class="slide-button next-button slick-next"></button>
+          <button class="slide-button prev-button">&lt;</button>
+          <button class="slide-button next-button">&gt;</button>
           <span data-th-text="${rentalHome.name}">숙소 이름</span>
           <span data-th-text="${rentalHome.price}">숙소 가격</span>
         </div>
@@ -234,19 +222,36 @@
     <span class="close-button" onclick="closeFilterPopup()">&times;</span>
 
     <!-- 필터 폼 -->
-    <div class="filter-options-theme" data-th-each="theme : ${session.themeList}">
-      <label class="theme-checkbox-label">
-        <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}">
-      </label>
+    <div>
+      <h3>숙소 유형</h3>
+      <div class="filter-options-home-type" data-th-each="theme : ${session.themeList}">
+        <label class="theme-checkbox-label">
+          <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}" data-th-if="${theme.themeNo < 10}">
+        </label>
+      </div>
     </div>
-    <label for="minPrice">최소 가격:</label>
-    <input type="number" id="minPrice" name="minPrice">
-    <label for="maxPrice">최대 가격:</label>
-    <input type="number" id="maxPrice" name="maxPrice">
-    <label for="rentalHomeFacilities"></label>
-    <select id="rentalHomeFacilities" name="rentalHomeFacilities">
-      
-    </select>
+    <div>
+      <h3>테마</h3>
+      <div class="filter-options-theme" data-th-each="theme : ${session.themeList}">
+        <label class="theme-checkbox-label">
+          <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}" data-th-if="${theme.themeNo >= 10 && theme.themeNo < 100}">
+        </label>
+      </div>
+    </div>
+    <div>
+      <label for="minPrice">최소 가격:</label>
+      <input type="number" id="minPrice" name="minPrice">
+      <label for="maxPrice">최대 가격:</label>
+      <input type="number" id="maxPrice" name="maxPrice">
+    </div>
+    <div>
+      <h3>편의 시설</h3>
+      <div class="filter-options-facility" data-th-each="facility : ${session.facilityList}">
+        <label for="rentalHomeFacilities">
+          
+        </label>
+      </div>
+    </div>
     <button class="apply-filter-button" onclick="getFilterData()" th:text="${rentalHomeList.size + '개의 숙소 보기'}">버튼</button>
   </div>
 </div>
@@ -267,7 +272,7 @@
   // 버튼의 텍스트를 업데이트
   function updateButtonLabel(count){
     const button = document.querySelector(".apply-filter-button");
-    button.textContent = '(${count})개의 숙소 보기';
+    button.textContent = count+'개의 숙소 보기';
   }
   
   let filteredRentalHomeList = rentalHomeList;
@@ -279,13 +284,14 @@
     });
     let minPrice = document.getElementById('minPrice').value;
     let maxPrice = document.getElementById('maxPrice').value;
+
     // 숙소List filter
     filteredRentalHomeList = Object.values(rentalHomeList).filter(function(rentalHome){
-      if( themes != null ){
+      if( themes != null ){ // theme를 선택했을때, 조건에 맞는 rentalHome return
         return rentalHome.themes.some(theme => themes.includes(theme.themeName)) && rentalHome.price >= minPrice && rentalHome.price <= maxPrice;
       }
-      if( themes == null ){
-        return rentalHome.price >= minPrice && rentalHome.price <= maxPrice;
+      if( themes == null ){ // theme를 선택 안했을때 해당 조건에 맞는 rentalHome return
+        return rentalHome.price >= minPrice && rentalHome.price <= maxPrice; 
       }
     });
     
@@ -306,6 +312,31 @@
 
     container.scrollLeft += offset;
   }
+
+  function bindSliderEvents(listItem){
+    let $slideImages = listItem.find('.slide-image');
+    let currentIndex = 0;
+
+    function showSlide(index){
+      $slideImages.hide().eq(index).show();
+    }
+
+    function showNextSlide(){
+      currentIndex = (currentIndex + 1) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    function showPreviousSlide(){
+      currentIndex = (currentIndex -1 + $slideImages.length) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    listItem.find('.next-button').off('click').on('click', showNextSlide);
+    listItem.find('.prev-button').off('click').on('click', showPreviousSlide);
+
+    showSlide(currentIndex);
+  }
+
   // 각 숙소의 이미지 슬라이더 처리
   $('.listing-item').each(function () {
     const $slideImages = $(this).find('.slide-image');
@@ -331,11 +362,12 @@
     showSlide(currentIndex);
   });
 
+  // 숙소 목록 재할당
  function updateRentalHomeList(newRentalHomeList){
-  let listContainer = $('.listing-container');
+  let listContainer = $('.listing-container'); // 가장 바깥 html 태그의 class 아이디
   listContainer.empty();
 
-  newRentalHomeList.forEach(function(rentalHome){
+  newRentalHomeList.forEach(function(rentalHome){ // html을 재할당된 숙소 목록으로 재작성
     let listItem = $( '<div class="listing-item">' );
     let sliderDiv = $( '<div class="listing-slider">' );
     
@@ -345,8 +377,8 @@
       .attr( 'alt', '숙소이미지' );
       sliderDiv.append(image);
     });
-    let imageLeftButton = $('<button class="slide-button prev-button slick-prev"></button>');
-    let imageRightButton = $('<button class="slide-button next-button slick-next"></button>');
+    let imageLeftButton = $('<button class="slide-button prev-button"></button>');
+    let imageRightButton = $('<button class="slide-button next-button"></button>');
     let nameSpan = $('<span>').text(rentalHome.name);
     let priceSpan = $('<span>').text(rentalHome.price);
     
@@ -356,23 +388,31 @@
     sliderDiv.append(priceSpan);
     listItem.append(sliderDiv);
 
-    listContainer.append(listItem);
+    listContainer.append(listItem); // html 작성한것 적용
+    
+    // 사진 슬라이더 이벤트 재할당
+    bindSliderEvents(listItem);
   });
  }
 
  function handleNewRentalHomeList(newRentalHomeList){
   updateRentalHomeList(newRentalHomeList);
  }
- $.ajax({
-    url: '/theme',
-    type: 'GET',
-    success : function(response){
-      handleNewRentalHomeList(response);
-    },
-    error: function(xhr, status, error){
-      console.error(error);
-    }
- })
+
+ $(document).ready(function(){
+  $('.theme-icon-container img').click(function(){
+    $.ajax({
+      url: '/theme',
+      type: 'GET',
+      success : function(response){
+        handleNewRentalHomeList(response);
+      },
+      error: function(xhr, status, error){
+        console.error(error);
+      }
+    });
+  });
+ });
 
 </script>
 </body>
