@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<div data-th-replace="header :: header">헤더</div>
-<div data-th-replace="sidebar :: sidebar">사이드바</div>
 <h2>신고 보기</h2>
 <!--게시글, 댓글, 답글 신고-->
 <form data-th-if="${!#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post"

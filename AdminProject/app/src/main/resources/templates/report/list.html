@@ -1,39 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" data-th-href="@{/css/list.css}" href="../../static/css/list.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      data-th-href="@{/css/list.css}"
+      href="../../static/css/list.css"
+    />
+  </head>
 
-<body>
-<div data-th-replace="header :: header">헤더</div>
-<div data-th-replace="sidebar :: sidebar">사이드바</div>
-<h3 data-th-text="${menuName}">메뉴 이름</h3>
-<table border="1">
-    <thead>
-    <tr>
-        <th>No</th>
-        <th>신고유형</th>
-        <th>처리여부</th>
-        <th>접수일</th>
-        <th>상세 보기</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr data-th-each="report : ${list}" data-th-object="${report}">
-        <td data-th-text="*{reportNo}">1</td>
-        <td ><a data-th-href="@{/report/detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}" data-th-text="*{categoryName}">신고 유형</a></td>
-        <td data-th-text="*{stateStr}">처리 여부</td>
-        <td data-th-text="*{reportDate}">접수일</td>
-        <td><button class="view">view</button></td>
-    </tr>
-    </tbody>
-    <tfoot>
-    <td colspan="5" class="tablefoot"></td>
-    </tfoot>
-</table>
-<div data-th-replace="footer :: footer">풋터</div>
+  <body>
+    <div data-th-replace="header :: header">헤더</div>
+    <div data-th-replace="sidebar :: sidebar">사이드바</div>
+    <h3 data-th-text="${menuName}">메뉴 이름</h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>신고유형</th>
+          <th>처리여부</th>
+          <th>접수일</th>
+          <th>상세 보기</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-th-each="report : ${list}" data-th-object="${report}">
+          <td data-th-text="*{reportNo}">1</td>
+          <td data-th-text="*{categoryName}">신고 유형</td>
+          <td data-th-text="*{stateStr}">처리 여부</td>
+          <td data-th-text="*{reportDate}">접수일</td>
+          <td>
+            <button
+              data-th-href="@{detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}"
+              id="viewButton"
+              class="view"
+            >
+              view
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <td colspan="5" class="tablefoot"></td>
+      </tfoot>
+    </table>
+    <div data-th-replace="footer :: footer">풋터</div>
 
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent">
+        <button type="button" id="closeBtn">닫기</button>
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+      </div>
+    </div>
 
-</body>
+    <script>
+      let button = document.getElementById("viewButton");
+
+      let modal = document.getElementById("detailModal");
+
+      button.addEventListener("click", function () {
+        // AJAX를 사용하여 서버에 HTML 조각 요청
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById("modalContent").innerHTML =
+              xhr.responseText;
+            modal.style.display = "block";
+          }
+        };
+        let url = button.getAttribute("href");
+        console.log(url);
+        xhr.open("GET", url, true); // 서버에 요청 보내는 URL
+        xhr.send();
+      });
+    
+      let closeButton = document.getElementById("closeBtn");
+      closeButton.addEventListener("click", function() {
+        modal.style.display = "none";
+      });
+    </script>
+  </body>
 </html>
