@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/css/list.css}" href="../../static/css/list.css">
 </head>
 
 <body>
@@ -33,54 +34,6 @@
 </table>
 <div data-th-replace="footer :: footer">풋터</div>
 
-<style>
-
-    table {
-    width: 700px;
-    text-align: center;
-    border: 1px solid #fff;
-    border-spacing: 1px;
-    font-family: 'Cairo', sans-serif;
-  margin: auto;
-}
-
-
-
-table td {
-    padding: 10px;
-    background-color: #eee;
-}
-
-table th {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-}
-
-
-
-.view,
-.delete {
-    border: none;
-    padding: 5px 10px;
-    color: #fff;
-    font-weight: bold;
-}
-
-.view {
-    background-color: #03A9F4;
-}
-
-.delete {
-    background-color: #E91E63;
-}
-
-.tablefoot {
-    padding: 0;
-    border-bottom: 3px solid #009688;
-}
-
-</style>
 
 </body>
 </html>

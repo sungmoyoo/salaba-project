@@ -1,50 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-<div data-th-replace="header :: header">헤더</div>
-<div data-th-replace="sidebar :: sidebar">사이드바</div>
-<h3 data-th-text="${menuName}">메뉴 이름</h3>
-<form data-th-action='@{/user/list/search}' method="post">
-    <input name="menu" type="hidden" data-th-value="${menu}">
-    <div>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" data-th-href="@{/css/list.css}" href="../../static/css/list.css">
+    <link >
+  </head>
+  <body>
+    <div data-th-replace="header :: header">헤더</div>
+    <div data-th-replace="sidebar :: sidebar">사이드바</div>
+    <h3 data-th-text="${menuName}">메뉴 이름</h3>
+    <form data-th-action="@{/user/list/search}" method="post">
+      <input name="menu" type="hidden" data-th-value="${menu}" />
+      <div>
         <select name="filter">
-            <option value="0">이름</option>
-            <option value="1">이메일</option>
+          <option value="0">이름</option>
+          <option value="1">이메일</option>
         </select>
-        <input name='keyword' type='text' placeholder='검색'>
+        <input name="keyword" type="text" placeholder="검색" />
         <button>검색</button>
-    </div>
-</form>
-<table border="1">
-    <thead>
-    <tr>
-        <th>No</th>
-        <th>이름</th>
-        <th>닉네임</th>
-        <th>이메일</th>
-        <th>연락처</th>
-        <th>가입일</th>
-        <th data-th-if="${#strings.equals(menuName, '회원 목록')}">상태</th>
-        <th data-th-if="${#strings.equals(menuName, '호스트 목록')}">등록 숙소 수</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr data-th-each="member : ${memberList}" data-th-object="${member}">
-        <td data-th-text="*{memberNo}">1</td>
-        <td><a data-th-text="*{name}" data-th-href="@{/user/detail(mno=*{memberNo},menu=${menu})}" href="detail">이름</a></td>
-        <td data-th-text="*{nickname}">닉네임</td>
-        <td data-th-text="*{email}">이메일</td>
-        <td data-th-text="*{tel}">연락처</td>
-        <td data-th-text="*{joinDate}">가입일</td>
-        <td data-th-if="${#strings.equals(menuName, '회원 목록')}" data-th-text="*{stateStr}">상태</td>
-        <td data-th-if="${#strings.equals(menuName, '호스트 목록')}" data-th-text="*{rentalCount}">등록 숙소 수</td>
-    </tr>
-    </tbody>
-</table>
-<div data-th-replace="footer :: footer">풋터</div>
-
-</body>
+      </div>
+    </form>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>이름</th>
+          <th>닉네임</th>
+          <th>이메일</th>
+          <th>연락처</th>
+          <th>가입일</th>
+          <th data-th-if="${#strings.equals(menuName, '회원 목록')}">상태</th>
+          <th data-th-if="${#strings.equals(menuName, '호스트 목록')}">
+            등록 숙소 수
+          </th>
+          <th>상세 보기</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-th-each="member : ${memberList}" data-th-object="${member}">
+          <td data-th-text="*{memberNo}">1</td>
+          <td>
+            <a
+              data-th-text="*{name}"
+              data-th-href="@{/user/detail(mno=*{memberNo},menu=${menu})}"
+              href="detail"
+              >이름</a
+            >
+          </td>
+          <td data-th-text="*{nickname}">닉네임</td>
+          <td data-th-text="*{email}">이메일</td>
+          <td data-th-text="*{tel}">연락처</td>
+          <td data-th-text="*{joinDate}">가입일</td>
+          <td
+            data-th-if="${#strings.equals(menuName, '회원 목록')}"
+            data-th-text="*{stateStr}"
+          >
+            상태
+          </td>
+          <td
+            data-th-if="${#strings.equals(menuName, '호스트 목록')}"
+            data-th-text="*{rentalCount}"
+          >
+            등록 숙소 수
+          </td>
+          <td><button class="view">view</button></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <td colspan="5" class="tablefoot"></td>
+      </tfoot>
+    </table>
+    <div data-th-replace="footer :: footer">풋터</div>
+  </body>
 </html>
