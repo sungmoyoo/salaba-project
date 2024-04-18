@@ -1,23 +1,25 @@
 package salaba.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.HostService;
 import salaba.service.StorageService;
@@ -33,7 +35,9 @@ import salaba.vo.rental_home.Theme;
 @Controller
 @RequestMapping("/host")
 @SessionAttributes("rentalHome")
+
 public class HostController {
+
   private static final Log log = LogFactory.getLog(HostController.class);
   private final HostService hostService;
   private final StorageService storageService;
@@ -68,7 +72,7 @@ public class HostController {
 
   // 호스트 숙소 테마 폼
   @GetMapping("themeForm")
-  public void themeForm(Model model){
+  public void themeForm(Model model) {
     model.addAttribute("themeList", hostService.themeList());
   }
 
@@ -90,7 +94,7 @@ public class HostController {
 
   // 호스트 숙소 시설 폼
   @GetMapping("rentalHomeFacilityForm")
-  public void rentalHomeFacilityForm(Model model){
+  public void rentalHomeFacilityForm(Model model) {
     model.addAttribute("facilityList", hostService.facilityList());
   }
 
@@ -102,10 +106,11 @@ public class HostController {
       @RequestParam List<Integer> facilityCount,
       @RequestParam List<Integer> facilityNos,
       @RequestParam List<String> facilityNames
-      ) {
+  ) {
     RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
 
-    rentalHome.setRentalHomeFacilities(facilityTransform(facilityCount, facilityNos, facilityNames));
+    rentalHome.setRentalHomeFacilities(
+        facilityTransform(facilityCount, facilityNos, facilityNames));
 
     rentalHome.setCapacity(capacity);
 
@@ -148,7 +153,8 @@ public class HostController {
 
   // 숙소 상세(수정)
   @GetMapping("rentalHomeView")
-  public void rentalHomeView(int rentalHomeNo, Model model, SessionStatus sessionStatus) throws Exception {
+  public void rentalHomeView(int rentalHomeNo, Model model, SessionStatus sessionStatus)
+      throws Exception {
     RentalHome rentalHome = hostService.getRentalHome(rentalHomeNo);
 
     model.addAttribute("themeList", hostService.themeList());
@@ -173,12 +179,11 @@ public class HostController {
       @RequestParam List<Integer> facilityNos,
       @RequestParam List<String> facilityNames,
       SessionStatus sessionStatus
-      ) throws Exception{
+  ) throws Exception {
 
     if (rentalHome.getRentalHomePhotos() == null) {
       System.out.println("true");
     }
-
 
     // 모든 숙소 정보 vo 형태에 맞게 변환 후 set
     if (photos != null) { // 추가된 사진이 있을 때만
@@ -191,7 +196,8 @@ public class HostController {
     }
 
     rentalHome.setThemes(themeTransform(themeNos, themeNames, type));
-    rentalHome.setRentalHomeFacilities(facilityTransform(facilityCount, facilityNos, facilityNames));
+    rentalHome.setRentalHomeFacilities(
+        facilityTransform(facilityCount, facilityNos, facilityNames));
     rentalHome.setCapacity(capacity);
 
     // 숙소 업데이트
@@ -205,7 +211,51 @@ public class HostController {
   @GetMapping("photoDelete")
   public String photoDelete(int photoNo, int rentalHomeNo) {
     hostService.deleteRentalHomePhoto(photoNo);
-    return  "redirect:rentalHomeView?rentalHomeNo=" + rentalHomeNo;
+    return "redirect:rentalHomeView?rentalHomeNo=" + rentalHomeNo;
+  }
+
+  @GetMapping("incomeList")
+  public void incomeList(Model model, int hostNo, Date startDateInput, Date endDateInput) {
+
+    List<HostReservation> reservationList = hostService.reservationList(hostNo);
+    List<RentalHome> rentalHomeList = hostService.rentalHomeList(hostNo);
+    HashMap<Integer, Integer> userCountMap = new HashMap<>();
+
+    System.out.println();
+    LocalDate startDate;
+    LocalDate endDate;
+
+    if (startDateInput == null || endDateInput == null) {
+      endDate = LocalDate.now();
+      startDate = endDate.minusMonths(1);
+    } else {
+      startDate = startDateInput.toLocalDate();
+      endDate = endDateInput.toLocalDate();
+    }
+
+    int totalIncome = 0;
+    int filteredIncome = 0;
+
+    for (HostReservation reservation : reservationList) {
+
+      totalIncome += reservation.getAmount();
+
+      if ((endDate.isAfter(reservation.getPaymentDate().toLocalDate()) ||
+          endDate.isEqual(reservation.getPaymentDate().toLocalDate())) &&
+          startDate.isBefore(reservation.getPaymentDate().toLocalDate())) {
+
+        filteredIncome += reservation.getAmount();
+
+        userCountMap.put(reservation.getRentalHomeNo(),
+            userCountMap.getOrDefault(reservation.getRentalHomeNo(), 0) + 1);
+      }
+    }
+    model.addAttribute("userCount", userCountMap);
+    model.addAttribute("rentalHomeList", rentalHomeList);
+    model.addAttribute("filteredIncome", filteredIncome);
+    model.addAttribute("totalIncome", totalIncome);
+    model.addAttribute("showStartDate", startDate);
+    model.addAttribute("showEndDate", endDate);
   }
 
   // 예약 내역 리스트
@@ -223,20 +273,19 @@ public class HostController {
   }
 
 
-
-
   // 숙소 정보 저장하기 위해 form으로부터 받은 정보들 변환하는 메서드들
-  private ArrayList<RentalHomePhoto> photoTransform (
+  private ArrayList<RentalHomePhoto> photoTransform(
       MultipartFile[] photos,
       String[] photoExplanations,
-      int startOrder) throws Exception{
+      int startOrder) throws Exception {
     ArrayList<RentalHomePhoto> files = new ArrayList<>();
-    int order = startOrder+1;  // 사진 순서
+    int order = startOrder + 1;  // 사진 순서
     for (MultipartFile file : photos) {
       if (file.getSize() == 0) {
         continue;
       }
-      String filename = storageService.upload(this.bucketName, this.uploadDir, file); // uuid_file_name
+      String filename = storageService.upload(this.bucketName, this.uploadDir,
+          file); // uuid_file_name
       files.add(
           RentalHomePhoto.builder()
               .uuidPhotoName(filename)
@@ -255,7 +304,7 @@ public class HostController {
     return files;
   }
 
-  private List<Theme> themeTransform (
+  private List<Theme> themeTransform(
       List<Integer> themeNos,
       List<String> themeNames,
       String type) {
@@ -279,7 +328,7 @@ public class HostController {
     return themes;
   }
 
-  private List<RentalHomeFacility> facilityTransform (
+  private List<RentalHomeFacility> facilityTransform(
       List<Integer> facilityCount,
       List<Integer> facilityNos,
       List<String> facilityNames) {
@@ -296,7 +345,5 @@ public class HostController {
     return facilities;
   }
 
-  private void adslkflaksdjg (MultipartFile[] files) {
 
-  }
 }

@@ -1,7 +1,7 @@
 package salaba.vo.host;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import lombok.Data;
 
 @Data
@@ -18,4 +18,6 @@ public class HostReservation implements Serializable { // 호스트 예약내역
   private Date endDate; // 종료일
   private int state; // 상태
   private Date paymentDate; // 결제일
+  private int amount; // 결제금액
+  private int numberOfPeople; // 이용 인원수
 }

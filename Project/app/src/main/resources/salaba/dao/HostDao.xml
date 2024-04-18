@@ -15,6 +15,8 @@
     <result column="end_date" property="endDate"/>
     <result column="state" property="state"/>
     <result column="payment_date" property="paymentDate"/>
+    <result column="amount" property="amount"/>
+    <result column="number_of_people" property="numberOfPeople"/>
   </resultMap>
 
   <resultMap id="RentalHomeMap" type="RentalHome">
@@ -131,7 +133,8 @@
       capacity,
       state,
       hosting_start_date,
-      hosting_end_date
+      hosting_end_date,
+      registe_date
     from
       rental_home
     where
@@ -193,7 +196,9 @@
     rv.start_date,
     rv.end_date,
     rv.state,
-    p.payment_date
+    rv.number_of_people,
+    p.payment_date,
+    p.amount
     from
     member m
     inner join
@@ -203,9 +208,7 @@
     inner join
     payment p on rv.reservation_no = p.reservation_no
     where
-    rent.member_no = #{value}
-    order by
-    rv.start_date asc;
+    rent.member_no = #{value};
   </select>
 
   <delete id="deleteRentalHome" parameterType="int">

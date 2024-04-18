@@ -71,13 +71,9 @@ public class DefaultHostService implements HostService {
   public int rentalHomeUpdate(RentalHome rentalHome) {
     int count = hostDao.updateRentalHome(rentalHome);
 
-
-
     if (rentalHome.getRentalHomePhotos() != null) {
-//      photoDao.addPhoto(rentalHome);
-      System.out.println("너 뭐야:" +rentalHome.getRentalHomePhotos().get(0));
+      photoDao.addPhoto(rentalHome);
     }
-
 
     themeDao.deleteAllTheme(rentalHome.getRentalHomeNo());
     themeDao.addTheme(rentalHome);
