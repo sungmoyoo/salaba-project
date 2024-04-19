@@ -129,6 +129,8 @@
       inner join rental_home_theme t3 on t3.rental_home_no = t1.rental_home_no
       inner join theme t4 on t4.theme_no = t3.theme_no
       inner join rental_home_detail t5 on t5.rental_home_no = t1.rental_home_no
+    where
+      t1.state = '1'
     order by
       like_count desc
   </select>
@@ -180,7 +182,8 @@
         <foreach collection="list" item="item" separator="OR">
           #{item.themeName}
         </foreach>
-      )
+      ) and
+      t1.state = '1'
     order by
       like_count desc
   </select>
@@ -215,7 +218,8 @@
         theme
       where
         theme_name = #{themeName}
-      )
+      ) and
+      t1.state = '1'
     order by
       like_count desc
   </select>
@@ -259,6 +263,7 @@
       inner join rental_home_detail t5 on t5.rental_home_no = t1.rental_home_no
       inner join region t6 on t6.region_no = t1.region_no
     where
+      t1.state = '1' and
       (t6.region_no) in (
          select
            region_no

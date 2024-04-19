@@ -6,10 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
   <script th:inline="javascript">
+    const rentalHomeModel = /*[[${rentalHome}]]*/ null;
     const sessionMemberNo = /*[[${session.memberNo}]]*/ null;
     const rentalHomeNoModel = /*[[${rentalHome.rentalHomeNo}]]*/ null;
     const rentalHomeReviewModel = /*[[${rentalHomeReview}]]*/ null;
   </script>
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: "AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk",
+      // Add other bootstrap parameters as needed, using camel case.
+      // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
+    });
+  </script>
+  <style>
+    #map{
+      height: 500px;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
 <main>
@@ -56,6 +70,11 @@
     <div data-th-each="facility : ${rentalHomeFacility}" data-th-object="${rentalHomeFacility}">
       <h6 data-th-text="${facility.facilityName}">시설 이름</h6>
       <h6 data-th-text="${facility.facilityCount}">시설 갯수</h6>
+    </div>
+  </section>
+  <section>
+    <div id="map">
+
     </div>
   </section>
   <section>
@@ -176,6 +195,30 @@ window.addEventListener('DOMContentLoaded', function() {
     document.getElementById('showMoreReview').style.display = 'none'; // 버튼 숨기기
   }
 });
+
+async function initMap(){
+  const rentalHome = rentalHomeModel;
+  const position = { lat:Number(rentalHome.lat) , lng:Number(rentalHome.lon) };
+  
+  console.log( typeof rentalHome.lat );
+  console.log( typeof rentalHome.lon );
+  
+  const{ Map } = await google.maps.importLibrary("maps");
+  const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+  
+  let map = new Map(document.getElementById("map"), {
+    zoom : 16,
+    center: position,
+    mapId: '470e45162ba863f'
+  });
+  
+  const marker = new google.maps.marker.AdvancedMarkerElement({
+    map: map,
+    position: position,
+  });
+}
+
+initMap();
 
 </script>
 

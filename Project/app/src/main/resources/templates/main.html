@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -119,23 +120,6 @@
       right: 10px;
     }
 
-    /* .slick-prev:before,
-    .slick-next:before {
-      content: '<';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .slick-next:before {
-      content: '>';
-      left: initial;
-      right: 50%;
-      transform: translate(50%, -50%);
-    }
-     */
-     
     /* 팝업 스타일 */
     .popup {
       display: none;
@@ -216,6 +200,8 @@
       </div>
     </div>
   </section>
+  <button id="mapButton">지도로 보기</button>
+  <button id="listButton">목록으로 보기</button>
 </main>
 <div id="filterPopup" class="popup">
   <div class="popup-content">
@@ -260,8 +246,87 @@
 <script th:inline="javascript">
   const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
 </script>
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=marker&v=beta"
+      defer>
+</script>
 <script>
-  
+  const mapButton = document.getElementById('mapButton');
+  const listButton = document.getElementById('listButton');
+  const listContainer = document.querySelector('listing-container');
+
+  // 지도로 보기 버튼
+  mapButton.addEventListener('click', function(){
+    mapContainer.style.display = 'block';
+    listContainer.style.display = 'none';
+    initMap();
+  });
+
+  // 목록 보기 버튼
+  listButton.addEventListener('click', function(){
+    mapContainer.style.display = 'none';
+    listContainer.style.display = 'block';
+  });
+
+  let rentalHomeProp = [];
+
+  async function initMap(){
+    let rentalHome = rentalHomeList;
+    
+    let priceTag = document.createElement("div");
+    priceTag.className = "price-tag"
+
+    rentalHomeList.forEach(rentalHome =>{
+      let photos = [];
+      rentalHome.rentalHomePhotos.forEach(photo =>{
+        photos.push( photo.uuidPhotoName );
+      });
+      rentalHomeProp.push( { 
+        photo: photos,
+        name: rentalHome.name,
+        price: rentalHome.price,
+        position: {lat:Number(rentalHome.lat) , lng:Number(rentalHome.lon)},
+       });
+    });
+
+    const{ Map } = await google.maps.importLibrary("maps");
+    const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+    
+    let map = new Map(document.getElementById("map"), {
+      zoom : 10,
+      center: {lat:rentalHomeProp[0].position.lat, lng:rentalHomeProp[0].position.lng},
+      mapId: '470e45162ba863f'
+    });
+
+    for( const property of rentalHomeProp ){
+      const advancedMarkerView = new google.maps.marker.advancedMarkerView({
+        map,
+        content: buildContent(property),
+        position:property.position,
+        title:property.name,
+      });
+
+    }
+  }
+
+  function buildContent(property){
+    const content = document.createElement("div");
+
+    content.classList.add();
+    content.innerHTML = '
+      <div>
+        <div class="mapImage-div">
+          <img src=''+${property.photo} />
+        </div>
+        <div>
+          <span>${property.name}</span>
+          <span>${property.price}</span>
+        </div>
+      </div>
+    ';
+    return content;
+  }
+
   function openFilterPopup(){
     document.getElementById("filterPopup").style.display = "block";
   }
