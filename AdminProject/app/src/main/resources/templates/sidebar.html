@@ -7,11 +7,10 @@
   <body>
     <sidebar data-th-fragment="sidebar">
       <div id="tabBar">
-        <p>신고관리</p>
+        <h3 class="subTitle">신고관리</h3>
         <ul>
           <li>
-            <a data-th-href="@{/report/list(menu=1)}" href="list"
-              >숙소 신고 내역</a
+            <a data-th-href="@{/report/list(menu=1)}" href="list">숙소 신고 내역</a
             >
           </li>
           <li>
@@ -26,7 +25,7 @@
           </li>
         </ul>
 
-        <p>회원 관리</p>
+        <h3 class="subTitle">회원 관리</h3>
         <ul>
           <li>
             <a data-th-href="@{/user/list(menu=1)}" href="list">회원 목록</a>
@@ -35,7 +34,7 @@
             <a data-th-href="@{/user/list(menu=2)}" href="list">호스트 목록</a>
           </li>
         </ul>
-        <p>숙소 관리</p>
+        <h3 class="subTitle">숙소 관리</h3>
         <ul>
           <li>
             <a data-th-href="@{/rental/list(menu=1)}" href="list"
@@ -49,7 +48,7 @@
           </li>
         </ul>
 
-        <p>문의 관리</p>
+        <h3 class="subTitle">문의 관리</h3>
         <ul>
           <li><a data-th-href="@{/qna/list}" href="qna">1:1 문의 내역</a></li>
         </ul>
@@ -62,6 +61,12 @@
           left: 20px; /* 왼쪽 여백 */
           top: 50%;
           transform: translateY(-50%);
+          border-radius: 10px;
+        }
+
+        .subTitle {
+          color: grey;
+          font-weight: normal;
         }
       </style>
     </sidebar>
