@@ -21,21 +21,24 @@
       <tbody>
         <tr data-th-each="qna : ${qnaList}" data-th-object="${qna}">
           <td data-th-text="*{questionNo}">1</td>
-          <td>
-            <a
-              data-th-text="*{title}"
-              data-th-href="@{detail(qno=*{questionNo})}"
-              >제목</a>
-          </td>
+          <td data-th-text="*{title}">제목</td>
           <td data-th-text="*{stateStr}">진행 상태</td>
           <td data-th-text="*{regDate}">접수일</td>
-          <td><button class="view">view</button></td>
+          <td><button data-th-href="@{detail(qno=*{questionNo})}" class="view">view</button></td>
         </tr>
       </tbody>
       <tfoot>
-        <td colspan="5" class="tablefoot"></td>
+        <td colspan="10" class="tablefoot"></td>
         </tfoot>
     </table>
     <div data-th-replace="footer :: footer">풋터</div>
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent">
+
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+      </div>
+      <button type="button" id="closeBtn">✕</button>
+    </div>
+    <script data-th-src="@{/js/list.js}"></script>
   </body>
 </html>

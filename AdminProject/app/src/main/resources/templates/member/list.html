@@ -39,37 +39,36 @@
       <tbody>
         <tr data-th-each="member : ${memberList}" data-th-object="${member}">
           <td data-th-text="*{memberNo}">1</td>
-          <td>
-            <a
-              data-th-text="*{name}"
-              data-th-href="@{/user/detail(mno=*{memberNo},menu=${menu})}"
-              href="detail"
-              >이름</a
-            >
-          </td>
+          <td data-th-text="*{name}">이름</td>
           <td data-th-text="*{nickname}">닉네임</td>
           <td data-th-text="*{email}">이메일</td>
           <td data-th-text="*{tel}">연락처</td>
           <td data-th-text="*{joinDate}">가입일</td>
           <td
             data-th-if="${#strings.equals(menuName, '회원 목록')}"
-            data-th-text="*{stateStr}"
-          >
+            data-th-text="*{stateStr}">
             상태
           </td>
           <td
             data-th-if="${#strings.equals(menuName, '호스트 목록')}"
-            data-th-text="*{rentalCount}"
-          >
+            data-th-text="*{rentalCount}">
             등록 숙소 수
           </td>
-          <td><button class="view">view</button></td>
+          <td><button data-th-href="@{/user/detail(mno=*{memberNo},menu=${menu})}" class="view">view</button></td>
         </tr>
       </tbody>
       <tfoot>
-        <td colspan="5" class="tablefoot"></td>
+        <td colspan="10" class="tablefoot"></td>
       </tfoot>
     </table>
     <div data-th-replace="footer :: footer">풋터</div>
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent">
+
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+      </div>
+      <button type="button" id="closeBtn">✕</button>
+    </div>
+    <script data-th-src="@{/js/list.js}"></script>
   </body>
 </html>

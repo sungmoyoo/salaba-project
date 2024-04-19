@@ -6,6 +6,7 @@
 <body>
 <h2>신고 보기</h2>
 <!--게시글, 댓글, 답글 신고-->
+<div class="content">
 <form data-th-if="${!#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post"
       data-th-object="${report}">
     <h4 data-th-text="${name}">신고 대상</h4>
@@ -55,19 +56,8 @@
         </select>
         <button onclick="submitForm()">신고 처리</button>
     </div>
+
 </form>
-<script>
-    function submitForm() {
-        var selectElement = document.getElementById("result");
-        var selectedValue = selectElement.options[selectElement.selectedIndex].value;
-
-        // 선택된 값 확인
-        console.log("선택된 값:", selectedValue);
-
-        // 폼 전송
-        document.getElementById("reportForm").submit();
-    }
-</script>
 
 <!--숙소 신고-->
 <form data-th-if="${#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post"
@@ -119,5 +109,20 @@
         <button>신고 처리</button>
     </div>
 </form>
+</div>
+
+<script>
+    function submitForm() {
+        var selectElement = document.getElementById("result");
+        var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+
+        // 선택된 값 확인
+        console.log("선택된 값:", selectedValue);
+
+        // 폼 전송
+        document.getElementById("reportForm").submit();
+    }
+</script>
+
 </body>
 </html>

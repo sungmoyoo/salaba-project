@@ -44,7 +44,7 @@ table th {
 }
 
 .modal {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -54,27 +54,37 @@ table th {
 }
 
 .modal .modal-content {
-    /*팝업*/
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 40%;
-    height: 70%;
+    width: 40vw;
+    height: 70vh;
     transform: translate(-50%, -50%);
     padding: 20px;
     background: #ffffff;
     border-radius: 20px;
+    overflow-y: auto;
+
+}
+
+.modal .modal-content .content {
     text-align: center;
 }
 
-#closeBtn {
-    display: block;
-    padding: 10px 20px;
-    background-color: rgb(116, 0, 0);
+.modal #closeBtn {
+    position: absolute;
+    top: 11%;
+    left: 69%;
+    height: 50px;
+    width: 50px;
+    padding: 10px;
+    margin-top: 0px;
+    margin-right: 0px;
+    background-color: black;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     color: #fff;
     cursor: pointer;
-    transition: box-shadow 0.2s;
-    
+    font-weight: bolder;
+    font-size: 30px;
 }

@@ -24,19 +24,26 @@
     <tbody>
     <tr data-th-each="rental : ${rentalList}" data-th-object="${rental}">
         <td data-th-text="*{rentalNo}">1</td>
-        <td><a data-th-text="*{name}" data-th-href="@{detail(menu=${menu},rno=*{rentalNo})}">이름</a></td>
+        <td data-th-text="*{name}">이름</td>
         <td data-th-text="*{host.name}">호스트명</td>
         <td data-th-text="*{regDate}">등록일</td>
         <td data-th-text="*{stateStr}">상태</td>
-        <td><button class="view">view</button></td>
+        <td><button data-th-href="@{detail(menu=${menu},rno=*{rentalNo})}" class="view">view</button></td>
     </tr>
     </tbody>
     <tfoot>
-    <td colspan="5" class="tablefoot"></td>
+    <td colspan="10" class="tablefoot"></td>
     </tfoot>
 </table>
 <div data-th-replace="footer :: footer">풋터</div>
+<div id="detailModal" class="modal">
+    <div class="modal-content" id="modalContent">
 
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+    </div>
+    <button type="button" id="closeBtn">✕</button>
+</div>
+<script data-th-src="@{/js/list.js}"></script>
 </body>
 </html>
 

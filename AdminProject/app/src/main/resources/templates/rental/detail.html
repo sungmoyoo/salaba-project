@@ -5,10 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<div data-th-replace="header :: header">헤더</div>
-<div data-th-replace="sidebar :: sidebar">사이드바</div>
+<h4>숙소 사진</h4>
+<div class="content">
 <form data-th-action="@{update}" method="post" data-th-object="${rental}">
-    <h4>숙소 사진</h4>
+    
     <div data-th-each="photo : ${rental.photos}" data-th-object="${photo}">
         <img data-th-src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + *{uuidName}(type=f,w=100,h=100,ttype=jpg)}">
         <p data-th-text="*{explanation}"></p>
@@ -64,7 +64,7 @@
         <button onclick="approveOrReject('1')">등록 승인</button>
         <button onclick="approveOrReject('4')">등록 거부</button>
     </div>
-
+</div>
 </form>
 
 
