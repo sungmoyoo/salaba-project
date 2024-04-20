@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" data-th-href="@{/css/detail.css}" href="../../static/css/detail.css">
 </head>
 <body>
 
@@ -84,66 +85,6 @@
 </div>
 
 
-
-<style>
-
-    .rentalImgs {
-        display: flex;
-        overflow-x: auto;
-
-    }
-
-    .rentalImgs  .rentalImg {
-        width: 250px;
-        height: 200px;
-        border-radius: 10px;
-        margin-right: 20px;
-    }
-
-
-    .partTitle {
-        position: relative;
-        left: 0px;
-        margin-left: 0px;
-        text-align: left;
-    }
-
-    .content {
-
-    }
-
-    .infoBox {
-        padding-top: 30px;
-        display: flex;
-        flex-direction: column;
-
-    }
-
-    /* .infoBox span {
-        display: inline-block;
-        position: absolute;
-        width: auto;
-        padding-bottom: 40px;
-
-    } */
-
-    .infoBox .info {
-        display: flex;
-        justify-content: space-between;
-        margin-left: 15%;
-        width : 70%;
-        height: 50px;
-    }
-
-    .infoBox .hr {
-        display: block;
-        /* margin-top: 200px; */
-        margin-left: 15%;
-        width : 70%;
-        height: 1px;
-        background-color: gainsboro;
-    }
-</style>
 
 <script>
     function approveOrReject(value) {
