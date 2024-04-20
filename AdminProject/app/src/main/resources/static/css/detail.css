@@ -47,3 +47,34 @@
         height: 1px;
         background-color: gainsboro;
     }
+
+    .dealSelect{
+        width: 200px;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 10px;
+        padding: 10px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        margin-top: 80px;
+    }
+    
+    .dealSelect:focus{
+        border: 1px solid #3377d6;
+        box-sizing: border-box;
+        border-radius: 10px;
+        outline: 3px solid #F8E4FF;
+        border-radius: 10px;
+    }
+
+    .dealBtn {
+        padding: 10px;
+        background-color: #3377d6;
+        color: white;
+        border: 0;
+        border-radius: 5px;
+        margin-top: 80px;
+    }

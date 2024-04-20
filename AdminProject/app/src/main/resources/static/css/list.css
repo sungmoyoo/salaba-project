@@ -78,7 +78,9 @@ table th {
 }
 
 .view {
-    background-color: #03A9F4;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #3377d6;
 }
 
 .delete {
@@ -104,7 +106,7 @@ table th {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 40vw;
+    width: 60vw;
     height: 70vh;
     transform: translate(-50%, -50%);
     padding: 20px;
@@ -120,7 +122,7 @@ table th {
 .modal #closeBtn {
     position: absolute;
     top: 11%;
-    left: 69%;
+    right: 18%;
     height: 50px;
     width: 50px;
     padding: 10px;
