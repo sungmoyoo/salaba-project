@@ -1,0 +1,49 @@
+
+    .rentalImgs {
+        display: flex;
+        overflow-x: auto;
+
+    }
+
+    .rentalImgs  .rentalImg {
+        width: 250px;
+        height: 200px;
+        border-radius: 10px;
+        margin-right: 20px;
+    }
+
+
+    .partTitle {
+        position: relative;
+        left: 0px;
+        margin-left: 0px;
+        text-align: left;
+    }
+
+    .content {
+
+    }
+
+    .infoBox {
+        padding-top: 30px;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .infoBox .info {
+        display: flex;
+        justify-content: space-between;
+        margin-left: 15%;
+        width : 70%;
+        height: 50px;
+    }
+
+    .infoBox .hr {
+        display: block;
+        /* margin-top: 200px; */
+        margin-left: 15%;
+        width : 70%;
+        height: 1px;
+        background-color: gainsboro;
+    }

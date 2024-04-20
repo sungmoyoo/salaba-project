@@ -13,45 +13,46 @@
   <body>
     <div data-th-replace="header :: header">헤더</div>
     <div data-th-replace="sidebar :: sidebar">사이드바</div>
-    <h3 data-th-text="${menuName}">메뉴 이름</h3>
-    <table border="1">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>신고유형</th>
-          <th>처리여부</th>
-          <th>접수일</th>
-          <th>상세 보기</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr data-th-each="report : ${list}" data-th-object="${report}">
-          <td data-th-text="*{reportNo}">1</td>
-          <td data-th-text="*{categoryName}">신고 유형</td>
-          <td data-th-text="*{stateStr}">처리 여부</td>
-          <td data-th-text="*{reportDate}">접수일</td>
-          <td>
-            <button
-              data-th-href="@{detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}"
-              class="view"
-            >
-              view
-            </button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <td colspan="10" class="tablefoot"></td>
-      </tfoot>
-    </table>
+    <div class="container">
+      <h3 data-th-text="${menuName}">메뉴 이름</h3>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>신고유형</th>
+            <th>처리여부</th>
+            <th>접수일</th>
+            <th>상세 보기</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-th-each="report : ${list}" data-th-object="${report}">
+            <td data-th-text="*{reportNo}">1</td>
+            <td data-th-text="*{categoryName}">신고 유형</td>
+            <td data-th-text="*{stateStr}">처리 여부</td>
+            <td data-th-text="*{reportDate}">접수일</td>
+            <td>
+              <button
+                data-th-href="@{detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}"
+                class="view"
+              >
+                view
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <td colspan="10" class="tablefoot"></td>
+        </tfoot>
+      </table>
+    </div>
     <div data-th-replace="footer :: footer">풋터</div>
 
     <div id="detailModal" class="modal">
-        <div class="modal-content" id="modalContent">
-        
+      <div class="modal-content" id="modalContent">
         <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
-        </div>
-        <button type="button" id="closeBtn">✕</button>
+      </div>
+      <button type="button" id="closeBtn">✕</button>
     </div>
 
     <script data-th-src="@{/js/list.js}"></script>

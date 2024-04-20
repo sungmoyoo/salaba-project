@@ -10,51 +10,53 @@
 <form data-th-action="@{update}" method="post" data-th-object="${rental}">
     <h4 class="partTitle">숙소 사진</h4>
     <div class="rentalImgs">
-    <div data-th-each="photo : ${rental.photos}" data-th-object="${photo}">
-        <div class="card">
-            <img class="rentalImg" data-th-src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + *{uuidName}(type=f,w=100,h=100,ttype=jpg)}">
-            <p data-th-text="*{explanation}"></p>
+        <div data-th-each="photo : ${rental.photos}" data-th-object="${photo}">
+            <div class="card">
+                <img class="rentalImg" data-th-src="@{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + *{uuidName}(type=f,w=100,h=100,ttype=jpg)}">
+                <p data-th-text="*{explanation}"></p>
+            </div>
         </div>
     </div>
-</div>
     <h4 class="partTitle">숙소 기본 정보</h4>
     <div class="infoBox">
-        <span>숙소 번호</span> <span name="rentalNo" data-th-text="*{rentalNo}"></span>
-        <div></div>
+        <div class="info"><span>숙소 번호</span> <span name="rentalNo" data-th-text="*{rentalNo}"></span></div>
+        <div class="hr"></div>
     </div>
     <div class="infoBox">
-        <span>숙소 이름</span> <span data-th-text="*{name}"></span>
-        <div></div>
+        <div class="info"><span>숙소 이름</span> <span data-th-text="*{name}"></span></div>
+        <div class="hr"></div>
     </div>
     <div class="infoBox">
-        <span>숙소 설명</span> <span  data-th-text="*{explanation}"></span>
-        <div></div>
+        <div class="info"><span>숙소 설명</span> <span data-th-text="*{explanation}"></span></div>
+        <div class="hr"></div>
     </div>
     <div class="infoBox">
-        <span>숙소 이용규칙</span></span> <span  data-th-text="*{rule}"></span>
-        <div></div>
+        <div class="info"><span>숙소 이용규칙</span></span> <span data-th-text="*{rule}"></span></div>
+        <div class="hr"></div>
     </div>
     <div class="infoBox">
-        <span>숙소 가격</span> <span  data-th-text="*{price}"></span>
-        <div></div>
+        <div class="info"><span>숙소 가격</span> <span data-th-text="*{price}"></span></div>
+        <div class="hr"></div>
     </div>
     <div class="infoBox">
-        <span>숙소 청소비</span> <span  data-th-text="*{cleanFee}"></span>
-        <div></div>
+        <div class="info"><span>숙소 청소비</span> <span data-th-text="*{cleanFee}"></span></div>
+        <div class="hr"></div>
     </div>
     <div class="infoBox">
-        <span>숙소 주소</span> <span  data-th-text="*{address}"></span>
-        <div></div>
+        <div class="info"><span>숙소 주소</span> <span data-th-text="*{address}"></span></div>
+        <div class="hr"></div>
     </div>
     <h4 class="partTitle">객실 정보</h4>
     <div class="infoBox">
-        <span>수용 인원</span> <span data-th-text="*{capacity}"></span>
+        <div class="info"><span>수용 인원</span> <span data-th-text="*{capacity}"></span></div>
+        <div class="hr"></div>
     </div>
     <div data-th-each="facility : ${rental.facilities}" data-th-object="${facility}">
         <div class="infoBox">
-            <span data-th-if="*{facilityNo < 4}" data-th-text="*{name}"></span >
-            <span data-th-if="*{facilityNo < 4}"> - </span >
-            <span  data-th-if="*{facilityNo < 4}" data-th-text="*{count}"></span>
+            <div class="info">
+                <span data-th-if="*{facilityNo < 4}" data-th-text="*{name}"></span >
+                <span  data-th-if="*{facilityNo < 4}" data-th-text="*{count}"></span>
+            </div>
         </div>
     </div>
 
@@ -82,6 +84,7 @@
 </div>
 
 
+
 <style>
 
     .rentalImgs {
@@ -94,18 +97,15 @@
         width: 250px;
         height: 200px;
         border-radius: 10px;
-        margin-right: 10px;
+        margin-right: 20px;
     }
 
-    .rentalImgs .card {
-    
-    }
 
     .partTitle {
         position: relative;
         left: 0px;
-<!--        margin-right: 84%;-->
-<!--        margin-bottom: 70px;-->
+        margin-left: 0px;
+        text-align: left;
     }
 
     .content {
@@ -113,20 +113,32 @@
     }
 
     .infoBox {
+        padding-top: 30px;
         display: flex;
-        border: 1px solid red;
-        margin-bottom: 30px;
-        align-items: center;
+        flex-direction: column;
 
     }
 
-    .infoBox span {
-        border: white;
-        margin-bottom: 60px;
+    /* .infoBox span {
+        display: inline-block;
+        position: absolute;
         width: auto;
+        padding-bottom: 40px;
+
+    } */
+
+    .infoBox .info {
+        display: flex;
+        justify-content: space-between;
+        margin-left: 15%;
+        width : 70%;
+        height: 50px;
     }
 
-    .infoBox div {
+    .infoBox .hr {
+        display: block;
+        /* margin-top: 200px; */
+        margin-left: 15%;
         width : 70%;
         height: 1px;
         background-color: gainsboro;

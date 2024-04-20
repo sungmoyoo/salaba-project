@@ -1,10 +1,9 @@
 table {
-    width: 700px;
     text-align: center;
     border: 1px solid #fff;
     border-spacing: 1px;
     font-family: 'Cairo', sans-serif;
-    margin: auto;
+    
 }
 
 
@@ -20,7 +19,55 @@ table th {
     padding: 10px;
 }
 
+.container {
+    margin-top: 10%;
+    width: 80%;
+    position: absolute;
+    left: 15%;
+    display: flex;
+    flex-direction: column;
+}
 
+.searchBar {
+    display: flex;
+    justify-content:baseline;
+    border:1px solid black;
+    position:relative;
+    max-width:300px;
+    border-radius: 20px;
+    height: 30px;
+    margin-bottom: 20px;
+}
+
+.searchBar select {
+    border-radius: 20px;
+    border: 0;
+    margin-left: 10px;
+
+}
+
+.searchBar select:focus {
+    outline: none;
+}
+
+
+.searchInput {
+    width: 70%;
+    padding-left: 10px;
+    border: 0;
+}
+
+.searchInput:focus {
+    outline: none;
+}
+
+.searchBtn {
+    border-radius: 20px;
+    margin-right: 10px;
+    background-color: white;
+    border: 0;
+    /* content: '\f002'; */
+}
 
 .view,
 .delete {
