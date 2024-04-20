@@ -78,3 +78,18 @@
         border-radius: 5px;
         margin-top: 80px;
     }
+
+    .itemList { 
+        height:15vh;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .itemList div span {
+        padding: 10px;
+        background-color: aliceblue;
+        border: 1px solid lightblue;
+        border-radius: 10px;
+        margin-right: 10px;
+    }

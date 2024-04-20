@@ -32,7 +32,7 @@
         <div class="hr"></div>
     </div>
     <div class="infoBox">
-        <div class="info"><span>숙소 이용규칙</span></span> <span data-th-text="*{rule}"></span></div>
+        <div class="info"><span>숙소 이용규칙</span> <span data-th-text="*{rule}"></span></div>
         <div class="hr"></div>
     </div>
     <div class="infoBox">
@@ -62,25 +62,31 @@
     </div>
 
     <h4 class="partTitle">숙소 타입</h4>
+    <div class="itemList">
     <div data-th-each="theme : ${rental.themes}" data-th-object="${theme}">
-        <span  data-th-if="*{themeNo < 10}" data-th-text="*{themeName}"></span>
-
+        <span data-th-if="*{themeNo < 10}" data-th-text="*{themeName}"></span>
+    </div>
     </div>
 
     <h4 class="partTitle">숙소 편의 시설</h4>
+    <div class="itemList">
     <div data-th-each="facility : ${rental.facilities}" data-th-object="${facility}">
-        <span  data-th-if="*{facilityNo > 3}" data-th-text="*{name}"></span>
-
+        <span data-th-if="*{facilityNo > 3}" data-th-text="*{name}"></span>
+    </div>
     </div>
 
+
     <h4 class="partTitle">숙소 테마</h4>
+    <div class="itemList">
     <div data-th-each="theme : ${rental.themes}" data-th-object="${theme}">
         <span  data-th-if="*{themeNo >= 10}" data-th-text="*{themeName}"></span>
+    </div>
     </div>
     <div data-th-if="${menu == 2}">
         <button class="dealBtn" onclick="approveOrReject('1')">등록 승인</button>
         <button class="dealBtn" onclick="approveOrReject('4')">등록 거부</button>
     </div>
+    
 </form>
 </div>
 
