@@ -130,6 +130,7 @@
       explanation,
       address,
       price,
+      clean_fee,
       capacity,
       state,
       hosting_start_date,

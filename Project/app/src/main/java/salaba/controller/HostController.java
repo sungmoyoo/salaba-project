@@ -1,9 +1,7 @@
 package salaba.controller;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -215,47 +213,13 @@ public class HostController {
   }
 
   @GetMapping("incomeList")
-  public void incomeList(Model model, int hostNo, Date startDateInput, Date endDateInput) {
+  public void incomeList(Model model, Date startDateInput, Date endDateInput, int hostNo) {
 
-    List<HostReservation> reservationList = hostService.reservationList(hostNo);
-    List<RentalHome> rentalHomeList = hostService.rentalHomeList(hostNo);
-    HashMap<Integer, Integer> userCountMap = new HashMap<>();
+//    if (startDateInput == null || endDateInput == null) {
+    model.addAttribute("reservationList", hostService.reservationList(hostNo));
+    model.addAttribute("rentalHomeList", hostService.rentalHomeList(hostNo));
+//    }
 
-    System.out.println();
-    LocalDate startDate;
-    LocalDate endDate;
-
-    if (startDateInput == null || endDateInput == null) {
-      endDate = LocalDate.now();
-      startDate = endDate.minusMonths(1);
-    } else {
-      startDate = startDateInput.toLocalDate();
-      endDate = endDateInput.toLocalDate();
-    }
-
-    int totalIncome = 0;
-    int filteredIncome = 0;
-
-    for (HostReservation reservation : reservationList) {
-
-      totalIncome += reservation.getAmount();
-
-      if ((endDate.isAfter(reservation.getPaymentDate().toLocalDate()) ||
-          endDate.isEqual(reservation.getPaymentDate().toLocalDate())) &&
-          startDate.isBefore(reservation.getPaymentDate().toLocalDate())) {
-
-        filteredIncome += reservation.getAmount();
-
-        userCountMap.put(reservation.getRentalHomeNo(),
-            userCountMap.getOrDefault(reservation.getRentalHomeNo(), 0) + 1);
-      }
-    }
-    model.addAttribute("userCount", userCountMap);
-    model.addAttribute("rentalHomeList", rentalHomeList);
-    model.addAttribute("filteredIncome", filteredIncome);
-    model.addAttribute("totalIncome", totalIncome);
-    model.addAttribute("showStartDate", startDate);
-    model.addAttribute("showEndDate", endDate);
   }
 
   // 예약 내역 리스트

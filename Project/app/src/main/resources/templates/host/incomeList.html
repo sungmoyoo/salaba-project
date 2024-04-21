@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
   <style>
+    html {
+      background-color: gray;
+    }
     #searchButton {
       display: inline-block;
       padding: 5px 8px;
@@ -12,9 +15,29 @@
       text-align: center;
       border: 2px solid #35C5B3; /* 테두리 색상 */
       color: #35C5B3; /* 텍스트 색상 */
-      background-color: transparent; /* 배경색 투명 */
       border-radius: 5px; /* 버튼 모서리 둥글게 */
-  }
+    }
+    .rental-home {
+      border: 1px solid black;
+      margin: 10px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .detail-item {
+      border: 1px solid black;
+      margin: 10px;
+    }
+
+    .nothing-div {
+      border: 1px solid black;
+      margin: 10px;
+      text-align: center;
+    }
+
+    span {
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
@@ -23,39 +46,224 @@
 <div>
   <input id='startDate' data-th-value="${showStartDate}" type='date'/>
   ~ <input id='endDate' data-th-value="${showEndDate}" type='date'/>
-  <a type="button" id="searchButton">조회</a>
+  <a id="searchButton">조회</a>
 </div>
 
-<div text-align="center">
-  <div data-th-each="rentalHome : ${rentalHomeList}" data-th-object="${rentalHome}">
+<div id="main-container">
+  <div data-th-each="rentalHome : ${rentalHomeList}" data-th-object="${rentalHome}"
+       class="rental-home"
+       data-th-data-price="${rentalHome.price}" data-price="10000"
+       data-th-data-no="${rentalHome.rentalHomeNo}" data-no="1"
+       data-th-data-cleanFee="${rentalHome.cleanFee}" data-cleanFee="2000">
     <span data-th-text="*{name}">xxx</span>
     등록일: <span data-th-text="*{registeDate}">2024-01-01</span>
     주소: <span data-th-text="*{address}">서울시 강남구...</span>
-    <label data-th-if="${userCount[__${rentalHome.rentalHomeNo}__]}">
-      이용건수: <span data-th-text="${userCount[__${rentalHome.rentalHomeNo}__]}"></span>
-    </label>
-    <label data-th-unless="${userCount[__${rentalHome.rentalHomeNo}__]}">
-      이용건수: <span>0</span>
-    </label>
+    이용건수:
+    <span data-th-id="'usageCount_' + *{rentalHomeNo}">0</span>
+    <div data-th-id="'detail-container' + *{rentalHomeNo}" class="detail-container"></div>
   </div>
+
 </div>
 
+
 <div>
-  전체 수입: <span data-th-text="${totalIncome}"></span>
-  이번달 수입: <span data-th-text="${filteredIncome}"></span>
+  전체 수입: <span id="totalIncome">0</span>
 </div>
 <div data-th-replace="footer :: footer">꼬리말</div>
 
-<script>
-  document.getElementById('searchButton').addEventListener('click', function() {
-      // 시작일과 종료일을 가져옴
-      var startDate = document.getElementById('startDate').value;
-      var endDate = document.getElementById('endDate').value;
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-      // 조회 링크의 href 속성 값을 업데이트
-      var searchLink = document.getElementById('searchButton');
-      searchLink.href = "incomeList?hostNo=2&startDateInput=" + startDate + "&endDateInput=" + endDate;
+<script data-th-inline="javascript">
+  // 화면에 필요한 정보들 변수에 저장
+  var reservationList = [[${reservationList}]];
+  var rentalHomeList = document.querySelectorAll(".rental-home");
+  var filteredReservationList;
+
+  // 상세 정보 조회 상태 체크용 Boolean
+  var state = true;
+
+  // 날짜 조회 버튼
+  var searchButton = document.getElementById("searchButton");
+  searchButton.addEventListener('click', getFilterDate)
+
+  // 날짜 조회 이벤트 함수
+  function getFilterDate() {
+    let startDate = document.getElementById("startDate").value;
+    let endDate = document.getElementById("endDate").value;
+
+    if (!state) {
+      deleteDetail();
+      state = true;
+    }
+
+    // 예약내역 필터링
+    filteredReservationList = reservationList.filter(function(reservation) {
+          return reservation.paymentDate >= startDate && reservation.paymentDate <= endDate;
+      });
+
+    getDefaultReservation(filteredReservationList);
+  }
+
+
+  // 날짜 조회 시 기존 리스트(컨테이너) 전체 제거
+  function deleteMain() {
+    let mainContainer = $("#main-container");
+    mainContainer.empty();
+  }
+
+  // 상세 보기 이벤트 설정
+  rentalHomeList.forEach(el => {
+    el.addEventListener('click', clickHandler);
   });
+
+
+  // 상세 보기 창 열고 닫는 조건
+  function clickHandler(e) {
+    if (state == true) {
+      if (filteredReservationList != null) {
+      showDetail(e.currentTarget.getAttribute("data-no"), filteredReservationList);
+      } else {
+      showDetail(e.currentTarget.getAttribute("data-no"), reservationList);
+      }
+      state = false;
+
+    } else {
+      deleteDetail(e.currentTarget.getAttribute("data-no"));
+      state = true;
+    }
+  }
+
+  // 이용건수, 총 수입 초기화하는 함수(기본, 전체)
+  document.addEventListener('DOMContentLoaded', function() {
+    getDefaultReservation(reservationList);
+  });
+
+  // 상세 보기 출력(태그 생성 방식)
+  function showDetail(rentalHomeNo, reservationList) {
+    let rentalHomeEl = document.querySelector(`.rental-home[data-no="${rentalHomeNo}"]`);
+    let no = rentalHomeEl.getAttribute("data-no");
+    let price = rentalHomeEl.getAttribute("data-price");
+    let cleanFee = rentalHomeEl.getAttribute("data-cleanFee");
+    let rentalHomeReservationList = [];
+
+    // 숙소별 예약내역 리스트 받기
+    reservationList.forEach(function(reservation) {
+      if (reservation.rentalHomeNo == no) {
+        rentalHomeReservationList.push(reservation);
+      }
+    });
+
+    let detailContainer = document.querySelector("#detail-container" + no);
+
+    if (rentalHomeReservationList.length != 0) {
+      rentalHomeReservationList.forEach(function(reservationEl) {
+        console.log("test...");
+        console.log(reservationEl.paymentDate);
+
+        let detailItem = document.createElement('div');
+        detailItem.className = "detail-item";
+
+        let titleDiv = document.createElement('div');
+        titleDiv.className = "title-div";
+        let nameDiv = document.createElement('div');
+        nameDiv.className = "name-div";
+        let valueDiv = document.createElement('div');
+        valueDiv.className = "value-div";
+
+        let reservationNo = document.createElement('span');
+        reservationNo.textContent = reservationEl.reservationNo;
+        let paymentDate = document.createElement('span');
+        paymentDate.textContent = reservationEl.paymentDate;
+        titleDiv.appendChild(reservationNo);
+        titleDiv.appendChild(paymentDate);
+
+        let priceName = document.createElement('span');
+        priceName.textContent = "가격(1주)";
+        let residenceName = document.createElement('span');
+        residenceName.textContent = '이용 기간';
+        let cleanFeeName = document.createElement('span');
+        cleanFeeName.textContent = '청소비';
+        let chargeName = document.createElement('span');
+        chargeName.textContent = '수수료';
+        let incomeName = document.createElement('span');
+        incomeName.textContent = '정산금액';
+        let guestName = document.createElement('span');
+        guestName.textContent = '게스트';
+        nameDiv.appendChild(priceName);
+        nameDiv.appendChild(residenceName);
+        nameDiv.appendChild(cleanFeeName);
+        nameDiv.appendChild(chargeName);
+        nameDiv.appendChild(incomeName);
+        nameDiv.appendChild(guestName);
+
+        let priceValue = document.createElement('span');
+        priceValue.textContent = price + '(주)';
+        let residenceValue = document.createElement('span');
+        residenceValue.textContent = reservationEl.startDate + '~' + reservationEl.endDate;
+        let cleanFeeValue = document.createElement('span');
+        cleanFeeValue.textContent = cleanFee;
+        let chargeValue = document.createElement('span');
+        chargeValue.textContent = price * 0.03;
+        let incomeValue = document.createElement('span');
+        incomeValue.textContent = price * 0.97;
+        let guestValue = document.createElement('span');
+        guestValue.textContent = reservationEl.memberName;
+        valueDiv.appendChild(priceValue);
+        valueDiv.appendChild(residenceValue);
+        valueDiv.appendChild(cleanFeeValue);
+        valueDiv.appendChild(chargeValue);
+        valueDiv.appendChild(incomeValue);
+        valueDiv.appendChild(guestValue);
+
+        detailItem.appendChild(titleDiv);
+        detailItem.appendChild(nameDiv);
+        detailItem.appendChild(valueDiv);
+
+        detailContainer.appendChild(detailItem);
+      });
+    }
+    else {
+      // 예약내역이 없을 경우
+      let nothingDiv = document.createElement('div');
+      nothingDiv.textContent = '이 숙소에 방문자가 없습니다. 첫 방문자를 받아보세요';
+      nothingDiv.className = "nothing-div";
+      detailContainer.appendChild(nothingDiv);
+    }
+   }
+
+  // 상세 보기 창 닫는 함수
+  function deleteDetail(rentalHomeNo) {
+    let detailContainer = $(".detail-container");
+    detailContainer.empty();
+  }
+
+  // 이용건수, 총 수입 계산 함수
+  function getDefaultReservation(reservationList) {
+    // 예약 숙소 번호별 이용건수 카운트
+    let usageCountMap = {};
+    let totalIncome = 0; // 총 수입 변수 초기화
+
+    reservationList.forEach(function(reservation) {
+      if (!usageCountMap.hasOwnProperty(reservation.rentalHomeNo)) {
+        usageCountMap[reservation.rentalHomeNo] = 0;
+      }
+      usageCountMap[reservation.rentalHomeNo]++;
+      totalIncome += reservation.amount;
+    });
+
+    // 이용건수를 화면에 업데이트
+    Object.keys(usageCountMap).forEach(function(rentalHomeNo) {
+      let usageCountSpan = document.getElementById("usageCount_" + rentalHomeNo);
+      if (usageCountSpan) {
+        usageCountSpan.innerHTML = usageCountMap[rentalHomeNo];
+      }
+    });
+    document.getElementById("totalIncome").innerHTML = totalIncome;
+  }
+
+
 </script>
+
+
 </body>
 </html>

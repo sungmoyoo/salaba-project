@@ -93,15 +93,14 @@
   </form>
 
 
+  <br>
+  <br>
+  <br>
 
-    <br>
-    <br>
-    <br>
 
-
-  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data' method='post'
-  data-th-object="${rentalHome}">
-
+  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data'
+        method='post'
+        data-th-object="${rentalHome}">
 
 
     <h2>숙소 사진</h2>
@@ -113,10 +112,12 @@
 
       <div class="image-container"
            data-th-each="photo : ${rentalHome.rentalHomePhotos}" data-th-object="${photo}">
-        <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}"
+        <img
+            data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}"
             src="/home1.jpg"/>
-                <a class="delete-button" data-th-href="@{photoDelete(photoNo=*{photoNo}, rentalHomeNo=${rentalHome.rentalHomeNo})}"
-                    href="file-delete.html">X</a>
+        <a class="delete-button"
+           data-th-href="@{photoDelete(photoNo=*{photoNo}, rentalHomeNo=${rentalHome.rentalHomeNo})}"
+           href="file-delete.html">X</a>
         <input class="image-description" type="text" placeholder="이미지 설명"
                data-th-value="${photo.photoExplanation}"/>
       </div>
@@ -168,7 +169,7 @@
     </div>
     <div>
       청소비 <input type="number" data-th-value="*{cleanFee}" value="100" name="cleanFee"
-                  id="cleanFee" onkeyup="calc(this.value)"/>
+                 id="cleanFee" onkeyup="calc(this.value)"/>
     </div>
     <div>
       정산금액 <input readonly type="text" id="income"/>
@@ -203,9 +204,9 @@
                      data-th-checked="${rentalHome.themes.indexOf(theme) != -1}"
                      data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
         </span>
-          </div>
         </div>
       </div>
+    </div>
 
     <br>
     <br>
@@ -237,7 +238,8 @@
       <div>
         <div style="display: inline-block;">
           <label>수용인원</label><br>
-          <input type="number" name="capacity" id="capacity" data-th-value="${rentalHome.capacity}" value="0">
+          <input type="number" name="capacity" id="capacity" data-th-value="${rentalHome.capacity}"
+                 value="0">
         </div>
       </div>
       <div data-th-if="${rentalHomeFacility.facilityNo < 4}" style="width: 20%;"
@@ -245,9 +247,11 @@
         <div style="display: inline-block;">
           <label data-th-text="${rentalHomeFacility.facilityName}"></label><br>
           <input type="number" value="2" class="facilityCount"
-                     data-th-value="${rentalHomeFacility.facilityCount}"/>
-          <input type="hidden" class="facilityNos" data-th-value="${rentalHomeFacility.facilityNo}"/>
-          <input type="hidden" class="facilityNames" data-th-value="${rentalHomeFacility.facilityName}"/>
+                 data-th-value="${rentalHomeFacility.facilityCount}"/>
+          <input type="hidden" class="facilityNos"
+                 data-th-value="${rentalHomeFacility.facilityNo}"/>
+          <input type="hidden" class="facilityNames"
+                 data-th-value="${rentalHomeFacility.facilityName}"/>
         </div>
       </div>
     </div>
@@ -268,21 +272,21 @@
               <input type="hidden" class="facilityNos" data-th-value="${facility.facilityNo}"/>
               <input type="hidden" class="facilityNames" data-th-value="${facility.facilityName}"/>
             </span>
-          </div>
         </div>
       </div>
+    </div>
 
 
     <br>
     <br>
     <br>
-
 
 
   </form>
   <div>
     <button type="submit" onclick="submitForm()">저장</button>
-    <button type="button" data-th-onclick="|location.href='@{rentalHomeList(hostNo=1)}'|">취소</button>
+    <button type="button" data-th-onclick="|location.href='@{rentalHomeList(hostNo=1)}'|">취소
+    </button>
   </div>
 </div>
 <div data-th-replace="footer :: footer">꼬리말</div>
@@ -326,7 +330,7 @@
 
     // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
     checkedFacility.forEach(function(e, index) {
-    debugger
+
         // 값이 1 이상일 때(선택 또는 입력되었을 때, 기본 시설은 최소 1개 이상임)
         if (e.checked) {
             // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
