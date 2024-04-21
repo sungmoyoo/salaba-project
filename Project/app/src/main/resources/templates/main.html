@@ -199,6 +199,11 @@
         </div>
       </div>
     </div>
+    <div class="mapContainer" style="display: none;">
+      <div id="map" style="height: 100%">
+
+      </div>
+    </div>
   </section>
   <button id="mapButton">지도로 보기</button>
   <button id="listButton">목록으로 보기</button>
@@ -246,14 +251,22 @@
 <script th:inline="javascript">
   const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
 </script>
+<script>
+  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+    key: "AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk",
+    // Add other bootstrap parameters as needed, using camel case.
+    // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
+  });
+</script>
 <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=marker&v=beta"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk&callback=initMap&libraries=marker&v=beta"
       defer>
 </script>
 <script>
   const mapButton = document.getElementById('mapButton');
   const listButton = document.getElementById('listButton');
-  const listContainer = document.querySelector('listing-container');
+  const listContainer = document.querySelector('.listing-container');
+  const mapContainer = document.querySelector('.mapContainer');
 
   // 지도로 보기 버튼
   mapButton.addEventListener('click', function(){
@@ -299,31 +312,51 @@
     });
 
     for( const property of rentalHomeProp ){
-      const advancedMarkerView = new google.maps.marker.advancedMarkerView({
+      const advancedMarkerView = new google.maps.marker.AdvancedMarkerElement({
         map,
         content: buildContent(property),
         position:property.position,
         title:property.name,
       });
-
+      // const element = advancedMarkerView.element;
+      // ["focus", "pointerenter"].forEach((event) => {
+      //   element.addEventListener(event, ()=>{
+      //     highlight(advancedMarkerView, property);
+      //   });
+      // });
+      // ["blur","pointerleave"].forEach((event)=>{
+      //   element.addEventListener(event, () =>{
+      //     unhighlight(advancedMarkerView, property);
+      //   });
+      // });
+      // advancedMarkerView.addListener("click",(event) =>{
+      //   unhighlight(advancedMarkerView, property);
+      // });
     }
   }
 
-  function buildContent(property){
-    const content = document.createElement("div");
+  function highlight(markerView, property){
+    markerView.content.classList.add("highlight");
+    markerView.element.style.zIndex = 1;
+  }
 
-    content.classList.add();
-    content.innerHTML = '
-      <div>
-        <div class="mapImage-div">
-          <img src=''+${property.photo} />
-        </div>
-        <div>
-          <span>${property.name}</span>
-          <span>${property.price}</span>
-        </div>
-      </div>
-    ';
+  function unhighlight(markerView, property){
+    markerView.content.classList.remove("highlight");
+    markerView.element.style.zIndex = "";
+  }
+
+  function buildContent(property){
+    let content = document.createElement("div");
+
+    content.classList.add("property");
+    content.innerHTML = '<div class="price-tag"><span class="mapPrice">${property.price}</span></div><div class="mapSlide-container">'
+    for( var i = 0; i < property.photo.length; i++ ){
+      content.innerHTML += '<img class="mapSlider-image" src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/';
+      content.innerHTML += '${property.photo(i)}';
+      content.innerHTML += '?type=f&w=150&h=150&ttype=jpg" alt="숙소이미지">';
+    }
+    content.innerHTML += '<button class="slide-button prev-button">&lt;</button><button class="slide-button next-button">&gt;</button><span>${property.name}</span><span>${property.price}</span></div>';
+
     return content;
   }
 
