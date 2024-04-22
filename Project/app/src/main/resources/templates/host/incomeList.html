@@ -38,6 +38,10 @@
     span {
       padding: 10px;
     }
+
+    .thumbnails {
+      border: 1px solid black;
+    }
   </style>
 </head>
 <body>
@@ -52,9 +56,12 @@
 <div id="main-container">
   <div data-th-each="rentalHome : ${rentalHomeList}" data-th-object="${rentalHome}"
        class="rental-home"
-       data-th-data-price="${rentalHome.price}" data-price="10000"
-       data-th-data-no="${rentalHome.rentalHomeNo}" data-no="1"
-       data-th-data-cleanFee="${rentalHome.cleanFee}" data-cleanFee="2000">
+       data-th-data-price="*{price}" data-price="10000"
+       data-th-data-no="*{rentalHomeNo}" data-no="1"
+       data-th-data-cleanFee="*{cleanFee}" data-cleanFee="2000">
+    <img class="thumbnails"
+         data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=80,h=80,ttype=jpg)}"
+         src="/photo1.jpg">
     <span data-th-text="*{name}">xxx</span>
     등록일: <span data-th-text="*{registeDate}">2024-01-01</span>
     주소: <span data-th-text="*{address}">서울시 강남구...</span>
@@ -84,10 +91,7 @@
 
   // 날짜 조회 버튼
   var searchButton = document.getElementById("searchButton");
-  searchButton.addEventListener('click', getFilterDate)
-
-  // 날짜 조회 이벤트 함수
-  function getFilterDate() {
+  searchButton.addEventListener('click', () => {
     let startDate = document.getElementById("startDate").value;
     let endDate = document.getElementById("endDate").value;
 
@@ -102,8 +106,7 @@
       });
 
     getDefaultReservation(filteredReservationList);
-  }
-
+  })
 
   // 날짜 조회 시 기존 리스트(컨테이너) 전체 제거
   function deleteMain() {
@@ -113,7 +116,20 @@
 
   // 상세 보기 이벤트 설정
   rentalHomeList.forEach(el => {
-    el.addEventListener('click', clickHandler);
+    el.addEventListener('click', (e) => {
+      if (state == true) {
+        if (filteredReservationList != null) {
+          showDetail(e.currentTarget.getAttribute("data-no"), filteredReservationList);
+        } else {
+          showDetail(e.currentTarget.getAttribute("data-no"), reservationList);
+        }
+        state = false;
+
+      } else {
+          deleteDetail(e.currentTarget.getAttribute("data-no"));
+        state = true;
+      }
+    })
   });
 
 

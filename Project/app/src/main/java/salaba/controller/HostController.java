@@ -1,6 +1,5 @@
 package salaba.controller;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -213,12 +212,9 @@ public class HostController {
   }
 
   @GetMapping("incomeList")
-  public void incomeList(Model model, Date startDateInput, Date endDateInput, int hostNo) {
-
-//    if (startDateInput == null || endDateInput == null) {
+  public void incomeList(Model model, int hostNo) {
     model.addAttribute("reservationList", hostService.reservationList(hostNo));
     model.addAttribute("rentalHomeList", hostService.rentalHomeList(hostNo));
-//    }
 
   }
 

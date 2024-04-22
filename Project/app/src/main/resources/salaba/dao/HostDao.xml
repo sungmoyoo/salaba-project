@@ -125,19 +125,25 @@
 
   <select id="findAllRentalHome" resultMap="RentalHomeMap" parameterType="int">
     select
-      rental_home_no,
-      name,
-      explanation,
-      address,
-      price,
-      clean_fee,
-      capacity,
-      state,
-      hosting_start_date,
-      hosting_end_date,
-      registe_date
+      r.rental_home_no,
+      r.name,
+      r.explanation,
+      r.address,
+      r.price,
+      r.clean_fee,
+      r.capacity,
+      r.state,
+      r.hosting_start_date,
+      r.hosting_end_date,
+      r.registe_date,
+      rp.photo_no,
+      rp.ori_photo_name,
+      rp.uuid_photo_name,
+      rp.photo_explanation,
+      rp.photo_order
     from
-      rental_home
+      rental_home r
+      inner join rental_home_photo rp on rp.rental_home_no = r.rental_home_no
     where
       member_no = #{value}
     order by
