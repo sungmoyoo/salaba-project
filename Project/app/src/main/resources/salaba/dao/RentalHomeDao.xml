@@ -391,11 +391,11 @@
       (
         reservation_no,
         score,
-        review,
+        review
       )
     values
       (
-        #{reservation_no},
+        #{reservationNo},
         #{score},
         #{review}
       )

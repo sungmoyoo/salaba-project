@@ -63,7 +63,7 @@
 
     <h2 data-th-text="${rentalHome.explanation}">숙소 소개</h2>
     <div data-th-each="photo : ${rentalHomePhoto}" data-th-object="${rentalHomePhoto}">
-      <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rental_home/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
+      <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
     </div>
     <h3 data-th-text="${rentalHome.address}">숙소 주소</h3>
     <h3 data-th-text="${rentalHome.price}">가격</h3>

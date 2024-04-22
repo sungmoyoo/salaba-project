@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
 import salaba.vo.rental_home.RentalHome;
-import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
@@ -101,13 +100,14 @@ public class RentalHomeController {
   }
 
 
-//  @PostMapping("")
-  public String rentalHomeReviewAdd( RentalHomeReview rentalHomeReview) {
+@PostMapping("/addReview")
+  public String rentalHomeReviewAdd( RentalHomeReview rentalHomeReview, int rentalHomeNo) {
+    log.debug(String.format("reservationNo : %s", rentalHomeReview.getReservationNo()));
     rentalHomeService.addRentalHomeReview(rentalHomeReview); // 숙소 리뷰 작성
-    return ""; // 작성전 페이지로 돌아가기
+    return "redirect:review?rentalHomeNo=" + rentalHomeNo; // 작성전 페이지로 돌아가기
   }
 
-//  @GetMapping("")
+  @GetMapping("/review")
   public void rentalHomeReviewList( int rentalHomeNo, Model model ){
     // 숙소 리뷰 조회
     model.addAttribute("rentalHomeReviewList",

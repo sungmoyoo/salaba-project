@@ -6,8 +6,18 @@
   <title>Title</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <style>
+    #map{
+      height: 1028px;
+      width: 1920px;
+    }
     body {
       font-family: Arial, sans-serif;
+    }
+
+    html,body{
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
 
     .search-container {
@@ -156,6 +166,78 @@
       cursor: pointer;
     }
 
+    /* 구글맵 마커 css */
+    .property {
+      align-items: center;
+      background-color: #FFFFFF;
+      border-radius: 50%;
+      color: #263238;
+      display: flex;
+      font-size: 14px;
+      gap: 15px;
+      height: 30px;
+      justify-content: center;
+      padding: 4px;
+      position: relative;
+      position: relative;
+      transition: all 0.3s ease-out;
+      width: 30px;
+    }
+
+    .property::after {
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 9px solid #FFFFFF;
+      content: "";
+      height: 0;
+      left: 50%;
+      position: absolute;
+      top: 95%;
+      transform: translate(-50%, 0);
+      transition: all 0.3s ease-out;
+      width: 0;
+      z-index: 1;
+    }
+
+    .price-tag{
+      background-color: #4285F4;
+      border-radius: 8px;
+      color: #FFFFFF;
+      font-size: 14px;
+      padding: 10px 15px;
+      position: relative;
+    }
+
+    .price-tag::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translate(-50%, 0);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #4285F4;
+    }
+    .property.highlight {
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+      height: 80px;
+      padding: 8px 15px;
+      width: auto;
+    }
+
+    .property.highlight::after {
+      border-top: 9px solid #FFFFFF;
+    }
+
+    .property.mapSlide-container{
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
   </style>
 </head>
 <body>
@@ -175,11 +257,11 @@
   <section>
     <div class="theme-container">
       <button onclick="scrollThemes(-100)">&lt;</button>
-      <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
+      <!-- <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
         <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
           <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
         </a>
-      </div>
+      </div> -->
       <button class="scroll-right-button" onclick="scrollThemes(100)">&gt;</button>
     </div>
     <div class="filter">
@@ -191,7 +273,7 @@
       <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
         <div class="listing-slider">
           <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
-               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
           <button class="slide-button prev-button">&lt;</button>
           <button class="slide-button next-button">&gt;</button>
           <span data-th-text="${rentalHome.name}">숙소 이름</span>
@@ -199,11 +281,11 @@
         </div>
       </div>
     </div>
-    <div class="mapContainer" style="display: none;">
+  </section>
+  <section class="map-section">
       <div id="map" style="height: 100%">
-
+  
       </div>
-    </div>
   </section>
   <button id="mapButton">지도로 보기</button>
   <button id="listButton">목록으로 보기</button>
@@ -258,20 +340,19 @@
     // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
   });
 </script>
-<script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk&callback=initMap&libraries=marker&v=beta"
-      defer>
-</script>
 <script>
+  // 지도 보기 / 목록보기 버튼
   const mapButton = document.getElementById('mapButton');
   const listButton = document.getElementById('listButton');
   const listContainer = document.querySelector('.listing-container');
-  const mapContainer = document.querySelector('.mapContainer');
+  const mapContainer = document.querySelector('.map-section');
 
   // 지도로 보기 버튼
   mapButton.addEventListener('click', function(){
     mapContainer.style.display = 'block';
     listContainer.style.display = 'none';
+    mapContainer.style.width = "1920px";
+    mapContainer.style.height = "1028px";
     initMap();
   });
 
@@ -281,14 +362,15 @@
     listContainer.style.display = 'block';
   });
 
-  let rentalHomeProp = [];
-
+  // googleMap 초기화
   async function initMap(){
-    let rentalHome = rentalHomeList;
+    let rentalHomeProp = [];
+    let rentalHome = rentalHomeList; // 숙소 목록
     
     let priceTag = document.createElement("div");
     priceTag.className = "price-tag"
 
+    // 숙소 목록에 대한 정보 작성
     rentalHomeList.forEach(rentalHome =>{
       let photos = [];
       rentalHome.rentalHomePhotos.forEach(photo =>{
@@ -302,36 +384,41 @@
        });
     });
 
+    // googleMap 변수 / 라이브러리
     const{ Map } = await google.maps.importLibrary("maps");
     const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
     
+    // google맵 초기 위치 설정
     let map = new Map(document.getElementById("map"), {
       zoom : 10,
       center: {lat:rentalHomeProp[0].position.lat, lng:rentalHomeProp[0].position.lng},
       mapId: '470e45162ba863f'
     });
 
+    // 구글맵에 표시할 마커에 대한 정보 설정
     for( const property of rentalHomeProp ){
       const advancedMarkerView = new google.maps.marker.AdvancedMarkerElement({
         map,
-        content: buildContent(property),
-        position:property.position,
+        content: buildContent(property), // 구글맵 마커 안쪽에서 표시할 것들 설정
+        position:property.position, // 구글맵 마커 위치 설정
         title:property.name,
       });
-      // const element = advancedMarkerView.element;
-      // ["focus", "pointerenter"].forEach((event) => {
-      //   element.addEventListener(event, ()=>{
-      //     highlight(advancedMarkerView, property);
-      //   });
-      // });
-      // ["blur","pointerleave"].forEach((event)=>{
-      //   element.addEventListener(event, () =>{
-      //     unhighlight(advancedMarkerView, property);
-      //   });
-      // });
-      // advancedMarkerView.addListener("click",(event) =>{
-      //   unhighlight(advancedMarkerView, property);
-      // });
+      
+      // 마커 동작에 대한 event
+      const element = advancedMarkerView.element;
+      ["focus", "pointerenter"].forEach((event) => {
+        element.addEventListener(event, ()=>{
+          highlight(advancedMarkerView, property);
+        });
+      });
+      ["blur","pointerleave"].forEach((event)=>{
+        element.addEventListener(event, () =>{
+          unhighlight(advancedMarkerView, property);
+        });
+      });
+      advancedMarkerView.addListener("click",(event) =>{
+        unhighlight(advancedMarkerView, property);
+      });
     }
   }
 
@@ -345,25 +432,35 @@
     markerView.element.style.zIndex = "";
   }
 
+  // googleMap 마커 내용 설정
   function buildContent(property){
     let content = document.createElement("div");
-
+    
     content.classList.add("property");
-    content.innerHTML = '<div class="price-tag"><span class="mapPrice">${property.price}</span></div><div class="mapSlide-container">'
+    content.innerHTML = "<div class='price-tag'><span class='mapPrice'>"+property.price+"</span></div>";
+    
+    let mapSlideContainer = document.createElement("div");
+    mapSlideContainer.classList.add("mapSlide-container");
+    
+    // 숙소 이미지 설정 appendChild로 html에서 자식으로 부여되도록 함
     for( var i = 0; i < property.photo.length; i++ ){
-      content.innerHTML += '<img class="mapSlider-image" src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/';
-      content.innerHTML += '${property.photo(i)}';
-      content.innerHTML += '?type=f&w=150&h=150&ttype=jpg" alt="숙소이미지">';
+      let img = document.createElement("img");
+      img.classList.add("mapSlider-image");
+      img.src = 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/" + property.photo[i] + "?type=f&w=150&h=150&ttype=jpg';
+      img.alt = "숙소이미지";
+      mapSlideContainer.appendChild(img);
     }
-    content.innerHTML += '<button class="slide-button prev-button">&lt;</button><button class="slide-button next-button">&gt;</button><span>${property.name}</span><span>${property.price}</span></div>';
+    content.appendChild(mapSlideContainer);
+  
+    content.innerHTML += "<button class='slide-button prev-button'>&lt;</button><button class='slide-button next-button'>&gt;</button><span>" + property.name + "</span><span>" + property.price + "</span>";
 
     return content;
   }
 
-  function openFilterPopup(){
+  function openFilterPopup(){ // 필터 팝업창 열기
     document.getElementById("filterPopup").style.display = "block";
   }
-  function closeFilterPopup(){
+  function closeFilterPopup(){ // 필터 팝업창 닫기
     document.getElementById("filterPopup").style.display = "none";
   }
   
@@ -374,7 +471,7 @@
   }
   
   let filteredRentalHomeList = rentalHomeList;
-  function getFilterData(){
+  function getFilterData(){ // 필터 적용
     let themes = [];
     let checkboxes = document.querySelectorAll('input[name="theme"]:checked');
     checkboxes.forEach(checkbox => {
@@ -405,12 +502,13 @@
 
 
 
-  function scrollThemes(offset) {
+  function scrollThemes(offset) { // 테마 스크롤 이벤트 (수정 필요)
     const container = document.querySelector('.theme-container');
 
     container.scrollLeft += offset;
   }
 
+  // 숙소 이미지 슬라이더 이벤트
   function bindSliderEvents(listItem){
     let $slideImages = listItem.find('.slide-image');
     let currentIndex = 0;
@@ -471,7 +569,7 @@
     
       rentalHome.rentalHomePhotos.forEach(function(photos){
       let image = $( '<img class="slide-image">' )
-      .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + photos.uuidPhotoName + '?type=f&w=265&h=252&faceopt=false&ttype=jpg' )
+      .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + photos.uuidPhotoName + '?type=f&w=265&h=252&faceopt=false&ttype=jpg' )
       .attr( 'alt', '숙소이미지' );
       sliderDiv.append(image);
     });
@@ -493,10 +591,12 @@
   });
  }
 
+ // 테마 검색 후 숙소 목록 재할당
  function handleNewRentalHomeList(newRentalHomeList){
   updateRentalHomeList(newRentalHomeList);
  }
 
+ // 테마 이미지 클릭시 테마 검색 실행
  $(document).ready(function(){
   $('.theme-icon-container img').click(function(){
     $.ajax({
