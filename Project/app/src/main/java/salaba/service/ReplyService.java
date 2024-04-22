@@ -1,11 +1,12 @@
 package salaba.service;
 
 import java.util.List;
-import salaba.vo.Comment;
-import salaba.vo.Reply;
+import salaba.vo.board.Reply;
 
 public interface ReplyService {
-  void addComment(Reply reply);  // 답글 작성
+  void addComment(Reply reply
+     // , int commentNo
+  );  // 답글 작성
 
   List<Reply> list(int commentNo);  // 댓글 번호로 답글 조회
 
@@ -13,6 +14,5 @@ public interface ReplyService {
 
   int deleteComment(int replyNo);  // 답글 삭제
 
-
-  Reply get(int replyNo); // 조회
+  Reply getComment(int replyNo); // 조회
 }

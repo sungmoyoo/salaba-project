@@ -25,7 +25,7 @@
   <!-- 답글 작성-->
   <insert id="addComment" parameterType="Reply"
     useGeneratedKeys="true" keyColumn="reply_no" keyProperty="replyNo">
-    insert into reply(comment_no,writer,content)
+    insert into reply(comment_no,member_no,content)
     values(#{commentNo},#{writer.no},#{content})
   </insert>
 
@@ -64,5 +64,4 @@
     where
     reply_no=${replyNo}
   </update>
-
 </mapper>

@@ -3,7 +3,7 @@ package salaba.dao;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import salaba.vo.Board;
+import salaba.vo.board.Board;
 
 @Mapper
 public interface BoardDao {  // 게시판 인터페이스
@@ -13,14 +13,24 @@ public interface BoardDao {  // 게시판 인터페이스
   int deleteBoard(@Param("boardNo") int boardNo); // 글 삭제
 
   List<Board> findAll( // 조회
-      @Param("categoryNo") int categoryNo,
-      @Param("offset") int offset,
-      @Param("rowCount") int rowCount);
+      @Param("categoryNo") int categoryNo, @Param("offset") int offset,
+      @Param("rowCount") int rowCount, @Param("headNo") int headNo);
 
-  Board findBy(@Param("boardNo") int boardNo); // 상세조회
+  Board findBy(@Param("boardNo") int boardNo, @Param("categoryNo") int categoryNo); // 상세조회
+
+  Board findByBoardNo(@Param("boardNo") int boardNo);
 
   int updateBoard(Board board); // 글 변경, 수정
 
-  int countAll(int categoryNo);
+  int countAll(int categoryNo);// count
+  void increaseViewCount(int boardNo); // 조회수 증가
+
+  int increaseLikeCount(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 추천수 증가
+
+  int decreaseLikeCount(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 추천 취소
+
+  int countLike(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo);
+
+  // 검색
 
 }

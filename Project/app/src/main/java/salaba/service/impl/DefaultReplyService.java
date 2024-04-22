@@ -3,9 +3,10 @@ package salaba.service.impl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import salaba.dao.ReplyDao;
 import salaba.service.ReplyService;
-import salaba.vo.Reply;
+import salaba.vo.board.Reply;
 
 @RequiredArgsConstructor
 @Service
@@ -14,8 +15,12 @@ public class DefaultReplyService implements ReplyService { // 답글
   private final ReplyDao replyDao;
 
   @Override
-  public void addComment(Reply reply) {
-    replyDao.addComment(reply);
+  public void addComment(@RequestParam("reply") Reply reply
+//      , @RequestParam("int commentNo") int commentNo
+  ) {
+    replyDao.addComment(reply
+//        , commentNo
+    );
   } // 답글 작성
 
   @Override
@@ -32,6 +37,6 @@ public class DefaultReplyService implements ReplyService { // 답글
   }
 
   @Override
-  public Reply get(int replyNo) { return null;}
+  public Reply getComment(int replyNo) { return null;}
 
 }

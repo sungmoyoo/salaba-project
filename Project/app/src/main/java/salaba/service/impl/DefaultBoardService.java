@@ -2,18 +2,21 @@ package salaba.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import salaba.dao.BoardFileDao;
 import salaba.dao.BoardDao;
 import salaba.service.BoardService;
-import salaba.vo.BoardFile;
-import salaba.vo.Board;
+import salaba.vo.board.BoardFile;
+import salaba.vo.board.Board;
 
 @RequiredArgsConstructor
 @Service
 public class DefaultBoardService implements BoardService { // 게시판 ServiceImpl 구현체
 
+  private static final Log log = LogFactory.getLog(DefaultBoardService.class);
   private final BoardDao boardDao;  // 게시판 DAO
   private final BoardFileDao boardFileDao; // 게시판 첨부파일 DAO
 
@@ -25,20 +28,27 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
       for (BoardFile boardFile : board.getFileList()) {
         boardFile.setBoardNo(board.getBoardNo());
       }
+      log.debug("xxxx" + board.getFileList());
       boardFileDao.addAll(board.getFileList());
     }
   }
 
   @Override
-  public List<Board> listBoard(int categoryNo, int pageNo, int pageSize) {  // 목록 조회
-    return boardDao.findAll(categoryNo, pageSize * (pageNo - 1), pageSize);
+  public List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo) {  // 목록 조회
+    return boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
   }
 
 
   @Override
-  public Board getBoard(int boardNo) {
-    return boardDao.findBy(boardNo);
-  } // 상세 조회
+  public Board getBoard(int boardNo, int categoryNo) { // 상세 조회
+    return boardDao.findBy(boardNo, categoryNo);
+  }
+
+  @Override
+  public Board getBoardNo(int boardNo) { // 댓글 조회
+    increaseViewCount(boardNo); // 조회수 증가
+    return boardDao.findByBoardNo(boardNo);
+  }
 
   @Transactional
   @Override
@@ -68,6 +78,7 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
     return boardFileDao.findByNo(fileNo);
   }
 
+  @Transactional
   @Override
   public int deleteBoardFile(int fileNo) {
     return boardFileDao.delete(fileNo);
@@ -76,6 +87,35 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   @Override
   public int countAll(int categoryNo) {
     return boardDao.countAll(categoryNo);
+  } // count
+
+  @Transactional
+  @Override
+  public void addAllFiles(List<BoardFile> boardFiles) {
+    boardFileDao.addAll(boardFiles);
   }
+
+
+  @Transactional
+  @Override
+  public void increaseViewCount(int boardNo) {
+    boardDao.increaseViewCount(boardNo); // DAO 메서드 호출
+  }
+
+  @Transactional
+  @Override
+  public int increaseLikeCount(int boardNo, int memberNo) {
+    return boardDao.increaseLikeCount(boardNo, memberNo);
+
+  } // 게시물의 추천 수 증가 메서드 호출
+
+
+  @Override
+  public int decreaseLikeCount(int boardNo, int memberNo) {
+    return boardDao.decreaseLikeCount(boardNo, memberNo);
+  }
+
+
+// 검색 기능
 
 }

@@ -14,8 +14,12 @@
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
     <result column="file_count" property="fileCount"/>
-    <result column="category_no" property="categoryNo"/>
+    <result column="board_category_no" property="categoryNo"/>
     <result column="scope_no" property="scopeNo"/>
+    <result column="view_count" property="viewCount"/>
+    <result column="like_count" property="likeCount"/>
+    <result column="my_like_count" property="myLikeCount"/>
+    <result column="scope_name" property="scopeName"/>
     <result column="state" property="state"/>
 
     <!-- 회원 정보 가져오기 -->
@@ -57,8 +61,14 @@
 
   <insert id="addBoard" parameterType="Board"
     useGeneratedKeys="true" keyColumn="board_no" keyProperty="boardNo">
-    insert into board(head_no,title,content,writer,category_no)
-    values(#{headNo},#{title},#{content},#{writer.no},#{categoryNo})
+    <if test="categoryNo == 0">
+    insert into board(scope_no,title,content,member_no,board_category_no,region_no,head_no)
+    values(#{scopeNo},#{title},#{content},#{writer.no},#{categoryNo},#{region.regionNo},0)
+    </if>
+    <if test="categoryNo != 0">
+      insert into board(scope_no,head_no,title,content,member_no,board_category_no)
+      values(#{scopeNo},#{headNo},#{title},#{content},#{writer.no},#{categoryNo})
+    </if>
   </insert>
 
   <update id="deleteBoard">
@@ -71,18 +81,22 @@
   <select id="findAll" resultMap="BoardMap">
     select
     b.board_no,
+    b.board_category_no,
     b.title,
     b.content,
     b.created_date,
-    count(bl.member_no) as like_count,
+    b.view_count,
+    (select count(*) from board_like where board_no=b.board_no) as like_count,
     m.member_no,
     m.nickname,
     h.head_no,
     h.head_content,
     r.region_no,
     r.region_name,
-    bf.file_no,
-    bf.uuid_file_name
+    count(distinct bf.file_no) as file_count, -- 파일 수 계산
+    bf.uuid_file_name,
+    bs.scope_name,
+    bs.scope_no
     from
     board b
     inner join head h on b.head_no=h.head_no
@@ -90,23 +104,27 @@
     left join board_like bl on b.board_no=bl.board_no
     left join board_file bf on b.board_no=bf.board_no
     left join region r on b.region_no=r.region_no
+    inner join board_scope bs on b.scope_no=bs.scope_no
     where
     b.board_category_no=#{categoryNo}
     AND
     b.state != '1'
     group by
-    b.board_no
+    b.board_no, b.view_count
     order by
-    like_count desc
+    like_count desc,
+    b.created_date desc
   </select>
 
   <select id="main" resultMap="BoardMap">
     select
     b.board_no,
+    b.board_category_no,
     b.title,
+    b.view_count,
     b.content,
     b.created_date,
-    count(bl.member_no) like_count,
+    (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
     m.member_no,
     m.nickname,
     h.head_no,
@@ -114,38 +132,48 @@
     bf.file_no,
     bf.uuid_file_name,
     r.region_no,
-    r.region_name
+    r.region_name,
+    bs.scope_name,
+    bs.scope_no
     from
     board b
     inner join head h on b.head_no=h.head_no
     inner join member m on b.member_no=m.member_no
-    left join board_like bl on b.board_no=bl.board_no
     left join board_file bf on b.board_no=bf.board_no
     left join region r on b.region_no=r.region_no
+    inner join board_scope bs on b.scope_no=bs.scope_no
     group by
     b.board_no
     order by
-    like_count desc
+    like_count desc,
+    created_date desc
   </select>
 
   <select id="findBy" resultMap="BoardMap">
     select
     b.board_no,
+    b.board_category_no,
     b.title,
     b.content,
     b.view_count,
     b.created_date,
+    <if test="categoryNo != 0">
     h.head_no,
     h.head_content,
+    </if>
+    <if test="categoryNo == 0">
     r.region_no,
     r.region_name,
+    </if>
     bs.scope_name,
+    bs.scope_no,
     m.member_no,
     m.nickname,
-    (select count(*) from board_like where board_no=b.board_no) as like_count
+    (select count(*) from board_like where board_no=b.board_no) as like_count,
+    (select count(*) from board_like where board_no=b.board_no and member_no=m.member_no) as my_like_count
     from
     board b
-    inner join head h on b.head_no=h.head_no
+    left join head h on b.head_no=h.head_no
     inner join board_scope bs on b.scope_no=bs.scope_no
     inner join member m on b.member_no=m.member_no
     left outer join comment c on b.board_no = c.board_no
@@ -157,7 +185,8 @@
     b.created_date
   </select>
 
-  <update id="update" parameterType="Board">
+<!-- 게시글 변경 -->
+  <update id="updateBoard" parameterType="Board">
     update board set
     title=#{title},
     content=#{content}
@@ -165,7 +194,65 @@
     board_no=#{boardNo}
   </update>
 
+  <!-- 댓글 작성 시 게시판 번호 찾기 -->
+  <select id="findByBoardNo" parameterType="int" resultType="Board">
+    SELECT
+    board_no
+    FROM
+    board
+    WHERE board_no = #{boardNo}
+  </select>
+
+<!-- 조회수 업데이트: 비공개 글에서는 조회수 증가 불가 -->
+  <update id="increaseViewCount" parameterType="Board">
+    UPDATE board
+    SET
+    view_count = view_count + 1
+    WHERE
+    board_no = #{boardNo}
+    AND scope_no != 2
+  </update>
+
+
+  <!-- 추천수 업데이트 -->
+  <insert id="increaseLikeCount">
+    INSERT INTO board_like (board_no, member_no)
+    VALUES (#{boardNo}, #{memberNo})
+  </insert>
+
+  <delete id="decreaseLikeCount">
+    delete from board_like
+    where board_no = #{boardNo}
+    and member_no = #{memberNo}
+  </delete>
+
+  <select id="countLike" resultType="int">
+    select count(*) from board_like
+    where board_no = #{boardNo}
+     AND member_no = #{memberNo}
+  </select>
+
+
+
+  <!--  &lt;!&ndash; 검색 기능 &ndash;&gt;-->
+<!--    <select id="search" parameterType="map" resultMap="boardMap">-->
+<!--      SELECT * FROM board-->
+<!--      WHERE-->
+<!--      <choose>-->
+<!--        <when test="type == 'title'">-->
+<!--          title LIKE CONCAT('%', #{query}, '%')-->
+<!--        </when>-->
+<!--        <when test="type == 'content'">-->
+<!--          content LIKE CONCAT('%', #{query}, '%')-->
+<!--        </when>-->
+<!--        <when test="type == 'date'">-->
+<!--          DATE(created_date) = #{query}-->
+<!--        </when>-->
+<!--      </choose>-->
+<!--    </select>-->
+
+  <!-- 페이지 -->
   <select id="countAll" resultType="int" parameterType="int">
-    select count(*) from board where board_no=#{value}
+    select count(*) from board where board_category_no=#{value}
   </select>
 </mapper>

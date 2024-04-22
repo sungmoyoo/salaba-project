@@ -21,15 +21,16 @@
 
     <!-- 게시판 정보 가져오기 -->
    <association property="board" javaType="Board">
-    <id column="board_no" property="boardNo"/>
+     <id column="board_no" property="boardNo"/>
+     <result column="title" property="title"/>
    </association>
   </resultMap>
 
   <!-- 댓글 작성 -->
   <insert id="addComment" parameterType="Comment"
     useGeneratedKeys="true" keyColumn="comment_no" keyProperty="commentNo">
-    insert into comment(writer,content,board_no)
-    values(#{writer.no},#{content},#{boardNo})
+    insert into comment(board_no, member_no, content)
+    values(#{boardNo},#{writer.no},#{content})
   </insert>
 
   <!-- 댓글 삭제 -->
