@@ -53,10 +53,10 @@
         <div class="hr"></div>
     </div>
     <div data-th-each="facility : ${rental.facilities}" data-th-object="${facility}">
-        <div class="infoBox">
+        <div class="infoBox" data-th-if="*{facilityNo < 4}">
             <div class="info">
-                <span data-th-if="*{facilityNo < 4}" data-th-text="*{name}"></span >
-                <span  data-th-if="*{facilityNo < 4}" data-th-text="*{count}"></span>
+                <span data-th-text="*{name}"></span >
+                <span data-th-text="*{count}"></span>
             </div>
         </div>
     </div>
