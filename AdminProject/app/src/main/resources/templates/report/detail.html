@@ -28,8 +28,8 @@
     <br>
 
     <h4 class="partTitle">신고 내용</h4>
-    <input name="targetNo" type="hidden" data-th-text="*{targetNo}">
-    <input name="targetType" type="hidden" data-th-text="*{targetType}">
+    <input name="targetNo" type="hidden" data-th-value="*{targetNo}">
+    <input name="targetType" type="hidden" data-th-value="*{targetType}">
     <div class="infoBox">
         <div class="info"><span>신고 번호</span><span name="reportNo" data-th-text="*{reportNo}"></span></div>
         <div class="hr"></div>
@@ -74,7 +74,7 @@
 <form data-th-if="${#strings.equals(type, '3')}" action="update" data-th-action="@{update}" method="post"
       data-th-object="${report}">
     <h4 data-th-text="${name}">신고 대상</h4>
-    <input name="targetNo" type="hidden" data-th-text="*{targetNo}">
+    <input name="targetNo" type="hidden" data-th-value="*{targetNo}">
     <div class="infoBox">
         <div class="info">
         <span>숙소명</span>
