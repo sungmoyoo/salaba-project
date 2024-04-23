@@ -57,17 +57,27 @@
     </div>
 </form>
 
-<!-- 추천 버튼 -->
+
 <!-- 추천 버튼 -->
 <div>
   <button id="likeButton" class="heart-btn">
-    <i class="fa-regular fa-heart"></i>
+    <i class="fa-regular fa-heart"></i> <!-- 기본적으로 빈 하트로 설정 -->
   </button>
   <span id="likeCount" data-th-text="${board.likeCount}">0</span>
   <div>
-  <span id="myLikeCount" data-th-text="${board.myLikeCount}">0</span>
+    <span id="myLikeCount" data-th-text="${board.myLikeCount}">0</span>
   </div>
 </div>
+<input type="checkbox" id="toggle" hidden>
+
+<script>
+  var btn = document.getElementById("likeButton")
+
+  btn.addEventListener('click',function(){
+            console.log(btn.classList);
+            btn.classList.toggle('active');
+    })
+</script>
 
 
 <!-- 게시글 신고 -->
@@ -168,6 +178,50 @@
           document.body.scrollTop = 0; // For Safari
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
       }
+
+// 추천 수
+<!--$(document).on('click', '#likeButton', function() {-->
+<!--    let boardNo = $("#boardNo").val();-->
+<!--    let myLikeCount = parseInt($("#myLikeCount").text());-->
+<!--    if (myLikeCount === 0) {-->
+<!--        $.ajax({-->
+<!--            type: 'POST',-->
+<!--            url: '/board/like',-->
+<!--            data: { boardNo: boardNo },-->
+<!--            success: function(response) {-->
+<!--                if (response.status === "success") {-->
+<!--                    alert('추천하였습니다.');-->
+<!--                    $("#myLikeCount").text('1');-->
+<!--                    $('#likeButton').addClass('active'); // 하트 버튼에 'active' 클래스 추가-->
+<!--                    $('#likeButton i').removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart'); // 꽉 찬 하트로 변경-->
+<!--                    window.location = window.location.href;-->
+<!--                }-->
+<!--            },-->
+<!--            error: function() {-->
+<!--              console.log("like 실패!");-->
+<!--            }-->
+<!--        });-->
+<!--    } else {-->
+<!--        $.ajax({-->
+<!--            type: 'POST',-->
+<!--            url: '/board/unlike',-->
+<!--            data: { boardNo: boardNo },-->
+<!--            success: function(response) {-->
+<!--                if (response.status === "success") {-->
+<!--                    alert('추천 취소');-->
+<!--                    $("#myLikeCount").text('0');-->
+<!--                    $('#likeButton').removeClass('active'); // 'active' 클래스 제거-->
+<!--                    $('#likeButton i').removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart'); // 빈 하트로 변경-->
+<!--                    window.location = window.location.href;-->
+<!--                }-->
+<!--            },-->
+<!--            error: function() {-->
+<!--              console.log("unlike 실패!");-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--});-->
+
 
 
 </script>

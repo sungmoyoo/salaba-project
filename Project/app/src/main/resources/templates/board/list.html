@@ -3,16 +3,13 @@
 <head>
   <meta charset='UTF-8'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>비트캠프 데브옵스 5기</title>
 </head>
 <body>
 <link rel="stylesheet" type="text/css" href="board.css">
 
 <div data-th-replace="header :: header">머리말</div>
-
 <h1 data-th-text="${boardName}">게시판</h1>
-
 
 <div id="header">
   <!-- 게시판 버튼 -->
@@ -31,7 +28,6 @@
     <button type="submit" id="search-button">검색</button>
   </form>
 
-
   <!-- 글쓰기 버튼 -->
   <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">글쓰기</a>
 </div>
@@ -39,7 +35,7 @@
 <!-- 게시판 -->
   <thead>
   <!-- 후기 게시판 카드형식 목록 -->
-  <tr data-th-if="*{categoryNo == 0}">
+  <tr data-th-if="*{categoryNo == 0}" data-no="1">
   <div class="container">
     <div class="card-deck">
       <div data-th-each="board : ${list}" data-th-object="${board}" class="card">
@@ -52,7 +48,7 @@
           </div>
           <div class="card-body">
           <h3><a  data-th-href="@{view(categoryNo=0,boardNo=*{boardNo})}" data-th-text="*{title}"
-                 href="view.html">제목:제목입니다.</a></h3>
+                 href="view.html" onclick="return false;">제목:제목입니다.</a></h3>
           <p class="card-text">작성자: <span data-th-text="${board.writer.nickname}">홍길동</span></p>
           <p class="card-text">작성일: <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
           <p class="card-text">추천수: <span data-th-text="${board.likeCount}"></span></p>
@@ -68,7 +64,7 @@
   <!-- 정보공유 게시판-->
 <table border='1'>
   <thead>
-  <tr data-th-if="*{categoryNo == 1}">
+  <tr data-th-if="*{categoryNo == 1}" data-no="2">
     <th>분류</th>
     <th>제목</th>
     <th>작성자</th>
@@ -82,7 +78,7 @@
   <tr data-th-if="*{categoryNo == 1}" data-th-each="board : ${list}" data-th-object="${board}">
     <td data-th-text="*{headContent}">공지</td>
     <td><a data-th-href="@{view(categoryNo=1,boardNo=*{boardNo})}" data-th-text="*{title}"
-           href="view.html">제목입니다.</a></td>
+           href="view.html" onclick="return false;">제목입니다.</a></td>
     <td data-th-text="*{writer.nickname}">홍길동</td>
     <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
     <td data-th-text="${board.likeCount}"></td>
@@ -95,7 +91,7 @@
 <!-- 자유게시판 -->
 <table border='1'>
   <thead>
-<tr data-th-if="*{categoryNo == 2}">
+<tr data-th-if="*{categoryNo == 2}" data-no="3">
   <th>분류</th> <!-- headName -->
   <th>제목</th>
   <th>작성자</th>
@@ -109,7 +105,7 @@
 <tr data-th-if="*{categoryNo == 2}" data-th-each="board : ${list}" data-th-object="${board}">
   <td data-th-text="*{headContent}">공지</td>
   <td><a data-th-href="@{view(categoryNo=2,boardNo=*{boardNo})}" data-th-text="*{title}"
-         href="view.html">제목입니다.</a></td>
+         href="view.html" onclick="return false;">제목입니다.</a></td>
   <td data-th-text="*{writer.nickname}">홍길동</td>
   <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
   <td data-th-text="${board.likeCount}"></td>
@@ -138,5 +134,44 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script data-th-src="@{/board/board.js}"></script>
+<script>
+  // 후기 게시판
+  // 카드 컨테이너에 대한 클릭 이벤트 리스너
+  document.querySelectorAll(".card-deck .card").forEach(card => {
+    card.addEventListener("click", function(event) {
+      // 이벤트가 발생한 위치에서 가장 가까운 a 태그를 찾기
+      const link = card.querySelector("a");
+
+      // a 태그가 있고, 이벤트가 a 태그 자체에서 발생하지 않았을 경우에만 동작
+      if (link && event.target !== link) {
+        event.preventDefault(); // 기본 이벤트 중지
+        window.location.href = link.href; // 해당 링크로 페이지 이동
+      }
+    });
+  });
+
+// 정보공유, 자유 게시판
+// 모든 행을 선택하여 클릭 이벤트를 추가
+    document.querySelectorAll("table").forEach(table => {
+      table.addEventListener("click", function(event) {
+        let target = event.target;
+
+        // 클릭된 요소에서 가장 가까운 tr 요소를 찾기
+        while (target && target.nodeName !== "TR") {
+          target = target.parentNode;
+        }
+
+        // tr 요소 내부에 있는 a 태그를 찾기
+        if (target) {
+          const link = target.querySelector("a");
+          if (link && link.href) {
+            event.preventDefault(); // 기본 이벤트 중지
+            window.location.href = link.href; // 해당 링크로 페이지 이동
+          }
+        }
+      });
+    });
+
+</script>
 </body>
 </html>

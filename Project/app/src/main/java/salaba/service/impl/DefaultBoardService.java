@@ -1,5 +1,6 @@
 package salaba.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -35,7 +36,7 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
 
   @Override
   public List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo) {  // 목록 조회
-    return boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
+      return boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
   }
 
 
@@ -104,14 +105,13 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
 
   @Transactional
   @Override
-  public int increaseLikeCount(int boardNo, int memberNo) {
+  public int increaseLikeCount(int boardNo, int memberNo) { // 게시물의 추천 수 증가 메서드 호출
     return boardDao.increaseLikeCount(boardNo, memberNo);
 
-  } // 게시물의 추천 수 증가 메서드 호출
-
+  }
 
   @Override
-  public int decreaseLikeCount(int boardNo, int memberNo) {
+  public int decreaseLikeCount(int boardNo, int memberNo) { // 게시물의 추천 수 감소 메서드 호출
     return boardDao.decreaseLikeCount(boardNo, memberNo);
   }
 

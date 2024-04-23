@@ -33,6 +33,6 @@ public interface BoardService {
   int decreaseLikeCount(int boardNo, int memberNo); // 추천 취소
 
 
- // List<Board> search(String type, String query); // 검색 기능
+// List<Board> search(String type, String query); // 검색 기능
 
 }

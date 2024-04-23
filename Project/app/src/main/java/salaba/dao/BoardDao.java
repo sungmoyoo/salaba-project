@@ -12,7 +12,7 @@ public interface BoardDao {  // 게시판 인터페이스
 
   int deleteBoard(@Param("boardNo") int boardNo); // 글 삭제
 
-  List<Board> findAll( // 조회
+  List<Board> findAll( // 목록 조회
       @Param("categoryNo") int categoryNo, @Param("offset") int offset,
       @Param("rowCount") int rowCount, @Param("headNo") int headNo);
 

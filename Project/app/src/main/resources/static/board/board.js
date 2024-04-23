@@ -32,7 +32,7 @@ $(document).ready(function() {
           let basePath = 'https://kr.object.ncloudstorage.com/tp3-salaba/board/';
           if (categoryNo == '0') {
             basePath += 'review/';
-          } else if (categoryNo != '0') {
+          } else {
             basePath += 'community/';
           }
 
@@ -138,42 +138,6 @@ $(document).ready(function() {
     openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
   });
 
-// 추천 수
-$(document).on('click', '#likeButton', function() {
-    console.log("aaaaaa");
-    let boardNo = $("#boardNo").val();
-    let myLikeCount = parseInt($("#myLikeCount").text());
-    console.log(boardNo);
-    if (myLikeCount === 0) {
-        $.ajax({
-            type: 'POST',
-            url: '/board/like',
-            data: { boardNo: boardNo },
-            success: function(response) {
-                if (response === "success") {
-                    console.log("success like")
-                    alert('추천하였습니다.');
-                    $("#myLikeCount").text('1'); // 추천++
-                    $('#likeButton').addClass('active'); // 꽉 찬 하트로 변경
-                }
-            },
-        });
-    } else {
-        $.ajax({
-            type: 'POST',
-            url: '/board/unlike',
-            data: { boardNo: boardNo },
-            success: function(response) {
-                if (response === "success") {
-                    console.log("success like")
-                    alert('추천 취소');
-                    $("#myLikeCount").text('0'); // 추천 취소
-                    $('#likeButton').removeClass('active'); // 빈 하트로 변경
-                }
-            },
-        });
-    }
-});
 
 
 
@@ -185,3 +149,5 @@ function openPopup(url, title, width, height) {
   var popup = window.open(url, title, options);
   return popup;
 }
+
+

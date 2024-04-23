@@ -1,7 +1,10 @@
 package salaba.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -62,29 +65,23 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   private List<Board> sort(List<Board> boardList) {
     List<Board> sortedList = new ArrayList<>();
     List<Board> headNo1List = new ArrayList<>();
-    List<Board> otherHeadNoList = new ArrayList<>();
+    List<Board> otherList = new ArrayList<>();
 
-    // headNo가 1인 경우(=공지)와 나머지 경우 분류
+    // 공지사항(headNo == 1)과 그 외 게시물 분류
     for (Board board : boardList) {
-      if (board.getCategoryNo() == 0) { // 카테고리 번호가 0인 경우(후기 게시판에는 공지x) 정렬하지 않고 그대로 추가
-        sortedList.add(board);
-      } else if (board.getHeadNo() == 1) {
+      if (board.getHeadNo() == 1) {
         headNo1List.add(board);
       } else {
-        otherHeadNoList.add(board);
+        otherList.add(board);
       }
     }
 
-    // headNo가 1인 경우에 대해서만 최대 2개까지 정렬하여 결과 리스트에 추가
-    headNo1List.sort((o1, o2) -> Integer.compare(o1.getHeadNo(), o2.getHeadNo()));
-    int count = 0;
-    for (Board board : headNo1List) {
-      if (count < 2) {
-        sortedList.add(board);
-        count++;
-      }
-    }
-    sortedList.addAll(otherHeadNoList);
+    // 공지사항을 결과 리스트에 추가
+    sortedList.addAll(headNo1List);
+
+    // 나머지 게시물들을 결과 리스트에 추가
+    sortedList.addAll(otherList);
+
     return sortedList;
   }
 
@@ -153,12 +150,12 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   public void listBoard(
       @RequestParam int categoryNo,
       @RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "5") int pageSize,
+      @RequestParam(defaultValue = "8") int pageSize,
       @RequestParam(defaultValue = "1") int headNo,
       Model model) throws Exception {
 
     if (pageSize < 3 || pageSize > 20) {  // 페이지 설정
-      pageSize = 5;
+      pageSize = 8;
     }
 
     if (pageNo < 1) {
@@ -171,15 +168,32 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
+    log.debug(String.format("로그"));
+    log.debug(String.format("pageSize : %s", pageSize));
+    log.debug(String.format("pageNo : %s", pageNo));
+    log.debug(String.format("headNo : %s", headNo));
+    log.debug(String.format("numOfRecord : %s", numOfRecord));
+    log.debug(String.format("numOfPage : %s", numOfPage));
+
 
     model.addAttribute("boardName",
         categoryNo == 0 ? "후기게시판" : (categoryNo == 1 ? "정보공유게시판" : "자유게시판"));
     model.addAttribute("categoryNo", categoryNo);
     model.addAttribute("headNo", headNo);
 
-    List<Board> boardList = boardService.listBoard(categoryNo, pageNo, pageSize, 1);
-    log.debug(boardList);
+    List<Board> boardList = boardService.listBoard(categoryNo, pageNo, pageSize, headNo);
+    int i = 0;
+    for(Board b : boardList){
+      log.debug(String.format("index : %s", i++));
+      log.debug(String.format("board : %s", b));
+    }
     boardList = sort(boardList); // 정렬 함수 호출
+    i = 0;
+    for(Board b : boardList){
+      log.debug(String.format("index : %s", i++));
+      log.debug(String.format("board : %s", b));
+    }
+
     model.addAttribute("list", boardList);
 
     model.addAttribute("pageNo", pageNo);
@@ -293,7 +307,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   }
 
-  @GetMapping("board/modify")
+  @GetMapping("board/modify") // 수정 폼으로 들어가기
   public void modifyBoard(@RequestParam("boardNo") int boardNo,
       @RequestParam("categoryNo") int categoryNo, Model model) {
     Board board = boardService.getBoard(boardNo, categoryNo);
@@ -335,7 +349,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       MultipartFile[] files,
       HttpSession session,
       Model model,
-      int categoryNo)
+      @RequestParam("categoryNo") int categoryNo)
       throws Exception {
     // NCP Object Storage에 저장한 파일의 이미지 이름을 보관할 컬렉션을 준비한다.
     ArrayList<BoardFile> boardFiles = new ArrayList<>();
@@ -414,7 +428,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     // 게시판 정보 가져오기
     Board board = boardService.getBoardNo(boardNo);
 
-    // 댓글 또는 답글에 해당하는지 확인하여 처리
     // 댓글 또는 답글에 해당하는지 확인하여 처리
     if (content != null && !content.isEmpty()) {
       String type = request.getParameter("type");
@@ -524,7 +537,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   // 추천수
   @PostMapping("/board/like")
-  public ResponseEntity<?> likeBoard(
+  @ResponseBody
+  public Object likeBoard(
       @RequestParam("boardNo") int boardNo,
       HttpSession session) {
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -532,37 +546,45 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인을 해주세요!");
     }
 
+    Map<String,Object> result = new HashMap<>();
     try {
       log.debug(("ffff") + boardNo);
       boardService.increaseLikeCount(boardNo, loginUser.getNo());
-      return ResponseEntity.status(HttpStatus.OK).body("추천 완료");
+
+      result.put("status", "success");
+
     } catch (Exception e) {
       log.error("추천 처리 중 오류 발생", e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("추천 처리 중 오류 발생!");
+      result.put("status", "fail");
     }
-
+    return result;
   }
 
   @PostMapping("/board/unlike")      // 추천 취소 로직
-  public ResponseEntity<?> removeLike(
+  @ResponseBody
+  public Object removeLike(
       @RequestParam int boardNo,
       HttpSession session) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
+    Map<String,Object> result = new HashMap<>();
     try {
       boardService.decreaseLikeCount(boardNo, loginUser.getNo());
-      return ResponseEntity.status(HttpStatus.OK).body("추천 취소");
+      result.put("status", "success");
     } catch (Exception e) {
       log.error("추천 처리 중 오류 발생", e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("추천 처리 중 오류 발생!");
+      result.put("status", "fail");
     }
+    return result;
   }
 
-  // 검색
+//   검색
 //  @GetMapping("/search")
-//  public String search(@RequestParam("type") String type,
-//      @RequestParam("q") String query,
+//  public String searchBoard(
+//      @RequestParam(value="title") String title,
+//      @RequestParam(value = "content") String content,
+//      @RequestParam(pattern = "yyyy-MM-dd") Date createdDate,
 //      Model model) {
 //    List<Board> searchResults = boardService.search(type, query);
 //    model.addAttribute("searchResults", searchResults);

@@ -113,7 +113,7 @@
     margin-left: 20px; /* 답글 들여쓰기. */
   }
 
-  /* 추천수 버튼 */
+
 /* 추천수 버튼 */
 .heart-btn {
   background-color: transparent;
@@ -126,19 +126,13 @@
   position: relative;
 }
 
-
-.heart-btn i.fa-heart-o { /* 빈 하트 스타일 */
-  width: 40px;
-  height: 40px;
-  border: 1px solid black;
-  color: grey;
+.heart-btn.active i.fa-regular {
+  fill: red; /* 꽉 찬 하트는 빨간색으로 표시 */
 }
 
-.heart-btn.active i.fa-heart-o { /* 꽉 찬 하트 스타일 */
-  width: 40px;
-  height: 40px;
-  border: 1px solid black;
-  color: red; /* 또는 다른 색상 */
+.heart-btn i.fa-regular {
+
+   fill: #white;
 }
 
 .heart-btn span {
@@ -151,12 +145,28 @@
   pointer-events: none; /* 숫자에 대한 클릭 이벤트 방지 */
 }
 
+
+
 #myLikeCount {
-  position:relative;
+  position: relative;
   left: 55%;
+  /*display: none;구현 시 숨기기 */
 }
 
 
+/* 정보공유, 자유게시판 행 클릭 이벤트 */
+  tbody tr:hover {
+    background-color: lightgray;
+    color: white;
+  cursor: pointer;
+  }
+
+/* 후기게시판 행 클릭 이벤트 */
+  tbody tr:hover, .card:hover {
+  background-color: lightgray;
+  color: white;
+  cursor: pointer;
+  }
 
   th, td {
      border: 1px solid black;
@@ -180,3 +190,4 @@
     height: 250px;  // 높이 설정
     object-fit: cover;  // 이미지 비율 유지하며 컨테이너에 맞춤
 }
+

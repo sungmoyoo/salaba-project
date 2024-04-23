@@ -106,10 +106,44 @@
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 <script data-th-src="@{/board/board.js}"></script>
+<script>
+  // 후기 게시판
+// 카드 컨테이너에 대한 클릭 이벤트 리스너
+document.querySelectorAll(".card-deck .card").forEach(card => {
+  card.addEventListener("click", function(event) {
+    // 이벤트가 발생한 위치에서 가장 가까운 a 태그를 찾기
+    const link = card.querySelector("a");
+
+    // a 태그가 있고, 이벤트가 a 태그 자체에서 발생하지 않았을 경우에만 동작
+    if (link && event.target !== link) {
+      event.preventDefault(); // 기본 이벤트 중지
+      window.location.href = link.href; // 해당 링크로 페이지 이동
+    }
+  });
+});
+
+// 정보공유, 자유 게시판
+// 모든 행을 선택하여 클릭 이벤트를 추가
+  document.querySelectorAll("table").forEach(table => {
+    table.addEventListener("click", function(event) {
+      let target = event.target;
+
+      // 클릭된 요소에서 가장 가까운 tr 요소를 찾기
+      while (target && target.nodeName !== "TR") {
+        target = target.parentNode;
+      }
+
+      // tr 요소 내부에 있는 a 태그를 찾기
+      if (target) {
+        const link = target.querySelector("a");
+        if (link && link.href) {
+          event.preventDefault(); // 기본 이벤트 중지
+          window.location.href = link.href; // 해당 링크로 페이지 이동
+        }
+      }
+    });
+  });
+
+</script>
  </body>
-
-
-<style>
-
-</style>
 </html>
