@@ -200,6 +200,9 @@
     }
 
     .price-tag{
+      align-items: center;
+      display: flex;
+      justify-content: center;
       background-color: #4285F4;
       border-radius: 8px;
       color: #FFFFFF;
@@ -233,7 +236,17 @@
       border-top: 9px solid #FFFFFF;
     }
 
-    .property.mapSlide-container{
+    .property.highlight .mapSlide-container {
+      display: flex;
+    }
+
+    .property.highlight .price-tag {
+      width: 50px;
+      height: 50px;
+    }
+
+
+    .mapSlide-container{
       display: none;
       flex-direction: column;
       flex: 1;
@@ -257,11 +270,11 @@
   <section>
     <div class="theme-container">
       <button onclick="scrollThemes(-100)">&lt;</button>
-      <!-- <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
+      <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
         <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
           <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
         </a>
-      </div> -->
+      </div>
       <button class="scroll-right-button" onclick="scrollThemes(100)">&gt;</button>
     </div>
     <div class="filter">
@@ -274,6 +287,7 @@
         <div class="listing-slider">
           <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
                data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+          <span class="no-rentalHome" type="hidden" data-th-text="${rentalHome.rentalHomeNo}"></span>
           <button class="slide-button prev-button">&lt;</button>
           <button class="slide-button next-button">&gt;</button>
           <span data-th-text="${rentalHome.name}">숙소 이름</span>
@@ -359,7 +373,7 @@
   // 목록 보기 버튼
   listButton.addEventListener('click', function(){
     mapContainer.style.display = 'none';
-    listContainer.style.display = 'block';
+    listContainer.style.display = 'flex';
   });
 
   // googleMap 초기화
@@ -399,7 +413,7 @@
     for( const property of rentalHomeProp ){
       const advancedMarkerView = new google.maps.marker.AdvancedMarkerElement({
         map,
-        content: buildContent(property), // 구글맵 마커 안쪽에서 표시할 것들 설정
+        // content: buildContent(property), // 구글맵 마커 안쪽에서 표시할 것들 설정
         position:property.position, // 구글맵 마커 위치 설정
         title:property.name,
       });
@@ -500,8 +514,6 @@
     closeFilterPopup();
   }
 
-
-
   function scrollThemes(offset) { // 테마 스크롤 이벤트 (수정 필요)
     const container = document.querySelector('.theme-container');
 
@@ -596,21 +608,30 @@
   updateRentalHomeList(newRentalHomeList);
  }
 
- // 테마 이미지 클릭시 테마 검색 실행
- $(document).ready(function(){
-  $('.theme-icon-container img').click(function(){
-    $.ajax({
-      url: '/theme',
-      type: 'GET',
-      success : function(response){
-        handleNewRentalHomeList(response);
-      },
-      error: function(xhr, status, error){
-        console.error(error);
-      }
-    });
-  });
- });
+  $(document).ready(function(){
+    $('.listing-slider img').click(function(){
+      
+      let clickImage = $(this);
+
+      let rentalHomeNo = clickImage.siblings('.no-rentalHome').text();
+      console.log(clickImage.siblings('.no-rentalHome').text());
+      console.log(clickImage);
+      console.log(rentalHomeNo);
+      $.ajax({
+        url:'/rentalHome/view',
+        type: 'GET',
+        data :{
+          rentalHomeNo : rentalHomeNo
+        },
+        success: function(){
+          window.location.href = '/rentalHome/view.html';
+        },
+        error: function(){
+
+        }
+      })
+    })
+  })
 
 </script>
 </body>
