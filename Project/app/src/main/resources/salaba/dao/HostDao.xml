@@ -194,28 +194,25 @@
 
   <select id="findAllReservation" resultMap="HostReservationMap" parameterType="int">
     select
-    rent.name as rentalHomeName,
-    rent.member_no hostNo,
-    m.name as memberName,
-    rv.reservation_no,
-    rv.member_no,
-    rv.rental_home_no,
-    rv.start_date,
-    rv.end_date,
-    rv.state,
-    rv.number_of_people,
-    p.payment_date,
-    p.amount
+      rent.name as rentalHomeName,
+      rent.member_no hostNo,
+      m.name as memberName,
+      rv.reservation_no,
+      rv.member_no,
+      rv.rental_home_no,
+      rv.start_date,
+      rv.end_date,
+      rv.state,
+      rv.number_of_people,
+      p.payment_date,
+      p.amount
     from
     member m
-    inner join
-    reservation rv on m.member_no = rv.member_no
-    inner join
-    rental_home rent on rv.rental_home_no = rent.rental_home_no
-    inner join
-    payment p on rv.reservation_no = p.reservation_no
+      inner join reservation rv on m.member_no = rv.member_no
+      inner join rental_home rent on rv.rental_home_no = rent.rental_home_no
+      inner join payment p on rv.reservation_no = p.reservation_no
     where
-    rent.member_no = #{value};
+      rent.member_no = #{value};
   </select>
 
   <delete id="deleteRentalHome" parameterType="int">
