@@ -1,51 +1,3 @@
-$(document).ready(function() {
-  $('#summernote').summernote({
-    height: 800,
-    width: 1000,
-    callbacks: {
-      onInit: function() {
-        console.log('Summernote 생성됨!');
-      },
-      onImageUpload: function(files) {
-
-        let data = new FormData();
-        for (const file of files) {
-          data.append("files", file);
-        }
-        let categoryNo = $("#categoryNo").val();
-
-        $.ajax({
-          url: 'file/upload?categoryNo=' + categoryNo,
-          type: 'POST',
-          dataType: 'json',
-          contentType: false,
-          processData: false,
-          data: data
-        })
-        .done(function(result) {
-          if (result.length == 0) {
-            alert('로그인 하세요!');
-            return;
-          }
-
-          // 카테고리 번호에 따라 다른 경로를 설정
-          let basePath = 'https://kr.object.ncloudstorage.com/tp3-salaba/board/';
-          if (categoryNo == '0') {
-            basePath += 'review/';
-          } else {
-            basePath += 'community/';
-          }
-
-          for (const boardFile of result) {
-            $('#summernote').summernote('insertImage', basePath + boardFile.uuidFileName);
-          }
-        });
-      }
-    }
-  });
-});
-
-
 // 게시글 공개범위 설정
   function setScopeNo(input) {
     // 선택된 라디오 버튼의 값을 scopeNo에 설정
@@ -106,38 +58,6 @@ $(document).ready(function() {
 
     showSlide(currentIndex);
   });
-
-
-// 게시글 신고 버튼
-  $('#board-report-btn').click(function() {
-    var title = '신고하기';
-    var width = 800;
-    var height = 600;
-    let targetNo = document.getElementById("noInput").getAttribute("value");
-    console.log(targetNo);
-    openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
-  });
-
-// 댓글 신고 버튼
-  $('#comment-report-btn').click(function() {
-    var title = '신고하기';
-    var width = 800;
-    var height = 600;
-    let targetNo = document.getElementById("noInput").getAttribute("value");
-    console.log(targetNo);
-    openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
-  });
-
-// 답글 신고 버튼
-    $('#reply-report-btn').click(function() {
-    var title = '신고하기';
-    var width = 800;
-    var height = 600;
-    let targetNo = document.getElementById("noInput").getAttribute("value");
-    console.log(targetNo);
-    openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
-  });
-
 
 
 

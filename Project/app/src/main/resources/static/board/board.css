@@ -145,8 +145,6 @@
   pointer-events: none; /* 숫자에 대한 클릭 이벤트 방지 */
 }
 
-
-
 #myLikeCount {
   position: relative;
   left: 55%;

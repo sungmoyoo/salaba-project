@@ -2,9 +2,13 @@ package salaba.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -51,37 +55,60 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @Value("${ncp.bucketname}")
   private String bucketName;
 
-  @GetMapping("board/main") // 게시글 전체 메인화면
+  @GetMapping("board/main")
   public void mainBoard(Model model) throws Exception {
-    List<Board> reviewBoardList = boardService.listBoard(0, 1, 4, 1);
-    List<Board> infoBoardList = boardService.listBoard(1, 1, 5, 1);
-    List<Board> communityBoardList = boardService.listBoard(2, 1, 5, 1);
-    model.addAttribute("review", sort(reviewBoardList));
-    model.addAttribute("information", sort(infoBoardList));
-    model.addAttribute("community", sort(communityBoardList));
+    // 각 카테고리별 게시판 리스트 로딩
+    List<Board> reviewBoardList = boardService.mainBoard(0, 1, 4, 1);
+    List<Board> infoBoardList = boardService.mainBoard(1, 1, 5, 1);
+    List<Board> communityBoardList = boardService.mainBoard(2, 1, 5, 1);
+
+    log.debug(String.format("infoBoard : %s", infoBoardList.size()));
+    log.debug(String.format("infoBoard : %s", infoBoardList.toString()));
+
+    model.addAttribute("review", reviewBoardList);
+    model.addAttribute("information", sortMain(infoBoardList));
+    model.addAttribute("community", sortMain(communityBoardList));
   }
 
-  // 보드 리스트를 말머리 순으로 정렬해주는 함수
-  private List<Board> sort(List<Board> boardList) {
+
+  // 게시글 정렬 - main
+  private List<Board> sortMain(List<Board> boardList) {
     List<Board> sortedList = new ArrayList<>();
-    List<Board> headNo1List = new ArrayList<>();
-    List<Board> otherList = new ArrayList<>();
+    sortedList = sortAnnounce(boardList);
+    sortedList.addAll(sortOthers(boardList));
+    return sortedList;
+  }
+
+  private List<Board> sortAnnounce(List<Board> boardList) {
+    List<Board> sortedList = new ArrayList<>();
 
     // 공지사항(headNo == 1)과 그 외 게시물 분류
     for (Board board : boardList) {
+      log.debug(String.format("sort test board loop1 : %s", sortedList.size()));
+      log.debug(String.format("sort test board loop1 : %s", board.toString()));
+      if (sortedList.size() == 2) {
+        break;
+      }
       if (board.getHeadNo() == 1) {
-        headNo1List.add(board);
-      } else {
-        otherList.add(board);
+        sortedList.add(board);
       }
     }
+    return sortedList;
+  }
 
-    // 공지사항을 결과 리스트에 추가
-    sortedList.addAll(headNo1List);
+  private List<Board> sortOthers(List<Board> boardList){
+    List<Board> sortedList = new ArrayList<>();
 
-    // 나머지 게시물들을 결과 리스트에 추가
-    sortedList.addAll(otherList);
-
+    for(Board board : boardList){
+      log.debug(String.format("sort test board loop2 : %s", sortedList.size()));
+      log.debug(String.format("sort test board loop2 : %s", board.toString()));
+      if(sortedList.size() == 3){
+        break;
+      }
+      if (board.getHeadNo() != 1) {
+        sortedList.add(board);
+      }
+    }
     return sortedList;
   }
 
@@ -152,7 +179,9 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "8") int pageSize,
       @RequestParam(defaultValue = "1") int headNo,
+      String keyword,
       Model model) throws Exception {
+
 
     if (pageSize < 3 || pageSize > 20) {  // 페이지 설정
       pageSize = 8;
@@ -182,20 +211,9 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     model.addAttribute("headNo", headNo);
 
     List<Board> boardList = boardService.listBoard(categoryNo, pageNo, pageSize, headNo);
-    int i = 0;
-    for(Board b : boardList){
-      log.debug(String.format("index : %s", i++));
-      log.debug(String.format("board : %s", b));
-    }
-    boardList = sort(boardList); // 정렬 함수 호출
-    i = 0;
-    for(Board b : boardList){
-      log.debug(String.format("index : %s", i++));
-      log.debug(String.format("board : %s", b));
-    }
 
-    model.addAttribute("list", boardList);
-
+    model.addAttribute("list", sortOthers(boardList));
+    model.addAttribute("announce", sortAnnounce(boardList));
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
@@ -580,15 +598,33 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   }
 
 //   검색
-//  @GetMapping("/search")
-//  public String searchBoard(
-//      @RequestParam(value="title") String title,
-//      @RequestParam(value = "content") String content,
-//      @RequestParam(pattern = "yyyy-MM-dd") Date createdDate,
-//      Model model) {
-//    List<Board> searchResults = boardService.search(type, query);
-//    model.addAttribute("searchResults", searchResults);
-//    return "searchResults";  // 검색 결과를 보여줄 뷰 페이지
-//  }
+@GetMapping("/board/search")
+public String searchBoard(
+    @RequestParam("type") String type,
+    @RequestParam("keyword") String keyword,
+    Model model) {
+
+  List<Board> filteredBoardList;
+
+  // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
+  if ("title".equals(type)) {
+    filteredBoardList = boardService.searchByTitle(keyword);
+  } else if ("content".equals(type)) {
+    filteredBoardList = boardService.searchByContent(keyword);
+  } else {
+    // 유효하지 않은 검색 유형을 처리하는 경우
+    filteredBoardList = Collections.emptyList(); // 빈 리스트 반환
+    model.addAttribute("message", "검색 결과가 없습니다");
+  }
+
+  // 필터링된 게시글 목록을 화면에 전달
+  model.addAttribute("list", filteredBoardList);
+  model.addAttribute("categoryNo", -1); // 필터링된 상태임을 나타내는 값(-1) 추가
+  model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
+  model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
+
+  return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
+}
+
 
 }

@@ -10,6 +10,9 @@ public interface BoardService {
 
   List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo); // 게시판 조회
 
+  List<Board> mainBoard(int categoryNo, int pageNo, int pageSize, int headNo); // 게시판 조회
+
+
   Board getBoard(int boardNo, int categoryNo); // 게시판 상세 조회
   Board getBoardNo(int boardNo); // 댓글 조회, 조회수용
 
@@ -33,6 +36,7 @@ public interface BoardService {
   int decreaseLikeCount(int boardNo, int memberNo); // 추천 취소
 
 
-// List<Board> search(String type, String query); // 검색 기능
-
+ List<Board> search(String keyword, String type); // 검색 기능
+  List<Board> searchByTitle(String title); // 제목으로 검색
+  List<Board> searchByContent(String content); // 내용으로 검색
 }

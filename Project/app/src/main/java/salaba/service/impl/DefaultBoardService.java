@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import salaba.dao.BoardFileDao;
@@ -36,9 +37,21 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
 
   @Override
   public List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo) {  // 목록 조회
+    if (headNo == 1) {
+      return boardDao.findAllAnnouncements(categoryNo, pageNo, pageSize, 1);
+    } else {
       return boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
+    }
   }
 
+  @Override
+  public List<Board> mainBoard(int categoryNo, int pageNo, int pageSize, int headNo) {  // 커뮤니티 메인화면 조회
+    if (headNo == 1) {
+      return boardDao.findAllAnnouncements(categoryNo, pageNo, pageSize, 1);
+    } else {
+      return boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
+    }
+  }
 
   @Override
   public Board getBoard(int boardNo, int categoryNo) { // 상세 조회
@@ -115,7 +128,21 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
     return boardDao.decreaseLikeCount(boardNo, memberNo);
   }
 
+  @Override// 검색 기능
+  public List<Board> search(String keyword, String type) {
+    return boardDao.searchByKeyword(keyword, type);
+  }
 
-// 검색 기능
+  @Override
+  public List<Board> searchByTitle(String title) {
+    return boardDao.searchByKeyword(title, "title");
+  }
+
+  @Override
+  public List<Board> searchByContent(String content) {
+    return boardDao.searchByKeyword(content, "content");
+  }
+
+
 
 }
