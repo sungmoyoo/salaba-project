@@ -92,13 +92,11 @@ public class RentalHomeController {
   }
 
   @GetMapping("/view")
-  public String rentalHomeView( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model){ // 숙소 상세 조회
+  public void rentalHomeView( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model){ // 숙소 상세 조회
     model.addAttribute("rentalHome", rentalHomeService.getRentalHomeDetailView(rentalHomeNo));
     model.addAttribute("rentalHomeReview", rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
     model.addAttribute("rentalHomePhoto", rentalHomeService.getRentalHomePhotos(rentalHomeNo));
     model.addAttribute("rentalHomeFacility", rentalHomeService.getRentalHomeFacilities(rentalHomeNo));
-
-    return "view?rentalHomeNo=" + rentalHomeNo;
   }
 
 

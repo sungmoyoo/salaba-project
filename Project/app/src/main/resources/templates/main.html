@@ -285,9 +285,10 @@
     <div class="listing-container">
       <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
         <div class="listing-slider">
-          <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
-               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
-          <span class="no-rentalHome" type="hidden" data-th-text="${rentalHome.rentalHomeNo}"></span>
+          <a data-th-href="@{view(rentalHomeNo=${rentalHome.rentalHomeNo})}" name="rentalHomeNo">
+            <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
+                 data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+          </a>
           <button class="slide-button prev-button">&lt;</button>
           <button class="slide-button next-button">&gt;</button>
           <span data-th-text="${rentalHome.name}">숙소 이름</span>
@@ -607,31 +608,6 @@
  function handleNewRentalHomeList(newRentalHomeList){
   updateRentalHomeList(newRentalHomeList);
  }
-
-  $(document).ready(function(){
-    $('.listing-slider img').click(function(){
-      
-      let clickImage = $(this);
-
-      let rentalHomeNo = clickImage.siblings('.no-rentalHome').text();
-      console.log(clickImage.siblings('.no-rentalHome').text());
-      console.log(clickImage);
-      console.log(rentalHomeNo);
-      $.ajax({
-        url:'/rentalHome/view',
-        type: 'GET',
-        data :{
-          rentalHomeNo : rentalHomeNo
-        },
-        success: function(){
-          window.location.href = '/rentalHome/view.html';
-        },
-        error: function(){
-
-        }
-      })
-    })
-  })
 
 </script>
 </body>

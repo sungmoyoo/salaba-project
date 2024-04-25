@@ -27,4 +27,9 @@ public class App {
     @GetMapping("/about")
     public void about() {
     }
+
+    @GetMapping("/chat")
+    public void chat(){
+
+    }
 }
