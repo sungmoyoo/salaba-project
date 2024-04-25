@@ -2,23 +2,42 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs');
-const path = require('path');
+const properties = require('properties-parser');
+
+// properties 파일 불러오기
+const config = properties.read('../application.properties');
+
+// ncp file upload
+const AWS = require('aws-sdk');
+const endpoint = new AWS.Endpoint(config.ncp.endpoint);
+const region = config.ncp.regionname;
+const access_key = config.ncp.accesskey;
+const secret_key = config.ncp.secretkey;
+const bucket_name = config.tp3-salaba;
 
 const chat = express(); // 'express' 변수명 수정
 const server = http.createServer(chat);
 const wss = new WebSocket.Server({ server });
 
-const chatFilePath = 'https://kr.object.ncloudstorage.com/tp3-salaba/chat/';
 
-function setFileDir(chatFileName){
-  const fileFullPath = chatFilePath + chatFileName;
-  const fileDir = path.dirname(fileFullPath);
-  process.chdir(fileDir);
+// 채팅파일
+const chatFile = {
+  chatFileName: '',
+  chatFilePath: '',
+  chatFileFullPath: ''
 }
 
 // 이전에 전송된 메시지를 보낸 방들의 목록을 저장하는 Set
 const sentPreviousMessagesRooms = new Set();
 
+const S3 = new AWS.S3({
+  endpoint: endpoint,
+  region: region,
+  credentials: {
+    accessKeyId : access_key,
+    secretAccessKey: secret_key
+  }
+});
 
 
 // 클라이언트 연결시
@@ -26,16 +45,15 @@ wss.on('connection', (ws) => {
   console.log("연결됨");
   // 클라이언트로부터 메시지를 받았을 때
   ws.on('message', (message) => {
-    console.log("aaaa");
+    
     const messageObj = JSON.parse(message);
-    const chatFileName = messageObj.chatName;
+    chatFile.chatFileName = messageObj.chatName;
+    chatFile.chatFileFullPath = chatFile.chatFilePath+chatFile.chatFileName;
 
     console.log(messageObj);
-    console.log(chatFilePath);
-    console.log(chatFileName);
 
     if(messageObj === 'getChat' && !sentPreviousMessagesRooms.has(messageObj.reservationNo)){
-      sendPreviousMessages(ws, chatFileName);
+      sendPreviousMessages(ws);
       sentPreviousMessagesRooms.add(messageObj.reservationNo);
     }
     else{
@@ -49,13 +67,16 @@ wss.on('connection', (ws) => {
       });
     }
   });
-  console.log("bbbbb");
+
+  // 클라이언트와의 WebSocket 연결이 끊겼을때
+  ws.on('close', () =>{
+    uploadFile(chatFileName);
+  });
 });
 
 // 이전 채팅기록 전송
-function sendPreviousMessages(ws, chatFileName) {
-  setFileDir(chatFileName);
-  fs.readFile(chatFileName, 'utf8', (err, data) => {
+function sendPreviousMessages(ws) {
+  fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
@@ -65,8 +86,8 @@ function sendPreviousMessages(ws, chatFileName) {
 }
 
 // 채팅 파일에 저장
-function saveMessage(message, chatFilePath) {
-  fs.readFile(chatFilePath, 'utf8', (err, data) => {
+function saveMessage(message) {
+  fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
@@ -76,7 +97,7 @@ function saveMessage(message, chatFilePath) {
       messages = JSON.parse(data);
     }
     messages.push(message); // 변수명 수정: message -> messageObj
-    fs.writeFile(chatFilePath, JSON.stringify(messages) + '\n', { flag: 'w' }, (err) => { // flag: 'a'를 사용하여 기존 데이터 덮어씌우지 않고 추가
+    fs.writeFile(chatFile.chatFileFullPath, JSON.stringify(messages) + '\n', { flag: 'w' }, (err) => { // flag: 'a'를 사용하여 기존 데이터 덮어씌우지 않고 추가
       if (err) {
         console.error(err);
         return;
@@ -84,6 +105,17 @@ function saveMessage(message, chatFilePath) {
       console.log("채팅 파일 저장");
     });
   });
+}
+
+async function uploadFile(){
+  // upload file
+  await S3.putObject({
+    Bucket: bucket_name, // upload할 bucket 명
+    Key: chatFile.chatFileName, // upload시 저장할 파일명
+    ACL: 'public-read',
+    // ACL을 지우면 전체 공개되지 않습니다.
+    Body: fs.createReadStream(chatFile.chatFileFullPath) // 로컬에 있는 파일 지정
+}).promise();
 }
 
 server.listen(8889, () => {
