@@ -10,8 +10,7 @@ public interface BoardService {
 
   List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo); // 게시판 조회
 
-  List<Board> mainBoard(int categoryNo, int pageNo, int pageSize, int headNo); // 게시판 조회
-
+  List<Board> findAnnouncements(int categoryNo, int limit); // 게시글 목록 공지사항 조회
 
   Board getBoard(int boardNo, int categoryNo); // 게시판 상세 조회
   Board getBoardNo(int boardNo); // 댓글 조회, 조회수용
@@ -26,7 +25,7 @@ public interface BoardService {
 
   int deleteBoardFile(int fileNo); // 첨부파일 삭제
 
-  int countAll(int categoryNo); // count
+  int countAll(int categoryNo); // 공지를 제외한 게시글 목록 페이징 처리
 
   void addAllFiles(List<BoardFile> boardFiles); // 파일 추가
 
@@ -35,8 +34,7 @@ public interface BoardService {
   int increaseLikeCount(int boardNo, int memberNo); // 게시글 추천수 증가
   int decreaseLikeCount(int boardNo, int memberNo); // 추천 취소
 
-
- List<Board> search(String keyword, String type); // 검색 기능
+  List<Board> search(String keyword, String type); // 검색 기능 업데이트
   List<Board> searchByTitle(String title); // 제목으로 검색
   List<Board> searchByContent(String content); // 내용으로 검색
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import salaba.dao.BoardFileDao;
@@ -36,21 +35,16 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
-  public List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo) {  // 목록 조회
-    if (headNo == 1) {
-      return boardDao.findAllAnnouncements(categoryNo, pageNo, pageSize, 1);
-    } else {
-      return boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
-    }
+  public List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo) { // 게시글 목록 조회
+    // 일반 게시글 조회
+    List<Board> normalPosts = boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
+
+    return normalPosts;
   }
 
   @Override
-  public List<Board> mainBoard(int categoryNo, int pageNo, int pageSize, int headNo) {  // 커뮤니티 메인화면 조회
-    if (headNo == 1) {
-      return boardDao.findAllAnnouncements(categoryNo, pageNo, pageSize, 1);
-    } else {
-      return boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
-    }
+  public List<Board> findAnnouncements(int categoryNo, int limit) { // 공지사항 찾기
+    return boardDao.findAnnouncements(categoryNo, limit);
   }
 
   @Override
@@ -101,7 +95,7 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   @Override
   public int countAll(int categoryNo) {
     return boardDao.countAll(categoryNo);
-  } // count
+  } // count 공지사항 제외 페이징 처리
 
   @Transactional
   @Override
@@ -128,7 +122,7 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
     return boardDao.decreaseLikeCount(boardNo, memberNo);
   }
 
-  @Override// 검색 기능
+  @Override
   public List<Board> search(String keyword, String type) {
     return boardDao.searchByKeyword(keyword, type);
   }
@@ -142,7 +136,4 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   public List<Board> searchByContent(String content) {
     return boardDao.searchByKeyword(content, "content");
   }
-
-
-
 }

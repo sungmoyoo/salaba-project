@@ -70,4 +70,8 @@ function openPopup(url, title, width, height) {
   return popup;
 }
 
+// 공지글 색상처
+.announcement {
+  color: red;
+}
 

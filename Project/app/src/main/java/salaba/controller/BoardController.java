@@ -1,14 +1,10 @@
 package salaba.controller;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -57,59 +53,34 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @GetMapping("board/main")
   public void mainBoard(Model model) throws Exception {
-    // 각 카테고리별 게시판 리스트 로딩
-    List<Board> reviewBoardList = boardService.mainBoard(0, 1, 4, 1);
-    List<Board> infoBoardList = boardService.mainBoard(1, 1, 5, 1);
-    List<Board> communityBoardList = boardService.mainBoard(2, 1, 5, 1);
-
-    log.debug(String.format("infoBoard : %s", infoBoardList.size()));
-    log.debug(String.format("infoBoard : %s", infoBoardList.toString()));
+    // 각 카테고리별로 최신 공지 2개와 일반 게시글 3개를 로드
+    List<Board> reviewBoardList = mainBoardContents(0, 1, 4);  // 후기 게시판에는 공지사항 없음
+    List<Board> infoBoardList = mainBoardContents(1, 1, 3);    // 정보공유 게시판
+    List<Board> communityBoardList = mainBoardContents(2, 1, 3); // 자유 게시판
 
     model.addAttribute("review", reviewBoardList);
-    model.addAttribute("information", sortMain(infoBoardList));
-    model.addAttribute("community", sortMain(communityBoardList));
+    model.addAttribute("information", infoBoardList);
+    model.addAttribute("community", communityBoardList);
   }
 
+  // 메인화면에서 공지와 일반 게시글 분리 후 합체
+  private List<Board> mainBoardContents(int categoryNo, int pageNo, int normalPostCount) {
+    List<Board> combinedList = new ArrayList<>();
 
-  // 게시글 정렬 - main
-  private List<Board> sortMain(List<Board> boardList) {
-    List<Board> sortedList = new ArrayList<>();
-    sortedList = sortAnnounce(boardList);
-    sortedList.addAll(sortOthers(boardList));
-    return sortedList;
-  }
+    // 공지사항 로드, 후기 게시판 제외
+    if (categoryNo != 0) {
+      List<Board> announcements = boardService.findAnnouncements(categoryNo,  2);
+      System.out.println("값 넣음");
+      combinedList.addAll(announcements);
+      System.out.println("넣었음");
 
-  private List<Board> sortAnnounce(List<Board> boardList) {
-    List<Board> sortedList = new ArrayList<>();
-
-    // 공지사항(headNo == 1)과 그 외 게시물 분류
-    for (Board board : boardList) {
-      log.debug(String.format("sort test board loop1 : %s", sortedList.size()));
-      log.debug(String.format("sort test board loop1 : %s", board.toString()));
-      if (sortedList.size() == 2) {
-        break;
-      }
-      if (board.getHeadNo() == 1) {
-        sortedList.add(board);
-      }
     }
-    return sortedList;
-  }
 
-  private List<Board> sortOthers(List<Board> boardList){
-    List<Board> sortedList = new ArrayList<>();
+    // 일반 게시글 로드
+    List<Board> normalPosts = boardService.listBoard(categoryNo, pageNo, normalPostCount,0);
+    combinedList.addAll(normalPosts);
 
-    for(Board board : boardList){
-      log.debug(String.format("sort test board loop2 : %s", sortedList.size()));
-      log.debug(String.format("sort test board loop2 : %s", board.toString()));
-      if(sortedList.size() == 3){
-        break;
-      }
-      if (board.getHeadNo() != 1) {
-        sortedList.add(board);
-      }
-    }
-    return sortedList;
+    return combinedList;
   }
 
   @GetMapping("board/form") // 게시글 폼
@@ -173,57 +144,62 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     return "redirect:list?categoryNo=" + board.getCategoryNo();
   }
 
+
   @GetMapping("board/list")  // 게시글 목록
   public void listBoard(
       @RequestParam int categoryNo,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "8") int pageSize,
-      @RequestParam(defaultValue = "1") int headNo,
-      String keyword,
+      @RequestParam(defaultValue = "0") int headNo,
       Model model) throws Exception {
 
+    int numOfPage = 1;
+    // 페이징 처리
+    if (categoryNo != 0) {  // 페이징 처리를 후기게시판에서 제외
+      pageSize = Math.max(3, Math.min(pageSize, 20));
+      pageNo = Math.max(1, pageNo);
 
-    if (pageSize < 3 || pageSize > 20) {  // 페이지 설정
-      pageSize = 8;
+      int numOfRecord = boardService.countAll(categoryNo);
+      numOfPage = (numOfRecord / pageSize ) + (numOfRecord % pageSize > 0 ? 1 : 0);
+      pageNo = Math.min(pageNo, numOfPage);
+
+      log.debug(String.format("로그"));
+      log.debug(String.format("pageSize : %s", pageSize));
+      log.debug(String.format("pageNo : %s", (pageNo-1) * pageSize));
+      log.debug(String.format("headNo : %s", headNo));
+      log.debug(String.format("numOfRecord : %s", numOfRecord));
+      log.debug(String.format("numOfPage : %s", numOfPage));
     }
 
-    if (pageNo < 1) {
-      pageNo = 1;
+    List<Board> combinedList = new ArrayList<>();
+    if (categoryNo != 0) {
+      // 후기게시판이 아닐 때만 공지사항을 가져오기
+      List<Board> announcements = boardService.findAnnouncements(categoryNo, 10);
+      combinedList.addAll(announcements);
     }
 
-    int numOfRecord = boardService.countAll(categoryNo);
-    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+    // 일반 게시글 로드
+    List<Board> boardList = boardService.listBoard(categoryNo, ((pageNo-1) * pageSize), pageSize, headNo);  // 공지사항 제외
+    log.debug("xxxxxxxx"+boardList);
+    combinedList.addAll(boardList);
 
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
-    }
-    log.debug(String.format("로그"));
-    log.debug(String.format("pageSize : %s", pageSize));
-    log.debug(String.format("pageNo : %s", pageNo));
-    log.debug(String.format("headNo : %s", headNo));
-    log.debug(String.format("numOfRecord : %s", numOfRecord));
-    log.debug(String.format("numOfPage : %s", numOfPage));
-
-
-    model.addAttribute("boardName",
-        categoryNo == 0 ? "후기게시판" : (categoryNo == 1 ? "정보공유게시판" : "자유게시판"));
+    model.addAttribute("boardName", categoryNo == 0 ? "후기게시판" : (categoryNo == 1 ? "정보공유게시판" : "자유게시판"));
     model.addAttribute("categoryNo", categoryNo);
     model.addAttribute("headNo", headNo);
-
-    List<Board> boardList = boardService.listBoard(categoryNo, pageNo, pageSize, headNo);
-
-    model.addAttribute("list", sortOthers(boardList));
-    model.addAttribute("announce", sortAnnounce(boardList));
+    model.addAttribute("list", combinedList);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
   }
 
+
+
   @GetMapping("board/view")  // 게시글 조회
-  public String viewBoard(@RequestParam("categoryNo") int categoryNo, // 카테고리 번호
+  public String viewBoard(
+      @RequestParam("categoryNo") int categoryNo, // 카테고리 번호
       @RequestParam("boardNo") int boardNo, // 게시글 번호
       @RequestParam(value = "commentNo", required = false) Integer commentNo,
-      // 댓글번호 - 필수x, 답글 찾을 때 필요
+      // 댓글번호 - 필수 x, 답글 찾을 때 필요
       Model model,
       HttpSession session) throws Exception {
 
@@ -237,16 +213,12 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     boardService.increaseViewCount(boardNo);
 
     Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인
-    if (loginUser == null) { // 로그인 정보 요청
-      throw new Exception("로그인하시기 바랍니다!");
-    }
-    System.out.println(board.getScopeNo());
 
     // 공개 범위에 따라 접근 제어
     switch (board.getScopeNo()) {
       case 2: // 작성자만
-        if (board.getWriter().getNo() != loginUser.getNo()) {
-          model.addAttribute("title", "비공개 게시글입니다.");
+          if (loginUser != null && board.getWriter().getNo() != loginUser.getNo()) {
+            model.addAttribute("title", "비공개 게시글입니다.");
           return "block";
         }
       case 1: // 로그인한 회원만
@@ -597,9 +569,10 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     return result;
   }
 
-//   검색
+// 검색
 @GetMapping("/board/search")
 public String searchBoard(
+    @RequestParam("categoryNo") int categoryNo, // 카테고리 번호를 요청 파라미터로 받음
     @RequestParam("type") String type,
     @RequestParam("keyword") String keyword,
     Model model) {
@@ -619,12 +592,11 @@ public String searchBoard(
 
   // 필터링된 게시글 목록을 화면에 전달
   model.addAttribute("list", filteredBoardList);
-  model.addAttribute("categoryNo", -1); // 필터링된 상태임을 나타내는 값(-1) 추가
+  model.addAttribute("categoryNo", categoryNo);
   model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
   model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
 
   return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
+  }
 }
 
-
-}

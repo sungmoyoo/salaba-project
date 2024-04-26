@@ -16,13 +16,14 @@
   <button type="button" name="inform" onclick="location.href='/board/list?categoryNo=1'">정보공유게시판</button>
   <button type="button" name="community" onclick="location.href='/board/list?categoryNo=2'">자유게시판</button>
 
-<!-- 검색 폼 -->
+  <!-- 검색 폼 -->
   <form id="search-form" action="/board/search" data-th-action="@{search}" method="GET">
+    <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">
     <select name="type">
       <option value="title">제목</option>
       <option value="content">내용</option>
     </select>
-    <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요">
+    <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" value="">
     <button id="search-button">검색</button>
   </form>
 
@@ -73,8 +74,13 @@
   </tr>
   </thead>
   <tbody>
-  <tr data-th-if="*{categoryNo == 1}" data-th-each="board : ${list}" data-th-object="${board}">
-    <td data-th-text="*{headContent}">공지</td>
+  <!-- 조건부 렌더링: 공지사항과 일반 게시글 분리 -->
+  <tr data-th-if="*{categoryNo == 1}"
+      data-th-each="board : ${list}"
+      data-th-object="${board}"
+      data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
+      data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
+    <td data-th-text="${board.headContent}">분류 내용</td>
     <td><a data-th-href="@{view(categoryNo=1,boardNo=*{boardNo})}" data-th-text="*{title}"
            href="view.html" onclick="return false;">제목입니다.</a></td>
     <td data-th-text="*{writer.nickname}">홍길동</td>
@@ -85,6 +91,8 @@
   </tr>
   </tbody>
 </table>
+
+
 
 <!-- 자유게시판 -->
 <table border='1'>
@@ -100,8 +108,12 @@
 </tr>
 </thead>
 <tbody>
-<tr data-th-if="*{categoryNo == 2}" data-th-each="board : ${list}" data-th-object="${board}">
-  <td data-th-text="*{headContent}">공지</td>
+<tr data-th-if="*{categoryNo == 2}"
+    data-th-each="board : ${list}"
+    data-th-object="${board}"
+    data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
+    data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
+  <td data-th-text="${board.headContent}">분류 내용</td>
   <td><a data-th-href="@{view(categoryNo=2,boardNo=*{boardNo})}" data-th-text="*{title}"
          href="view.html" onclick="return false;">제목입니다.</a></td>
   <td data-th-text="*{writer.nickname}">홍길동</td>
@@ -114,21 +126,13 @@
 </table>
 
 <!-- 페이지 설정 -->
-<p>
+<p data-th-if="${categoryNo != 0}"> <!-- Add this line -->
   [
   <a data-th-if="${pageNo > 1}"
      data-th-href="@{list(categoryNo=*{categoryNo},pageNo=${pageNo - 1},pageSize=${pageSize})}"
      href="list">이전</a>
   <span data-th-unless="${pageNo > 1}">이전</span>
   ]
-
-<!--  &lt;!&ndash; 페이지 번호 목록 &ndash;&gt;-->
-<!--  <span data-th-each="i : ${#numbers.sequence(max(1, pageNo - 5), min(pageNo + 4, numOfPage))}">-->
-<!--    <a data-th-if="${i != pageNo}"-->
-<!--       data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${i}, pageSize=${pageSize})}"-->
-<!--       data-th-text="${i}" data-th-href="list"></a>-->
-<!--    <span data-th-if="${i == pageNo}" data-th-text="${i}"></span>-->
-<!--  </span>-->
 
   [
   <a data-th-if="${pageNo < numOfPage}"
@@ -137,6 +141,7 @@
   <span data-th-unless="${pageNo < numOfPage}">다음</span>
   ]
 </p>
+
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
@@ -181,7 +186,21 @@
 
 
 // 검색
+    // 페이지가 로드될 때 저장된 검색어가 있는지 확인 -> 있으면 검색창에 남겨두기
+  window.onload = function() {
+    var savedKeyword = localStorage.getItem('searchKeyword');
+    if (savedKeyword) {
+      document.getElementById('search-input').value = savedKeyword;
+      // 검색어를 가져왔으면 -> 다시 로컬 스토리지에서 삭제
+      localStorage.removeItem('searchKeyword');
+    }
+  };
 
+  // 검색 버튼 클릭 시 검색어를 로컬 스토리지에 저장
+  document.getElementById('search-button').addEventListener('click', function() {
+    var keyword = document.getElementById('search-input').value;
+    localStorage.setItem('searchKeyword', keyword);
+  });
 </script>
 </body>
 </html>
