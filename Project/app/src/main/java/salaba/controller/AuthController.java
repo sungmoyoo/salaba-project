@@ -33,6 +33,7 @@ public class AuthController {
       String email,
       String password,
       String saveEmail,
+      Model model,
       HttpServletResponse response,
       HttpSession session) throws Exception {
 
@@ -47,8 +48,21 @@ public class AuthController {
     }
 
     Member member = memberService.get(email, password);
+    //이메일주소 또는 암호가 맞을 경우
     if (member != null) {
-      session.setAttribute("loginUser", member);
+      if('1' == member.getState()){//회원탈퇴
+        model.addAttribute("memberState",member.getState());
+      }else if('3' == member.getState()) {//제재회원
+        model.addAttribute("memberState",member.getState());
+      }else if('4' == member.getState()) {//휴먼회원
+        model.addAttribute("memberName",member.getName());
+        model.addAttribute("memberEmail",member.getEmail());
+        model.addAttribute("memberState",member.getState());
+      }else {//로그인 성공
+        session.setAttribute("loginUser", member);
+      }
+    }else{//이메일주소 또는 암호가 맞지 않을 경우
+      model.addAttribute("memberState","99");
     }
 
     return "auth/login";

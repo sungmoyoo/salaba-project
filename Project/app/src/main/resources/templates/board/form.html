@@ -14,8 +14,17 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"
         rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<<<<<<< HEAD
   <link rel="stylesheet" type="text/css" href="board.css">
 
+=======
+
+  <style>
+  body {
+    padding-left: 10px;
+  }
+</style>
+>>>>>>> origin/dev
 </head>
 <body>
 
@@ -27,7 +36,11 @@
 <h1 data-th-text="${boardName}">게시판</h1>
 
 <form action="add" data-th-action="@{add}" enctype='multipart/form-data' method='post'>
+<<<<<<< HEAD
   <input id="categoryNo" data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
+=======
+  <input data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
+>>>>>>> origin/dev
 
   <div data-th-if="*{categoryNo != 0}">
     <select name="headNo">
@@ -81,6 +94,16 @@
     <input name="scopeNo" data-th-value="2" type="radio">
     <label>비공개</label><br>
   </div>
+<<<<<<< HEAD
+=======
+  <script>
+    function setScopeNo(input) {
+        // 선택된 라디오 버튼의 값을 scopeNo에 설정
+        document.getElementById("scopeNo").value = input.dataset.thValue;
+    }
+  </script>
+  <input type="hidden" id="scopeNo" name="scopeNo" value="">
+>>>>>>> origin/dev
   <div>
     내용: <textarea id="summernote" name='content'></textarea>
   </div>
@@ -95,6 +118,7 @@
 <script>
   $(document).ready(function() {
     $('#summernote').summernote({
+<<<<<<< HEAD
         height: 800,
         width: 1000,
         callbacks: {
@@ -107,6 +131,15 @@
                     data.append("files", file);
                 }
                 let categoryNo = $("#categoryNo").val();
+=======
+      height: 800,
+      width: 1000,
+      callbacks: {
+        onInit: function() {
+          console.log('Summernote 생성됨!');
+        },
+        onImageUpload: function(files) {
+>>>>>>> origin/dev
 
                 $.ajax({
                     url: 'file/upload?categoryNo=' + categoryNo,
@@ -140,6 +173,18 @@
                     alert('이미지 업로드 실패: ' + error);
                 });
             }
+<<<<<<< HEAD
+=======
+
+            // 서버에서 받은 업로드 파일 이름을 가지고 <img> 태그를 설정한다.
+            for (const boardFile of result) {
+              $('#summernote').summernote('insertImage',
+                'https://kr.object.ncloudstorage.com/tp3-salaba/board/'
+                + boardFile.uuidFileName);
+            }
+          });
+
+>>>>>>> origin/dev
         }
     });
 });

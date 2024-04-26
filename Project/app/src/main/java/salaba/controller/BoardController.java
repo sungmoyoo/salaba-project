@@ -1,5 +1,6 @@
 package salaba.controller;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +51,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   private final ReplyService replyService; // 답글 서비스
 
 
-  @Value("${ncp.bucketname}")
+  @Value("${ncpbucketname}")
   private String bucketName;
 
   @GetMapping("board/main")
@@ -116,7 +118,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     } else {
       board.setHeadNo(headNo); // 말머리 설정
     }
-    log.debug(String.format("addBoard 진입44"));
+  log.debug(String.format("addBoard 진입44"));
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
     List<BoardFile> boardFiles = (List<BoardFile>) session.getAttribute("boardFiles");
     log.debug("1234" + boardFiles);
@@ -193,8 +195,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     model.addAttribute("numOfPage", numOfPage);
   }
 
-
-
   @GetMapping("board/view")  // 게시글 조회
   public String viewBoard(
       @RequestParam("categoryNo") int categoryNo, // 카테고리 번호
@@ -203,7 +203,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       // 댓글번호 - 필수 x, 답글 찾을 때 필요
       Model model,
       HttpSession session) throws Exception {
-
     Board board = boardService.getBoard(boardNo, categoryNo);
     //log.debug("abcdefg"+ board);
     if (board == null) {
@@ -310,7 +309,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     return "redirect:list?categoryNo=" + board.getCategoryNo();
 
   }
-
   @GetMapping("board/modify") // 수정 폼으로 들어가기
   public void modifyBoard(@RequestParam("boardNo") int boardNo,
       @RequestParam("categoryNo") int categoryNo, Model model) {
@@ -452,7 +450,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       return ResponseEntity.noContent().build();
     }
 
-
   }
 
   @GetMapping("/board/comment/delete") // 댓글 또는 답글 삭제 - 상태 1로 변경
@@ -522,7 +519,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
     }
   }
-
   @GetMapping("/board/reply/delete") //답글 삭제
   public ResponseEntity<?> deleteReply(@RequestParam("replyNo") int replyNo,
       HttpSession session) {
@@ -542,7 +538,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
     }
   }
-
 
   // 조회수
   @GetMapping("/board/preview")
@@ -627,6 +622,7 @@ public String searchBoard(
 
   return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
   }
+
   @GetMapping("board/boardHistory")  // 작성글 내역
   public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "1") int headNo,
@@ -690,7 +686,7 @@ public String searchBoard(
     List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
 
 
-    commentList = sort(commentList); // 정렬 함수 호출
+    //commentList = sort(commentList); // 정렬 함수 호출
     model.addAttribute("list", commentList);
 
     model.addAttribute("pageNo", pageNo);
@@ -699,4 +695,3 @@ public String searchBoard(
 
   }
 }
-
