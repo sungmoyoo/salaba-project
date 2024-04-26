@@ -12,12 +12,36 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     const ws = new WebSocket('ws://localhost:8889');
+
+    // URL에서 쿼리 매개변수를 가져오는 함수
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    // sender설정
+    var sender = getParameterByName('sender');
+    if(sender == 1){
+      sender = 'guest';
+    }else{
+      sender = 'host';
+    }
+    console.log(sender);    
+        
     const requestData = {
       message:'getChat',
       reservationNo : 1,
-      chatName: 'chat.json'
+      chatName: 'chat.json',
+      sender: sender
     }
+
     ws.onopen = function(event){
+      console.log(requestData);
       ws.send(JSON.stringify(requestData));
     }
 
@@ -39,9 +63,10 @@
       const messageInput = document.getElementById('messageInput');
       const message = {
         name: '11',
-        sender: 'guest',
+        sender: sender,
         timestamp: new Date().toISOString(),
-        content: messageInput.value
+        content: messageInput.value,
+        chatName:'chat.json'
       };
 
       ws.send(JSON.stringify(message));

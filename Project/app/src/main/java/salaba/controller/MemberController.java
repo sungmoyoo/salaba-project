@@ -30,7 +30,7 @@ public class MemberController implements InitializingBean {
   private final StorageService storageService;
   private String uploadDir;
 
-  @Value("${ncp.bucketname}")
+  @Value("${ncpbucketname}")
   private String bucketName;
 
   @Override

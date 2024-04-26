@@ -44,7 +44,7 @@ public class BoardController {  // 게시판, 댓글, 답글, 신고 컨트롤�
   private final BoardReportService boardReportService; // 신고 서비스
   private String uploadDir = "board/";
 
-  @Value("${ncp.bucketname}")
+  @Value("${ncpbucketname}")
   private String bucketName;
 
   @GetMapping("main") // 게시글 전체 메인화면

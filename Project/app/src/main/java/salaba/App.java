@@ -32,4 +32,8 @@ public class App {
     public void chat(){
 
     }
+    @GetMapping("/tete")
+    public void tete(){
+
+    }
 }
