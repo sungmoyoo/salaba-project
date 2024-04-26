@@ -1,6 +1,7 @@
 package org.admin.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.admin.domain.Member;
 import org.admin.domain.Photo;
 import org.admin.domain.Rental;
 import org.admin.service.RentalService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -22,11 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RentalManageController {
     private final RentalService rentalService;
-    private final StorageService storageService;
-    private final String rentalImgPath = "static/img/rental";
-    @Value("${ncp.ss.bucketname}")
-    private String bucketName;
     private static final Log log = LogFactory.getLog(RentalManageController.class);
+
     @GetMapping("rental/list")
     public String rentalList(@RequestParam("menu") int menu,
                              HttpSession session,
@@ -76,5 +75,43 @@ public class RentalManageController {
                 break;
         }
         return "rental/detail";
+    }
+
+    @PostMapping("rental/update")
+    public String rentalUpdate(@RequestParam("value") String value,
+                               @RequestParam("rentalNo") int rentalNo,
+                               HttpSession session) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+        rentalService.updateState(rentalNo, value);
+        return "redirect:list?menu=2";
+    }
+
+    @PostMapping("rental/list/search")
+    public String searchRental(@RequestParam("keyword") String keyword,
+                               @RequestParam("filter") String filter,
+                               HttpSession session,
+                               Model model) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("menuName", "등록된 숙소 목록");
+        model.addAttribute("menu", 1);
+        if (filter.equals("0")) {
+            // 숙소명으로 검색
+            List<Rental> rentalList = rentalService.getAllByName(keyword);
+            log.debug(rentalList);
+            model.addAttribute("rentalList", rentalList);
+        } else {
+            // 호스트명로 검색
+            List<Rental> rentalList = rentalService.getAllByHostName(keyword);
+            log.debug(rentalList);
+            model.addAttribute("rentalList", rentalList);
+
+        }
+
+
+        return "rental/list";
     }
 }

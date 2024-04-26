@@ -85,8 +85,7 @@ public class DefaultRentalHomeService implements RentalHomeService {
   }
 
   @Override
-  public List<RentalHome> getRentalHomeFilterSearch(Theme theme, int minPrice, int maxPrice,
-      int capacity) { // 숙소 필터 조회
-    return rentalHomeDao.rentalHomeFilterSelect(theme, minPrice, maxPrice, capacity);
+  public List<RentalHomeFacility> getAllFacilities() { // 편의 시설 전체 조회
+    return rentalHomeDao.getAllFacilities();
   }
 }

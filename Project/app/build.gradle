@@ -31,6 +31,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+    //Mybatis를 이용한 sql 쿼리 실행, 결과 보여줌
+    implementation group: 'org.bgee.log4jdbc-log4j2', name:'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 
     // AWS S3 API
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.688'
@@ -55,3 +57,5 @@ tasks.withType(JavaCompile).configureEach {
     // $javac -encoding UTF-8 ..
     options.encoding = 'UTF-8'
 }
+
+tasks.register("prepareKotlinBuildScriptModel"){}

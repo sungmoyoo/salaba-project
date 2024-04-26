@@ -5,6 +5,7 @@ import org.admin.domain.Report;
 import org.admin.repository.RentalReportDao;
 import org.admin.service.RentalReportService;
 import org.admin.util.Translator;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,5 +31,10 @@ public class DefaultRentalReportService implements RentalReportService {
         report.setTargetType("3");
         report.setStateStr(Translator.dealState.get(report.getState()));
         return report;
+    }
+
+    @Override
+    public int updateState(int rentalNo, int memberNo) {
+        return rentalReportDao.updateState(rentalNo, memberNo);
     }
 }

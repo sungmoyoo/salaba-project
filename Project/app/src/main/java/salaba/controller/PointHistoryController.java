@@ -8,28 +8,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import salaba.service.Point_historyService;
+import salaba.service.PointHistoryService;
 import salaba.vo.Member;
-import salaba.vo.Point_history;
+import salaba.vo.PointHistory;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/point_history")
+@RequestMapping("/pointHistory")
 public class PointHistoryController {
 
   private static final Log log = LogFactory.getLog(PointHistoryController.class);
-  private final Point_historyService point_historyService;
+  private final PointHistoryService pointHistoryService;
 
   @GetMapping("pointList")
   public void pointList(
-      Point_history pointHistory,
+      PointHistory pointHistory,
       Model model,
       HttpSession session) throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     pointHistory.setNo(sessionInfo.getNo());
 
-    model.addAttribute("pointList", point_historyService.pointList(pointHistory));
+    model.addAttribute("pointList", pointHistoryService.pointList(pointHistory));
 
   }
 }

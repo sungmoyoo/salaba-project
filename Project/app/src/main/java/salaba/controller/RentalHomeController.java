@@ -20,7 +20,6 @@ import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
 import salaba.vo.rental_home.RentalHomeReview;
-import salaba.vo.rental_home.Theme;
 
 @RequiredArgsConstructor
 @Controller
@@ -39,9 +38,15 @@ public class RentalHomeController {
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
       @RequestParam( value = "capacity", defaultValue = "1") int capacity) throws Exception{ // 메인화면
     Member loginUser = (Member) httpSession.getAttribute("loginUser");
-
+    
+    // 세션에 테마가 없는 경우 세션에 테마 저장
     if(httpSession.getAttribute("themeList") == null ){
       httpSession.setAttribute("themeList", rentalHomeService.getAllThemes());
+    }
+    
+    // 세션에 편의시설이 없는 경우 세션에 편의시설 저장
+    if(httpSession.getAttribute("facilityList") == null){
+      httpSession.setAttribute("facilityList", rentalHomeService.getAllFacilities());
     }
 
     // LogIn User Check
@@ -64,7 +69,6 @@ public class RentalHomeController {
       // 숙소 검색
       model.addAttribute("rentalHomeList",
           rentalHomeService.getRentalHomeConditionSearch(regionName,checkInDate,checkOutDate,capacity));
-
     }
     return "main";
   }
@@ -87,20 +91,8 @@ public class RentalHomeController {
     return "main";
   }
 
-  @GetMapping("/filter")
-  public String rentalHomeFilterSearch( Model model,
-      @RequestParam Theme theme,
-      @RequestParam int minPrice,
-      @RequestParam int maxPrice,
-      @RequestParam int capacity){
-    model.addAttribute("rentalHomeList",
-        rentalHomeService.getRentalHomeFilterSearch(theme,minPrice,maxPrice,capacity));
-
-    return "main";
-  }
-
   @GetMapping("/view")
-  public void rentalHomeView( int rentalHomeNo, Model model){ // 숙소 상세 조회
+  public void rentalHomeView( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model){ // 숙소 상세 조회
     model.addAttribute("rentalHome", rentalHomeService.getRentalHomeDetailView(rentalHomeNo));
     model.addAttribute("rentalHomeReview", rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
     model.addAttribute("rentalHomePhoto", rentalHomeService.getRentalHomePhotos(rentalHomeNo));
@@ -108,13 +100,14 @@ public class RentalHomeController {
   }
 
 
-//  @PostMapping("")
-  public String rentalHomeReviewAdd( RentalHomeReview rentalHomeReview) {
+@PostMapping("/addReview")
+  public String rentalHomeReviewAdd( RentalHomeReview rentalHomeReview, int rentalHomeNo) {
+    log.debug(String.format("reservationNo : %s", rentalHomeReview.getReservationNo()));
     rentalHomeService.addRentalHomeReview(rentalHomeReview); // 숙소 리뷰 작성
-    return ""; // 작성전 페이지로 돌아가기
+    return "redirect:review?rentalHomeNo=" + rentalHomeNo; // 작성전 페이지로 돌아가기
   }
 
-//  @GetMapping("")
+  @GetMapping("/review")
   public void rentalHomeReviewList( int rentalHomeNo, Model model ){
     // 숙소 리뷰 조회
     model.addAttribute("rentalHomeReviewList",

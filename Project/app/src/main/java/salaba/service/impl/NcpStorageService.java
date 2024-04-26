@@ -30,10 +30,10 @@ public class NcpStorageService implements StorageService, InitializingBean {
   final AmazonS3 s3;
 
   public NcpStorageService(
-      @Value("${ncp.endpoint}") String endPoint,
-      @Value("${ncp.regionname}") String regionName,
-      @Value("${ncp.accesskey}") String accessKey,
-      @Value("${ncp.secretkey}") String secretKey) {
+      @Value("${ncpendpoint}") String endPoint,
+      @Value("${ncpregionname}") String regionName,
+      @Value("${ncpaccesskey}") String accessKey,
+      @Value("${ncpsecretkey}") String secretKey) {
 
     this.endPoint = endPoint;
     this.regionName = regionName;

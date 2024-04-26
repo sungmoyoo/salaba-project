@@ -3,10 +3,9 @@ package salaba.service.impl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import salaba.dao.Point_historyDao;
 import salaba.dao.QuestionDao;
 import salaba.service.QuestionService;
+import salaba.vo.Qna;
 import salaba.vo.Question;
 
 @RequiredArgsConstructor
@@ -26,12 +25,18 @@ public class DefaultQuestionService implements QuestionService {
   }
 
   @Override
-  public Question get(int no) {
-    return questionDao.findBy(no);
+  public Question get(int questionNo) {
+    return questionDao.findBy(questionNo);
+  }
+
+  @Override
+  public Qna getAnswer(int questionNo) {
+    return questionDao.getAnswer(questionNo);
   }
 
   @Override
   public int questionUpdate(Question question) {
     return questionDao.questionUpdate(question);
   }
+
 }

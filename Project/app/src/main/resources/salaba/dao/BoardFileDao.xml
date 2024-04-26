@@ -13,26 +13,25 @@
   </resultMap>
 
   <insert id="add" parameterType="BoardFile">
-    insert into board_files (board_no, ori_file_name, uuid_file_name)
-    values (#{board_no},#{ori_file_name})
+    insert into board_file (board_no, ori_file_name, uuid_file_name)
+    values (#{boardNo},#{oriFileName},#{uuidFileName})
   </insert>
 
   <insert id="addAll" parameterType="list">
-    insert into board_files (board_no, ori_file_name, uuid_file_name)
-    values
+    insert into board_file (board_no, ori_file_name, uuid_file_name) values
     <foreach collection="list" item="item" separator=",">
-      (#{item.boardNo},#{item.oriFileName},#{item.uuidFildName})
+      (#{item.boardNo},#{item.oriFileName},#{item.uuidFileName})
     </foreach>
   </insert>
 
   <delete id="delete" parameterType="int">
-    delete from board_files
-    where file_no=#{value}
+    delete from board_file
+    where file_no=#{fileNo}
   </delete>
 
   <delete id="deleteAll" parameterType="int">
-    delete from board_files
-    where board_no=#{value}
+    delete from board_file
+    where board_no=#{boardNo}
   </delete>
 
   <select id="findAllByBoardNo" resultMap="BoardFileMap" parameterType="int">
@@ -42,9 +41,9 @@
       ori_file_name,
       uuid_file_name
     from
-      board_files
+      board_file
     where
-      board_no=#{value}
+      board_no=#{boardNo}
     order by
       file_no asc
   </select>
@@ -54,9 +53,9 @@
       file_no,
       board_no
     from
-      board_files
+      board_file
     where
-      file_no=#{value}
+      file_no=#{fileNo}
   </select>
 
 </mapper>
