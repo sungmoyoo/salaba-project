@@ -7,30 +7,28 @@
 
   <resultMap id="ReplyMap" type="Reply">
     <id column="reply_no" property="replyNo"/>
+    <result column="comment_no" property="commentNo"/>
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
     <result column="state" property="state"/>
 
     <association property="writer" javaType="Member">
-     <id column="member_no" property="no"/>
-     <result column="nickname" property="nickname"/>
-     <result column="photo" property="photo"/>
-   </association>
-
-    <association property="comment" javaType="Comment">
-      <id column="comment_no" property="commentNo"/>
+      <id column="member_no" property="no"/>
+      <result column="nickname" property="nickname"/>
+      <result column="photo" property="photo"/>
     </association>
+
   </resultMap>
 
   <!-- 답글 작성-->
-  <insert id="addComment" parameterType="Reply"
+  <insert id="addReply" parameterType="Reply"
     useGeneratedKeys="true" keyColumn="reply_no" keyProperty="replyNo">
     insert into reply(comment_no,member_no,content)
     values(#{commentNo},#{writer.no},#{content})
   </insert>
 
   <!-- 답글 삭제-->
-  <update id="deleteComment">
+  <update id="deleteReply">
     update
     reply
     set
@@ -54,14 +52,35 @@
     left join comment c on r.comment_no=c.comment_no
     where
     c.comment_no=#{commentNo}
+    and
+    r.state != '1'
     order by
-    r.created_date desc
+    r.created_date asc
   </select>
 
-  <update id="update" parameterType="Reply">
-    update board set
-    content=${content}
+  <select id="findReply" resultMap="ReplyMap">
+    select
+    c.comment_no,
+    r.reply_no,
+    r.content,
+    r.created_date,
+    m.member_no,
+    m.nickname,
+    m.photo
+    from
+    reply r
+    inner join member m on r.member_no=m.member_no
+    left join comment c on r.comment_no=c.comment_no
     where
-    reply_no=${replyNo}
+    r.reply_no = #{replyNo}
+    and
+    r.state = '0'
+  </select>
+
+  <update id="updateReply" parameterType="Reply">
+    update reply set
+    content=#{content}
+    where
+    reply_no=#{replyNo}
   </update>
 </mapper>

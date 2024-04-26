@@ -15,9 +15,8 @@ public class DefaultCommentService implements CommentService { // 댓글
   private final CommentDao commentDao;
 
   @Override
-  public void addComment(@RequestParam("comment") Comment comment,
-      @RequestParam("boardNo") int boardNo) {
-    commentDao.addComment(comment, boardNo);
+  public void addComment(Comment comment){
+    commentDao.addComment(comment);
   } // 댓글 작성
 
   @Override
@@ -34,8 +33,8 @@ public class DefaultCommentService implements CommentService { // 댓글
   } // 댓글 삭제
 
   @Override
-  public Comment getComment(int commentNo) {
-    return null;
+  public Comment getBy(int commentNo) {
+    return commentDao.findBy(commentNo);
   }
 
 

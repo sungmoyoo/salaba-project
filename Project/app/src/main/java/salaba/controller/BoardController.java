@@ -2,6 +2,7 @@ package salaba.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,6 +210,24 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       throw new Exception("번호가 유효하지 않습니다.");
     }
 
+    //댓글을 가져온다.
+    List<Comment> commentList = commentService.list(boardNo);
+    if (commentList != null) {
+      //댓글이 있다면 댓글을 게시글에 저장한다.
+      board.setCommentList(commentList);
+      if (commentList.size() > 0) {
+        for (Comment comment : board.getCommentList()) {
+          //답글을 가져온다.
+          List<Reply> replyList = replyService.list(comment.getCommentNo());
+          //답글이 있다면 답글을 댓글에 저장한다.
+          if (replyList != null) {
+            comment.setReplyList(replyList);
+          }
+        }
+      }
+
+    }
+
     // 조회수 증가 (게시글 존재 및 접근 가능 확인 후)
     boardService.increaseViewCount(boardNo);
 
@@ -235,11 +254,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
         : (categoryNo == 1 ? "정보공유게시판" : "자유게시판")); // 0: 후기 게시판 - 1 : 정보공유게시판
     model.addAttribute("loginUser", session.getAttribute("loginUser"));
 
-    if (commentNo != null) { // 댓글이 있을 시 댓글과 답글을 함께 조회
-      Comment comment = commentService.getComment(commentNo); // 댓글 번호로 답글 찾기
-      model.addAttribute("commentList", commentService.list(board.getBoardNo()));  // 댓글 조회
-      model.addAttribute("replyList", replyService.list(comment.getCommentNo()));  // 답글 조회
-    }
     return "board/view";
   }
 
@@ -397,123 +411,138 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 //    return "redirect:../view?categoryNo=" + categoryNo + "&boardNo=" + file.getBoardNo();
 //  }
 
-  @PostMapping("board/addComment") // 댓글 또는 답글 작성
-  public String addComment(
-      HttpServletRequest request,
-      HttpSession session,
-      @RequestParam("boardNo") int boardNo,
-      @RequestParam(value = "commentNo", required = false) Integer commentNo) throws Exception {
+  @PostMapping("/board/comment/add") // 댓글 또는 답글 작성
+  public ResponseEntity<?> addComment(
+      Comment comment,
+      HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+    }
+
+    comment.setWriter(loginUser);
+    commentService.addComment(comment);
+    comment.setCreatedDate(new Date());
+    return ResponseEntity.ok(comment);
+
+  }
+
+  @PostMapping("/board/comment/update") // 답글 또는 댓글 수정
+  public ResponseEntity<?> updateComment(Comment comment,
+      HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인하시기 바랍니다!");
     }
 
-    // 댓글 또는 답글의 내용
-    String content = request.getParameter("comment");
+    Comment oldComment = commentService.getBy(comment.getCommentNo());
 
-    // 이미지 경로(photo) - 폼에서 제출하지 않은 경우 적절한 방법으로 가져와야 함
-    //String photo = "";
-
-    // 게시판 정보 가져오기
-    Board board = boardService.getBoardNo(boardNo);
-
-    // 댓글 또는 답글에 해당하는지 확인하여 처리
-    if (content != null && !content.isEmpty()) {
-      String type = request.getParameter("type");
-      if (type == null) {
-        type = "comment"; // 기본값으로 댓글로 설정
-      }
-
-      if (type.equals("reply")) { // 답글인 경우
-        Reply reply = new Reply();
-        reply.setContent(content);
-        reply.setWriter(loginUser);
-        // reply.setPhoto(photo); // 이미지 경로 설정
-        replyService.addComment(reply);
-      } else { // 댓글인 경우
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setWriter(loginUser);
-        // comment.setPhoto(photo);
-        comment.setBoard(board); // 게시판 정보 설정
-        commentService.addComment(comment, boardNo);
-      }
-    } else {
-      throw new IllegalArgumentException("댓글 또는 답글을 작성해주세요.");
+    if (oldComment.getWriter().getNo() != loginUser.getNo()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
     }
 
-    return "redirect:view?boardNo=" + boardNo; // 적절한 경로로 리다이렉트
+    comment.setWriter(loginUser);
+    int result = commentService.updateComment(comment);
+
+    if (result == 1) {
+      return ResponseEntity.ok(result);
+    } else {
+      return ResponseEntity.noContent().build();
+    }
+
+
   }
 
-
-  @PostMapping("comment/update") // 답글 또는 댓글 수정
-  public String updateComment(@ModelAttribute("reply") Reply reply,
-      @ModelAttribute("comment") Comment comment, HttpSession session) throws Exception {
-
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      throw new Exception("로그인하시기 바랍니다!");
-    }
-
-    if (reply.getReplyNo() != 0) { // 답글인 경우
-      Reply oldReply = replyService.getComment(reply.getReplyNo());
-      if (oldReply == null) {
-        throw new Exception("답글 번호가 유효하지 않습니다.");
-      } else if (oldReply.getWriter().getNo() != loginUser.getNo()) {
-        throw new Exception("권한이 없습니다.");
-      }
-      replyService.updateComment(reply);
-    } else if (comment.getCommentNo() != 0) { // 댓글인 경우
-      Comment oldComment = commentService.getComment(comment.getCommentNo());
-      if (oldComment == null) {
-        throw new Exception("댓글 번호가 유효하지 않습니다.");
-      } else if (oldComment.getWriter().getNo() != loginUser.getNo()) {
-        throw new Exception("권한이 없습니다.");
-      }
-      commentService.updateComment(comment);
-    } else {
-      throw new IllegalArgumentException("수정할 댓글 또는 답글 번호를 제공해야 합니다.");
-    }
-
-    return "redirect:list";
-  }
-
-  @GetMapping("comment/delete") // 댓글 또는 답글 삭제 - 상태 1로 변경
-  public String deleteComment(
-      @RequestParam(required = false) Integer replyNo,
-      @RequestParam(required = false) Integer commentNo,
-      Board board,
+  @GetMapping("/board/comment/delete") // 댓글 또는 답글 삭제 - 상태 1로 변경
+  public ResponseEntity<?> deleteComment(
+      @RequestParam("commentNo") int commentNo,
       HttpSession session)
       throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인 요청
     if (loginUser == null) {
-      throw new Exception("로그인하시기 바랍니다!");
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
     }
 
-    if (replyNo != null) {
-      Reply reply = replyService.getComment(replyNo);
-      if (reply == null) {
-        throw new Exception("답글 번호가 유효하지 않습니다.");
-      } else if (reply.getWriter().getNo() != loginUser.getNo()) {
-        throw new Exception("권한이 없습니다.");
-      }
-      replyService.deleteComment(replyNo);
-    } else if (commentNo != null) {
-      Comment comment = commentService.getComment(commentNo);
-      if (comment == null) {
-        throw new Exception("댓글 번호가 유효하지 않습니다.");
-      } else if (comment.getWriter().getNo() != loginUser.getNo()) {
-        throw new Exception("권한이 없습니다.");
-      }
-      commentService.deleteComment(commentNo);
+    Comment oldComment = commentService.getBy(commentNo);
+
+    if (loginUser.getNo() != oldComment.getWriter().getNo()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+    }
+
+    int result = commentService.deleteComment(commentNo);
+
+    if (result == 1) {
+      return ResponseEntity.ok(result);
     } else {
-      throw new IllegalArgumentException("삭제할 댓글 또는 답글 번호를 제공해야 합니다.");
+      return ResponseEntity.noContent().build();
+    }
+  }
+
+  @PostMapping("/board/reply/add") // 답글 작성
+  public ResponseEntity<?> addReply(Reply reply,
+      HttpSession session) throws Exception {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
     }
 
-    return "redirect:list";
+    try {
+      reply.setWriter(loginUser);
+      replyService.addReply(reply);
+      reply.setCreatedDate(new Date());
+      return ResponseEntity.ok(reply);
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
   }
+
+  @PostMapping("/board/reply/update") // 답글 수정
+  public ResponseEntity<?> updateReply(Reply reply,
+      HttpSession session) {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+    }
+
+    Reply oldReply = replyService.getReply(reply.getReplyNo());
+
+    if (oldReply.getWriter().getNo() == loginUser.getNo()) {
+      reply.setWriter(loginUser);
+      int result = replyService.updateReply(reply);
+      if (result == 1) {
+        return ResponseEntity.ok(result);
+      } else {
+        return ResponseEntity.noContent().build();
+      }
+    } else {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+    }
+  }
+
+  @GetMapping("/board/reply/delete") //답글 삭제
+  public ResponseEntity<?> deleteReply(@RequestParam("replyNo") int replyNo,
+      HttpSession session) {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+    }
+    Reply reply = replyService.getReply(replyNo);
+    if (reply.getWriter().getNo() == loginUser.getNo()) {
+      int result = replyService.deleteReply(replyNo);
+      if (result == 1) {
+        return ResponseEntity.ok(result);
+      } else {
+        return ResponseEntity.noContent().build();
+      }
+    } else {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+    }
+  }
+
 
   // 조회수
   @GetMapping("/board/preview")

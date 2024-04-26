@@ -41,22 +41,6 @@
       <result column="ori_file_name" property="oriFileName"/>
       <result column="uuid_file_name" property="uuidFileName"/>
     </collection>
-
-    <!-- 댓글 -->
-    <collection property="commentList" ofType="Comment">
-      <id column="comment_no" property="commentNo"/>
-      <result column="content" property="content"/>
-      <result column="created_date" property="createdDate"/>
-      <result column="state" property="state"/>
-    </collection>
-
-    <!-- 답글 -->
-    <collection property="replyList" ofType="Reply">
-      <id column="reply_no" property="replyNo"/>
-      <result column="content" property="content"/>
-      <result column="created_date" property="createdDate"/>
-      <result column="state" property="state"/>
-    </collection>
   </resultMap>
 
   <!-- 게시글 작성 -->

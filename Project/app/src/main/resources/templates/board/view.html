@@ -10,7 +10,9 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"
         rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 <body>
@@ -89,64 +91,46 @@
 </div>
 </form>
 
-<!-- 댓글 & 답글 폼 -->
-<div class="comment">
-  <h2>댓글</h2>
-  <div class="comment">
-    <!-- 댓글 내용 -->
-    <tr>
-      <td>
-        <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
-           data-th-if="*{photo}" img height='40px'>
-          <img
-              data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{photo}(type=f,w=10,h=10,ttype=jpg)}"></a><br>
-        <a data-th-unless="*{photo}" href='/img/default-photo.jpeg'>
-          <img height='40px' src='/img/default-photo.jpeg'></a><br>
-      </td>
-    </tr>
-    <input data-th-value="${board.writer.nickname}" readonly type='text' value="홍길동">
-<!--    comment.writer.nickname 으로 수정해야 댓글 조회 가능-->
-    작성일:<input data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly
-               type='text' value="2024-03-27">
-    내용:<input data-th-value="*{content}" readonly name='content' type='text' value="내용">
-    <!-- 댓글 수정, 삭제 버튼 -->
-    <div data-th-if="${loginUser != null && board.writer.no == loginUser.no}" >
-<!--      <button data-th-action="updateComment" data-th-href="@{update(commentNo=*{commentNo}, boardNo=*{boardNo})}" data-th-object="${comment}">수정하기</button>-->
-      <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
+<!--댓글, 답글 리스트-->
+<div id="box">
+  <div data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
+    <div data-th-if="*{#strings.equals(state,'1')}" class="comment">
+      <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
+      <span>삭제된 댓글입니다.</span>
     </div>
-    <!-- 답글 달기 버튼 -->
-    <button onclick="toggleReplyForm()">답글 달기</button>
-    <button type="button" id="comment-report-btn" class="report-btn">신고</button>
-  </div>
-
-  <!-- 답글 폼 -->
-  <div id="reply-form" style="display: none;">
-    <form action="addComment" data-th-action="@{addComment}" method="post">
-<!--      <input type="hidden" name="commentNo" data-th-value="${comment.commentNo}"> &lt;!&ndash; 댓글 번호 전달 &ndash;&gt;-->
-      <label for="reply">답글 작성:</label><br>
-      <textarea id="reply" name="comment" rows="4" cols="50"></textarea><br>
-      <input type="hidden" name="type" value="reply"> <!-- 답글 타입 전달 -->
-      <input type="submit" value="등록">
-      <button onclick="toggleReplyForm()">취소</button>
-    </form>
+    <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
+      <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
+      <span data-th-text="*{writer.nickname}">댓글 작성자</span>
+      <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
+      <span data-th-text="*{createdDate}">댓글 작성시간</span>
+      <button class="del">삭제</button>
+      <button class="modi">수정</button>
+      <button class="repo">신고</button>
+    </div>
+    <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
+      <div class="reply">
+        <span class="replyNo" data-th-text="*{replyNo}" hidden></span>
+        <span data-th-text="*{writer.nickname}">댓글 작성자</span>
+        <span class="replContent" data-th-text="*{content}">댓글 내용</span>
+        <span data-th-text="*{createdDate}">댓글 작성시간</span>
+        <button class="del2">삭제</button>
+        <button class="modi2">수정</button>
+        <button class="repo2">신고</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- 댓글 폼 -->
-<form action="addComment" data-th-action="@{addComment}" method="post">
-  <input type="hidden" name="boardNo" data-th-value="${board.boardNo}">
-  <label for="comment">댓글 작성:</label><br>
-  <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
-  <input type="submit" value="등록">
-  <button>취소</button>
+<form id="commentForm" method="post">
+  <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
+  <input id="commentContent" name="content" type="textarea">
+  <button id="addCommendBtn">댓글 작성</button>
 </form>
-
 
 <!-- 페이지 맨 위로 올라가기-->
 <button id="scrollToTopBtn" onclick="scrollToTop()">🔝</button>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
-<script data-th-src="@{/board/board.js}"></script>
 </body>
 
 <script>
@@ -307,5 +291,8 @@ $(document).on('click', '#likeButton', function() {
 
 
 </script>
+
+<script data-th-src="@{/board/view.js}"></script>
+<script data-th-src="@{/board/board.js}"></script>
 
 </html>

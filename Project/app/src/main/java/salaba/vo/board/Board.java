@@ -34,7 +34,6 @@ public class Board implements Serializable {  // 게시판
   private String scopeName; // 공개범위 이름
   private List<BoardFile> fileList; // 첨부파일
   private List<Comment> commentList; // 댓글
-  private List<Reply> replyList; // 답글
   private int fileCount; // 파일수
   private Region region; // 지역
 }

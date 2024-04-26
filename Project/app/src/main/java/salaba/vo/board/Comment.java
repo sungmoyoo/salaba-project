@@ -2,6 +2,8 @@ package salaba.vo.board;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import javax.servlet.ServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,10 +20,10 @@ public class Comment implements Serializable { // 댓글
   private static final long serialVersionUID = 100L;
 
   private int commentNo;  // 댓글 번호
-  private Board board; // 게시판 번호
+  private int boardNo; // 게시판 번호
   private String content;  // 내용
   private Member writer;  // 댓글 작성자
   private Date createdDate; // 작성일
   private String state; // 상태
-
+  private List<Reply> replyList; // 대댓글 리스트
 }

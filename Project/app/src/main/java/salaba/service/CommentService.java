@@ -6,7 +6,7 @@ import salaba.vo.board.Comment;
 import salaba.vo.board.Reply;
 
 public interface CommentService {
-  void addComment(Comment comment, int boardNo);  // 댓글 작성
+  void addComment(Comment comment);  // 댓글 작성
 
   List<Comment> list(int boardNo);  // 게시판 번호로 댓글 조회
 
@@ -15,5 +15,5 @@ public interface CommentService {
 
   int deleteComment(int commentNo);  // 댓글 삭제
 
-  Comment getComment(int commentNo);
+  Comment getBy(int commentNo);
 }

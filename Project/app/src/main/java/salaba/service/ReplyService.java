@@ -1,18 +1,21 @@
 package salaba.service;
 
 import java.util.List;
+
+import salaba.vo.Member;
 import salaba.vo.board.Reply;
 
 public interface ReplyService {
-  void addComment(Reply reply
-     // , int commentNo
+  void addReply(Reply reply
+      // , int ReplyNo
   );  // 답글 작성
 
   List<Reply> list(int commentNo);  // 댓글 번호로 답글 조회
 
-  int updateComment(Reply reply);  // 답글 수정, 변경
+  int updateReply(Reply reply);  // 답글 수정, 변경
 
-  int deleteComment(int replyNo);  // 답글 삭제
+  int deleteReply(int replyNo);  // 답글 삭제
 
-  Reply getComment(int replyNo); // 조회
+  Reply getReply(int replyNo); // 조회
+
 }
