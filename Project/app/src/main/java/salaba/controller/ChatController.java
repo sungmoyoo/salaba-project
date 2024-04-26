@@ -33,15 +33,15 @@ public class ChatController {
 
   @PostMapping("/sendLoginUser")
   @ResponseBody
-  public void sendLoginUser(HttpSession session) {
+  public void sendLoginUser(int reservationNo, HttpSession session) {
     Member loginUser = (Member) session.getAttribute("loginUser");
     // Node.js 서버로 데이터 전송
     String url = "http://localhost:3000/receiveData";
 
-    System.out.println("잘받음여");
     // 전송할 데이터 설정
     Map<String, Object> data = new HashMap<>();
     data.put("loginUser", loginUser.getName());
+    data.put("reservationNo", reservationNo);
 
     // RestTemplate을 사용하여 Node.js 서버로 데이터 전송
     RestTemplate restTemplate = new RestTemplate();

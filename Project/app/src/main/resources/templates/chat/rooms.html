@@ -28,7 +28,7 @@
       data: {'reservationNo': reservationNo},
       success: function(response) {
       // Spring Boot 컨트롤러가 응답한 후에 Node.js 서버로 리다이렉트
-      window.location.href = `http://localhost:3000/${reservationNo}`;
+      window.location.href = `http://localhost:3000`;
       },
       error: function(xhr, status, error) {
         console.error('Error sending user ID:', error);
