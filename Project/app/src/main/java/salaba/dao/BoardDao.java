@@ -36,4 +36,18 @@ public interface BoardDao {  // 게시판 인터페이스
   int countLike(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 한 회원의 추천수
 
   List<Board> searchByKeyword(@Param("keyword") String keyword, @Param("type") String type); // 검색
+
+  List<Board> findHistory( // 작성글 내역
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("no") int no);
+
+  int countAllHistory(int no);// count
+
+  List<Board> findCommentHistory( // 작성글 내역
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("no") int no);
+
+  int countAllCommentHistory(int no);// count
 }

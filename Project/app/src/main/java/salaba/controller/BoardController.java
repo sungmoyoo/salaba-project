@@ -627,5 +627,76 @@ public String searchBoard(
 
   return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
   }
+  @GetMapping("board/boardHistory")  // 작성글 내역
+  public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "1") int headNo,
+      Model model,
+      HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+
+    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
+      pageSize = 10;
+    }
+
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfRecord = boardService.countAllHistory(loginUser.getNo());
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("headNo", headNo);
+
+    List<Board> boardList = boardService.boardHistory(pageNo, pageSize, loginUser.getNo());
+    model.addAttribute("list", boardList);
+
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+
+  }
+
+
+  @GetMapping("board/commentHistory")  // 작성댓글 내역
+  public void boardReplyHistory(@RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "1") int headNo,
+      Model model,
+      HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+
+    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
+      pageSize = 10;
+    }
+
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfRecord = boardService.countAllCommentHistory(loginUser.getNo());
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("headNo", headNo);
+
+    List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
+
+
+    commentList = sort(commentList); // 정렬 함수 호출
+    model.addAttribute("list", commentList);
+
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+
+  }
 }
 

@@ -37,4 +37,11 @@ public interface BoardService {
   List<Board> search(String keyword, String type); // 검색 기능 업데이트
   List<Board> searchByTitle(String title); // 제목으로 검색
   List<Board> searchByContent(String content); // 내용으로 검색
+  int countAllHistory(int memberNo); // count
+
+  List<Board> boardHistory(int pageNo, int pageSize, int no); // 작성글 내역
+
+  int countAllCommentHistory(int memberNo); // count
+
+  List<Board> commentHistory(int pageNo, int pageSize, int no); // 작성글 내역
 }

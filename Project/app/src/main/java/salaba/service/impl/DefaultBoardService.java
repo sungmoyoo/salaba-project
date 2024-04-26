@@ -136,4 +136,24 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   public List<Board> searchByContent(String content) {
     return boardDao.searchByKeyword(content, "content");
   }
+
+  @Override
+  public int countAllHistory(int no) {
+    return boardDao.countAllHistory(no);
+  } // count
+
+  @Override
+  public List<Board> boardHistory(int pageNo, int pageSize, int no) {  // 목록 조회
+    return boardDao.findHistory(pageSize * (pageNo - 1), pageSize, no);
+  }
+
+  @Override
+  public int countAllCommentHistory(int no) {
+    return boardDao.countAllCommentHistory(no);
+  } // count
+
+  @Override
+  public List<Board> commentHistory(int pageNo, int pageSize, int no) {  // 목록 조회
+    return boardDao.findCommentHistory(pageSize * (pageNo - 1), pageSize, no);
+  }
 }
