@@ -19,7 +19,7 @@ public class Member implements Serializable { // 회원
   private String nickname; // 닉네임
   private String oldNickname; // 변경 전 닉네임
   private String birthday; // 생년월일
-  private Nation nation; // 국가번호
+  private int nationNo; // 국가번호
   private String telNo; // 전화번호
   private int gradeNo; // 등급번호
   private String address; // 주소
@@ -29,4 +29,9 @@ public class Member implements Serializable { // 회원
   private Date exitDate; // 회원탈퇴 날짜
 
   private List<Theme> themes; // 테마
+
+  private List<String> myThemes;
+  private String myThemeYn;
+  private int themeNo;
+  private String themeName;
 }

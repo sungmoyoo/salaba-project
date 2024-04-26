@@ -2,6 +2,7 @@ package salaba.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import salaba.vo.Qna;
 import salaba.vo.Question;
 
 @Mapper
@@ -11,7 +12,10 @@ public interface QuestionDao {
 
   List<Question> findAll(Question question);
 
-  Question findBy(int no);
+  Question findBy(int questionNo);
+
+  Qna getAnswer(int questionNo);
 
   int questionUpdate(Question question);
+
 }

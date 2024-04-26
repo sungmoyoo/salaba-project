@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <style>
+    .left-li{
+      list-style-type:none;
+      width: 110px;
+      background-color: #b9b9b9;
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px 5px 10px 5px;
+    }
+    li a {
+      text-decoration-line: none;
+      color: #fff;
+    }
+    .listing-container {
+      margin: 20px auto; /* 중앙 정렬 */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start; /* 왼쪽 정렬 */
+    }
+
+    .listing-item {
+      width: 265px; /* 수정된 부분: listing-item의 너비를 265px로 지정 */
+      height: 252px; /* 수정된 부분: listing-item의 높이를 252px로 지정 */
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .listing-item img {
+      /* width: 100%; div에 맞추어 이미지의 너비 조절 */
+      /* height: 100%; div에 맞추어 이미지의 높이 조절 */
+      object-fit: cover;
+    }
+
+    .listing-slider {
+      position: relative;
+      width: 100%; /* 수정된 부분: slider의 너비를 100%로 지정 */
+      height: 100%; /* 수정된 부분: slider의 높이를 100%로 지정 */
+    }
+
+
+    /* 여기부터 사진에 있는 버튼 부분 */
+    .slick-arrow {
+      position: absolute;
+      top: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .slick-prev,
+    .slick-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 2;
+      font-size: 20px;
+      line-height: 30px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .slick-prev {
+      left: 10px;
+    }
+
+    .slick-next {
+      right: 10px;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      content: '<';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .slick-next:before {
+      content: '>';
+      left: initial;
+      right: 50%;
+      transform: translate(50%, -50%);
+    }
+  </style>
+  <meta charset='UTF-8'>
+  <title>사라바</title>
+
+</head>
+<body>
+
+<div data-th-replace="header :: header">머리말</div>
+<table style="width:100%;height:540px;">
+  <tr>
+    <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
+      <ul>
+        <li class="left-li"><a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="member/chkPw">내정보 관리</a></li>
+        <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
+        <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList" style="color:#000;"><b>예약 내역</b></a></li>
+        <li class="left-li"><a data-th-href="@{/board/boardHistory}" data-th-if="${session.loginUser != null}" href="board/boardHistory">작성글 내역</a></li>
+        <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
+        <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList" >고객센터</a></li>
+      </ul>
+    </td>
+    <td style="vertical-align:top;">
+      <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
+        <h1 data-th-text="예약내역"></h1>
+        <table style="width:800px;">
+          <tr data-th-each="reservation : ${reservationList}" data-th-object="${reservation}">
+            <td style="width:285px;">
+              <section class="slider-container">
+                <div class="listing-container">
+                  <div class="listing-item">
+                    <div class="listing-slider">
+                      <img class="slide-image" data-th-each="photo : ${reservation.photoList}"
+                           data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+                      <button class="slide-button prev-button slick-prev"></button>
+                      <button class="slide-button next-button slick-next"></button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </td>
+            <td>
+                <table style="width: 100%;height:252px;background-color: #ccc;">
+                  <tr>
+                    <td style="width: 20%;font-size: 15px;font-weight: bold;padding-left: 15px;">예약번호:</td>
+                    <td data-th-text="${reservation.reservationNo}" style="font-size: 15px;font-weight: bold;"></td>
+                    <td style="text-align: right;font-size: 16px;font-weight: bold;padding-right: 15px;">
+                      <a data-th-if="*{state == '0'}" data-th-href="@{reservationView(reservationNo=*{reservationNo})}" href="reservationView">예약 상세 →</a>
+                      <a data-th-if="*{state == '1'}">리뷰 작성 →</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" data-th-text="${reservation.name}" style="font-size: 28px;font-weight: bold;padding-left: 15px;"></td>
+                  </tr>
+                  <tr style="height: 15px;">
+                    <td style="font-size: 15px;font-weight: bold;padding-left: 15px;">체크인</td>
+                    <td colspan="2" data-th-text="${reservation.startDate}"></td>
+                  </tr>
+                  <tr style="height: 15px;">
+                    <td style="font-size: 15px;font-weight: bold;padding-left: 15px;">체크아웃</td>
+                    <td colspan="2" data-th-text="${reservation.endDate}"></td>
+                  </tr>
+                  <tr>
+                    <td style="font-size: 15px;font-weight: bold;text-align: center;padding-left: 15px;">인원:</td>
+                    <td data-th-text="'총 '+${reservation.numberOfPeople}+'명'" style="font-size: 15px;font-weight: bold;"></td>
+                    <td data-th-text="${reservation.stateNm}" style="text-align:right;font-weight: bold;padding-right: 15px;"></td>
+                  </tr>
+                </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+</table>
+
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // 각 숙소의 이미지 슬라이더 처리
+  $('.listing-item').each(function () {
+    const $slideImages = $(this).find('.slide-image');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      $slideImages.hide().eq(index).show();
+    }
+
+    function showNextSlide() {
+      currentIndex = (currentIndex + 1) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    function showPreviousSlide() {
+      currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    $(this).find('.next-button').click(showNextSlide);
+    $(this).find('.prev-button').click(showPreviousSlide);
+
+    showSlide(currentIndex);
+  });
+</script>

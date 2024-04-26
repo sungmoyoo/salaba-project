@@ -3,6 +3,7 @@ package salaba.service;
 import java.util.List;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.rental_home.Theme;
 
 public interface MemberService {
 
@@ -27,4 +28,11 @@ public interface MemberService {
   void chgPwSave(Member member);
 
   Member chkPw(Member member);
+
+  void insertPreference(Member member);
+
+  void deletePreference(Member member);
+
+  List<Member> themeList(Member sessionInfo);
+
 }

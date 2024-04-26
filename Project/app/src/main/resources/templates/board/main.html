@@ -8,12 +8,24 @@
 <body>
 
 <style>
-  /* 스타일링 CSS */
+  /* 스타일링  */
     th, td {
         border: 1px solid black;
         padding: 8px;
         text-align: left;
     }
+
+    .table-container {
+    display: flex;
+    justify-content: space-around; /* 테이블 사이의 간격을 조정 */
+}
+
+.board {
+    flex: 1; /* 각 보드가 가능한 같은 크기를 차지하도록 함 */
+    padding: 10px; /* 패딩으로 약간의 여백을 추가 */
+    box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 설정 */
+}
+
 
   #search-form {
       display: inline-block;
@@ -91,10 +103,9 @@
 <tr>
   <div class="container">
     <div class="card-deck">
-      <div data-th-each="board : ${main}" data-th-object="${board}" class="card">
+      <div data-th-each="board : ${review.subList(0, 4)}" data-th-object="${board}" class="card">
         <div class="card-thumbnail-container">
-<!--          <div class="card-region" data-th-text="${board.region.regionName}">지역명</div>-->
-          <div class="card-region" data-th-text="${board.region != null ? board.region.regionName : 'Unknown'}">지역명</div>
+          <div class="card-region" data-th-text="${board.region != null ? board.region.regionName : '미정'}">지역명</div>
           <img src='https://content.skyscnr.com/m/41acfff761f8ea1a/original/GettyImages-519763361.jpg?resize=1800px:1800px&quality=100' class="card-thumbnail" alt="Thumbnail Image">
         </div>
         <div class="card-body">
@@ -112,7 +123,9 @@
 </table>
 
 
-<!-- 정보공유게시판 -->
+<div class="table-container">
+  <!-- 정보공유게시판 -->
+  <div class="board">
 <h1>정보공유게시판</h1>
 <table border='1'>
   <thead>
@@ -122,13 +135,13 @@
     <th>작성자</th>
     <th>작성일</th>
     <th>추천수</th>
-    <th>조회수</th>
+    <th>조회수</th>  <!-- 목록에서는 정보공유 게시판과 자유 게시판에서만 표시됨 -->
     <th>첨부파일</th>
   </tr>
   </thead>
   <tbody>
-  <tr data-th-if="${categoryNo == 1}" data-th-each="board : ${list}" data-th-object="${board}">
-    <td data-th-text="*{headNo}">공지</td>
+  <tr data-th-each="board : ${information.subList(0, 5)}" data-th-object="${board}">
+    <td data-th-text="*{headContent}">공지</td>
     <td><a data-th-href="@{view(categoryNo=1,boardNo=*{boardNo})}" data-th-text="*{title}"
            href="view.html">제목입니다.</a></td>
     <td data-th-text="*{writer.nickname}">홍길동</td>
@@ -139,14 +152,15 @@
   </tr>
   </tbody>
 </table>
+  </div>
 
-
-<!-- 자유게시판 -->
-<h1>자유게시판</h1>
+  <!-- 자유게시판 -->
+  <div class="board">
+    <h1>자유게시판</h1>
 <table border='1'>
   <thead>
   <tr>
-    <th>분류</th> <!-- headName -->
+    <th>분류</th> <!-- 말머리 headName -->
     <th>제목</th>
     <th>작성자</th>
     <th>작성일</th>
@@ -156,8 +170,9 @@
   </tr>
   </thead>
   <tbody>
-  <tr data-th-if="${categoryNo == 2}" data-th-each="board : ${list}" data-th-object="${board}">
-    <td data-th-text="*{headNo}">공지</td>
+
+  <tr data-th-each="board : ${community.subList(0, 5)}" data-th-object="${board}">
+    <td data-th-text="*{headContent}">공지</td>
     <td><a data-th-href="@{view(categoryNo=2,boardNo=*{boardNo})}" data-th-text="*{title}"
            href="view.html">제목입니다.</a></td>
     <td data-th-text="*{writer.nickname}">홍길동</td>
@@ -168,6 +183,8 @@
   </tr>
   </tbody>
 </table>
+  </div>
+</div>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 

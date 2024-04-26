@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import salaba.service.HostService;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
 import salaba.vo.Member;
@@ -28,6 +29,7 @@ public class MemberController implements InitializingBean {
 
   private final MemberService memberService;
   private final StorageService storageService;
+
   private String uploadDir;
 
   @Value("${ncp.bucketname}")
@@ -78,6 +80,8 @@ public class MemberController implements InitializingBean {
 
     //닉네임 중복체크
     String nickcheck = request.getParameter("nickcheck");
+
+    session.setAttribute("loginUser", member);
 
     //조회한 결과 model 에 add
     model.addAttribute("member", member);
@@ -175,4 +179,29 @@ public class MemberController implements InitializingBean {
       return "redirect:myinfo";
     }
   }
+
+  @PostMapping("themeSave")
+  public String themeSave(Member member, Model model, HttpSession session)
+      throws Exception { // 비밀번호 확인
+
+    Member sessionInfo = (Member) session.getAttribute("loginUser");
+    member.setNo(sessionInfo.getNo());
+    memberService.deletePreference(member);
+
+    for(int i=0;i<member.getMyThemes().size();i++) {
+      member.setThemeNo(Integer.parseInt(member.getMyThemes().get(i)));
+      memberService.insertPreference(member);
+
+    }
+    return "redirect:myinfo";
+  }
+
+  // 선호사항 폼
+  @GetMapping("mytheme")
+  public void mytheme(Model model, HttpSession session){
+    Member sessionInfo = (Member) session.getAttribute("loginUser");
+
+    model.addAttribute("themeList", memberService.themeList(sessionInfo));
+  }
+
 }
