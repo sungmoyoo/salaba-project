@@ -20,7 +20,7 @@
   <div data-th-if="${facility.facilityNo < 4} " data-th-each="facility : ${facilityList}"
        data-th-object="${facility}">
     <a data-th-text="*{facilityName}">시설</a>
-    <input type="text" name="facilityCount" value="0"/>
+    <input type="number" name="facilityCount" value="0"/>
     <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
     <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
   </div>
