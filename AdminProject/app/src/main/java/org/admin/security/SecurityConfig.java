@@ -38,7 +38,7 @@ public class SecurityConfig {
                     .antMatchers("/rental/list").permitAll()
                     .antMatchers("/rental/detail").permitAll();
         });
-//        httpSecurity.formLogin();
+        httpSecurity.formLogin().loginPage("/admin");
         httpSecurity.csrf().disable();
         return httpSecurity.build();
     }
