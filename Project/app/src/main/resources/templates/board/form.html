@@ -14,17 +14,21 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"
         rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<<<<<<< HEAD
+  <link rel="stylesheet" type="text/css" href="board.css">
+
+=======
 
   <style>
   body {
     padding-left: 10px;
   }
 </style>
+>>>>>>> origin/dev
 </head>
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
-
 <button type="button" name="review" onclick="location.href='/board/list?categoryNo=0'">후기게시판</button>
 <button type="button" name="inform" onclick="location.href='/board/list?categoryNo=1'">정보공유게시판</button>
 <button type="button" name="community" onclick="location.href='/board/list?categoryNo=2'">자유게시판</button>
@@ -32,7 +36,11 @@
 <h1 data-th-text="${boardName}">게시판</h1>
 
 <form action="add" data-th-action="@{add}" enctype='multipart/form-data' method='post'>
+<<<<<<< HEAD
+  <input id="categoryNo" data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
+=======
   <input data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
+>>>>>>> origin/dev
 
   <div data-th-if="*{categoryNo != 0}">
     <select name="headNo">
@@ -74,17 +82,20 @@
   </div>
 
   <div>
-    제목: <input name='title' type='text'>
+    제목: <input name='title' type='text'  placeholder="제목을 입력하세요.">
   </div>
   <div>
+<!--    <input type="hidden" id="scopeNo" name="scopeNo" value="">-->
     공개범위:
-    <input data-th-value="0" type="radio" name="scopeNo" onchange="setScopeNo(this)">
+    <input name="scopeNo" data-th-value="0" type="radio" >
     <label>전체공개</label><br>
-    <input data-th-value="1" type="radio" name="scopeNo" onchange="setScopeNo(this)">
+    <input name="scopeNo" data-th-value="1" type="radio">
     <label>회원공개</label><br>
-    <input data-th-value="2" type="radio" name="scopeNo" onchange="setScopeNo(this)">
+    <input name="scopeNo" data-th-value="2" type="radio">
     <label>비공개</label><br>
   </div>
+<<<<<<< HEAD
+=======
   <script>
     function setScopeNo(input) {
         // 선택된 라디오 버튼의 값을 scopeNo에 설정
@@ -92,6 +103,7 @@
     }
   </script>
   <input type="hidden" id="scopeNo" name="scopeNo" value="">
+>>>>>>> origin/dev
   <div>
     내용: <textarea id="summernote" name='content'></textarea>
   </div>
@@ -102,9 +114,24 @@
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
+<script data-th-src="@{/board/board.js}"></script>
 <script>
   $(document).ready(function() {
     $('#summernote').summernote({
+<<<<<<< HEAD
+        height: 800,
+        width: 1000,
+        callbacks: {
+            onInit: function() {
+                console.log('Summernote 생성됨!');
+            },
+            onImageUpload: function(files) {
+                let data = new FormData();
+                for (const file of files) {
+                    data.append("files", file);
+                }
+                let categoryNo = $("#categoryNo").val();
+=======
       height: 800,
       width: 1000,
       callbacks: {
@@ -112,24 +139,42 @@
           console.log('Summernote 생성됨!');
         },
         onImageUpload: function(files) {
+>>>>>>> origin/dev
 
-          let data = new FormData();
-          for (const file of files) {
-            data.append("files", file);
-          }
-          $.ajax({
-            url: 'file/upload', // 절대경로: http://localhost:8888/board2/file/upload
-            type: 'POST',
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            data: data
-          })
-          .done(function(result) {
-            if (result.length == 0) {
-              alert('로그인 하세요!');
-              return;
+                $.ajax({
+                    url: 'file/upload?categoryNo=' + categoryNo,
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    data: data
+                })
+                .done(function(result) {
+                    if (result.length == 0) {
+                        alert('로그인 하세요!');
+                        return;
+                    }
+
+                    // 카테고리 번호에 따라 다른 경로를 설정
+                    let basePath = 'https://kr.object.ncloudstorage.com/tp3-salaba/board/';
+                    if (categoryNo == '0') {
+                        basePath += 'review/';
+                    } else {
+                        basePath += 'community/';
+                    }
+
+                    for (const boardFile of result) {
+                        $('#summernote').summernote('insertImage',
+                            basePath + boardFile.uuidFileName);
+                    }
+                })
+                .fail(function(xhr, status, error) {
+                    console.error('Upload failed: ' + error);
+                    alert('이미지 업로드 실패: ' + error);
+                });
             }
+<<<<<<< HEAD
+=======
 
             // 서버에서 받은 업로드 파일 이름을 가지고 <img> 태그를 설정한다.
             for (const boardFile of result) {
@@ -139,12 +184,11 @@
             }
           });
 
+>>>>>>> origin/dev
         }
-      }
     });
+});
 
-  });
 </script>
-
 </body>
 </html>

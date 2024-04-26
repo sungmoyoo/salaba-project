@@ -6,6 +6,9 @@
   <title>비트캠프 데브옵스 5기</title>
 </head>
 <body>
+<<<<<<< HEAD
+<link rel="stylesheet" type="text/css" href="board.css">
+=======
 <style>
   /* 스타일링 CSS */
 
@@ -86,20 +89,25 @@
   }
 </style>
 
+>>>>>>> origin/dev
 <div data-th-replace="header :: header">머리말</div>
-
 <h1 data-th-text="${boardName}">게시판</h1>
-
 
 <div id="header">
   <!-- 게시판 버튼 -->
   <button type="button" name="review" onclick="location.href='/board/list?categoryNo=0'">후기게시판</button>
   <button type="button" name="inform" onclick="location.href='/board/list?categoryNo=1'">정보공유게시판</button>
   <button type="button" name="community" onclick="location.href='/board/list?categoryNo=2'">자유게시판</button>
-  <!-- 검색 폼 추가 -->
-  <form id="search-form" action="/search" method="GET">
-    <input type="text" id="search-input" name="q" placeholder="검색어를 입력하세요">
-    <button type="submit" id="search-button">검색</button>
+
+  <!-- 검색 폼 -->
+  <form id="search-form" action="/board/search" data-th-action="@{search}" method="GET">
+    <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">
+    <select name="type">
+      <option value="title">제목</option>
+      <option value="content">내용</option>
+    </select>
+    <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" value="">
+    <button id="search-button">검색</button>
   </form>
 
   <!-- 글쓰기 버튼 -->
@@ -109,12 +117,24 @@
 <!-- 게시판 -->
   <thead>
   <!-- 후기 게시판 카드형식 목록 -->
+<<<<<<< HEAD
+  <tr data-th-if="*{categoryNo == 0}" data-no="1">
+=======
   <tr data-th-if="*{categoryNo == 0}">
+>>>>>>> origin/dev
   <div class="container">
     <div class="card-deck">
       <div data-th-each="board : ${list}" data-th-object="${board}" class="card">
         <div class="card-thumbnail-container">
           <div class="card-region" data-th-text="${board.region.regionName}">지역명</div>
+<<<<<<< HEAD
+          <div data-th-each="boardFile : ${boardFileList}" data-th-object="${boardFile}">
+            <img class="card-thumbnail"
+                 data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/board/'
+  + ${boardFile.uuidFileName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" height='40px' alt="Thumbnail">
+          </div>
+          <div class="card-body">
+=======
           <div data-th-each="boardFile : ${boardFile}" data-th-object="${boardFile}">
 <!--            <tr>-->
 <!--              <td>-->
@@ -132,11 +152,12 @@
 
 
         <div class="card-body">
+>>>>>>> origin/dev
           <h3><a  data-th-href="@{view(categoryNo=0,boardNo=*{boardNo})}" data-th-text="*{title}"
-                 href="view.html">제목:제목입니다.</a></h3>
+                 href="view.html" onclick="return false;">제목:제목입니다.</a></h3>
           <p class="card-text">작성자: <span data-th-text="${board.writer.nickname}">홍길동</span></p>
           <p class="card-text">작성일: <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
-          <p class="card-text">추천수: <span data-th-text="*{likeCount}">20</span></p>
+          <p class="card-text">추천수: <span data-th-text="${board.likeCount}"></span></p>
         </div>
       </div>
     </div>
@@ -149,7 +170,11 @@
   <!-- 정보공유 게시판-->
 <table border='1'>
   <thead>
+<<<<<<< HEAD
+  <tr data-th-if="*{categoryNo == 1}" data-no="2">
+=======
   <tr data-th-if="*{categoryNo == 1}">
+>>>>>>> origin/dev
     <th>분류</th>
     <th>제목</th>
     <th>작성자</th>
@@ -160,23 +185,39 @@
   </tr>
   </thead>
   <tbody>
+<<<<<<< HEAD
+  <!-- 조건부 렌더링: 공지사항과 일반 게시글 분리 -->
+  <tr data-th-if="*{categoryNo == 1}"
+      data-th-each="board : ${list}"
+      data-th-object="${board}"
+      data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
+      data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
+    <td data-th-text="${board.headContent}">분류 내용</td>
+=======
   <tr data-th-if="*{categoryNo == 1}" data-th-each="board : ${list}" data-th-object="${board}">
     <td data-th-text="*{headContent}">공지</td>
+>>>>>>> origin/dev
     <td><a data-th-href="@{view(categoryNo=1,boardNo=*{boardNo})}" data-th-text="*{title}"
-           href="view.html">제목입니다.</a></td>
+           href="view.html" onclick="return false;">제목입니다.</a></td>
     <td data-th-text="*{writer.nickname}">홍길동</td>
     <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
-    <td data-th-text="*{likeCount}">20</td>
-    <td data-th-text="*{viewCount}">50</td>
-    <td data-th-text="*{fileCount}">5</td>
+    <td data-th-text="${board.likeCount}"></td>
+    <td data-th-text="${board.viewCount}"></td>
+    <td data-th-text="${board.fileCount}"></td>
   </tr>
   </tbody>
 </table>
 
+
+
 <!-- 자유게시판 -->
 <table border='1'>
   <thead>
+<<<<<<< HEAD
+<tr data-th-if="*{categoryNo == 2}" data-no="3">
+=======
 <tr data-th-if="*{categoryNo == 2}">
+>>>>>>> origin/dev
   <th>분류</th> <!-- headName -->
   <th>제목</th>
   <th>작성자</th>
@@ -187,15 +228,24 @@
 </tr>
 </thead>
 <tbody>
+<<<<<<< HEAD
+<tr data-th-if="*{categoryNo == 2}"
+    data-th-each="board : ${list}"
+    data-th-object="${board}"
+    data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
+    data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
+  <td data-th-text="${board.headContent}">분류 내용</td>
+=======
 <tr data-th-if="*{categoryNo == 2}" data-th-each="board : ${list}" data-th-object="${board}">
   <td data-th-text="*{headContent}">공지</td>
+>>>>>>> origin/dev
   <td><a data-th-href="@{view(categoryNo=2,boardNo=*{boardNo})}" data-th-text="*{title}"
-         href="view.html">제목입니다.</a></td>
+         href="view.html" onclick="return false;">제목입니다.</a></td>
   <td data-th-text="*{writer.nickname}">홍길동</td>
   <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
-  <td data-th-text="*{likeCount}">20</td>
-  <td data-th-text="*{viewCount}">50</td>
-  <td data-th-text="*{fileCount}">5</td>
+  <td data-th-text="${board.likeCount}"></td>
+  <td data-th-text="${board.viewCount}"></td>
+  <td data-th-text="${board.fileCount}"></td>
 </tr>
 </tbody>
 </table>
@@ -233,21 +283,81 @@
 </script>
 
 <!-- 페이지 설정 -->
-<p>
+<p data-th-if="${categoryNo != 0}"> <!-- Add this line -->
   [
-  <a data-th-if="${pageNo} <= 1">이전</a>
   <a data-th-if="${pageNo > 1}"
      data-th-href="@{list(categoryNo=*{categoryNo},pageNo=${pageNo - 1},pageSize=${pageSize})}"
      href="list">이전</a>
+  <span data-th-unless="${pageNo > 1}">이전</span>
   ]
+
   [
-  <a data-th-if="${pageNo >= numOfPage}">다음</a>
   <a data-th-if="${pageNo < numOfPage}"
      data-th-href="@{list(categoryNo=*{categoryNo},pageNo=${pageNo + 1},pageSize=${pageSize})}"
      href="list">다음</a>
+  <span data-th-unless="${pageNo < numOfPage}">다음</span>
   ]
 </p>
+
+
 <div data-th-replace="footer :: footer">꼬리말</div>
 
+<script data-th-src="@{/board/board.js}"></script>
+<script>
+  // 후기 게시판
+  // 카드 컨테이너에 대한 클릭 이벤트 리스너
+  document.querySelectorAll(".card-deck .card").forEach(card => {
+    card.addEventListener("click", function(event) {
+      // 이벤트가 발생한 위치에서 가장 가까운 a 태그를 찾기
+      const link = card.querySelector("a");
+
+      // a 태그가 있고, 이벤트가 a 태그 자체에서 발생하지 않았을 경우에만 동작
+      if (link && event.target !== link) {
+        event.preventDefault(); // 기본 이벤트 중지
+        window.location.href = link.href; // 해당 링크로 페이지 이동
+      }
+    });
+  });
+
+// 정보공유, 자유 게시판
+// 모든 행을 선택하여 클릭 이벤트를 추가
+    document.querySelectorAll("table").forEach(table => {
+      table.addEventListener("click", function(event) {
+        let target = event.target;
+
+        // 클릭된 요소에서 가장 가까운 tr 요소를 찾기
+        while (target && target.nodeName !== "TR") {
+          target = target.parentNode;
+        }
+
+        // tr 요소 내부에 있는 a 태그를 찾기
+        if (target) {
+          const link = target.querySelector("a");
+          if (link && link.href) {
+            event.preventDefault(); // 기본 이벤트 중지
+            window.location.href = link.href; // 해당 링크로 페이지 이동
+          }
+        }
+      });
+    });
+
+
+// 검색
+    // 페이지가 로드될 때 저장된 검색어가 있는지 확인 -> 있으면 검색창에 남겨두기
+  window.onload = function() {
+    var savedKeyword = localStorage.getItem('searchKeyword');
+    if (savedKeyword) {
+      document.getElementById('search-input').value = savedKeyword;
+      // 검색어를 가져왔으면 -> 다시 로컬 스토리지에서 삭제
+      localStorage.removeItem('searchKeyword');
+    }
+  };
+
+  // 검색 버튼 클릭 시 검색어를 로컬 스토리지에 저장
+  document.getElementById('search-button').addEventListener('click', function() {
+    var keyword = document.getElementById('search-input').value;
+    localStorage.setItem('searchKeyword', keyword);
+  });
+</script>
 </body>
 </html>
