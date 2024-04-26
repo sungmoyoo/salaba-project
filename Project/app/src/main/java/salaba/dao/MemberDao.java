@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.rental_home.Theme;
 
 @Mapper
 public interface MemberDao {
@@ -33,5 +34,10 @@ public interface MemberDao {
 
   public Member chkPw(Member member);
 
+  public void insertPreference(Member member);
+
+  public void deletePreference(Member member);
+
+  List<Member> findAllTheme(Member sessionInfo);
 
 }

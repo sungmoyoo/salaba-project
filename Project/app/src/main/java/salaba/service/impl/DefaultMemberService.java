@@ -10,6 +10,7 @@ import salaba.service.MemberService;
 import salaba.vo.ConstVO;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.rental_home.Theme;
 
 @RequiredArgsConstructor
 @Service
@@ -74,5 +75,20 @@ public class DefaultMemberService implements MemberService {
   @Override
   public Member chkPw(Member member) {
     return memberDao.chkPw(member);
+  }
+
+  @Override
+  public void insertPreference(Member member) {
+    memberDao.insertPreference(member);
+  }
+
+  @Override
+  public void deletePreference(Member member) {
+    memberDao.deletePreference(member);
+  }
+
+  @Override
+  public List<Member> themeList(Member sessionInfo) {
+    return memberDao.findAllTheme(sessionInfo);
   }
 }

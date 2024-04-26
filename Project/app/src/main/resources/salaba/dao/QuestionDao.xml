@@ -6,23 +6,35 @@
 <mapper namespace="salaba.dao.QuestionDao">
 
   <resultMap id="QuestionMap" type="Question">
-    <id column="member_no" property="no"/>
+    <id column="question_no" property="questionNo"/>
+    <result column="member_no" property="no"/>
     <result column="title" property="title"/>
     <result column="content" property="content"/>
     <result column="state" property="state"/>
+    <result column="state_nm" property="stateNm"/>
     <result column="register_date" property="registerDate"/>
   </resultMap>
 
+  <resultMap id="QnaMap" type="Qna">
+    <id column="question_no" property="questionNo"/>
+    <result column="answer" property="answer"/>
+    <result column="answer_date" property="answerDate"/>
+  </resultMap>
+
   <insert id="questionAdd" parameterType="Question">
-    insert into question(title,content)
-    values(#{title}, #{content})
+    insert into question(member_no,title,content)
+    values(#{no},#{title}, #{content})
   </insert>
 
   <select id="findAll" resultMap="QuestionMap">
     select
+      question_no,
       member_no,
       title,
-      state,
+      case when state = '0' then '미답변'
+           when state = '1' then '답변완료'
+           else ''
+      end as state,
       register_date
     from
       question
@@ -34,15 +46,35 @@
 
   <select id="findBy" resultMap="QuestionMap" parameterType="int">
     select
-      member_no,
-      title,
-      register_date,
       question_no,
-      answer,
-      answerDate
+      title,
+      content,
+      state,
+      register_date
     from
       question
     where
-      member_no=#{no}
+      question_no=#{value}
+  </select>
+
+  <update id="questionUpdate" parameterType="Question">
+  update
+    question
+  set
+    title=#{title},
+    content=#{content}
+  where
+    question_no=#{no}
+</update>
+
+  <select id="getAnswer" resultMap="QnaMap" parameterType="int">
+    select
+      question_no,
+      answer,
+      answer_date
+    from
+      qna
+    where
+      question_no=#{value}
   </select>
 </mapper>

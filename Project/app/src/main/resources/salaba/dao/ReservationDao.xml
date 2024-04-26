@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.ReservationDao">
+
+  <resultMap id="ReservationMap" type="Reservation">
+    <id column="reservation_no" property="reservationNo"/>
+    <result column="name" property="name"/>
+    <result column="start_date" property="startDate"/>
+    <result column="end_date" property="endDate"/>
+    <result column="number_of_people" property="numberOfPeople"/>
+    <result column="state" property="state"/>
+    <result column="state_nm" property="stateNm"/>
+    <result column="payment_date" property="paymentDate"/>
+    <result column="nickname" property="nickname"/>
+    <result column="tel_no" property="telNo"/>
+    <result column="rental_home_rule" property="rentalHomeRule"/>
+    <result column="address" property="address"/>
+    <result column="amount" property="amount"/>
+    <result column="rtn_date" property="rtnDate"/>
+    <result column="photo" property="photo"/>
+    <result column="lat" property="lat"/>
+    <result column="lon" property="lon"/>
+
+    <collection property="photoList" ofType="salaba.vo.rental_home.RentalHomePhoto">
+      <id column="photo_no" property="photoNo"/>
+      <result column="photo_order" property="photoOrder"/>
+      <result column="uuid_photo_name" property="uuidPhotoName"/>
+    </collection>
+  </resultMap>
+
+  <select id="findAll" resultMap="ReservationMap">
+    select
+      rh.name,
+      r.reservation_no,
+      r.start_date,
+      r.end_date,
+      r.number_of_people,
+      r.state,
+      case when r.state = '0' then '예약됨'
+           when r.state = '1' then '완료됨'
+      else ''
+      end as state_nm,
+      rhp.uuid_photo_name,
+      rhp.photo_order,
+      rhp.photo_no
+    from reservation r
+    JOIN rental_home rh ON r.rental_home_no = rh.rental_home_no
+    left outer join rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
+    WHERE
+      r.member_no=#{no}
+    order by
+      r.reservation_no
+  </select>
+
+  <select id="findBy" resultMap="ReservationMap" parameterType="int">
+    select
+      rh.name,
+      pay.payment_date,
+      r.reservation_no,
+      r.number_of_people,
+      mb.nickname,
+      mb.tel_no,
+      r.start_date,
+      r.end_date,
+      rh.rental_home_rule,
+      rh.address,
+      concat('￦', FORMAT(pay.amount , 0)) as amount,
+      DATE_FORMAT(DATE_ADD(r.start_date, INTERVAL -2 DAY), '%m월%d일') as rtn_date,
+      r.state,
+      rhp.uuid_photo_name,
+      rhp.photo_order,
+      rhp.photo_no,
+      mb.photo,
+      rh.lat,
+      rh.lon
+    from reservation r
+         inner join rental_home rh ON r.rental_home_no = rh.rental_home_no
+         inner join rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
+         inner join payment pay on r.reservation_no = pay.reservation_no
+         inner join member mb on r.member_no = mb.member_no
+    WHERE
+      r.reservation_no=#{value}
+  </select>
+</mapper>
