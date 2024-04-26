@@ -6,7 +6,7 @@ import org.admin.domain.Rental;
 import org.admin.repository.MemberDao;
 import org.admin.service.MemberService;
 import org.admin.util.Translator;
-import org.springframework.stereotype.Service;
+import org.springframework.stereo.Service;
 
 import java.util.List;
 @Service

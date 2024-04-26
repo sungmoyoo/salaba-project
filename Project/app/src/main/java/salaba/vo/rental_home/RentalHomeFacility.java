@@ -18,6 +18,7 @@ public class RentalHomeFacility implements Serializable { // 숙소 편의시설
 
   @EqualsAndHashCode.Exclude
   private String facilityName; // 숙소 시설명
-  
+
+  @EqualsAndHashCode.Exclude
   private int facilityCount; // 시설 갯수
 }

@@ -1,6 +1,7 @@
 package salaba.controller;
 
 
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import salaba.service.QuestionService;
 import salaba.service.StorageService;
 import salaba.vo.Member;
+import salaba.vo.Nation;
+import salaba.vo.Qna;
 import salaba.vo.Question;
 
 @RequiredArgsConstructor
@@ -25,18 +28,14 @@ public class QuestionController {
   private final QuestionService questionService;
   private final StorageService storageService;
 
-  @GetMapping("questionForm")
-  public void questionForm() throws Exception {
-  }
-
   @PostMapping("questionAdd")
   public String questionAdd(
       Question question,
       HttpSession session) throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
-    questionService.questionAdd(question);
     question.setNo(sessionInfo.getNo());
+    questionService.questionAdd(question);
     return "redirect:questionList";
   }
 
@@ -49,13 +48,16 @@ public class QuestionController {
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     question.setNo(sessionInfo.getNo());
 
-    model.addAttribute("question", questionService.questionList(question));
+    model.addAttribute("questionList", questionService.questionList(question));
   }
 
   @GetMapping("questionView")
-  public void questionView(int no, Model model) throws Exception {
-    Question question = questionService.get(no);
+  public void questionView(int questionNo, Model model) throws Exception {
+
+    Question question = questionService.get(questionNo);
     model.addAttribute("question", question);
+    Qna qna = questionService.getAnswer(questionNo);
+    model.addAttribute("qna", qna);
   }
 
   @PostMapping("questionUpdate")
@@ -65,4 +67,6 @@ public class QuestionController {
     questionService.questionUpdate(question);
     return "redirect:questionView";
   }
+
+  
 }

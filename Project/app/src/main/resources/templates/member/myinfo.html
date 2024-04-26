@@ -1,8 +1,22 @@
 <!DOCTYPE html>
 <html lang='en' xmlns:th="http://www.thymeleaf.org">
 <head>
+  <style>
+    .left-li{
+      list-style-type:none;
+      width: 110px;
+      background-color: #b9b9b9;
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px 5px 10px 5px;
+    }
+    li a {
+      text-decoration-line: none;
+      color: #fff;
+    }
+  </style>
   <meta charset='UTF-8'>
-  <title>테스트</title>
+  <title>사라바</title>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script><!--중복체크 메시지를 위해 필요함>-->
   <script>
     $(document).ready(function() { //화면이 전부 로딩 된 후 자동으로 실행되는 함수
@@ -17,81 +31,100 @@
 
 <div data-th-replace="header :: header">머리말</div>
 
-<h2>내 정보</h2>
-<form name="frm" action="" data-th-action="@{myinfoUpdate}" data-th-object="${member}"
-      enctype='multipart/form-data'
-      method='post'>
-  <input type="hidden" data-th-value='*{no}' name="no"/>
-  <input type="hidden" data-th-value='*{nickname}' name="oldNickname" />
-  <table border='1'>
-    <tbody>
-    <tr>
-      <th>이름</th>
-      <td><input type="text" data-th-value='*{name}' name="name"/></td>
-    </tr>
-    <tr>
-      <th>닉네임</th>
-      <td><input type="text" data-th-value='*{nickname}' name="nickname" /></td>
-    </tr>
-    <tr>
-    <th>이메일</th>
-      <td><input type="text" data-th-value='*{email}' name="email" readonly/></td>
-    </tr>
-    <tr>
-      <th>전화번호</th>
-      <td><input type="text" data-th-value='*{telNo}' name="telNo" /></td>
-    </tr>
-    <tr>
-      <th>생년월일</th>
-      <td ><input type="date" data-th-value="*{birthday}" name="birthday"/></td>
-    </tr>
-    <tr>
-      <th>국적</th>
-      <td>
-        <select name="nationNo">
-            <option data-th-each="nation : ${nationList}" data-th-value="${nation.nationNo}"
-                    th:selected="${nation.nationNo == member.nationNo}"><label data-th-text="${nation.nationName}"></label></option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <th>성별</th>
-      <td>
-        <!--#strings.contains 는 Like 검색기능으로 문자열중에 포함되는 글자가 있으면 참, 없으면 거짓을 리턴한다.
-        이유는 모르겠으나 if로 하면 제대로 비교를 못함. 문자열 비교는 #strings.contains 로 해야 한다고 함.
-        -->
-        <input type="radio" name="sex" value="M" th:checked="${#strings.contains(member.sex,'M'.toString())}" />남
-        <input type="radio" name="sex" value="W" th:checked="${#strings.contains(member.sex,'W'.toString())}" />여
-      </td>
-    </select>
-    </tr>
-    <tr>
-      <th>주소</th>
-      <td><input type="text" data-th-value='*{address}' name="address" /></td>
-    </tr>
-    <tr>
-      <th>사진</th>
-      <td>
-        <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
-           data-th-if="*{photo}">
-          <img
-              data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-        <a data-th-unless="*{photo}" href='/img/default-photo.jpeg'>
-          <img height='80px' src='/img/default-photo.jpeg'></a><br>
-        <input name='file' type='file'>
-      </td>
-    </tr>
-    <tr>
-      <th></th>
-      <td><a data-th-href="@{delete(no=*{no})}" href="delete.html">[회원탈퇴]</a></td>
-    </tr>
-  </tbody>
-</table>
+<table style="width:100%;height:540px;">
   <tr>
-  <td><button>정보 저장</button></td>
+    <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
+      <ul>
+        <li class="left-li"><a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="member/chkPw" style="color:#000;"><b>내정보 관리</b></a></li>
+        <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
+        <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
+        <li class="left-li"><a data-th-href="@{/board/boardHistory}" data-th-if="${session.loginUser != null}" href="board/boardHistory">작성글 내역</a></li>
+        <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
+        <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList">고객센터</a></li>
+      </ul>
+    </td>
+    <td style="vertical-align:top;">
+      <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
+        <h2>내 정보</h2>
+        <form name="frm" action="" data-th-action="@{myinfoUpdate}" data-th-object="${member}"
+              enctype='multipart/form-data'
+              method='post'>
+          <input type="hidden" data-th-value='*{no}' name="no"/>
+          <input type="hidden" data-th-value='*{nickname}' name="oldNickname" />
+          <table border='1'>
+            <tbody>
+            <tr>
+              <th>이름</th>
+              <td><input type="text" data-th-value='*{name}' name="name"/></td>
+            </tr>
+            <tr>
+              <th>닉네임</th>
+              <td><input type="text" data-th-value='*{nickname}' name="nickname" /></td>
+            </tr>
+            <tr>
+              <th>이메일</th>
+              <td><input type="text" data-th-value='*{email}' name="email" readonly/></td>
+            </tr>
+            <tr>
+              <th>전화번호</th>
+              <td><input type="text" data-th-value='*{telNo}' name="telNo" /></td>
+            </tr>
+            <tr>
+              <th>생년월일</th>
+              <td ><input type="date" data-th-value="*{birthday}" name="birthday"/></td>
+            </tr>
+            <tr>
+              <th>국적</th>
+              <td>
+                <select name="nationNo">
+                  <option data-th-each="nation : ${nationList}" data-th-value="${nation.nationNo}"
+                          th:selected="${nation.nationNo == member.nationNo}"><label data-th-text="${nation.nationName}"></label></option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>성별</th>
+              <td>
+                <!--#strings.contains 는 Like 검색기능으로 문자열중에 포함되는 글자가 있으면 참, 없으면 거짓을 리턴한다.
+                이유는 모르겠으나 if로 하면 제대로 비교를 못함. 문자열 비교는 #strings.contains 로 해야 한다고 함.
+                -->
+                <input type="radio" name="sex" value="M" th:checked="${#strings.contains(member.sex,'M'.toString())}" />남
+                <input type="radio" name="sex" value="W" th:checked="${#strings.contains(member.sex,'W'.toString())}" />여
+              </td>
+              </select>
+            </tr>
+            <tr>
+              <th>주소</th>
+              <td><input type="text" data-th-value='*{address}' name="address" /></td>
+            </tr>
+            <tr>
+              <th></th>
+              <td><a href="mytheme">선호사항 편집</a></td>
+            </tr>
+            <tr>
+              <th>사진</th>
+              <td>
+                <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
+                   data-th-if="*{photo}">
+                  <img
+                      data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
+                <a data-th-unless="*{photo}" href='/img/default-photo.jpeg'>
+                  <img height='80px' src='/img/default-photo.jpeg'></a><br>
+                <input name='file' type='file'>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td><a data-th-href="@{delete(no=*{no})}" href="delete.html">[회원탈퇴]</a></td>
+            </tr>
+            </tbody>
+          </table>
+          <button>정보 저장</button>
+        </form>
+      </div>
+    </td>
   </tr>
-</form>
-
+</table>
 <div data-th-replace="footer :: footer">꼬리말</div>
 </body>
 </html>

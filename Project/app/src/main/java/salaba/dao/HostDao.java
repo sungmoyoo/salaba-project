@@ -17,12 +17,18 @@ public interface HostDao {
 
   RentalHome findByRentalHomeNo(int rentalHomeNo); // 숙소 번호로 찾기
 
-  int updateRentalHome(RentalHome rentalHome);
+  int updateRentalHome(RentalHome rentalHome); // 숙소 정보 업데이트
 
-  // 예약 상태 업데이트
-  int reservationStateUpdate(
+  int rentalHomeStateUpdate( // 숙소 상태 업데이트
+      @Param("state") int state,
+      @Param("rentalHomeNo") int rentalHomeNo
+  );
+
+  int reservationStateUpdate( // 예약 상태 업데이트
       @Param("state")int state,
       @Param("reservationNo") int reservationNo);
 
-  int deleteRentalHome(int rentalHomeNo);
+  int deleteRentalHome(int rentalHomeNo); // 숙소 삭제
+
+
 }

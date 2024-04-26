@@ -34,8 +34,13 @@ public class DefaultHostService implements HostService {
 
     // ParameterType을 사용해서 rentalHome 객체 자체를 파라미터로 넘겨 처리
     // Null 검사는 안함 -> 모두 N.N이기 때문
-    photoDao.addPhoto(rentalHome);
+
+      photoDao.addPhoto(rentalHome);
+
+    themeDao.deleteAllTheme(rentalHome.getRentalHomeNo());
     themeDao.addTheme(rentalHome);
+
+    facilityDao.deleteAllFacility(rentalHome.getRentalHomeNo());
     facilityDao.addFacility(rentalHome);
   }
 
@@ -65,7 +70,10 @@ public class DefaultHostService implements HostService {
   @Override
   public int rentalHomeUpdate(RentalHome rentalHome) {
     int count = hostDao.updateRentalHome(rentalHome);
-    photoDao.addPhoto(rentalHome);
+
+    if (rentalHome.getRentalHomePhotos() != null) {
+      photoDao.addPhoto(rentalHome);
+    }
 
     themeDao.deleteAllTheme(rentalHome.getRentalHomeNo());
     themeDao.addTheme(rentalHome);
@@ -98,4 +106,6 @@ public class DefaultHostService implements HostService {
   public int deleteRentalHomePhoto(int photoNo) {
     return photoDao.deletePhoto(photoNo);
   }
+
+
 }

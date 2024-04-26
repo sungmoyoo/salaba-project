@@ -2,10 +2,10 @@ package salaba.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
-import salaba.vo.BoardFile;
+import salaba.vo.board.BoardFile;
 
 @Mapper
-public interface BoardFileDao { // 게시판, 신고 첨부파일 인터페이스
+public interface BoardFileDao { // 게시판 첨부파일 인터페이스
 
   void add(BoardFile file); // 파일 추가
 
@@ -19,5 +19,4 @@ public interface BoardFileDao { // 게시판, 신고 첨부파일 인터페이�
 
   List<BoardFile> findAllByBoardNo(int boardNo); // 게시판 번호로 게시판 첨부파일 찾기
 
-  List<BoardFile> findAllByReportNo(int reportNo); // 신고 번호로 신고 첨부파일 찾기
 }

@@ -17,12 +17,17 @@
     <result column="address" property="address"/>
     <result column="sex" property="sex"/>
     <result column="photo" property="photo"/>
+    <result column="my_theme_yn" property="myThemeYn"/>
+    <result column="theme_no" property="themeNo"/>
+    <result column="theme_name" property="themeName"/>
   </resultMap>
 
   <resultMap id="NationMap" type="Nation"><!--국가선택 준비-->
     <id column="nation_no" property="nationNo"/>
     <result column="nation_name" property="nationName"/>
   </resultMap>
+
+
 
   <insert id="add" parameterType="Member"><!--회원가입>-->
     insert into member(
@@ -107,13 +112,14 @@
       name,
       nickname,
       birthday,
-      email
+      email,
+      photo,
+      state
     from
       member
     where
       email= #{email}
       and password=sha2(#{password},256)
-      and state='0'
   </select>
 
   <select id="findEmail" resultMap="MemberMap"><!--이메일 찾기>-->
@@ -125,7 +131,6 @@
     where
       name= #{name}
       and birthday=#{birthday}
-      and state='0'
   </select>
 
   <select id="findPw" resultMap="MemberMap"><!--비밀번호 찾기>-->
@@ -136,14 +141,14 @@
     where
       email= #{email}
       and name= #{name}
-      and state='0'
   </select>
 
   <update id="chgPwSave" parameterType="Member"><!--비밀번호 변경>-->
     update
       member
     set
-      password = sha2(#{password},256)
+      password = sha2(#{password},256),
+      state = case when state = '4' then '0' else state end
     where
       member_no=#{no}
   </update>
@@ -157,5 +162,43 @@
       member_no=#{no}
       and password = sha2(#{password},256)
   </select>
+
+  <insert id="insertPreference" parameterType="Member">
+    insert into member_preference
+    (member_no,theme_no)
+    values(#{no},#{themeNo})
+  </insert>
+
+  <select id="findAllTheme" resultMap="MemberMap">
+    select
+      t.theme_no,
+      t.theme_name,
+      case when m.theme_no is null then 'N'
+      else 'Y'
+      end as my_theme_yn
+    from
+      theme t
+    left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
+  </select>
+
+  <select id="joinThemeList" resultMap="MemberMap">
+    select
+      theme_no,
+      theme_name,
+      case when m.theme_no is null then 'N'
+      else 'Y'
+      end as my_theme_yn
+    from
+      theme t
+    left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
+  </select>
+
+  <delete id="deletePreference" parameterType="Member">
+    delete
+    from
+      member_preference
+    where
+      member_no = #{no}
+  </delete>
 
 </mapper>

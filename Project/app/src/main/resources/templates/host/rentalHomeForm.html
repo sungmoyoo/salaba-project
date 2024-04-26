@@ -44,7 +44,7 @@
   }
   .input-file-button{
     padding: 6px 25px;
-    background-color:#FF6600;
+    background-color:#35C5B3;
     border-radius: 4px;
     color: white;
     cursor: pointer;
@@ -56,18 +56,18 @@
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
 <div align="center">
-<form action="themeForm" data-th-action="@{rentalHomeSave}" enctype="multipart/form-data" method='post'>
+<form id="myForm" enctype="multipart/form-data" method='post'>
   <br>
 
   <h2>숙소 기본 정보</h2>
   <div>
-     <input type="text" name="name" placeholder="숙소명">
+     <input type="text" name="name" id="name" placeholder="숙소명">
   </div>
   <div>
-     <textarea name="explanation" placeholder="숙소 설명"></textarea>
+     <textarea name="explanation" id="explanation" placeholder="숙소 설명"></textarea>
   </div>
   <div>
-     <textarea name="rentalHomeRule" placeholder="숙소 이용규칙"></textarea>
+     <textarea name="rentalHomeRule" id="rentalHomeRule" placeholder="숙소 이용규칙"></textarea>
   </div>
 
   <br>
@@ -79,16 +79,16 @@
     지도 API 들어감
   </div>
   <div>
-    임시 지역 값: <input type="text" name="region_no" value="2">
+    임시 지역 값: <input type="text" id="region_no" name="regionNo" value="2">
   </div>
   <div>
-    임시 주소 값: <input type="text" name="address" value="대한민국 제주도 제주 중앙로 304">
+    임시 주소 값: <input type="text" id="address" name="address" value="대한민국 제주도 제주 중앙로 304">
   </div>
   <div>
-    임시 위도 값: <input type="text" name="lat" value="33.493496809557">
+    임시 위도 값: <input type="text" id="lat" name="lat" value="33.493496809557">
   </div>
   <div>
-    임시 경도 값: <input type="text" name="lon" value="126.534302173485">
+    임시 경도 값: <input type="text" id="lon" name="lon" value="126.534302173485">
   </div>
   <br>
   <br>
@@ -98,92 +98,108 @@
 
 
   <script>
+    var filesArray = []; // 이미지 배열
+    var formData = new FormData(); // 폼데이터
+
     function submitForm() {
-        var form = document.querySelector('form');
-        form.submit();
+      formData.append('name', document.querySelector('#name').value);
+      formData.append('explanation', document.querySelector('#explanation').value);
+      formData.append('rentalHomeRule', document.querySelector('#rentalHomeRule').value);
+
+      formData.append('region_no', document.querySelector('#region_no').value);
+      formData.append('address', document.querySelector('#address').value);
+      formData.append('lat', document.querySelector('#lat').value);
+      formData.append('lon', document.querySelector('#lon').value);
+
+      formData.append('price', document.querySelector('#price').value);
+      formData.append('cleanFee', document.querySelector('#cleanFee').value);
+      formData.append('hostingStartDate', document.querySelector('#hostingStartDate').value);
+      formData.append('hostingEndDate', document.querySelector('#hostingEndDate').value);
+
+      updateFormData(); // FormData 업데이트
+
+      console.log(formData.getAll('photoExplanations'));
+      console.log(formData.getAll('photos'));
+
+      fetch('rentalHomeSave', {
+        method: 'POST',
+        body: formData
+
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+
+      }).then(data => {
+        console.log('Response data:', data);
+        window.location.href = "themeForm"; // 자동으로 리디렉션
+
+      }).catch(error => {
+        console.error('Error:', error);
+      });
+    }
+
+    // FormData 업데이트 함수
+    function updateFormData() {
+      filesArray.forEach(obj => {
+        formData.append('photos', obj.file);
+        formData.append('photoExplanations', obj.description.value);
+      });
     }
 
     function photoCountAndDisplay(files) {
       var imageContainer = document.getElementById('imageContainer');
-      var form = document.querySelector('form'); // 폼 요소를 가져옵니다.
-      var filesArray = []; // 배열에 선택된 파일을 저장합니다.
 
       for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-
-        // FileReader 객체를 사용하여 파일을 읽습니다.
+        let file = files[i];
         var reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           var container = document.createElement('div');
-          container.classList.add('image-container'); // 이미지와 설명을 감싸는 컨테이너에 CSS 클래스를 추가합니다.
+          container.classList.add('image-container');
 
           var imgElement = document.createElement('img');
-          imgElement.classList.add('image-item'); // 이미지에 CSS 클래스를 추가합니다.
-
-          // 이미지를 화면에 표시합니다.
+          imgElement.classList.add('image-item');
           imgElement.src = e.target.result;
-          container.appendChild(imgElement); // 이미지를 컨테이너에 추가합니다.
+          container.appendChild(imgElement);
 
-          // 이미지 설명을 입력할 수 있는 입력 필드를 생성합니다.
           var descriptionInput = document.createElement('input');
           descriptionInput.type = 'text';
           descriptionInput.placeholder = '이미지 설명';
-          descriptionInput.classList.add('image-description'); // 입력 필드에 CSS 클래스를 추가합니다.
-          descriptionInput.name = 'photoExplanations'; // form을 통해 보낼 데이터 이름 지정
-          container.appendChild(descriptionInput); // 입력 필드를 컨테이너에 추가합니다.
+          descriptionInput.classList.add('image-description');
+          descriptionInput.name = 'photoExplanations'; // 이미지 설명의 이름 설정
+          container.appendChild(descriptionInput);
 
-          // 삭제 버튼을 생성합니다.
           var deleteButton = document.createElement('button');
           deleteButton.textContent = 'X';
           deleteButton.classList.add('delete-button');
-          deleteButton.onclick = function() {
-            // 해당 이미지의 파일을 배열에서 삭제하고 해당 이미지를 화면에서도 제거합니다.
-            var index = filesArray.indexOf(file);
+          deleteButton.onclick = function () {
+            var index = filesArray.findIndex(obj => obj.file === file);
             if (index > -1) {
               filesArray.splice(index, 1);
               container.remove();
             }
           };
-          container.appendChild(deleteButton); // 삭제 버튼을 컨테이너에 추가합니다.
+          container.appendChild(deleteButton);
 
-          imageContainer.appendChild(container); // 컨테이너를 이미지 컨테이너에 추가합니다.
+          imageContainer.appendChild(container);
+
+          // 파일과 설명을 하나의 객체로 연결하여 배열에 추가
+          filesArray.push({
+            file: file,
+            description: descriptionInput
+          });
         };
 
-        reader.readAsDataURL(file); // 파일을 데이터 URL로 읽습니다.
-
-        // 파일을 배열에 추가합니다.
-        filesArray.push(file);
+        reader.readAsDataURL(file);
       }
-
-      // 폼 제출 시 파일을 함께 제출합니다.
-      form.addEventListener('submit', function(event) {
-        event.preventDefault(); // 기본 제출 동작을 막습니다.
-
-        // FormData 객체를 생성합니다.
-        var formData = new FormData(form);
-
-        // 배열에 있는 파일을 FormData 객체에 추가합니다.
-        filesArray.forEach(function(file, index) {
-          formData.append('photos', file); // 파일들을 'photos'라는 이름으로 FormData에 추가합니다.
-        });
-
-        // FormData 객체를 서버로 전송합니다.
-        fetch(form.action, {
-          method: form.method,
-          body: formData
-        })
-        .then(response => response.text())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
-      });
     }
   </script>
   <div>
     <label class="input-file-button" for="photoInput">사진 추가</label>
-    <input type="file" id="photoInput" name="photos" style="display:none;"
-            onchange="photoCountAndDisplay(this.files)"/>
-
+    <input type="file" multiple id="photoInput" name="photos" style="display:none;"
+           onchange="photoCountAndDisplay(this.files)"/>
     <div id="imageContainer"></div>
   </div>
 
@@ -200,10 +216,10 @@
     }
   </script>
     <div>
-      <input type="text" name="price" id="price" placeholder="이용요금(주 기준)" onkeyup="calc(this.value)">
+      <input type="number" name="price" id="price" placeholder="이용요금(주 기준)" onkeyup="calc(this.value)">
     </div>
     <div>
-      <input type="text" name="cleanFee" id="cleanFee" placeholder="청소비" onkeyup="calc(this.value)">
+      <input type="number" name="cleanFee" id="cleanFee" placeholder="청소비" onkeyup="calc(this.value)">
     </div>
     <div>
      <input readonly type="text" id="income" placeholder="정산금액">
@@ -216,10 +232,10 @@
 
   <h2>호스팅 기간</h2>
   <div>
-    호스팅 시작일: <input name='hostingStartDate' type='date'>
+    호스팅 시작일: <input name='hostingStartDate' id="hostingStartDate" type='date'>
   </div>
   <div>
-    호스팅 종료일: <input name='hostingEndDate' type='date'>
+    호스팅 종료일: <input name='hostingEndDate' id="hostingEndDate" type='date'>
   </div>
 
   <h2>본인 인증</h2>
@@ -231,15 +247,17 @@
   <br>
   <br>
 
+</form>
+
   <div>
     <button type="submit" onclick="submitForm()">다음</button>
   </div>
 
   <br>
   <br>
-
-</form>
 </div>
+
+
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 

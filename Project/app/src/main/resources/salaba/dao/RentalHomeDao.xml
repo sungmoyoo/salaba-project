@@ -67,6 +67,8 @@
     <result column="lon" property="lon"/>
 
     <collection property="rentalHomePhotos" resultMap="rentalHomePhotos"/>
+    <collection property="themes" resultMap="themeMap"/>
+    <collection property="rentalHomeFacilities" resultMap="rentalHomeFacilityMap"/>
   </resultMap>
 
   <resultMap id="rentalHomeView" type="RentalHome">
@@ -108,10 +110,27 @@
           rental_home_like
         where
           t1.rental_home_no = rental_home_no
-      ) as like_count
+      ) as like_count,
+      t3.theme_no,
+      t4.theme_name,
+      t5.facility_count,
+      t5.facility_no,
+      (
+        select
+          t6.facility_name
+        from
+          rental_home_facility t6
+        where
+          facility_no = t5.facility_no
+      ) as facility_name
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_theme t3 on t3.rental_home_no = t1.rental_home_no
+      inner join theme t4 on t4.theme_no = t3.theme_no
+      inner join rental_home_detail t5 on t5.rental_home_no = t1.rental_home_no
+    where
+      t1.state = '1'
     order by
       like_count desc
   </select>
@@ -134,12 +153,26 @@
           rental_home_like
         where
           t1.rental_home_no = rental_home_no
-      ) as like_count
+      ) as like_count,
+      t3.theme_no,
+      t4.theme_name,
+      t5.facility_count,
+      t5.facility_no,
+      (
+        select
+        t6.facility_name
+        from
+        rental_home_facility t6
+        where
+        facility_no = t5.facility_no
+      ) as facility_name
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
-      inner join rental_home_theme t4 on t4.rental_home_no = t1.rental_home_no
-    where (t4.theme_no) in (
+      inner join rental_home_theme t3 on t3.rental_home_no = t1.rental_home_no
+      inner join theme t4 on t4.theme_no = t3.theme_no
+      inner join rental_home_detail t5 on t5.rental_home_no = t1.rental_home_no
+    where (t3.theme_no) in (
       select
         theme_no
       from
@@ -149,7 +182,8 @@
         <foreach collection="list" item="item" separator="OR">
           #{item.themeName}
         </foreach>
-      )
+      ) and
+      t1.state = '1'
     order by
       like_count desc
   </select>
@@ -184,7 +218,8 @@
         theme
       where
         theme_name = #{themeName}
-      )
+      ) and
+      t1.state = '1'
     order by
       like_count desc
   </select>
@@ -207,13 +242,29 @@
           rental_home_like
         where
           t1.rental_home_no = rental_home_no
-      ) as like_count
+      ) as like_count,
+      t3.theme_no,
+      t4.theme_name,
+      t5.facility_count,
+      t5.facility_no,
+      (
+        select
+          t6.facility_name
+        from
+          rental_home_facility t6
+        where
+          facility_no = t5.facility_no
+      ) as facility_name
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
-      inner join region t4 on t4.region_no = t1.region_no
+      inner join rental_home_theme t3 on t3.rental_home_no = t1.rental_home_no
+      inner join theme t4 on t4.theme_no = t3.theme_no
+      inner join rental_home_detail t5 on t5.rental_home_no = t1.rental_home_no
+      inner join region t6 on t6.region_no = t1.region_no
     where
-      (t4.region_no) in (
+      t1.state = '1' and
+      (t6.region_no) in (
          select
            region_no
          from
@@ -243,62 +294,6 @@
       like_count desc
   </select>
 
-  <!-- 필터 검색 -->
-  <select id="rentalHomeFilterSelect" resultMap="rentalHomeSearch">
-    select
-      t1.rental_home_no,
-      t1.name,
-      t1.price,
-      t1.lat,
-      t1.lon,
-      t2.photo_no,
-      t2.uuid_photo_name,
-      t2.photo_order,
-      (
-        select
-        count(*)
-        from
-        rental_home_like
-        where
-        t1.rental_home_no = rental_home_no
-      ) as like_count
-      from
-        rental_home t1
-        inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
-      where
-      <if test="theme != null">
-        t1.rental_home_no in (
-          select
-            t4.rental_home_no
-          from
-            rental_home_theme t4
-          where
-            t4.theme_no = (
-              select
-                theme_no
-              from
-                theme
-              where
-                theme_name =
-              <foreach collection="list" item="item" separator="OR">
-                #{item.themeName}
-              </foreach>
-          )
-        )
-      </if>
-      <if test="theme != null and ((minPrice > 0 and maxPrice > 0 ) or capacity > 0 )">
-        and
-      </if>
-      <if test="minPrice != null and maxPrice != null">
-        ( t1.price between #{minPrice} and #{maxPrice} )
-      </if>
-      <if test="theme != null and ((minPrice > 0 and maxPrice > 0 ) or capacity > 0 )">
-        and
-      </if>
-      <if test="capacity > 0">
-        <![CDATA[ t1.capacity >= #{capacity} ]]>
-      </if>
-  </select>
   <!-- 숙소 상세 조회 -->
   <select id="rentalHomeDetailSelect" resultMap="rentalHomeView" parameterType="int">
     select
@@ -378,6 +373,17 @@
       theme_no
   </select>
 
+  <!-- 편의 시설 전체 검색 -->
+  <select id="getAllFacilities" resultMap="rentalHomeFacilityMap">
+    select
+      facility_no,
+      facility_name
+    from
+      rental_home_facility
+    order by
+      facility_no
+  </select>
+
   <!-- 숙소 리뷰 작성 -->
   <insert id="rentalHomeReviewAdd" parameterType="RentalHomeReview">
     insert into
@@ -385,11 +391,11 @@
       (
         reservation_no,
         score,
-        review,
+        review
       )
     values
       (
-        #{reservation_no},
+        #{reservationNo},
         #{score},
         #{review}
       )
