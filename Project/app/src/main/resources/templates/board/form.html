@@ -14,17 +14,8 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"
         rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<<<<<<< HEAD
   <link rel="stylesheet" type="text/css" href="board.css">
 
-=======
-
-  <style>
-  body {
-    padding-left: 10px;
-  }
-</style>
->>>>>>> origin/dev
 </head>
 <body>
 
@@ -36,24 +27,20 @@
 <h1 data-th-text="${boardName}">게시판</h1>
 
 <form action="add" data-th-action="@{add}" enctype='multipart/form-data' method='post'>
-<<<<<<< HEAD
   <input id="categoryNo" data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
-=======
-  <input data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
->>>>>>> origin/dev
 
   <div data-th-if="*{categoryNo != 0}">
     <select name="headNo">
       분류:
       <option value="1">공지</option>
       <optgroup label="[정보공유]">
-      <option value="2">이벤트</option>
-      <option value="3">홍보</option>
-      <option value="4">꿀팁</option>
+        <option value="2">이벤트</option>
+        <option value="3">홍보</option>
+        <option value="4">꿀팁</option>
       </optgroup>
       <optgroup label="[자유]">
-      <option value="5">잡담</option>
-      <option value="6">질문</option>
+        <option value="5">잡담</option>
+        <option value="6">질문</option>
       </optgroup>
     </select>
   </div>
@@ -62,21 +49,21 @@
     <select name="regionNo">
       지역:
       <optgroup label="[국내여행]">
-      <option value="1">서울</option>
-      <option value="2">제주도</option>
-      <option value="3">전주</option>
+        <option value="1">서울</option>
+        <option value="2">제주도</option>
+        <option value="3">전주</option>
       </optgroup>
       <optgroup label="[해외여행]">
-      <option value="11">삿포로</option>
-      <option value="12">오사카</option>
-      <option value="13">후쿠오카</option>
-      <option value="21">베를린</option>
-      <option value="22">프랑크푸르트</option>
-      <option value="31">브리즈번</option>
-      <option value="32">멜버른</option>
-      <option value="33">시드니</option>
-      <option value="41">파리</option>
-      <option value="42">몽펠리에</option>
+        <option value="11">삿포로</option>
+        <option value="12">오사카</option>
+        <option value="13">후쿠오카</option>
+        <option value="21">베를린</option>
+        <option value="22">프랑크푸르트</option>
+        <option value="31">브리즈번</option>
+        <option value="32">멜버른</option>
+        <option value="33">시드니</option>
+        <option value="41">파리</option>
+        <option value="42">몽펠리에</option>
       </optgroup>
     </select>
   </div>
@@ -85,7 +72,7 @@
     제목: <input name='title' type='text'  placeholder="제목을 입력하세요.">
   </div>
   <div>
-<!--    <input type="hidden" id="scopeNo" name="scopeNo" value="">-->
+    <!--    <input type="hidden" id="scopeNo" name="scopeNo" value="">-->
     공개범위:
     <input name="scopeNo" data-th-value="0" type="radio" >
     <label>전체공개</label><br>
@@ -94,16 +81,6 @@
     <input name="scopeNo" data-th-value="2" type="radio">
     <label>비공개</label><br>
   </div>
-<<<<<<< HEAD
-=======
-  <script>
-    function setScopeNo(input) {
-        // 선택된 라디오 버튼의 값을 scopeNo에 설정
-        document.getElementById("scopeNo").value = input.dataset.thValue;
-    }
-  </script>
-  <input type="hidden" id="scopeNo" name="scopeNo" value="">
->>>>>>> origin/dev
   <div>
     내용: <textarea id="summernote" name='content'></textarea>
   </div>
@@ -118,7 +95,6 @@
 <script>
   $(document).ready(function() {
     $('#summernote').summernote({
-<<<<<<< HEAD
         height: 800,
         width: 1000,
         callbacks: {
@@ -131,15 +107,6 @@
                     data.append("files", file);
                 }
                 let categoryNo = $("#categoryNo").val();
-=======
-      height: 800,
-      width: 1000,
-      callbacks: {
-        onInit: function() {
-          console.log('Summernote 생성됨!');
-        },
-        onImageUpload: function(files) {
->>>>>>> origin/dev
 
                 $.ajax({
                     url: 'file/upload?categoryNo=' + categoryNo,
@@ -173,18 +140,6 @@
                     alert('이미지 업로드 실패: ' + error);
                 });
             }
-<<<<<<< HEAD
-=======
-
-            // 서버에서 받은 업로드 파일 이름을 가지고 <img> 태그를 설정한다.
-            for (const boardFile of result) {
-              $('#summernote').summernote('insertImage',
-                'https://kr.object.ncloudstorage.com/tp3-salaba/board/'
-                + boardFile.uuidFileName);
-            }
-          });
-
->>>>>>> origin/dev
         }
     });
 });

@@ -35,7 +35,7 @@ public class DefaultCommentService implements CommentService { // 댓글
   @Override
   public Comment getBy(int commentNo) {
     return commentDao.findBy(commentNo);
-  }
+  } // 댓글 찾기
 
 
 }

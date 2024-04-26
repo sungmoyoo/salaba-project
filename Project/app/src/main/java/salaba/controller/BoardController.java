@@ -384,31 +384,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     return boardFiles;
   }
 
-//  @GetMapping("board/file/delete") // 게시판 첨부 파일 삭제
-//  public String fileDelete(int categoryNo, int fileNo, HttpSession session) throws Exception {
-//
-//    Member loginUser = (Member) session.getAttribute("loginUser");
-//    if (loginUser == null) {
-//      throw new Exception("로그인하시기 바랍니다!");
-//    }
-//
-//    BoardFile file = boardService.getBoardFile(fileNo);
-//    if (file == null) {
-//      throw new Exception("첨부파일 번호가 유효하지 않습니다.");
-//    }
-//
-//    Member writer = boardService.getBoard(file.getBoardNo()).getWriter();
-//    if (writer.getNo() != loginUser.getNo()) {
-//      throw new Exception("권한이 없습니다.");
-//    }
-//
-//    boardService.deleteBoardFile(fileNo);
-//
-//    storageService.delete(this.bucketName, this.uploadDir, file.getUuidFileName());
-//
-//    return "redirect:../view?categoryNo=" + categoryNo + "&boardNo=" + file.getBoardNo();
-//  }
-
   @PostMapping("/board/comment/add") // 댓글 또는 답글 작성
   public ResponseEntity<?> addComment(
       Comment comment,

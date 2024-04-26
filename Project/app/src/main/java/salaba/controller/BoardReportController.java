@@ -36,7 +36,7 @@ public class BoardReportController {
 
   private String uploadDir = "board/";
 
-  @Value("${ncp.bucketname}")
+  @Value("${ncpbucketname}")
   private String bucketName;
 
   @PostMapping("/board/report/add") // 신고 작성
