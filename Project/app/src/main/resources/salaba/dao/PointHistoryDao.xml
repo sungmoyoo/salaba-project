@@ -3,21 +3,23 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="salaba.dao.Point_historyDao">
+<mapper namespace="salaba.dao.PointHistoryDao">
 
-  <resultMap id="Point_historyMap" type="Point_history">
+  <resultMap id="PointHistoryMap" type="PointHistory">
     <id column="member_no" property="no"/>
     <result column="save_content" property="saveContent"/>
     <result column="save_point" property="savePoint"/>
     <result column="save_date" property="saveDate"/>
+    <result column="total_point" property="totalPoint"/>
   </resultMap>
 
-  <select id="findAll" resultMap="Point_historyMap">
+  <select id="findAll" resultMap="PointHistoryMap">
       select
         member_no,
         save_content,
         save_point,
-        save_date
+        save_date,
+        SUM(save_point) OVER(order by save_date) as total_point
       from
         point_history
       where

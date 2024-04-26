@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.BookmarkDao">
+
+  <resultMap id="BookmarkMap" type="Bookmark">
+    <id column="rental_home_no" property="rentalHomeNo"/>
+    <result column="member_no" property="no"/>
+    <result column="name" property="name"/>
+    <result column="uuid_photo_name" property="uuidPhotoName"/>
+    <result column="address" property="address"/>
+    <result column="price" property="price"/>
+    <result column="photo" property="photo"/>
+
+    <collection property="photoList" ofType="Bookmark">
+      <id column="photo_no" property="photoNo"/>
+      <result column="photo_order" property="photoOrder"/>
+      <result column="uuid_photo_name" property="uuidPhotoName"/>
+    </collection>
+  </resultMap>
+
+  <select id="findAll" resultMap="BookmarkMap">
+    SELECT
+      rh.rental_home_no,
+      rh.name,
+      rh.address,
+      rh.price,
+      rhp.uuid_photo_name,
+      rhp.photo_order,
+      rhp.photo_no
+    FROM
+      bookmark b
+    INNER JOIN rental_home rh ON b.rental_home_no = rh.rental_home_no
+    LEFT OUTER JOIN rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
+    WHERE
+      b.member_no=#{no}
+  </select>
+</mapper>

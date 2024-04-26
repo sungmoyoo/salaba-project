@@ -40,7 +40,7 @@ public class HostController {
   private final StorageService storageService;
   private String uploadDir = "rentalHome/";
 
-  @Value("${ncp.bucketname}")
+  @Value("${ncpbucketname}")
   private String bucketName;
 
   // 호스트 숙소등록 시작화면
