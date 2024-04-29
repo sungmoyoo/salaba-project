@@ -60,10 +60,11 @@ wss.on('connection', (ws) => {
   count++;
   // 클라이언트로부터 메시지를 받았을 때
   ws.on('message', (message) => {
-
+    
     const messageObj = JSON.parse(message);
     const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
 
+    console.log(messageObj.message);
     chatFile.chatFileName = messageObj.chatName;
     chatFile.chatFileFullPath = localFilePath+chatFile.chatFileName;
     console.log(messageObj);
@@ -77,17 +78,7 @@ wss.on('connection', (ws) => {
         addChatUser(ws, messageObj);
       }
         sendPreviousMessages(ws);
-    }
-    else if(messageObj.message === 'close'){ // 클라이언트 종료 했을 경우
-      if(roomInfo){ // 채팅방 유무 체크
-        if( roomInfo.has(messageObj.memberNo) ){ // 채팅방에 해당 회원번호 존재 여부 체크
-          roomInfo.delete(messageObj.memberNo); // 채팅방에 회원번호 삭제
-        }
-        if(roomInfo.size === 0){ // 채팅방에 회원이 모두 나갔을 경우
-          sentPreviousMessagesRooms.delete(messageObj.reservationNo); // 해당 예약번호에 대한 실시간 채팅방 삭제
-          uploadFile(); // 스토리지 업로드 최소화를 위해 채팅방에 사람이 모두 나갔을때만 스토리지에 저장
-        }
-      }
+        console.log(sentPreviousMessagesRooms);
     }
     else{
       console.log(chatContent);
@@ -107,6 +98,11 @@ wss.on('connection', (ws) => {
       chatContent.pop();
     }
   });
+
+  ws.on('close', () =>{
+    console.log("웹소켓 종료");
+    deleteChatUser(ws);
+  })
 });
 
 // 채팅방 설정
@@ -128,6 +124,23 @@ function addChatUser(ws, messageObj){
     const addInfo = { sender: messageObj.sender, ws:ws };
     roomInfo.set( messageObj.memberNo, addInfo );
   }
+}
+
+// 채팅방 유저 삭제
+function deleteChatUser(ws){
+  console.log("맵에서 웹소켓 삭제");
+  sentPreviousMessagesRooms.forEach((roomInfo, reservationNo) => { // Map에 대해 반복문 실행
+    roomInfo.forEach((clientInfo, memberNo) => {
+      if(clientInfo.ws === ws){ // 클라이언트에서 종료를한(웹소켓연결이 끊긴) 대상 체크
+        roomInfo.delete(memberNo); // map에서 삭제
+      }
+    });
+
+    if(roomInfo.size === 0){ // Map에 해당 채팅방에 사용자가 없는경우
+      sentPreviousMessagesRooms.delete(reservationNo); // 채팅방 완전 삭제
+      uploadFile(); // 스토리지 서버에 파일 업로드
+    }
+  });
 }
 
 // 이전 채팅기록 전송

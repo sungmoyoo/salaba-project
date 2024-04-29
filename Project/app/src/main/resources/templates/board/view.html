@@ -99,6 +99,7 @@
       <span>삭제된 댓글입니다.</span>
     </div>
     <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
+      <span class="commentWriterNo" name="commentWriterNo" data-th-text="${comment.writer.no}" hidden></span>
       <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
       <span data-th-text="*{writer.nickname}">댓글 작성자</span>
       <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
@@ -123,6 +124,7 @@
 
 <form id="commentForm" method="post">
   <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
+  <span id="memberNoForAlarm" name="memberNoForAlarm" data-th-text="${board.writer.no}" hidden></span>
   <input id="commentContent" name="content" type="textarea">
   <button id="addCommendBtn">댓글 작성</button>
 </form>

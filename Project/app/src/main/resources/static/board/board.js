@@ -69,9 +69,3 @@ function openPopup(url, title, width, height) {
   var popup = window.open(url, title, options);
   return popup;
 }
-
-// 공지글 색상처
-.announcement {
-  color: red;
-}
-

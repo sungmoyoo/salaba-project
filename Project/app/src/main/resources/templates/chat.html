@@ -73,14 +73,6 @@
       messageInput.value = '';
     }
 
-    window.addEventListener('beforeunload', function(event){
-      const message = {
-        message: 'close',
-        memberNo: memberNo,
-        reservationNo: reservationNo
-      }
-      ws.send(JSON.stringify(message));
-    });
-
+    
   </script>
 </body>

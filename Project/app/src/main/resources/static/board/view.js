@@ -4,13 +4,17 @@ $('#addCommendBtn').click(function(e) {
     e.preventDefault();
     let boardNo = $('#boardNum').text();
     let content = $('#commentContent').val();
+    let alarmContent = window.location.href;
+    let commentWriterNo = $('#commentWriterNo').text();
     $.ajax({
         url: "/board/comment/add",
         type: "POST",
         dataType: 'json',
         data: {
             boardNo: boardNo,
-            content: content
+            content: content,
+            alarmContent: alarmContent,
+            commentWriterNo: commentWriterNo
         },
         success: function(data) {
             let newComment = `<div>
@@ -108,6 +112,8 @@ $('.modi').click(function(e) {
 $('.comment').click(function(e) {
     let replyForm = $('.replyForm');
     let commentNo = $(this).find('.commentNo').text();
+    let alarmContent = window.location.href;
+    let memberNoForAlarm = $('#memberNoForAlarm').text();
 
     if (replyForm.length != 0 && replyForm.children().first().val() != commentNo) {
         replyForm.remove();
@@ -130,7 +136,9 @@ $('.comment').click(function(e) {
                 dataType: 'json',
                 data: {
                     commentNo: commentNo,
-                    content: content
+                    content: content,
+                    alarmContent: alarmContent,
+                    memberNoForAlarm: memberNoForAlarm
                 },
                 success: function (data) {
                     here.find('.replyForm').remove();
