@@ -1,13 +1,12 @@
 package salaba.controller;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -18,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,9 +58,18 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     List<Board> infoBoardList = mainBoardContents(1, 1, 3);    // 정보공유 게시판
     List<Board> communityBoardList = mainBoardContents(2, 1, 3); // 자유 게시판
 
+    List<BoardFile> fileList = new ArrayList<>(); // 게시글의 이미지 파일을 저장할 (썸네일용) 리스트 생성
+    log.debug("1234" + fileList);
+
+      for (Board board : reviewBoardList) {
+        List<BoardFile> boardFiles = boardService.getBoardThumbnail(board.getBoardNo()); // 각 게시글의 첨부파일 리스트를 가져오기
+        fileList.addAll(boardFiles); // fileList에 모든 이미지 파일을 추가
+    }
+
     model.addAttribute("review", reviewBoardList);
     model.addAttribute("information", infoBoardList);
     model.addAttribute("community", communityBoardList);
+    model.addAttribute("fileList", fileList); // 모델에 이미지 파일 리스트를 추가
   }
 
   // 메인화면에서 공지와 일반 게시글 분리 후 합체
@@ -179,12 +185,23 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       // 후기게시판이 아닐 때만 공지사항을 가져오기
       List<Board> announcements = boardService.findAnnouncements(categoryNo, 10);
       combinedList.addAll(announcements);
+
     }
 
     // 일반 게시글 로드
     List<Board> boardList = boardService.listBoard(categoryNo, ((pageNo-1) * pageSize), pageSize, headNo);  // 공지사항 제외
     log.debug("xxxxxxxx"+boardList);
     combinedList.addAll(boardList);
+
+    List<BoardFile> fileList = new ArrayList<>(); // 게시글의 이미지 파일을 저장할 (썸네일용) 리스트 생성
+
+    // ** 이미지가 아닌 다른 첨부파일이 들어갈 경우 어떻게 처리할지 고민..
+    if (categoryNo == 0) { // 후기 게시판 썸네일 처리
+      for (Board board : boardList) {
+        List<BoardFile> boardFiles = boardService.getBoardThumbnail(board.getBoardNo()); // 각 게시글의 첨부파일 리스트를 가져오기
+        fileList.addAll(boardFiles); // fileList에 모든 이미지 파일을 추가
+      }
+    }
 
     model.addAttribute("boardName", categoryNo == 0 ? "후기게시판" : (categoryNo == 1 ? "정보공유게시판" : "자유게시판"));
     model.addAttribute("categoryNo", categoryNo);
@@ -193,39 +210,47 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("fileList", fileList); // 모델에 이미지 파일 리스트를 추가
   }
 
   @GetMapping("board/view")  // 게시글 조회
-  public String viewBoard(
-      @RequestParam("categoryNo") int categoryNo, // 카테고리 번호
+  public String viewBoard(@RequestParam("categoryNo") int categoryNo, // 카테고리 번호
       @RequestParam("boardNo") int boardNo, // 게시글 번호
-      @RequestParam(value = "commentNo", required = false) Integer commentNo,
-      // 댓글번호 - 필수 x, 답글 찾을 때 필요
       Model model,
       HttpSession session) throws Exception {
+
     Board board = boardService.getBoard(boardNo, categoryNo);
-    //log.debug("abcdefg"+ board);
     if (board == null) {
       throw new Exception("번호가 유효하지 않습니다.");
     }
 
     //댓글을 가져온다.
     List<Comment> commentList = commentService.list(boardNo);
+    Iterator<Comment> iterator = commentList.iterator();
+
     if (commentList != null) {
-      //댓글이 있다면 댓글을 게시글에 저장한다.
-      board.setCommentList(commentList);
+
       if (commentList.size() > 0) {
-        for (Comment comment : board.getCommentList()) {
+        while (iterator.hasNext()) {
+          Comment comment = iterator.next();
           //답글을 가져온다.
           List<Reply> replyList = replyService.list(comment.getCommentNo());
+          //삭제된 댓글이면서 댓글에 달린 대댓글이 없다면 해당 댓글은 목록에서 삭제한다.
+          if (comment.getState().equals("1") && replyList.isEmpty()) {
+            iterator.remove();
+            continue;
+          }
           //답글이 있다면 답글을 댓글에 저장한다.
           if (replyList != null) {
             comment.setReplyList(replyList);
           }
         }
       }
-
+      //댓글을 게시글에 저장한다.
+      board.setCommentList(commentList);
     }
+
+    System.out.println("xxxxxxx" + board);
 
     // 조회수 증가 (게시글 존재 및 접근 가능 확인 후)
     boardService.increaseViewCount(boardNo);
@@ -235,8 +260,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     // 공개 범위에 따라 접근 제어
     switch (board.getScopeNo()) {
       case 2: // 작성자만
-          if (loginUser != null && board.getWriter().getNo() != loginUser.getNo()) {
-            model.addAttribute("title", "비공개 게시글입니다.");
+        if (loginUser == null || board.getWriter().getNo() != loginUser.getNo()) {
+          model.addAttribute("title", "비공개 게시글입니다.");
           return "block";
         }
       case 1: // 로그인한 회원만
@@ -244,8 +269,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
           model.addAttribute("title", "회원만 열람이 가능한 게시물입니다.");
           return "block";
         }
-      case 0: // 전체 공개
-        break;
     }
     model.addAttribute("categoryNo", categoryNo); // 카테고리 별 분류
     model.addAttribute("board", board); // 게시판
@@ -255,8 +278,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     return "board/view";
   }
-
-
   @PostMapping("board/update")
   public String updateBoard( // 게시글 수정
       Board board, HttpSession session, SessionStatus sessionStatus) throws Exception {

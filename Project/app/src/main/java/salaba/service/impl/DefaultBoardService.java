@@ -93,6 +93,11 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   } // 게시글 첨부파일 삭제
 
   @Override
+  public List<BoardFile> getBoardThumbnail(int boardNo) { // 썸네일 처리
+    return boardDao.boardThumbnail(boardNo);
+  }
+
+  @Override
   public int countAll(int categoryNo) {
     return boardDao.countAll(categoryNo);
   } // count 공지사항 제외 페이징 처리
