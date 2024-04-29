@@ -31,10 +31,11 @@
     </select>
     <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" value="">
     <button id="search-button">검색</button>
-  </form>
+  </form><tr>
 
   <!-- 글쓰기 버튼 -->
   <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">글쓰기</a>
+  <i class="fa-solid fa-pen"></i>
 </div>
 
 <!-- 게시판 -->
@@ -60,7 +61,7 @@
                     href="view.html" onclick="return false;">제목:제목입니다.</a></h3>
             <p class="card-text">작성자: <span data-th-text="${board.writer.nickname}">홍길동</span></p>
             <p class="card-text">작성일: <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
-            <p class="card-text">추천수: <span data-th-text="${board.likeCount}"></span></p>
+            <i class="fa-solid fa-heart"> <span data-th-text="${board.likeCount}"></span></i>
           </div>
         </div>
       </div>

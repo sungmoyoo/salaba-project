@@ -46,7 +46,7 @@
                   href="view.html">제목:제목입니다.</a></h3>
           <p class="card-text">작성자: <span data-th-text="${board.writer.nickname}">홍길동</span></p>
           <p class="card-text">작성일: <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
-          <p class="card-text">추천수: <span data-th-text="${board.likeCount}">20</span></p>
+            <i class="fa-solid fa-heart"> <span data-th-text="${board.likeCount}">20</span></i>
         </div>
       </div>
     </div>
