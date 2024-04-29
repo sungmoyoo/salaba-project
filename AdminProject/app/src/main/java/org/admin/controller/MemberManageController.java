@@ -3,8 +3,6 @@ package org.admin.controller;
 import lombok.RequiredArgsConstructor;
 import org.admin.domain.Member;
 import org.admin.service.MemberService;
-import org.admin.service.RentalReportService;
-import org.admin.service.TextReportService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
@@ -18,11 +16,11 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class UserManageController {
+public class MemberManageController {
 
     private static final Log log = LogFactory.getLog(ReportManageController.class);
     private final MemberService memberService;
-    @GetMapping("user/list")
+    @GetMapping("member/list")
     public String userList(@RequestParam("menu") int menu,
                              HttpSession session,
                              Model model) {
@@ -49,7 +47,7 @@ public class UserManageController {
     }
 
 
-    @GetMapping("user/detail")
+    @GetMapping("member/detail")
     public String userDetail(@RequestParam("mno") int memberNo,
                              @RequestParam("menu") int menu,
                              HttpSession session,
@@ -75,7 +73,7 @@ public class UserManageController {
         return "member/detail";
     }
 
-    @PostMapping("user/list/search")
+    @PostMapping("member/list/search")
     public String searchUser(@RequestParam("keyword") String keyword,
                              @RequestParam("filter") String filter,
                              @RequestParam("menu") int menu,
@@ -120,7 +118,7 @@ public class UserManageController {
         return "member/list";
     }
 
-    @PostMapping("user/update")
+    @PostMapping("member/update")
     public String updateGrade(@RequestParam("grade") String grade,
                               @RequestParam("memberNo") int memberNo,
                               HttpSession session) {
