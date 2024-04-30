@@ -1,4 +1,5 @@
 "use strict"
+
 //댓글 작성
 $('#addCommendBtn').click(function(e) {
     e.preventDefault();
@@ -29,7 +30,7 @@ $('#addCommendBtn').click(function(e) {
                                 </div>
                             </div>`;
             $('#box').append(newComment);
-
+            sendAlarm();
         },
         error: function() {
             alert("권한이 없습니다.")
