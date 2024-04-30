@@ -12,11 +12,40 @@
       src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
   <a data-th-href="@{/home}" href="/home">한달살기</a>
   <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
+  <div class="userInfo-container">
+    <button class="userInfo-button">
+      ㅇㅇㅇㅇ
+      <div class="userInfo-menu">
+        <span>
+          가나다
+        </span>
+      </div>
+    </button>
+  </div>
   <a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="/member/chkPw">마이페이지</a>
   <a data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
   <a data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
 
+  <section>
+    <div class="search-container">
+      <h1>어디로 여행 가시나요?</h1>
+      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
+        <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
+        <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
+        <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
+        <input class="search-input" type="number" name="capacity" id="guests" placeholder="인원">
+        <button class="search-button" type="submit">검색</button>
+      </form>
+    </div>
+  </section>
 </body>
+<script data-th-inline="javascript">
+  let sessionInfo = /*[[${session.loginUser}]]*/ '';
+</script>
 <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script>
-
+<script data-th-src="@{/js/header.js}"></script>
+<script>
+  const se = sessionInfo;
+  console.log(se);
+</script>
 </html>

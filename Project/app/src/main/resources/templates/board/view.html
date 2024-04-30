@@ -93,12 +93,12 @@
 <!--댓글, 답글 리스트-->
 <div id="box">
   <div data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
+    <span id="commentWriterNo" name="commentWriterNo" data-th-text="${comment.writer.no}" hidden></span>
     <div data-th-if="*{#strings.equals(state,'1')}" class="comment">
       <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
       <span>삭제된 댓글입니다.</span>
     </div>
     <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
-      <span class="commentWriterNo" name="commentWriterNo" data-th-text="${comment.writer.no}" hidden></span>
       <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
       <span data-th-text="*{writer.nickname}">댓글 작성자</span>
       <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
@@ -150,170 +150,19 @@
 <button id="scrollToTopBtn" onclick="scrollToTop()">🔝</button>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
-<script data-th-src="@{/js/board/view.js}"></script>
-
-</body>
-
-<script>
-  //summernote
-  $(document).ready(function() {
-    $('#summernote').summernote({
-        height: 800,
-        width: 1000,
-        callbacks: {
-            onInit: function() {
-                console.log('Summernote 생성됨!');
-            },
-            onImageUpload: function(files) {
-                let data = new FormData();
-                for (const file of files) {
-                    data.append("files", file);
-                }
-                let categoryNo = $("#categoryNo").val();
-
-                $.ajax({
-                    url: 'file/upload?categoryNo=' + categoryNo,
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    data: data
-                })
-                .done(function(result) {
-                    if (result.length == 0) {
-                        alert('로그인 하세요!');
-                        return;
-                    }
-
-                    // 카테고리 번호에 따라 다른 경로를 설정
-                    let basePath = 'https://kr.object.ncloudstorage.com/tp3-salaba/board/';
-                    if (categoryNo == '0') {
-                        basePath += 'review/';
-                    } else {
-                        basePath += 'community/';
-                    }
-
-                    for (const boardFile of result) {
-                        $('#summernote').summernote('insertImage',
-                            basePath + boardFile.uuidFileName);
-                    }
-                })
-                .fail(function(xhr, status, error) {
-                    console.error('Upload failed: ' + error);
-                    alert('이미지 업로드 실패: ' + error);
-                });
-            }
-        }
-    });
-});
-
-
-  function toggleReplyForm() {
-    var replyForm = document.getElementById('reply-form');
-    if (replyForm.style.display === 'none') {
-      replyForm.style.display = 'block';
-    } else {
-      replyForm.style.display = 'none';
-    }
-  }
-
-  // 버튼 표시 여부를 확인하고 스크롤 위치에 따라 버튼을 보여주거나 감추는 함수
-  window.onscroll = function() {
-          scrollFunction();
-  };
-
-      function scrollFunction() {
-          var scrollToTopBtn = document.getElementById("scrollToTopBtn");
-          if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-              scrollToTopBtn.style.display = "block";
-          } else {
-              scrollToTopBtn.style.display = "none";
-          }
-      }
-
-      // 페이지 맨 위로 스크롤하는 함수
-      function scrollToTop() {
-          document.body.scrollTop = 0; // For Safari
-          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-      }
-
-// 추천 수
-$(document).on('click', '#likeButton', function() {
-    let boardNo = $("#boardNo").val();
-    let myLikeCount = parseInt($("#myLikeCount").text());
-    if (myLikeCount === 0) {
-        $.ajax({
-            type: 'POST',
-            url: '/board/like',
-            data: { boardNo: boardNo },
-            success: function(response) {
-                if (response.status === "success") {
-                    alert('추천하였습니다.');
-                    $("#myLikeCount").text('1');
-                    $('#likeButton').addClass('active'); // 하트 버튼에 'active' 클래스 추가
-                    $('#likeButton i').removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart'); // 꽉 찬 하트로 변경
-                    window.location = window.location.href;
-                }
-            },
-            error: function() {
-              console.log("like 실패!");
-            }
-        });
-    } else {
-        $.ajax({
-            type: 'POST',
-            url: '/board/unlike',
-            data: { boardNo: boardNo },
-            success: function(response) {
-                if (response.status === "success") {
-                    alert('추천 취소');
-                    $("#myLikeCount").text('0');
-                    $('#likeButton').removeClass('active'); // 'active' 클래스 제거
-                    $('#likeButton i').removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart'); // 빈 하트로 변경
-                    window.location = window.location.href;
-                }
-            },
-            error: function() {
-              console.log("unlike 실패!");
-            }
-        });
-    }
-});
-
-// 게시글 신고 버튼
-  $('#board-report-btn').click(function() {
-    var title = '신고하기';
-    var width = 800;
-    var height = 600;
-    let targetNo = document.getElementById("noInput").getAttribute("value");
-    console.log(targetNo);
-    openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
-  });
-
-// 댓글 신고 버튼
-  $('#comment-report-btn').click(function() {
-    var title = '신고하기';
-    var width = 800;
-    var height = 600;
-    let targetNo = document.getElementById("noInput").getAttribute("value");
-    console.log(targetNo);
-    openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
-  });
-
-// 답글 신고 버튼
-    $('#reply-report-btn').click(function() {
-    var title = '신고하기';
-    var width = 800;
-    var height = 600;
-    let targetNo = document.getElementById("noInput").getAttribute("value");
-    console.log(targetNo);
-    openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
-  });
-
-
+<script data-th-inline="javascript">
+  let board = /*[[${board}]]*/ '';
+  let sessionInfo = /*[[${session.loginUser}]]*/ '';
 </script>
+<script data-th-src="@{/js/board/view.js}"></script>
+<script data-th-src="@{/common/alarm.js}"></script>
+<script>
+  const boardlist = board;
+  const se = sessionInfo;
+  console.log(boardlist);
+  console.log($('#boardNum').text());
 
-<script data-th-src="@{/board/view.js}" type="module"></script>
-<script data-th-src="@{/board/board.js}" type="module"></script>
-
+  console.log(se);
+</script>
+</body>
 </html>

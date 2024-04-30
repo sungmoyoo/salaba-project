@@ -5,6 +5,12 @@ $('#addCommendBtn').click(function(e) {
     let boardNo = $('#boardNum').text();
     let input = $('#commentContent')
     let content = input.val();
+    let alarmContent = window.location.href;
+    console.log(alarmContent);
+    console.log(typeof alarmContent);
+    let memberNoForAlarm = $('#memberNoForAlarm').text();
+    console.log(memberNoForAlarm);
+    console.log(typeof memberNoForAlarm);
     if (content != '') {
         $.ajax({
             url: "/board/comment/add",
@@ -12,7 +18,9 @@ $('#addCommendBtn').click(function(e) {
             dataType: 'json',
             data: {
                 boardNo: boardNo,
-                content: content
+                content: content,
+                alarmContent: alarmContent,
+                memberNoForAlarm: memberNoForAlarm
             },
             success: function(data) {
                 let newComment = $(`<div>
@@ -32,7 +40,8 @@ $('#addCommendBtn').click(function(e) {
                 newComment.children().find('.del').click(deleteComment);
                 newComment.children().find('.modi').click(modifyComment);
                 // $('#box').find('.repo')
-
+                
+                window.sendAlarm(memberNoForAlarm);
             },
             error: function() {
                 alert("권한이 없습니다.")
@@ -141,6 +150,8 @@ function addReply(e) {
     e.stopPropagation();
     let replyForm = $('.replyForm');
     let commentNo = $(this).find('.commentNo').text();
+    let alarmContent = window.location.href;
+    let memberNoForAlarm = $('#memberNoForAlarm').text();
 
     if (replyForm.length != 0 && replyForm.children().first().val() != commentNo) {
         replyForm.remove();
@@ -165,7 +176,9 @@ function addReply(e) {
                     dataType: 'json',
                     data: {
                         commentNo: commentNo,
-                        content: newContent
+                        content: newContent,
+                        alarmContent: alarmContent,
+                        memberNoForAlarm: memberNoForAlarm
                     },
                     success: function (data) {
                         here.find('.replyForm').remove();
@@ -326,7 +339,7 @@ $(document).on('click', '#likeButton', function() {
     openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
   });
 
-<!--// 댓글 신고 버튼-->
+// 댓글 신고 버튼-->
   $('#comment-report-btn').click(function() {
     var title = '신고하기';
     var width = 800;
@@ -336,7 +349,7 @@ $(document).on('click', '#likeButton', function() {
     openPopup('report/form?targetType=1&targetNo=' + targetNo, title, width, height);
   });
 
-<!--// 답글 신고 버튼-->
+// 답글 신고 버튼-->
     $('#reply-report-btn').click(function() {
     var title = '신고하기';
     var width = 800;

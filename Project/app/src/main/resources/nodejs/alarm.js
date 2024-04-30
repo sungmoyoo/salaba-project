@@ -1,6 +1,5 @@
 const express = require('express');
 const http = require('http');
-const { userInfo } = require('os');
 const WebSocket = require('ws');
 
 const alarm = express(); // 'express' 변수명 수정
@@ -30,10 +29,10 @@ wss.on('connection', (ws) => {
     console.log("클라이언트로부터 요청을 받음");
 
     const messageObj = JSON.parse(message);
-    
+    const memberNo = parseInt(messageObj.memberNo);
     // 유저가 로그인 했을 때
     if( messageObj.message === 'connectUser' ){
-      setUser(messageObj , ws);
+      setUser(memberNo , ws);
       console.log("유저 로그인 함");
       console.log("============================");
       console.log(loginUser);
@@ -43,21 +42,23 @@ wss.on('connection', (ws) => {
     // 새로운 알림을 받았을 때
     if( messageObj.message === 'getAlarm' ){
       console.log("새로운 알람을 받음");
+      console.log(messageObj);
+      console.log(messageObj.memberNo);
+      console.log(loginUser.has(memberNo));
       // 알람받을 대상이 클라이언트에 연결된 상태일 경우
-      if(loginUser.has(messageObj.memberNo)){
+      if(loginUser.has(memberNo)){
+        console.log("map에 존재");
         setAlarmContent(messageObj); // 알림 내용 저장
         
         // 알림 받을 회원의 웹소켓 정보를 갖고오기 위해 map에서 조회
-        const userInfo = loginUser.get(messageObj.memberNo);
+        const userInfo = loginUser.get(memberNo);
 
-        const userWs = userInfo.ws; // 알림받을 대상의 웹켓
-
-        if(userWs.readyState === WebSocket.OPEN){
-          userWs.send(JSON.stringify(alarmContent)); // 알림 전송
+        if(userInfo.readyState === WebSocket.OPEN){
+          userInfo.send(JSON.stringify(alarmContent)); // 알림 전송
           console.log("알람 보냄");
           console.log("알람 내용" + alarmContent);
           console.log("대상 :" + userInfo);
-          console.log(userWs);
+          console.log(userInfo);
           alarmContent.pop(); // 알람 내용 초기화
         }
       }
@@ -71,11 +72,11 @@ wss.on('connection', (ws) => {
 });
 
 // 로그인 유저 셋팅
-function setUser(messageObj , ws){
+function setUser(memberNo , ws){
   // 로그인한 유저의 번호 , 소켓 저장
-  console.log(messageObj);
-  if(!loginUser.has(messageObj.memberNo)){
-    loginUser.set(messageObj.memberNo, ws);
+  console.log(memberNo);
+  if(!loginUser.has(memberNo)){
+    loginUser.set(memberNo, ws);
   }
 }
 

@@ -1,8 +1,13 @@
+let ws; // WebSocket
 const loginUserInfo = sessionInfo;
 console.log(loginUserInfo);
 console.log(sessionInfo);
-  const ws = new WebSocket('ws://192.168.0.55:8890');
+window.onload = function(){
   if(loginUserInfo){
+    console.log("소켓 생성" );
+    // 웹소켓 연결
+    ws = new WebSocket('ws://192.168.0.55:8890');
+    
     // 로그인했을때 웹소켓 연결
     ws.onopen = function(event){
       const message = {
@@ -21,13 +26,19 @@ console.log(sessionInfo);
       console.log(alarm);
     }
   }
+}
 
-   window.sendAlarm = function(){
-    const message = {
-      message: 'getAlarm',
-      memberNo: loginUserInfo.no,
-      content: '알람알람',
-      timestamp: new Date().toISOString()
+   window.sendAlarm = function(targetNo){
+    // 웹소켓이 연결되어 있을때만 알림 전송
+    if( ws && ws.readyState === WebSocket.OPEN ){
+      const message = {
+        message: 'getAlarm',
+        memberNo: targetNo,
+        content: '알람알람',
+        timestamp: new Date().toISOString()
+      }
+      ws.send(JSON.stringify(message));
+    }else{
+      console.log("웹소켓이 연결되어 있지 않음");
     }
-    ws.send(JSON.stringify(message));
   }
