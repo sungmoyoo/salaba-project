@@ -1,0 +1,54 @@
+  /* 맨 위로 올라가기 */
+  #scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #35C5B3;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50%;
+    }
+
+
+/* 추천수 버튼 */
+.heart-btn {
+  background-color: transparent;
+  border: none;
+  color: red;
+  font-size: 40px; /* 하트 아이콘 크기 */
+  cursor: pointer;
+  outline: none;
+  display: inline-block;
+  position: relative;
+}
+
+.heart-btn.active i.fa-regular {
+  fill: red; /* 꽉 찬 하트는 빨간색으로 표시 */
+}
+
+.heart-btn i.fa-regular {
+
+   fill: #white;
+}
+
+.heart-btn span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px; /* 숫자 크기 */
+  pointer-events: none; /* 숫자에 대한 클릭 이벤트 방지 */
+}
+
+#myLikeCount {
+  position: relative;
+  left: 55%;
+  /*display: none;구현 시 숨기기 */
+}
+

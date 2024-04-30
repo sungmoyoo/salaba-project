@@ -11,18 +11,20 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<link rel="stylesheet" type="text/css" href="board.css">
+<link rel="stylesheet" type="text/css" href="/css/board/board.css">
 
 <div data-th-replace="header :: header">머리말</div>
 <h1 data-th-text="${boardName}">게시판</h1>
 
-<div id="header">
+<tr><div id="header">
   <!-- 게시판 버튼 -->
   <button type="button" name="review" onclick="location.href='/board/list?categoryNo=0'">후기게시판</button>
   <button type="button" name="inform" onclick="location.href='/board/list?categoryNo=1'">정보공유게시판</button>
   <button type="button" name="community" onclick="location.href='/board/list?categoryNo=2'">자유게시판</button>
+</div></tr>
 
-  <!-- 검색 폼 -->
+<!-- 검색 폼 -->
+<div>
   <form id="search-form" action="/board/search" data-th-action="@{search}" method="GET">
     <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">
     <select name="type">
@@ -32,10 +34,6 @@
     <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" value="">
     <button id="search-button">검색</button>
   </form><tr>
-
-  <!-- 글쓰기 버튼 -->
-  <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">글쓰기</a>
-  <i class="fa-solid fa-pen"></i>
 </div>
 
 <!-- 게시판 -->
@@ -90,7 +88,7 @@
       data-th-object="${board}"
       data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
       data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
-    <td data-th-text="${board.headContent}">분류 내용</td>
+    <td class="head-box" data-th-text="${board.headContent}">분류 내용</td>
     <td>
       <a data-th-href="@{view(categoryNo=1,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
         <span data-th-text="*{title}">제목입니다.</span>
@@ -126,7 +124,7 @@
       data-th-object="${board}"
       data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
       data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
-    <td data-th-text="${board.headContent}">분류 내용</td>
+    <td class="head-box" data-th-text="${board.headContent}">분류 내용</td>
     <td>
       <a data-th-href="@{view(categoryNo=2,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
         <span data-th-text="*{title}">제목입니다.</span>
@@ -142,6 +140,11 @@
   </tbody>
 </table>
 
+<!-- 글쓰기 버튼 -->
+<div id="write-button-container">
+  <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">글쓰기</a>
+  <i class="fa-solid fa-pen"></i>
+</div>
 
 <!-- 페이지네이션: 게시판용 페이징처리 적용-->
 <nav aria-label="Page navigation example" data-th-if="${categoryNo != 0}">
@@ -172,7 +175,7 @@
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
-<script data-th-src="@{/board/list.js}"></script>
+<script data-th-src="@{/js/board/list.js}"></script>
 
 </body>
 </html>
