@@ -35,13 +35,13 @@
     </div>
     </div>
     <div class="center-box">
-      <a data-th-href="@{reservationList(hostNo=1)}" href="list">예약관리</a>
-      <a data-th-href="@{rentalHomeList(hostNo=1)}" href="hostHome/list">숙소관리</a>
-      <a data-th-href="@{chat/rooms(hostNo=1)}" href="hostChat/list">채팅</a>
-      <a data-th-href="@{incomeList(hostNo=1)}" href="Income/list">정산</a>
+      <a data-th-href="@{reservationList(hostNo=${session.loginUser.no})}" href="list">예약관리</a>
+      <a data-th-href="@{rentalHomeList(hostNo=${session.loginUser.no})}" href="hostHome/list">숙소관리</a>
+      <a data-th-href="@{chatList(hostNo=${session.loginUser.no})}" href="hostChat/list">채팅</a>
+      <a data-th-href="@{incomeList(hostNo=${session.loginUser.no})}" href="Income/list">정산</a>
     </div>
     <div class="right-box">
-      <button type="button" onclick="location.href='home'">돌아가기</button>
+      <button type="button" onclick="window.location.href='/home'">게스트로 돌아가기</button>
     </div>
     </div>
 </header>

@@ -3,7 +3,13 @@
 <head>
   <meta charset='UTF-8'>
   <title>숙소 정보 확인</title>
-
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: "AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk",
+      // Add other bootstrap parameters as needed, using camel case.
+      // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
+    });
+  </script>
   <style>
     .image-item {
       width: 265px; /* 원하는 너비를 지정합니다. */
@@ -27,11 +33,16 @@
       margin: 0; /* 마진 초기화 */
       padding: 5px; /* 패딩 추가 */
     }
+
+    #map{
+      height: 513px;
+      width: 912px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 
 <body>
-
 
 
 <br>
@@ -62,16 +73,13 @@
   <br>
 
   <h2>숙소 위치</h2>
-  <div>
-      지도 API 들어감
-  </div>
+  <section>
+    <div id="map"></div>
+  </section>
+  <br>
   <br>
   <div>
-      임시 지역 값: <span>2</span>
-  </div>
-  <br>
-  <div>
-    임시 주소 값: <span>대한민국 제주도 제주 중앙로 304</span>
+    주소: <span data-th-text="${session.rentalHome.address}"></span>
   </div>
   <br>
   <br>
@@ -85,7 +93,8 @@
       <img class="image-item"
            data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}"
            src="/home1.jpg"/>
-      <input readonly class="image-description" type="text" placeholder="이미지 설명" name="photoExplanation"
+      <input readonly class="image-description" type="text" placeholder="이미지 설명"
+             name="photoExplanation"
              data-th-value="${photo.photoExplanation}"/>
     </div>
   </div>
@@ -96,12 +105,12 @@
 
   <h2>요금설정</h2>
   <div>
-    이용요금(주 기준)  <input readonly type="text" data-th-value="${session.rentalHome.price}"
-                         value="price" id="price" onkeyup="calc(this.value)">
+    이용요금(주 기준) <input readonly type="text" data-th-value="${session.rentalHome.price}"
+                      value="price" id="price" onkeyup="calc(this.value)">
   </div>
   <div>
-    청소비  <input readonly type="text" data-th-value="${session.rentalHome.cleanFee}"
-                value="cleanFee" id="cleanFee" onkeyup="calc(this.value)">
+    청소비 <input readonly type="text" data-th-value="${session.rentalHome.cleanFee}"
+               value="cleanFee" id="cleanFee" onkeyup="calc(this.value)">
   </div>
 
 
@@ -116,12 +125,7 @@
   <div>
     호스팅 종료일: <input readonly data-th-value='${session.rentalHome.hostingEndDate}' type='date'>
   </div>
-
-  <h2>본인 인증</h2>
-  <div>
-    휴대폰인증
-  </div>
-
+  
   <br>
   <br>
   <br>
@@ -134,15 +138,15 @@
   <div>
     <table border="1">
       <thead>
-        <th>유형</th>
+      <th>유형</th>
       </thead>
       <tbody>
-        <tr data-th-if="${theme.themeNo < 10}"
+      <tr data-th-if="${theme.themeNo < 10}"
           data-th-each="theme : ${session.rentalHome.themes}">
-          <td data-th-text="${theme.themeName}">모텔</td>
-        </tr>
+        <td data-th-text="${theme.themeName}">모텔</td>
+      </tr>
       </tbody>
-      </table>
+    </table>
   </div>
 
   <br>
@@ -161,11 +165,13 @@
 
   <h2>숙소 시설</h2>
   <div>
-    수용인원 <input readonly type="number" name="capacity" data-th-value="${session.rentalHome.capacity}">
+    수용인원 <input readonly type="number" name="capacity"
+                data-th-value="${session.rentalHome.capacity}">
   </div>
   <h2>숙소 테마</h2>
   <p data-th-if="${facility.facilityNo < 4}"
-     data-th-each="facility : ${session.rentalHome.rentalHomeFacilities}" data-th-object="${facility}">
+     data-th-each="facility : ${session.rentalHome.rentalHomeFacilities}"
+     data-th-object="${facility}">
     <a data-th-text="*{facilityName}">aaa</a>
   </p>
 
@@ -175,7 +181,8 @@
 
   <h2>숙소 편의시설</h2>
   <p data-th-if="${facility.facilityNo >= 10}"
-     data-th-each="facility : ${session.rentalHome.rentalHomeFacilities}" data-th-object="${facility}">
+     data-th-each="facility : ${session.rentalHome.rentalHomeFacilities}"
+     data-th-object="${facility}">
     <a data-th-text="*{facilityName}">aaa</a>
   </p>
 </div>
@@ -191,6 +198,27 @@
 
 
 <div class="footer" data-th-replace="footer :: footer">꼬리말</div>
+<script data-th-inline="javaScript">
+  async function initMap(){
+    const rentalHome = [[${rentalHome}]];
+    const position = { lat:Number(rentalHome.lat) , lng:Number(rentalHome.lon) };
 
+    const{ Map } = await google.maps.importLibrary("maps");
+    const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+
+    let map = new Map(document.getElementById("map"), {
+      zoom : 16,
+      center: position,
+      mapId: '470e45162ba863f'
+    });
+
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+      map: map,
+      position: position,
+    });
+  }
+
+  initMap();
+</script>
 </body>
 </html>

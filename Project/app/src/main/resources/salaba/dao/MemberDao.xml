@@ -9,7 +9,6 @@
     <id column="member_no" property="no"/>
     <result column="email" property="email"/>
     <result column="name" property="name"/>
-    <result column="password" property="password"/>
     <result column="nickname" property="nickname"/>
     <result column="birthday" property="birthday"/>
     <result column="tel_no" property="telNo"/>
@@ -17,9 +16,10 @@
     <result column="address" property="address"/>
     <result column="sex" property="sex"/>
     <result column="photo" property="photo"/>
-    <result column="my_theme_yn" property="myThemeYn"/>
-    <result column="theme_no" property="themeNo"/>
-    <result column="theme_name" property="themeName"/>
+    <collection property="themes" ofType="Theme">
+      <id column="theme_no" property="themeNo"/>
+      <result column="theme_name" property="themeName"/>
+    </collection>
   </resultMap>
 
   <resultMap id="NationMap" type="Nation"><!--국가선택 준비-->
@@ -109,10 +109,14 @@
   <select id="findByEmailAndPassword" resultMap="MemberMap"><!--로그인>-->
     select
       member_no,
+      email,
       name,
       nickname,
       birthday,
-      email,
+      tel_no,
+      nation_no,
+      address,
+      sex,
       photo,
       state
     from

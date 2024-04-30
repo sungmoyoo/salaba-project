@@ -155,7 +155,7 @@
   function showDetail(rentalHomeNo, reservationList) {
     let rentalHomeEl = document.querySelector(`.rental-home[data-no="${rentalHomeNo}"]`);
     let no = rentalHomeEl.getAttribute("data-no");
-    let price = rentalHomeEl.getAttribute("data-price");
+
     let cleanFee = rentalHomeEl.getAttribute("data-cleanFee");
     let rentalHomeReservationList = [];
 
@@ -191,7 +191,7 @@
         titleDiv.appendChild(paymentDate);
 
         let priceName = document.createElement('span');
-        priceName.textContent = "가격(1주)";
+        priceName.textContent = "결제금액";
         let residenceName = document.createElement('span');
         residenceName.textContent = '이용 기간';
         let cleanFeeName = document.createElement('span');
@@ -210,15 +210,15 @@
         nameDiv.appendChild(guestName);
 
         let priceValue = document.createElement('span');
-        priceValue.textContent = price + '(주)';
+        priceValue.textContent = reservationEl.amount;
         let residenceValue = document.createElement('span');
         residenceValue.textContent = reservationEl.startDate + '~' + reservationEl.endDate;
         let cleanFeeValue = document.createElement('span');
-        cleanFeeValue.textContent = cleanFee;
+        cleanFeeValue.textContent = cleanFee + '원';
         let chargeValue = document.createElement('span');
-        chargeValue.textContent = price * 0.03;
+        chargeValue.textContent = (reservationEl.amount) * 0.03;
         let incomeValue = document.createElement('span');
-        incomeValue.textContent = price * 0.97;
+        incomeValue.textContent = (reservationEl.amount) * 0.97 - cleanFee;
         let guestValue = document.createElement('span');
         guestValue.textContent = reservationEl.memberName;
         valueDiv.appendChild(priceValue);

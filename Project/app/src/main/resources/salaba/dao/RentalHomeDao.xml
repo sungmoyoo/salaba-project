@@ -421,4 +421,13 @@
       )
   </insert>
 
+  <!-- 지역 리스트-->
+  <select id="getAllRegion" resultMap="region">
+    select
+      region_no,
+      region_name
+    from
+      region
+  </select>
+
 </mapper>
