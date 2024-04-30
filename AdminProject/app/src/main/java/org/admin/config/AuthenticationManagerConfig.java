@@ -14,14 +14,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class AuthenticationManagerConfig extends AbstractHttpConfigurer<AuthenticationManagerConfig, HttpSecurity> {
 
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+
     @Override
     public void configure(HttpSecurity builder) throws Exception {
         AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
         builder.addFilterBefore(
-                new JwtAuthenticationFilter(authenticationManager),
-                UsernamePasswordAuthenticationFilter.class)
+                        new JwtAuthenticationFilter(authenticationManager),
+                        UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(jwtAuthenticationProvider);
-
     }
 }

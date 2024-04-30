@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class UserSignupResponseDto {
+public class MemberSignupResponseDto {
 
-    private Long userNo;
+    private Long memberNo;
     private String email;
     private String name;
     private LocalDateTime regdate;

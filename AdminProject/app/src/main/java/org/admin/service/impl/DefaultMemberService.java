@@ -3,10 +3,13 @@ package org.admin.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.admin.domain.Member;
 import org.admin.domain.Rental;
+import org.admin.domain.Role;
 import org.admin.repository.MemberDao;
+import org.admin.repository.RoleDao;
 import org.admin.service.MemberService;
 import org.admin.util.Translator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -14,6 +17,7 @@ import java.util.List;
 public class DefaultMemberService implements MemberService {
 
     private final MemberDao memberDao;
+    private final RoleDao roleDao;
     @Override
     public List<Member> getAll() {
         List<Member> members = memberDao.findAll();
@@ -33,14 +37,14 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public Member getMemberBy(int memberNo) {
+    public Member getMemberBy(long memberNo) {
         Member member = memberDao.findMemberBy(memberNo);
         member.setStateStr(Translator.memberState.get(member.getState()));
         return member;
     }
 
     @Override
-    public Member getHostBy(int memberNo) {
+    public Member getHostBy(long memberNo) {
         Member member = memberDao.findHostBy(memberNo);
         member.setStateStr(Translator.memberState.get(member.getState()));
         for (Rental rental : member.getRentals()) {
@@ -96,7 +100,30 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public int updateGrade(String grade, int memberNo) {
+    public int updateGrade(String grade, long memberNo) {
         return memberDao.updateGrade(grade, memberNo);
+    }
+
+
+    @Override
+    @Transactional
+    public void add(Member member) {
+        memberDao.add(member);
+        Role role = roleDao.findRoleName("ROLE_MANAGER");
+        roleDao.addRole(member.getMemberNo(), role.getRoleNo());
+    }
+
+    @Override
+    public Member login(String email, String password) {
+        return memberDao.findByEmailAndPassword(email, password);
+    }
+
+    @Override
+    @Transactional
+    public Member getByEmail(String email) {
+        Member member =  memberDao.findByEmail(email);
+        List<Role> roles = roleDao.findRoles(member.getMemberNo());
+        member.setRoles(roles);
+        return member;
     }
 }

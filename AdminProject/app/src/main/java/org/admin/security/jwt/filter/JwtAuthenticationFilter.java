@@ -1,6 +1,7 @@
 package org.admin.security.jwt.filter;
 
 import org.admin.security.jwt.token.JwtAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -69,9 +70,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void getAuthentication(String token) {
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token);
-        authenticationManager.authenticate(authenticationToken);
+        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext()
-                .setAuthentication(authenticationToken);
+                .setAuthentication(authenticate);
     }
 
     private String getToken(HttpServletRequest request) {

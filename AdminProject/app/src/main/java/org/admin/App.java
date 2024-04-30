@@ -6,7 +6,9 @@ package org.admin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -15,10 +17,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "classpath:config/ncp-secret.properties"
 })
 
+@Controller
 public class App {
 
     public static void main(String[] args) {
         System.out.println("한달살기 관리자 시스템 실행");
         SpringApplication.run(App.class, args);
+    }
+
+    @GetMapping("/")
+    public String login() {
+        return "auth/form";
     }
 }

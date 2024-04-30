@@ -1,5 +1,4 @@
 package org.admin.security.jwt.token;
-
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
