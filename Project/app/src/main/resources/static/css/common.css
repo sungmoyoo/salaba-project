@@ -1,0 +1,9 @@
+// 로고 - 검색엔진과 로고 사진을 둘다 사용하는 css로 수정
+  #logo {
+    background-image: url('https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png
+');
+    background-repeat: no-repeat;
+    padding-top: 40px;
+    height: 0px;
+    overflow: hidden; /* 영역에서 밀려난 콘텐트를 숨김 */
+  }
