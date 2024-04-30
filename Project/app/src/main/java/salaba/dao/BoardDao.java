@@ -42,6 +42,8 @@ public interface BoardDao {  // 게시판 인터페이스
 
   List<Board> searchByKeyword(@Param("keyword") String keyword, @Param("type") String type); // 검색
 
+  int countFiltered(int categoryNo, String type, String keyword); // 검색으로 필터링해 페이징 처리
+
   List<Board> findHistory( // 작성글 내역
       @Param("offset") int offset,
       @Param("rowCount") int rowCount,

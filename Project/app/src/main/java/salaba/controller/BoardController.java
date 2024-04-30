@@ -595,6 +595,8 @@ public String searchBoard(
     @RequestParam("categoryNo") int categoryNo, // 카테고리 번호를 요청 파라미터로 받음
     @RequestParam("type") String type,
     @RequestParam("keyword") String keyword,
+    @RequestParam(defaultValue = "1") int pageNo,
+    @RequestParam(defaultValue = "8") int pageSize,
     Model model) {
 
   List<Board> filteredBoardList;
@@ -610,11 +612,19 @@ public String searchBoard(
     model.addAttribute("message", "검색 결과가 없습니다");
   }
 
+  // 페이징 처리를 위해 검색 결과의 총 개수를 계산
+  int numOfRecord = boardService.countFiltered(categoryNo, type, keyword);
+  int numOfPage = (numOfRecord / pageSize) + (numOfRecord % pageSize > 0 ? 1 : 0);
+  pageNo = Math.max(1, Math.min(pageNo, numOfPage));
+
   // 필터링된 게시글 목록을 화면에 전달
   model.addAttribute("list", filteredBoardList);
   model.addAttribute("categoryNo", categoryNo);
   model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
   model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
+  model.addAttribute("pageNo", pageNo);
+  model.addAttribute("pageSize", pageSize);
+  model.addAttribute("numOfPage", numOfPage);
 
   return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
   }

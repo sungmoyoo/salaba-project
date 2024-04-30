@@ -326,7 +326,7 @@ $(document).on('click', '#likeButton', function() {
     openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
   });
 
-<!--// 댓글 신고 버튼-->
+// 댓글 신고 버튼
   $('#comment-report-btn').click(function() {
     var title = '신고하기';
     var width = 800;
@@ -336,7 +336,7 @@ $(document).on('click', '#likeButton', function() {
     openPopup('report/form?targetType=1&targetNo=' + targetNo, title, width, height);
   });
 
-<!--// 답글 신고 버튼-->
+// 답글 신고 버튼
     $('#reply-report-btn').click(function() {
     var title = '신고하기';
     var width = 800;
@@ -354,3 +354,4 @@ function openPopup(url, title, width, height) {
   var popup = window.open(url, title, options);
   return popup;
 }
+

@@ -37,6 +37,9 @@ public interface BoardService {
   int decreaseLikeCount(int boardNo, int memberNo); // 추천 취소
 
   List<Board> search(String keyword, String type); // 검색 기능 업데이트
+
+  int countFiltered(int categoryNo, String type, String keyword); // 검색 결과 페이징 처리
+
   List<Board> searchByTitle(String title); // 제목으로 검색
   List<Board> searchByContent(String content); // 내용으로 검색
   int countAllHistory(int memberNo); // count

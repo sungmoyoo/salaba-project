@@ -142,7 +142,7 @@
     </tr>
     <!-- 일반 게시글은 최신순으로 최대 3개까지, headNo가 1이 아닌 경우 -->
     <tr data-th-each="board, stat : ${community}"
-        data-th-if="${board.headNo != 1 and stat.count <= 8}">
+        data-th-if="${board.headNo != 1 and stat.count <= 9}">
       <td class="head-box" data-th-text="${board.headContent}">일반 게시물</td>
       <td>
         <a data-th-href="@{view(categoryNo=2, boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
