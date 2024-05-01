@@ -1,15 +1,29 @@
 /* 로고 - 검색엔진과 로고 사진을 둘다 사용하는 css로 수정 */
-  #logo {
-    background-image: url('https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png');
+ #logo {
     background-repeat: no-repeat;
     padding-top: 40px;
     height: 0px;
     overflow: hidden; /* 영역에서 밀려난 콘텐트를 숨김 */
   }
 
-  .userInfo-container {
-    position: relative;
+  .logo-div{
+    width: 150px;
+    height: 50px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
     display: inline-block;
+  }
+
+  .main-menu{
+    position: absolute;
+    display: inline-block;
+  }
+
+  .userInfo-container {
+    position: absolute;
+    display: inline-block;
+    right: 100px;
   }
   
   .userInfo-menu {
@@ -19,29 +33,72 @@
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    border-radius: 4px;
+    border-radius: 10px;
     display: none;
     z-index: 1;
   }
-  
-  .userInfo-menu.show {
-    display: block;
+
+  .userInfo-menu{
+    background-color: #f9f9f9;
+  }
+
+  .userInfo-button {
+    position: absolute; /* 버튼의 위치를 절대적으로 지정합니다. */
+    top: 10px; /* 위에서 10px 만큼 떨어지도록 설정합니다. */
+    display: inline-block;
   }
   
-  .userInfo-menu button {
+  .userInfo-menu-item{
     display: block;
-    width: 100%;
+    text-decoration: none;
+    border-radius: 10px;
+  }
+
+  .userInfo-menu-item:hover{
+    background-color: #d6d3d3;
+  }
+
+  .userInfo-menu-item a{
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Circular', sans-serif;
+  }
+
+  .userInfo-menu-item a:visited{
+    color: inherit;
+  }
+
+  .search-container {
+    width: 745px;
+    height: 40px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .search-input,
+  .search-button {
     padding: 10px;
-    text-align: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .search-button {
+    background-color: #007bff;
+    color: #fff;
     border: none;
-    background: none;
     cursor: pointer;
   }
-  
-  .userInfo-menu button:hover {
-    background-color: #ddd;
-  }
-  
-  .userInfo-container:hover .userInfo-menu {
-    display: block;
+
+  .search-button:hover {
+    background-color: #0056b3;
   }

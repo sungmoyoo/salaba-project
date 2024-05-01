@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-  <link rel="stylesheet" type="text/css" href="/mainStyle.css">
+  <link rel="stylesheet" type="text/css" href="/css/mainStyle.css">
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+
 </head>
 <body>
   <div data-th-replace="header :: header">header</div>
@@ -90,6 +92,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:inline="javascript">
   const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
+  const sessionInfo = /*[[${session}]]*/ null;
+  const loginUser = /*[[${session.loginUser}]]*/ null;
 </script>
 <script data-th-src="@{/js/header.js}"></script>
 <script>
@@ -100,6 +104,12 @@
   });
 </script>
 <script>
+  const si = sessionInfo;
+  const sl = loginUser;
+
+  console.log(sessionInfo);
+  console.log(loginUser);
+
   // 지도 보기 / 목록보기 버튼
   const mapButton = document.getElementById('mapButton');
   const listButton = document.getElementById('listButton');
