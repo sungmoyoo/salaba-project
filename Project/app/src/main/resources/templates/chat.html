@@ -41,11 +41,11 @@
   console.log(sender);
 
   // 예약번호 설정(방 식별자)
-  var reservationNo = getParameterByName('reservationNo');
+  const reservationNo = getParameterByName('reservationNo');
 
   // 회원정보 설정
-  var memberName = getParameterByName('name');
-  var memberNo = getParameterByName('memberNo');
+  const memberName = getParameterByName('name');
+  const memberNo = getParameterByName('memberNo');
 
   if(sender == 1){
     sender = 'guest';
@@ -56,6 +56,7 @@
 
   const requestData = {
     message:'getChat',
+    memberNo: memberNo,
     reservationNo : reservationNo,
     chatName: `chat-${reservationNo}.json`,
     sender: sender

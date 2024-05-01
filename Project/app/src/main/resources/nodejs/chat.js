@@ -73,7 +73,7 @@ wss.on('connection', (ws) => {
     const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
 
     chatFile.chatFileName = messageObj.chatName;
-    chatFile.chatFilePath = 'tmp/'
+    chatFile.chatFilePath = 'tmp/';
     chatFile.chatFileFullPath ='tmp/' + chatFile.chatFileName;
 
 
@@ -85,10 +85,11 @@ wss.on('connection', (ws) => {
       }
       sendPreviousMessages(ws);
     } else{
+      // 메시지를 파일에 저장
+      saveMessage(messageObj);
+
       // 채팅 메시지 설정
       setChatContent(messageObj);
-      // 메시지를 파일에 저장
-      saveMessage(chatContent);
       // 방에 속한 클라이언트에게 새로운 메시지 전송
       roomInfo.forEach(clientInfo => {
         const ws = clientInfo.ws;
@@ -152,30 +153,25 @@ function deleteChatUser(ws){
 
 // 이전 채팅기록 전송
 function sendPreviousMessages(ws) {
-console.log("이전 채팅기록 전송");
-console.log(chatFile.chatFileFullPath);
-  if (fs.existsSync(chatFile.chatFileFullPath)) {
-    console.log("파일 읽기")
-    fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      ws.send(data);
-    });
-  }
-}
-
-// 채팅 파일에 저장
-function saveMessage(message) {
-console.log("파일 로컬 저장");
+  console.log("이전 채팅 기록 전송");
   console.log(chatFile);
   fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
     }
-    let messages = [];
+    ws.send(data);
+  });
+}
+
+// 채팅 파일에 저장
+function saveMessage(message) {
+  console.log("채팅 파일 로컬에 저장");
+  let messages = [];
+  fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
+    if (err) {
+
+    }
     if (data) {
       messages = JSON.parse(data);
     }
@@ -189,6 +185,7 @@ console.log("파일 로컬 저장");
     });
   });
 }
+
 
 async function uploadFile(){
   console.log("파일 업로드");
