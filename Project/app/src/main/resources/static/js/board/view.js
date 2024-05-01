@@ -274,7 +274,8 @@ function modifyReply(e) {
 //추천수 
 let myLikeCount = parseInt($("#myLikeCount").text());
 let initialCount = myLikeCount;
-console.log(myLikeCount);
+console.log("myLikecount: ", myLikeCount);
+
 let likeButton = $("#likeButton");
 // 하트 아이콘 색깔 변경
 likeButton.click(function () {
@@ -288,7 +289,7 @@ likeButton.click(function () {
     likeButton.html('<i class="fa-solid fa-heart"></i>');
   }
 
-  console.log("Page Load - Current Like Count: ", myLikeCount);
+  console.log("현재 Like Count: ", myLikeCount);
   console.log(initialCount, myLikeCount);
 });
 
@@ -309,9 +310,11 @@ likeButton.click(function () {
 
 // 신고: 모달 사용
 $("#board-report-btn, #comment-report-btn, #reply-report-btn").click(function () {
-  // 기존 로직을 사용하여 신고 대상 번호(targetNo)를 설정
   let targetNo = $(this).closest("form").find("input[name='targetNo']").val();
   let targetType = $(this).closest("form").find("input[name='targetType']").val();
+
+  console.log("Target No:", targetNo);  
+  console.log("Target Type:", targetType);  
 
   // 모달 내 신고 대상 번호와 타입을 업데이트
   $("#reportModal").find("input[name='targetNo']").val(targetNo);
@@ -319,4 +322,11 @@ $("#board-report-btn, #comment-report-btn, #reply-report-btn").click(function ()
 
   // 모달 열기
   $("#reportModal").modal('show');
+});
+
+
+$('#reportModal').on('hidden.bs.modal', function (e) {
+  // 모달이 닫힐 때 입력된 내용을 초기화
+  $(this).find("input[name='targetNo']").val('');
+  $(this).find("input[name='targetType']").val('');
 });

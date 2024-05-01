@@ -87,9 +87,9 @@ public class BoardReportController {
       @RequestParam("targetType") String targetType,
       Model model)
       throws Exception { // 신고 폼
-    System.out.println("----------------------------");
-    System.out.println(targetNo);
-    System.out.println(targetType);
+
+    log.debug("-----aa------" + targetNo);
+    log.debug("-----bb------" + targetType);
     model.addAttribute("targetNo", targetNo);
     model.addAttribute("targetType", targetType);
   }
