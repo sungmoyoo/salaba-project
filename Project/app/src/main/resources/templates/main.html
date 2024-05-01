@@ -36,8 +36,12 @@
           </a>
           <button class="slide-button prev-button">&lt;</button>
           <button class="slide-button next-button">&gt;</button>
-          <span data-th-text="${rentalHome.name}">숙소 이름</span>
-          <span data-th-text="${rentalHome.price}">숙소 가격</span>
+          <div class="listing-text">
+            <span data-th-text="${rentalHome.name}">숙소 이름</span>
+          </div>
+          <div class="listing-text">
+            <span data-th-text="${rentalHome.price}">숙소 가격</span>
+          </div>
         </div>
       </div>
     </div>

@@ -57,7 +57,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @GetMapping("board/main")
   public void mainBoard(Model model) throws Exception {
     // 각 카테고리별로 최신 공지 2개와 일반 게시글 3개를 로드
-    List<Board> reviewBoardList = mainBoardContents(0, 1, 4);  // 후기 게시판에는 공지사항 없음
+    List<Board> reviewBoardList =  mainBoardContents(0, 1, 4);  // 후기 게시판에는 공지사항 없음
     List<Board> infoBoardList = mainBoardContents(1, 1, 3);    // 정보공유 게시판
     List<Board> communityBoardList = mainBoardContents(2, 1, 3); // 자유 게시판
 
