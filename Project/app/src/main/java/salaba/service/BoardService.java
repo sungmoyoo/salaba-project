@@ -13,6 +13,7 @@ public interface BoardService {
   List<Board> findAnnouncements(int categoryNo, int limit); // 게시글 목록 공지사항 조회
 
   Board getBoard(int boardNo, int categoryNo); // 게시판 상세 조회
+  int isLiked(int memberNo, int boardNo); // 내 추천 여부
   Board getBoardNo(int boardNo); // 댓글 조회, 조회수용
 
   int updateBoard(Board board); // 게시판 업데이트

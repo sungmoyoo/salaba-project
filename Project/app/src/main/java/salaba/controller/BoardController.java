@@ -257,6 +257,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인
 
+    int isLiked = boardService.isLiked(loginUser.getNo(), boardNo); // 추천수 처리(내 추천 여부 확인)
+
     // 공개 범위에 따라 접근 제어
     switch (board.getScopeNo()) {
       case 2: // 작성자만
@@ -275,9 +277,10 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     model.addAttribute("boardName", categoryNo == 0 ? "후기게시판"
         : (categoryNo == 1 ? "정보공유게시판" : "자유게시판")); // 0: 후기 게시판 - 1 : 정보공유게시판
     model.addAttribute("loginUser", session.getAttribute("loginUser"));
-
+    model.addAttribute("isLiked", isLiked);
     return "board/view";
   }
+
   @PostMapping("board/update")
   public String updateBoard( // 게시글 수정
       Board board, HttpSession session, SessionStatus sessionStatus) throws Exception {
@@ -547,8 +550,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   // 추천수
   @PostMapping("/board/like")
-  @ResponseBody
-  public Object likeBoard(
+  public ResponseEntity likeBsoard(
       @RequestParam("boardNo") int boardNo,
       HttpSession session) {
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -556,31 +558,27 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인을 해주세요!");
     }
 
-    Map<String,Object> result = new HashMap<>();
     try {
       log.debug(("ffff") + boardNo);
-      boardService.increaseLikeCount(boardNo, loginUser.getNo());
-
-      result.put("status", "success");
+      int result = boardService.increaseLikeCount(boardNo, loginUser.getNo()); // 추천수 증가: board_like 테이블에 추가
+      return ResponseEntity.ok(result);
 
     } catch (Exception e) {
-      log.error("추천 처리 중 오류 발생", e);
-      result.put("status", "fail");
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    return result;
   }
 
   @PostMapping("/board/unlike")      // 추천 취소 로직
-  @ResponseBody
   public Object removeLike(
-      @RequestParam int boardNo,
+      @RequestParam("boardNo") int boardNo,
       HttpSession session) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
     Map<String,Object> result = new HashMap<>();
     try {
-      boardService.decreaseLikeCount(boardNo, loginUser.getNo());
+      boardService.decreaseLikeCount(boardNo, loginUser.getNo()); // 추천수 감소: board_like 테이블에서 삭제
+
       result.put("status", "success");
     } catch (Exception e) {
       log.error("추천 처리 중 오류 발생", e);

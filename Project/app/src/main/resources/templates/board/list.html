@@ -21,18 +21,20 @@
   <button type="button" name="review" onclick="location.href='/board/list?categoryNo=0'">후기게시판</button>
   <button type="button" name="inform" onclick="location.href='/board/list?categoryNo=1'">정보공유게시판</button>
   <button type="button" name="community" onclick="location.href='/board/list?categoryNo=2'">자유게시판</button>
+</div>
 
   <!-- 검색 폼 -->
-  <form id="search-form" action="/board/search" data-th-action="@{search}" method="GET">
-    <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">
-    <select name="type">
-      <option value="title">제목</option>
-      <option value="content">내용</option>
-    </select>
-    <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" value="">
-    <button id="search-button">검색</button>
-  </form>
-</div>
+  <div id="search-container">
+    <form id="search-form" action="/board/search" data-th-action="@{search}" method="GET">
+      <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">
+      <select name="type">
+        <option value="title">제목</option>
+        <option value="content">내용</option>
+      </select>
+      <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" value="">
+      <button id="search-button">검색</button>
+    </form>
+  </div>
 
 <!-- 게시판 -->
 <table border='1'>
@@ -54,11 +56,13 @@
             </div>
           </div>
         <div class="card-body">
-            <h3><a  data-th-href="@{view(categoryNo=0,boardNo=*{boardNo})}" data-th-text="*{title}"
-                    href="view.html" onclick="return false;">제목:제목입니다.</a></h3>
-            <p class="card-text">작성자: <span data-th-text="${board.writer.nickname}">홍길동</span></p>
-            <p class="card-text">작성일: <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
+          <h3><a data-th-href="@{view(categoryNo=0,boardNo=*{boardNo})}" data-th-text="*{title}"
+                    href="view.html">제목:제목입니다.</a></h3>
+            <p class="card-text"><span data-th-text="${board.writer.nickname}">홍길동</span></p>
+          <div class="card-footer">
+            <p class="card-text"><span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
             <i class="fa-solid fa-heart"> <span data-th-text="${board.likeCount}"></span></i>
+          </div>
           </div>
         </div>
       </div>
@@ -87,7 +91,7 @@
       data-th-object="${board}"
       data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
       data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
-    <td class="head-box" data-th-text="${board.headContent}">분류 내용</td>
+    <td data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
     <td>
       <a data-th-href="@{view(categoryNo=1,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
         <span data-th-text="*{title}">제목입니다.</span>
@@ -122,7 +126,7 @@
       data-th-object="${board}"
       data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}"
       data-th-style="${board.headNo == 1 ? 'color: red;' : ''}">
-    <td class="head-box" data-th-text="${board.headContent}">분류 내용</td>
+    <td class="head-box" data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
     <td>
       <a data-th-href="@{view(categoryNo=2,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
         <span data-th-text="*{title}">제목입니다.</span>
@@ -146,7 +150,7 @@
 
 <!-- 페이지네이션: 게시판용 페이징처리 적용-->
 <nav aria-label="Page navigation example" data-th-if="${categoryNo != 0}">
-  <ul class="pagination">
+  <ul class="pagination justify-content-center">
     <!-- '이전' 페이지 버튼 -->
     <li class="page-item" data-th-classappend="${pageNo == 1} ? 'disabled' : ''">
       <a class="page-link" data-th-if="${pageNo > 1}" data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${pageNo - 1}, pageSize=${pageSize})}" href="#" aria-label="Previous">

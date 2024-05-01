@@ -37,18 +37,23 @@
                type='text' value="2024-03-27">
   </div>
 
-  <!-- 말머리 -->
-  <div data-th-if="*{categoryNo != 0}">
-    분류:
-    <select name="headNo">
-      <option value="1">공지</option>
-      <option value="2">이벤트</option>
-      <option value="3">홍보</option>
-      <option value="4">꿀팁</option>
-      <option value="5">잡담</option>
-      <option value="6">질문</option>
-    </select>
-  </div>
+  <!--말머리-->
+    <div data-th-if="*{categoryNo != 0}">
+      <select name="headNo">
+        분류:
+        <option value="1" hidden>공지</option> <!-- 일반 회원은 공지 작성 권한 없음 -->
+        <optgroup data-th-if="*{categoryNo == 1}" label="[정보공유]">
+          <option selected value="2">이벤트</option>
+          <option value="3">홍보</option>
+          <option value="4">꿀팁</option>
+        </optgroup>
+        <optgroup data-th-if="*{categoryNo == 2}" label="[자유]">
+          <option selected value="5">잡담</option>
+          <option value="6">질문</option>
+        </optgroup>
+      </select>
+    </div>
+
   <!--공개범위 -->
   <div>
     공개범위:

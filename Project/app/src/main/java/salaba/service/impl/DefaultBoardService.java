@@ -53,6 +53,11 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
+  public int isLiked(int memberNo, int boardNo) { // 내 추천 여부
+    return boardDao.isLiked(memberNo, boardNo);
+  }
+
+  @Override
   public Board getBoardNo(int boardNo) { // 댓글 조회
     increaseViewCount(boardNo); // 조회수 증가
     return boardDao.findByBoardNo(boardNo);

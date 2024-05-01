@@ -32,6 +32,7 @@ public class BoardReportController {
 
   private static final Log log = LogFactory.getLog(BoardController.class);
   private final BoardReportService boardReportService; // 신고 서비스
+  private final BoardService boardService;
   private final StorageService storageService; // 스토리지 서비스
 
   private String uploadDir = "board/";
@@ -44,6 +45,7 @@ public class BoardReportController {
       BoardReport boardReport,
       @RequestParam("targetNo") int targetNo,
       @RequestParam("targetType") String targetType,
+      @RequestParam("categoryNo") int categoryNo,
       MultipartFile[] reportFiles,
       HttpSession session) throws Exception {
 
@@ -76,7 +78,7 @@ public class BoardReportController {
 
     boardReportService.addReport(boardReport);
 
-    return "redirect:/board/list?categoryNo=" + boardReport.getCategoryNo();
+    return "redirect:/board/view?boardNo=" + boardReport.getTargetNo();
   }
 
   @GetMapping("/board/report/form")
