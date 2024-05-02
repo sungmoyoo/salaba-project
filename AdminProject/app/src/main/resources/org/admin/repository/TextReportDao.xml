@@ -31,6 +31,7 @@
 
 
         <collection property="reportFiles" ofType="ReportFile">
+            <result column="report_no" property="reportNo"/>
             <result column="ori_file_name" property="originalName"/>
             <result column="uuid_file_name" property="uuidName"/>
         </collection>

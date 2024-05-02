@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
         "classpath:config/ncp-secret.properties"
 })
 
-@Controller
 public class App {
 
     public static void main(String[] args) {
@@ -25,8 +24,4 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
-    @GetMapping("/home")
-    public void home() {
-
-    }
 }
