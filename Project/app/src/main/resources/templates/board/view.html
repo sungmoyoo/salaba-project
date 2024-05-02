@@ -18,11 +18,11 @@
   <!-- 게시글 조회 -->
   <h1 data-th-text="${boardName}">게시판</h1>
   <form action="modify" data-th-action="@{modify}" data-th-object="${board}">
-    <div data-th-if="*{categoryNo == 0}">
-      <input data-th-value="${board.region.regionName}" type="text"></div>
     <!--제목~작성자 묶기-->
-
-      <!-- <div data-th-if="${loginUser == null || board.writer.no != loginUser.no}"> -->
+      <div class="info-box">
+        <div data-th-if="*{categoryNo == 0}">
+          <input data-th-value="${board.region.regionName}" type="text">
+        </div>
         <div data-th-if="*{categoryNo != 0}">
           분류: <input data-th-value="*{headContent}" readonly name='headContent' type="text">
         </div>
@@ -36,7 +36,6 @@
           작성자: <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
         </div>
       </div>
-
     <!--내용-->
     <div class="content-box">
       <div>
@@ -47,7 +46,6 @@
     <div>
       <input id="boardNo" data-th-value="*{boardNo}" name='boardNo' type='hidden' value="100">
     </div>
-
     <!--수정 버튼-->
     <div data-th-if="${loginUser != null && board.writer.no == loginUser.no}">
       <button data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html">수정하기</button>
@@ -56,7 +54,7 @@
   </form>
 
   <!-- 추천 버튼 -->
-  <div>
+  <div id="heart">
     <button id="likeButton" class="heart-btn">
       <i data-th-if="${isLiked == 0}" class="fa-regular fa-heart"></i> <!-- 기본적으로 빈 하트로 설정 -->
       <i data-th-if="${isLiked == 1}" class="fa-solid fa-heart"></i> <!-- 기본적으로 빈 하트로 설정 -->
@@ -81,12 +79,12 @@
   <div id="comment-box">
     <div data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
       <div data-th-if="*{#strings.equals(state,'1')}" class="comment">
-        <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
+        <span class="commentNo" data-th-text="*{commentNo}"></span>
         <span>삭제된 댓글입니다.</span>
       </div>
       <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
         <div class="comment-text">
-          <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
+          <span class="commentNo" data-th-text="*{commentNo}"></span>
           <span data-th-text="*{writer.nickname}">댓글 작성자</span>
           <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
           <span data-th-text="*{createdDate}">댓글 작성시간</span>
@@ -107,6 +105,7 @@
         <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
           <div class="reply">
             <span class="replyNo" data-th-text="*{replyNo}" hidden></span>
+<!--            <img data-th-src=""-->
             <span data-th-text="*{writer.nickname}">댓글 작성자</span>
             <span class="replContent" data-th-text="*{content}">댓글 내용</span>
             <span data-th-text="*{createdDate}">댓글 작성시간</span>

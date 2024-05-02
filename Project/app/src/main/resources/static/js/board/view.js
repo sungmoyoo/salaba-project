@@ -1,17 +1,17 @@
 "use strict";
 
-//댓글 작성
+// 댓글 작성
 $("#addCommendBtn").click(function (e) {
-  e.preventDefault();
-  let boardNo = $("#boardNum").text();
-  let input = $("#commentContent");
-  let content = input.val();
-  if (content != "") {
+  e.preventDefault(); // 기본 이벤트 방지
+  let boardNo = $("#boardNum").text(); // 게시글 번호
+  let input = $("#commentContent"); // 댓글 내용
+  let content = input.val(); // 입력 필드에 값 가져오기
+  if (content != "") { // 댓글 내용이 비어있지 않은 경우
     $.ajax({
-      url: "/board/comment/add",
-      type: "POST",
-      dataType: "json",
-      data: {
+      url: "/board/comment/add",  // 요청할 서버의 URL
+      type: "POST",        // HTTP 요청 방식
+      dataType: "json",    // 서버에서 반환되는 데이터 타입
+      data: {              // 서버로 보낼 데이터
         boardNo: boardNo,
         content: content,
       },
@@ -29,18 +29,18 @@ $("#addCommendBtn").click(function (e) {
                                         <button class="report-btn comment-report-btn">신고</button>
                                     </div>
                                 </div>`);
-        $("#box").append(newComment);
-        input.val("");
+        $("#box").append(newComment); // 새 댓글 추가
+        input.val(""); // 새 댓글 입력 필드 비우기
         newComment.children().first().click(addReply);
         newComment.children().find(".del").click(deleteComment);
         newComment.children().find(".modi").click(modifyComment);
         // $('#box').find('.repo')
       },
-      error: function () {
+      error: function () { // 오류 메시지 날리기
         alert("권한이 없습니다.");
       },
     });
-  } else {
+  } else { // 내용이 비어있는 경우
     alert("내용을 작성하세요");
   }
 });
@@ -61,9 +61,9 @@ $(".del2").click(deleteReply);
 $(".modi2").click(modifyReply);
 
 function deleteComment(e) {
-  e.stopPropagation();
+  console.log($(this));
   let commentDiv = $(this).parent();
-  let commentNo = commentDiv.children().first().text();
+  let commentNo = commentDiv.children().find('.commentNo').text();
   console.log(commentNo);
   $.ajax({
     url: "/board/comment/delete",
@@ -275,7 +275,7 @@ function modifyReply(e) {
 }
 
 //추천수 
-let myLikeCount = parseInt($("#myLikeCount").text());
+let myLikeCount = parseInt($("#myLikeCount").text()); // 내 추천수(0 or 1)
 let initialCount = myLikeCount;
 console.log("myLikecount: ", myLikeCount);
 
@@ -286,10 +286,10 @@ likeButton.click(function () {
   // 추천 상태에 따라 하트 아이콘 업데이트
   if (myLikeCount > 0) {
     myLikeCount = 0;
-    likeButton.html('<i class="fa-regular fa-heart"></i>');
+    likeButton.html('<i class="fa-regular fa-heart"></i>'); // 빈 하트
   } else {
     myLikeCount = 1;
-    likeButton.html('<i class="fa-solid fa-heart"></i>');
+    likeButton.html('<i class="fa-solid fa-heart"></i>'); // 꽉 찬 하트
   }
 
   console.log("현재 Like Count: ", myLikeCount);

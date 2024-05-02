@@ -16,6 +16,10 @@
 
 
 /* 추천수 버튼 */
+#heart {
+  text-align: center;
+}
+
 .heart-btn {
   background-color: transparent;
   border: none;
@@ -25,6 +29,7 @@
   outline: none;
   display: inline-block;
   position: relative;
+  text-align: center;
 }
 
 .heart-btn.active i.fa-regular {
@@ -45,11 +50,22 @@
   pointer-events: none; /* 숫자에 대한 클릭 이벤트 방지 */
 }
 
+.like-count {
+  position: absolute; /* 숫자를 절대 위치로 설정하여 컨테이너 내에서 자유롭게 이동 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 숫자를 수직 및 수평으로 가운데 정렬 */
+  color: white;
+  font-size: 12px; /* 숫자 크기 */
+  pointer-events: none; /* 숫자에 대한 클릭 이벤트 방지 */
+}
+
 #myLikeCount {
   position: relative;
   left: 55%;
   /*display: none;구현 시 숨기기 */
 }
+
 
 /* 게시글 내용 테두리 설정 */
   .content-box {
