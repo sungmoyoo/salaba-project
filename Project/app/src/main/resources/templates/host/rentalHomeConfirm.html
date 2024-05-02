@@ -34,11 +34,83 @@
       padding: 5px; /* 패딩 추가 */
     }
 
-    #map{
+    #map {
       height: 513px;
       width: 912px;
       border-radius: 4px;
     }
+
+    #modalButton {
+      background-color: #35C5B3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #modalButton:hover {
+      background-color: #1C9189;
+    }
+
+    #modalWrap {
+      position: fixed; /* 화면에 고정 */
+      z-index: 1; /* 상위에 위치 */
+      padding-top: 250px;;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7); /* 반투명한 배경색 */
+      display: none; /* 초기에는 숨김 */
+    }
+
+    #modalBody {
+      text-align: center;
+      font-size: 18px;
+      width: 500px; /* 모달 창의 너비를 조정합니다. */
+      height: auto;
+      padding: 20px; /* 패딩을 추가합니다. */
+      margin: 0 auto; /* 가운데 정렬합니다. */
+      border: 1px solid #777;
+      background-color: #fff;
+      border-radius: 8px; /* 모달 창의 모서리를 둥글게 만듭니다. */
+   }
+
+    #submitButton {
+      font-weight: bold;
+      color: #fff; /* 버튼 텍스트 색상을 흰색으로 지정합니다. */
+      background-color: #35C5B3; /* 버튼 배경색을 변경합니다. */
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-right: 10px; /* 버튼 사이의 간격을 조정합니다. */
+    }
+
+
+    #closeButton {
+      font-weight: bold;
+      color: #fff; /* 버튼 텍스트 색상을 흰색으로 지정합니다. */
+      background-color: #FA5858; /* 버튼 배경색을 변경합니다. */
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-right: 10px; /* 버튼 사이의 간격을 조정합니다. */
+    }
+
+
+    #submitButton:hover,
+    #closeButton:hover {
+    background-color: #1C9189; /* 마우스 오버 시 배경색 변경 */
+
+
   </style>
 </head>
 
@@ -125,7 +197,7 @@
   <div>
     호스팅 종료일: <input readonly data-th-value='${session.rentalHome.hostingEndDate}' type='date'>
   </div>
-  
+
   <br>
   <br>
   <br>
@@ -165,14 +237,13 @@
 
   <h2>숙소 시설</h2>
   <div>
-    수용인원 <input readonly type="number" name="capacity"
-                data-th-value="${session.rentalHome.capacity}">
+    수용인원 : <span data-th-text="${session.rentalHome.capacity}"></span>
   </div>
-  <h2>숙소 테마</h2>
   <p data-th-if="${facility.facilityNo < 4}"
      data-th-each="facility : ${session.rentalHome.rentalHomeFacilities}"
      data-th-object="${facility}">
-    <a data-th-text="*{facilityName}">aaa</a>
+    <span data-th-text="*{facilityName}">aaa</span> :
+    <span data-th-text="*{facilityCount}"></span>
   </p>
 
   <br>
@@ -192,7 +263,16 @@
 <br>
 
 <div align="center">
-  <a type="button" data-th-href="@{rentalHomeAdd}">등록</a>
+  <button id="modalButton" type="button">등록</button>
+</div>
+
+<div id="modalWrap"> <!-- 모달 창을 감싸는 div -->
+  <div id="modalBody">
+    <p>숙소 등록에 필요한 심사가 영업일 기준 7~14일 소요될 수 있습니다. </p> <!-- 모달 창 내용 -->
+    <button id="submitButton">등록</button> <!-- 모달을 닫는 X 버튼 -->
+    <button id="closeButton">취소</button>
+
+  </div>
 </div>
 <br>
 
@@ -219,6 +299,22 @@
   }
 
   initMap();
+
+  // 등록 최종 확인 및 안내메시지 모달
+  const modal = document.getElementById("modalWrap");
+
+  document.querySelector("#modalButton").onclick= () => {
+    modal.style.display = "block";
+  }
+
+  document.querySelector("#submitButton").onclick = () => {
+    window.location.href = "rentalHomeAdd";
+  }
+
+  document.querySelector("#closeButton").onclick = () => {
+    modal.style.display = "none";
+  }
+
 </script>
 </body>
 </html>

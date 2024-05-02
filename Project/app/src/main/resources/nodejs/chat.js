@@ -31,8 +31,11 @@ const chatFile = {
 
 // 채팅 내역
 const chatContent = [];
+let lastDate = '';
 
 function setChatContent(messageObj){
+
+  if (messageObj.timestamp)
   chatContent.push({
       name: messageObj.name,
       sender: messageObj.sender,
@@ -61,34 +64,34 @@ wss.on('connection', (ws) => {
   // 클라이언트로부터 메시지를 받았을 때
   ws.on('message', (message) => {
 
-    console.log("메세지 전송 후");
-    console.log(message);
-
     const messageObj = JSON.parse(message);
-
-    console.log("메세지 변환 후");
-    console.log(messageObj);
-
 
     const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
 
     chatFile.chatFileName = messageObj.chatName;
-    chatFile.chatFilePath = 'tmp/'
+    chatFile.chatFilePath = 'tmp/';
     chatFile.chatFileFullPath ='tmp/' + chatFile.chatFileName;
 
 
     if(messageObj.message === 'getChat'){
       if( !roomInfo ){
         setChatRoom(ws, messageObj);
+
       } else{
         addChatUser(ws, messageObj);
       }
       sendPreviousMessages(ws);
+
     } else{
+      // 이전 날짜와 다르면 변경된 날짜 출력
+      checkAndUpdateDate(messageObj.timestamp);
+      // 날짜 변환(오전 00:00)
+      messageObj.timestamp = formatTime(messageObj.timestamp);
+      // 메시지를 파일에 저장
+      saveMessage(messageObj);
       // 채팅 메시지 설정
       setChatContent(messageObj);
-      // 메시지를 파일에 저장
-      saveMessage(chatContent);
+
       // 방에 속한 클라이언트에게 새로운 메시지 전송
       roomInfo.forEach(clientInfo => {
         const ws = clientInfo.ws;
@@ -118,8 +121,6 @@ function setChatRoom(ws, messageObj){
   const clientInfo = { sender: messageObj.sender, ws: ws }; // 채팅방에 접속한 클라이언트 정보 , sender / WebSocket 설정
   roomInfo.set( messageObj.memberNo , clientInfo ); // memberNo를 토대로 clientInfo 설정
 
-  console.log( sentPreviousMessagesRooms );
-  console.log(roomInfo);
 }
 
 // 채팅방에 유저 추가
@@ -152,30 +153,25 @@ function deleteChatUser(ws){
 
 // 이전 채팅기록 전송
 function sendPreviousMessages(ws) {
-console.log("이전 채팅기록 전송");
-console.log(chatFile.chatFileFullPath);
-  if (fs.existsSync(chatFile.chatFileFullPath)) {
-    console.log("파일 읽기")
-    fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      ws.send(data);
-    });
-  }
-}
-
-// 채팅 파일에 저장
-function saveMessage(message) {
-console.log("파일 로컬 저장");
+  console.log("이전 채팅 기록 전송");
   console.log(chatFile);
   fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
     }
-    let messages = [];
+    ws.send(data);
+  });
+}
+
+// 채팅 파일에 저장
+function saveMessage(message) {
+  console.log("채팅 파일 로컬에 저장");
+  let messages = [];
+  fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
+    if (err) {
+
+    }
     if (data) {
       messages = JSON.parse(data);
     }
@@ -190,6 +186,7 @@ console.log("파일 로컬 저장");
   });
 }
 
+
 async function uploadFile(){
   console.log("파일 업로드");
   // upload file
@@ -202,6 +199,43 @@ async function uploadFile(){
 }).promise();
 }
 
+// 시간 포맷팅 함수
+function formatTime(timestamp) {
+  const currentTime = new Date(timestamp);
+  let hours = currentTime.getHours();
+  let minutes = currentTime.getMinutes();
+
+  // 시간을 오전 또는 오후로 변환
+  const ampm = hours >= 12 ? '오후' : '오전';
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // 0시를 12시로 표시
+
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+
+  return `${ampm} ${hours}:${minutes}`;
+}
+
+function checkAndUpdateDate(timestamp) {
+
+    const newDate = new Date(timestamp);
+    const year = newDate.getFullYear();
+    const month = newDate.getMonth() + 1;
+    const day = newDate.getDate();
+    const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+
+    // 이전에 저장된 날짜와 현재 날짜가 다른 경우에만 출력
+    if (formattedDate !== lastDate) {
+        // 채팅방에 날짜 출력하는 코드 추가
+//        ws.send(formattedDate);
+        lastDate = formattedDate; // 현재 날짜를 이전 날짜로 저장
+    }
+}
+
+
 server.listen(8889, () => {
   console.log("채팅 서버 시작 port : 8889");
 });
+
+
+

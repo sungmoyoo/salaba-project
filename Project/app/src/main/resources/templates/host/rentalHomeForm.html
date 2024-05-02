@@ -172,6 +172,8 @@
     <div>
       <textarea style="width:500px" name="rentalHomeRule" id="rentalHomeRule"
                 placeholder="숙소 이용규칙" required></textarea>
+
+      <input type="file" multiple/>
     </div>
 
     <br>
@@ -261,9 +263,12 @@
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 <script>
+  var filesArray = []; // 이미지 배열
+  var formData = new FormData(); // 폼데이터
+
   function checkRequiredFields() {
   // 필수 입력 필드 목록
-  const requiredFields = [
+  let requiredFields = [
     document.getElementById('name'),
     document.getElementById('explanation'),
     document.getElementById('rentalHomeRule'),
@@ -276,13 +281,14 @@
   ];
 
   // 필수 입력 필드가 비어 있는지 확인
-  const isEmpty = requiredFields.some(field => !field.value.trim());
+  let isEmpty = requiredFields.some(field => !field.value.trim());
+  console.log(filesArray);
 
   // 다음 버튼 가져오기
   const nextButton = document.querySelector('button[type="submit"]');
 
   // 필수 입력 필드가 비어 있으면 다음 버튼을 비활성화
-  if (isEmpty) {
+  if (isEmpty || filesArray.length <= 0) {
     nextButton.disabled = true;
     nextButton.style.backgroundColor = '#CCCCCC';
   } else {
@@ -298,12 +304,10 @@ window.onload = function() {
     element.addEventListener('input', checkRequiredFields);
   });
 
+
   // 초기에도 확인
   checkRequiredFields();
 };
-
-  var filesArray = []; // 이미지 배열
-  var formData = new FormData(); // 폼데이터
 
   function submitForm() {
     formData.append('name', document.querySelector('#name').value);
@@ -384,7 +388,9 @@ window.onload = function() {
           var index = filesArray.findIndex(obj => obj.file === file);
           if (index > -1) {
             filesArray.splice(index, 1);
+            checkRequiredFields();
             container.remove();
+
           }
         };
         container.appendChild(deleteButton);
@@ -396,6 +402,7 @@ window.onload = function() {
           file: file,
           description: descriptionInput
         });
+        checkRequiredFields();
       };
 
       reader.readAsDataURL(file);

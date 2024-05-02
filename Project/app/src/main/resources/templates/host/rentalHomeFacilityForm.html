@@ -3,6 +3,24 @@
 <head>
   <meta charset='UTF-8'>
   <title>숙소 시설 입력 폼</title>
+  <style>
+    button[type="button"],
+    button[type="submit"] {
+      background-color: #35C5B3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="button"]:hover,
+    button[type="submit"]:hover {
+      background-color: #1C9189;
+    }
+  </style>
 </head>
 <body>
 
@@ -11,47 +29,79 @@
 
 <div align="center">
 
-<form action="facilityForm" data-th-action="@{rentalHomeFacilitySave}" method='post'>
+  <form action="facilityForm" data-th-action="@{rentalHomeFacilitySave}" method='post'>
 
-  <h2>숙소 시설</h2>
-  <div>
-    수용인원 <input type="number" name="capacity" value="0">
-  </div>
-  <div data-th-if="${facility.facilityNo < 4} " data-th-each="facility : ${facilityList}"
-       data-th-object="${facility}">
-    <a data-th-text="*{facilityName}">시설</a>
-    <input type="number" name="facilityCount" value="0"/>
-    <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
-    <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
-  </div>
+    <h2>숙소 시설</h2>
+    <div>
+      수용인원 <input class="roomFacility" type="number" name="capacity" value="0">
+    </div>
+    <div data-th-if="${facility.facilityNo < 4} " data-th-each="facility : ${facilityList}"
+         data-th-object="${facility}">
+      <a data-th-text="*{facilityName}">시설</a>
+      <input class="roomFacility" type="number" name="facilityCount" value="0"/>
+      <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+      <input type="hidden" name="facilityNames"
+             data-th-value="*{facilityName}"/>
+    </div>
 
 
-  <br>
-  <br>
-  <br>
+    <br>
+    <br>
+    <br>
 
-  <h2>숙소 편의시설</h2>
-  <p data-th-if="${facility.facilityNo >= 10}"
+    <h2>숙소 편의시설</h2>
+    <p data-th-if="${facility.facilityNo >= 10}"
        data-th-each="facility : ${facilityList}" data-th-object="${facility}">
-    <a data-th-text="*{facilityName}"></a>
-    <input type="checkbox" name="facilityCount" value="1" />
-    <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
-    <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
-  </p>
+      <a data-th-text="*{facilityName}"></a>
+      <input type="checkbox" name="facilityCount" value="1"/>
+      <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+      <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+    </p>
 
 
-  <div>
-    <button>다음</button>
-  </div>
+    <div>
+      <button type="button" onclick="window.history.back()">이전</button>
+      <button type="submit" id="next-button">다음</button>
+    </div>
 
 
-
-</form>
+  </form>
 </div>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
+<script>
 
+  function checkRequiredFields() {
+    let roomFacility = Array.prototype.slice.call(document.querySelectorAll(".roomFacility"));
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
 
+    let isEmpty = roomFacility.some(facility => Number(facility.value) <= 0)
+
+    const nextButton = document.getElementById('next-button');
+
+   if (isEmpty || checkboxes.length <= 0) {
+      nextButton.disabled = true;
+      nextButton.style.backgroundColor = '#CCCCCC';
+    } else {
+      nextButton.disabled = false;
+      nextButton.style.backgroundColor = '#35C5B3';
+    }
+  }
+
+    // 페이지 로드 시, 입력 필드가 변경될 때마다 확인
+  window.onload = function() {
+    // 입력 필드가 변경될 때마다 확인
+    document.querySelectorAll('input').forEach(element => {
+      element.addEventListener('change', checkRequiredFields);
+    });
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(element => {
+      element.addEventListener('change', checkRequiredFields);
+    });
+
+    checkRequiredFields();
+  };
+</script>
 
 </body>
 </html>

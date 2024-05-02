@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.HostService;
+import salaba.service.MemberService;
 import salaba.service.StorageService;
 import salaba.vo.Member;
 import salaba.vo.Region;
@@ -39,6 +40,7 @@ public class HostController {
 
   private static final Log log = LogFactory.getLog(HostController.class);
   private final HostService hostService;
+  private final MemberService memberService;
   private final StorageService storageService;
   private String uploadDir = "rentalHome/";
 
@@ -196,8 +198,6 @@ public class HostController {
     model.addAttribute("themeList", hostService.themeList());
     model.addAttribute("facilityList", hostService.facilityList());
     model.addAttribute("rentalHome", hostService.getRentalHome(rentalHomeNo));
-    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    System.out.println(hostService.getRentalHome(rentalHomeNo));
 
     // 자동 바인딩 문제
     sessionStatus.setComplete();
@@ -292,8 +292,19 @@ public class HostController {
         filteredList.add(reservation);
       }
     }
+    List<String> uuidPhotoNames = new ArrayList<>();
+
+    for (HostReservation reservation : filteredList) {
+      String photo = memberService.get(reservation.getMemberNo()).getPhoto();
+      if (photo != null) {
+        uuidPhotoNames.add(photo);
+      } else {
+        uuidPhotoNames.add("default-photo.jpeg");
+      }
+    }
 
     model.addAttribute("list", filteredList);
+    model.addAttribute("photoNames", uuidPhotoNames);
   }
 
 
