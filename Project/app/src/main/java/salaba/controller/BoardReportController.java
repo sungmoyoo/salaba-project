@@ -28,7 +28,7 @@ import salaba.vo.board.BoardReportFile;
 @RequiredArgsConstructor
 @Controller
 @SessionAttributes("boardReportFiles")
-public class BoardReportController {
+public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트롤러
 
   private static final Log log = LogFactory.getLog(BoardController.class);
   private final BoardReportService boardReportService; // 신고 서비스
@@ -43,9 +43,9 @@ public class BoardReportController {
   @PostMapping("/board/report/add") // 신고 작성
   public String addReport(
       BoardReport boardReport,
-      @RequestParam("targetNo") int targetNo,
-      @RequestParam("targetType") String targetType,
-      @RequestParam("categoryNo") int categoryNo,
+      @RequestParam("targetNo") int targetNo, // 타겟(게시글, 댓글, 답글) 번호
+      @RequestParam("targetType") String targetType, // 타겟 타입(0,1,2)
+      @RequestParam("categoryNo") int categoryNo, // 신고 카테고리 번호
       MultipartFile[] reportFiles,
       HttpSession session) throws Exception {
 
@@ -77,8 +77,7 @@ public class BoardReportController {
     }
 
     boardReportService.addReport(boardReport);
-
-    return "redirect:/board/view?boardNo=" + boardReport.getTargetNo();
+    return "redirect:/board/list?categoryNo=" + categoryNo;
   }
 
   @GetMapping("/board/report/form")

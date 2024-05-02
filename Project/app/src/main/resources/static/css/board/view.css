@@ -1,18 +1,18 @@
-  /* 맨 위로 올라가기 */
-  #scrollToTopBtn {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 99;
-    border: none;
-    outline: none;
-    background-color: #35C5B3;
-    color: white;
-    cursor: pointer;
-    padding: 15px;
-    border-radius: 50%;
-    }
+/* 맨 위로 올라가기 */
+#scrollToTopBtn {  
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #35C5B3;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 50%;
+}
 
 
 /* 추천수 버튼 */
@@ -32,8 +32,7 @@
 }
 
 .heart-btn i.fa-regular {
-
-   fill: #white;
+  fill: white;
 }
 
 .heart-btn span {
@@ -64,6 +63,9 @@
     padding: 10px;
     margin-bottom: 10px;
   }
+  .comment-text {
+    display: inline-block;
+  }
   .reply {
     border: 0.3px solid #ccc;
     padding: 5px;
@@ -71,3 +73,53 @@
     margin-left: 20px; /* 답글 들여쓰기. */
   }
 
+
+/*분류~공개범위 묶기*/
+.info-box {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-top: 20px; /* 상단 마진 */
+  margin-bottom: 20px; /* 하단 마진 */
+  width: 70%;
+  max-width: 600px;
+  height: 100px; /* 높이를 지정 */
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  font-size: medium;
+  flex-direction: column;
+  justify-content: center; /* 수직 중앙 정렬 */
+  align-items: center; /* 모든 내부 요소를 수평 중앙으로 정렬 */
+  text-align: left; /* 모든 텍스트 정렬 */
+}
+
+.info-box > div {
+  margin-bottom: 10px;
+  width: 100%; /* 또는 너비를 필요에 따라 조절하여 중앙 정렬을 조절할 수 있습니다 */
+}
+
+/* 작성자, 작성일 묶기 */
+.info-box {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-top: 20px; /* 상단 마진 */
+  margin-bottom: 20px; /* 하단 마진 */
+  width: 70%;
+  max-width: 600px;
+  height: 100px; /* 높이를 지정 */
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  font-size: medium;
+  flex-direction: column;
+  justify-content: center; /* 수직 중앙 정렬 */
+  align-items: center; /* 모든 내부 요소를 수평 중앙으로 정렬 */
+  text-align: left; /* 모든 텍스트 정렬 */
+}
+
+.info-box > div {
+  margin-bottom: 10px;
+  width: 100%; /* 또는 너비를 필요에 따라 조절하여 중앙 정렬을 조절할 수 있습니다 */
+}

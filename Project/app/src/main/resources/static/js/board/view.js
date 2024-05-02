@@ -1,4 +1,5 @@
 "use strict";
+
 //댓글 작성
 $("#addCommendBtn").click(function (e) {
   e.preventDefault();
@@ -17,13 +18,15 @@ $("#addCommendBtn").click(function (e) {
       success: function (data) {
         let newComment = $(`<div>
                                     <div class="comment">
-                                        <span class="commentNo" hidden>${data.commentNo}</span>
-                                        <span >${data.writer.nickname}</span>
-                                        <span class="commentContent" data-th-text="*">${data.content}</span>
-                                        <span data-th-text="*">${data.createdDate}</span>
+                                        <div class="comment-text">
+                                          <span class="commentNo" hidden>${data.commentNo}</span>
+                                          <span >${data.writer.nickname}</span>
+                                          <span class="commentContent" data-th-text="*">${data.content}</span>
+                                          <span data-th-text="*">${data.createdDate}</span>
+                                        </div>
                                         <button class="del">삭제</button>
                                         <button class="modi">수정</button>
-                                        <button class="repo">신고</button>
+                                        <button class="report-btn comment-report-btn">신고</button>
                                     </div>
                                 </div>`);
         $("#box").append(newComment);
@@ -49,7 +52,7 @@ $(".del").click(deleteComment);
 $(".modi").click(modifyComment);
 
 //댓글 - 답글달기
-$(".comment").click(addReply);
+$(document.body).on(".comment-text").click(addReply);
 
 //대댓글 삭제
 $(".del2").click(deleteReply);
@@ -177,7 +180,7 @@ function addReply(e) {
                                             <span>${data.createdDate}</span>
                                             <button class="del2">삭제</button>
                                             <button class="modi2">수정</button>
-                                            <button class="repo2">신고</button>
+                                            <button class="report-btn reply-report-btn">신고</button>
                                         </div>`);
             here.parent().append(newReply);
             newReply.find(".del2").click(deleteReply);
@@ -309,7 +312,9 @@ likeButton.click(function () {
 
 
 // 신고: 모달 사용
-$("#board-report-btn, #comment-report-btn, #reply-report-btn").click(function () {
+$(document.body).on(".report-btn").click(function (event) {
+  console.log(event.target);
+/*
   let targetNo = $(this).closest("form").find("input[name='targetNo']").val();
   let targetType = $(this).closest("form").find("input[name='targetType']").val();
 
@@ -320,8 +325,9 @@ $("#board-report-btn, #comment-report-btn, #reply-report-btn").click(function ()
   $("#reportModal").find("input[name='targetNo']").val(targetNo);
   $("#reportModal").find("input[name='targetType']").val(targetType);
 
-  // 모달 열기
+  // 모달 열기s
   $("#reportModal").modal('show');
+*/
 });
 
 

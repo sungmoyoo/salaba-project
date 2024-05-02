@@ -2,7 +2,7 @@
   $(document).ready(function() {
     $('#summernote').summernote({
         height: 800,
-        width: 1000,
+        width: 1400,
         callbacks: {
             onInit: function() {
                 console.log('Summernote 생성됨!');

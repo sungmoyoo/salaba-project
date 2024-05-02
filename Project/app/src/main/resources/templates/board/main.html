@@ -75,8 +75,7 @@
         <!-- 공지사항은 최신순으로 최대 2개까지, headNo가 1인 경우 -->
         <tr data-th-each="board, stat : ${information}"
             data-th-if="${board.headNo == 1 and stat.count <= 2}"
-            data-th-class="'announcement'"
-            data-th-style="'color: red;'">
+            data-th-class="'announcement'">
           <td class="head-box" data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
           <td>
             <a data-th-href="@{view(categoryNo=1, boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
@@ -127,8 +126,7 @@
       <!-- 공지사항은 최신순으로 최대 2개까지, headNo가 1인 경우 -->
       <tr data-th-each="board, stat : ${community}"
           data-th-if="${board.headNo == 1 and stat.count <= 2}"
-          data-th-class="'announcement'"
-          data-th-style="'color: red;'">
+          data-th-class="'announcement'">
         <td class="head-box" data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
         <td>
           <a data-th-href="@{view(categoryNo=2, boardNo=${board.boardNo})}" href="view.html" onclick="return false;">

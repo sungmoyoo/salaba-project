@@ -224,6 +224,26 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       throw new Exception("번호가 유효하지 않습니다.");
     }
 
+    Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인
+//    if (loginUser == null) {
+//      model.addAttribute("message", "로그인이 필요합니다.");
+//      return "auth/form";  // 로그인 페이지로 리다이렉트
+//    }
+
+    // 공개 범위에 따라 접근 제어
+    switch (board.getScopeNo()) {
+      case 2: // 작성자만
+        if (loginUser == null || board.getWriter().getNo() != loginUser.getNo()) {
+          model.addAttribute("title", "비공개 게시글입니다.");
+          return "block";
+        }
+      case 1: // 로그인한 회원만
+        if (loginUser == null) {
+          model.addAttribute("title", "회원만 열람이 가능한 게시물입니다.");
+          return "block";
+        }
+    }
+
     //댓글을 가져온다.
     List<Comment> commentList = commentService.list(boardNo);
     Iterator<Comment> iterator = commentList.iterator();
@@ -255,23 +275,9 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     // 조회수 증가 (게시글 존재 및 접근 가능 확인 후)
     boardService.increaseViewCount(boardNo);
 
-    Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인
 
     int isLiked = boardService.isLiked(loginUser.getNo(), boardNo); // 추천수 처리(내 추천 여부 확인)
 
-    // 공개 범위에 따라 접근 제어
-    switch (board.getScopeNo()) {
-      case 2: // 작성자만
-        if (loginUser == null || board.getWriter().getNo() != loginUser.getNo()) {
-          model.addAttribute("title", "비공개 게시글입니다.");
-          return "block";
-        }
-      case 1: // 로그인한 회원만
-        if (loginUser == null) {
-          model.addAttribute("title", "회원만 열람이 가능한 게시물입니다.");
-          return "block";
-        }
-    }
     model.addAttribute("categoryNo", categoryNo); // 카테고리 별 분류
     model.addAttribute("board", board); // 게시판
     model.addAttribute("boardName", categoryNo == 0 ? "후기게시판"
