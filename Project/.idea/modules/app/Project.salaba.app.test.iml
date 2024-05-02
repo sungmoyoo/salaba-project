@@ -5,10 +5,11 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../app/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../app/src/test/resources" type="java-test-resource" />
     </content>
     <orderEntry type="jdk" jdkName="21" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Project.salaba.app.main~1" />
+    <orderEntry type="module" module-name="Project.salaba.app.main" />
     <orderEntry type="library" name="Gradle: org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:2.7.18" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-thymeleaf:2.7.18" level="project" />

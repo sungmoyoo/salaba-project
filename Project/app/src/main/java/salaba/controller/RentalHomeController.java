@@ -52,7 +52,6 @@ public class RentalHomeController {
     // LogIn User Check
     if(  loginUser == null   && ( regionName.equalsIgnoreCase("all") &&
         checkInDate == null && checkOutDate == null && capacity == 1 ) ){
-
       // 로그인하지 않은 경우 기본 숙소 목록 출력 검색 하지 않은 경우
       model.addAttribute("rentalHomeList", rentalHomeService.getRentalHomeMain());
     }

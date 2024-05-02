@@ -12,15 +12,16 @@
 <body>
   <div data-th-replace="header :: header">header</div>
 <main>
-  <section>
+  <section class="theme-section">
     <div class="theme-container">
-      <button onclick="scrollThemes(-100)">&lt;</button>
+      <button class="scroll-left-button"onclick="scrollThemes(-480)">&lt;</button>
       <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
         <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
           <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
+          <span class="theme-name" data-th-text="${theme.themeName}"></span>
         </a>
       </div>
-      <button class="scroll-right-button" onclick="scrollThemes(100)">&gt;</button>
+      <button class="scroll-right-button" onclick="scrollThemes(480)">&gt;</button>
     </div>
     <div class="filter">
       <button class="filter-button" onclick="openFilterPopup()">필터</button>
@@ -92,7 +93,8 @@
     <button class="apply-filter-button" onclick="getFilterData()" th:text="${rentalHomeList.size + '개의 숙소 보기'}">버튼</button>
   </div>
 </div>
-
+<div data-th-replace="footer :: footer">footer</div>
+</body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:inline="javascript">
   const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
@@ -273,10 +275,32 @@
     closeFilterPopup();
   }
 
-  function scrollThemes(offset) { // 테마 스크롤 이벤트 (수정 필요)
+  function scrollThemes(offset) { // 테마 스크롤 이벤트
     const container = document.querySelector('.theme-container');
+    const currentScroll = container.scrollLeft;
+    const newScroll = currentScroll + offset;
+    container.scrollTo({
+      left:newScroll,
+      behavior:'smooth'
+    });
 
-    container.scrollLeft += offset;
+    const scrollRightButton = document.querySelector('.scroll-right-button');
+    const scrollLeftButton = document.querySelector('.scroll-left-button');
+    const buttonWidth = scrollRightButton.offsetWidth;
+    const containerWidth = container.offsetWidth;
+
+    // 오른쪽 버튼
+    if( newScroll < container.scrollWidth - containerWidth ){
+      scrollRightButton.style.display = 'block';
+      scrollRightButton.style.right = '${containerWidth - buttonWidth}px';
+    }
+    
+    // 왼쪽 버튼
+    if( newScroll > 0 ){
+      scrollLeftButton.style.display = 'block';
+      scrollLeftButton.style.left = '${containerWidth - buttonWidth}px';
+    }
+
   }
 
   // 숙소 이미지 슬라이더 이벤트
@@ -368,5 +392,4 @@
  }
 
 </script>
-</body>
 </html>
