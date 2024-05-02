@@ -20,9 +20,11 @@
   <form action="modify" data-th-action="@{modify}" data-th-object="${board}">
     <!--제목~작성자 묶기-->
       <div class="info-box">
+        <!--후기게시판이면 지역 표기-->
         <div data-th-if="*{categoryNo == 0}">
           <input data-th-value="${board.region.regionName}" type="text">
         </div>
+        <!--정보공유, 자유게시판이면 분류(말머리) 표기-->
         <div data-th-if="*{categoryNo != 0}">
           분류: <input data-th-value="*{headContent}" readonly name='headContent' type="text">
         </div>
@@ -53,27 +55,23 @@
     </div>
   </form>
 
-  <!-- 추천 버튼 -->
-  <div id="heart">
+  <!-- 추천 버튼과 신고 버튼 컨테이너 -->
+  <div id="interaction-container">
+    <!-- 추천 버튼 -->
     <button id="likeButton" class="heart-btn">
-      <i data-th-if="${isLiked == 0}" class="fa-regular fa-heart"></i> <!-- 기본적으로 빈 하트로 설정 -->
-      <i data-th-if="${isLiked == 1}" class="fa-solid fa-heart"></i> <!-- 기본적으로 빈 하트로 설정 -->
+      <i data-th-if="${isLiked == 0}" class="fa-regular fa-heart"></i>
+      <i data-th-if="${isLiked == 1}" class="fa-solid fa-heart"></i>
+      <span id="likeCount" data-th-text="${board.likeCount}"></span>
     </button>
-    <span id="likeCount" data-th-text="${board.likeCount}"></span>
-    <div>
-      <span id="myLikeCount" data-th-text="${isLiked}" hidden></span>
-    </div>
-    <input type="checkbox" id="toggle" hidden>
-  </div>
 
-  <!-- 게시글 신고 -->
-  <div></div>
-    <form data-th-action="@{report/form}">
-      <input id="noInput1" type="hidden" name="targetNo" data-th-value="${board.boardNo}">
+    <!-- 게시글 신고 버튼 -->
+    <form data-th-action="@{report/form}" style="display: inline;">
+      <input type="hidden" name="targetNo" data-th-value="${board.boardNo}">
       <input type="hidden" name="targetType" data-th-value="0">
       <button type="button" class="report-btn board-report-btn">신고</button>
     </form>
   </div>
+
 
   <!--댓글, 답글 리스트-->
   <div id="comment-box">

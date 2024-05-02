@@ -140,8 +140,8 @@ function modifyComment(e) {
 
 function addReply(e) {
   e.stopPropagation();
-  let replyForm = $(".replyForm");
-  let commentNo = $(this).find(".commentNo").text();
+  let replyForm = $(".replyForm");// 댓글에 대한 답글 폼 가져오기
+  let commentNo = $(this).find(".commentNo").text(); // 클릭한 댓글 번호
 
   if (
     replyForm.length != 0 &&
