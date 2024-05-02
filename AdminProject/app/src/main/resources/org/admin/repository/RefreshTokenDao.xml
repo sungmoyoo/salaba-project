@@ -16,7 +16,7 @@
         VALUES(#{memberNo}, #{value})
     </insert>
 
-    <delete id="deleteRefreshToken" parameterType="RefreshToken">
+    <delete id="deleteRefreshToken">
         DELETE FROM refresh_token where value = #{refreshToken}
     </delete>
 

@@ -25,8 +25,8 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
-    @GetMapping("/")
-    public String login() {
-        return "auth/form";
+    @GetMapping("/home")
+    public void home() {
+
     }
 }

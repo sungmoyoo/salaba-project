@@ -14,21 +14,20 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Validated
 @RestController
 @RequiredArgsConstructor
-public class AuthController {
-    private static final Log log = LogFactory.getLog(AuthController.class);
+@RequestMapping("/auth")
+public class AuthRestController {
+    private static final Log log = LogFactory.getLog(AuthRestController.class);
     private final MemberService memberService;
     private final JwtTokenizer jwtTokenizer;
     private final RefreshTokenService refreshTokenService;
@@ -38,7 +37,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody @Valid MemberSignupDto memberSignupDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Member newMember = Member.builder()
@@ -57,13 +56,13 @@ public class AuthController {
                 .regdate(newMember.getJoinDate())
                 .build();
 
-        return new ResponseEntity(memberSignupResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(memberSignupResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid MemberLoginDto loginDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         System.out.println(loginDto.getEmail());
         // email이 없을 경우 Exception이 발생한다. Global Exception에 대한 처리가 필요하다.
@@ -71,7 +70,7 @@ public class AuthController {
 
         //해당 유저가 없거나, 비밀번호가 틀리거나 roleNo가 1 or 2가 아닐때
         if (member == null || !passwordEncoder.matches(loginDto.getPassword(), member.getPassword())) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
 
@@ -100,7 +99,7 @@ public class AuthController {
     public ResponseEntity logout(@RequestBody RefreshTokenDto refreshTokenDto) {
         refreshTokenService.deleteRefreshToken(refreshTokenDto.getRefreshToken());
         // token repository에서 refresh Token에 해당하는 값을 삭제한다.
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/refreshToken")
@@ -122,7 +121,7 @@ public class AuthController {
                 .memberNo(member.getMemberNo())
                 .name(member.getName())
                 .build();
-        return new ResponseEntity(loginResponse, HttpStatus.OK);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 
 
