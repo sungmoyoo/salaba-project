@@ -25,6 +25,8 @@ public interface BoardService {
 
   int deleteBoardFile(int fileNo); // 첨부파일 삭제
 
+  List<BoardFile> getBoardThumbnail(int boardNo); // 썸네일
+
   int countAll(int categoryNo); // 공지를 제외한 게시글 목록 페이징 처리
 
   void addAllFiles(List<BoardFile> boardFiles); // 파일 추가

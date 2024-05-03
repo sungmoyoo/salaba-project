@@ -4,6 +4,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import salaba.vo.board.Board;
+import salaba.vo.board.BoardFile;
+import salaba.vo.rental_home.RentalHomePhoto;
 
 @Mapper
 public interface BoardDao {  // 게시판 인터페이스
@@ -21,6 +23,9 @@ public interface BoardDao {  // 게시판 인터페이스
       @Param("offset") int offset);
 
   Board findBy(@Param("boardNo") int boardNo, @Param("categoryNo") int categoryNo); // 상세조회
+
+
+  List<BoardFile> boardThumbnail(int boardNo);  // 게시글 썸네일
 
   Board findByBoardNo(@Param("boardNo") int boardNo);
 

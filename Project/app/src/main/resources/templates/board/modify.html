@@ -11,10 +11,9 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <!-- include summernote css/js -->
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"
-        rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="board.css">
+  <link rel="stylesheet" type="text/css" href="/css/board/board.css">
 
 </head>
 <body>
@@ -90,7 +89,7 @@
   <div>
     내용: <textarea id="summernote" data-th-text="*{content}" name='content' style="display: none;"/></textarea>
   </div>
-  <!--변경 버튼-->
+  <!--변경 버튼을 누르면 update 완료-->
   <div>
     <button>변경</button>
     <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
@@ -99,59 +98,7 @@
 </form>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
-<script data-th-src="@{/board/board.js}"></script>
-<script>
-  $(document).ready(function() {
-    $('#summernote').summernote({
-        height: 800,
-        width: 1000,
-        callbacks: {
-            onInit: function() {
-                console.log('Summernote 생성됨!');
-            },
-            onImageUpload: function(files) {
-                let data = new FormData();
-                for (const file of files) {
-                    data.append("files", file);
-                }
-                let categoryNo = $("#categoryNo").val();
 
-                $.ajax({
-                    url: 'file/upload?categoryNo=' + categoryNo,
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    data: data
-                })
-                .done(function(result) {
-                    if (result.length == 0) {
-                        alert('로그인 하세요!');
-                        return;
-                    }
-
-                    // 카테고리 번호에 따라 다른 경로를 설정
-                    let basePath = 'https://kr.object.ncloudstorage.com/tp3-salaba/board/';
-                    if (categoryNo == '0') {
-                        basePath += 'review/';
-                    } else {
-                        basePath += 'community/';
-                    }
-
-                    for (const boardFile of result) {
-                        $('#summernote').summernote('insertImage',
-                            basePath + boardFile.uuidFileName);
-                    }
-                })
-                .fail(function(xhr, status, error) {
-                    console.error('Upload failed: ' + error);
-                    alert('이미지 업로드 실패: ' + error);
-                });
-            }
-        }
-    });
-});
-
-</script>
+<script data-th-src="@{/js/board/form.js}"></script>
 </body>
 </html>

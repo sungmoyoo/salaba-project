@@ -1,0 +1,416 @@
+/* <uniquifier>: Use a unique and descriptive class name */
+/* <weight>: Use a value from 100 to 900 */
+
+  html{
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  header{
+    position: fixed;
+    top:0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  body {
+    height: 100vh;
+  }
+
+  main{
+    position: absolute;
+    top: 332px;
+    bottom: 100px;
+    width: 100%;
+    height: calc(100vh - 240px - 100px);
+    overflow-y: auto;
+  }
+
+  #map{
+    height: 1028px;
+    width: 1920px;
+  }
+
+  html,body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* 테마 */
+  .theme-section{
+    position: fixed;
+    top: 240px;
+    width: 100%;
+    border-top: 0.5px solid #cccccc;
+    padding-top: 14px;
+    display: flex;
+    z-index: 1000;
+  }
+
+  .theme-container{
+    display: flex;
+    overflow-x: hidden;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    white-space: normal;
+    width: 83%;
+    left: 66px;
+  }
+
+  .theme-icon-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 56px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+
+  .theme-icon-container:hover{
+    font-weight:bold;
+  }
+
+  .theme-icon-container img{
+    margin-bottom: 4px;
+  }
+
+  .theme-icon-container a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .theme-name{
+    display: flex;
+    margin-top: 2px;
+    font-size: small;
+    white-space: nowrap;
+  }
+
+  .scroll-right-button{
+    position: fixed;
+    right: 150px;
+    transform:translateY(-10%);
+    border-radius: 20px;
+    border: 1px solid #cccccc;
+    background-color: #FFFFFF;
+    z-index: 1;
+    width: 28px;
+    height: 28px;
+    padding: 0px;
+  }
+
+  .scroll-left-button{
+    position: fixed;
+    left: 65px;
+    transform: translateY(-10%);
+    border-radius: 20px;
+    border: 1px solid #cccccc;
+    background-color: #FFFFFF;
+    z-index: 1;
+    width: 28px;
+    height: 28px;
+    padding: 0px;
+  }
+
+  .scroll-left-button span,
+  .scroll-right-button span{
+    display: flex;
+    justify-content: center;
+  }
+  
+
+  /* 필터버튼 스타일 */
+  .filter{
+    position: fixed;
+    right: 50px;
+    transform:translateY(20%);
+  }
+
+  .filter-button{
+    width: 82px;
+    height: 48px;
+    background-color: #FFFFFF;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .filter-button-span{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 10px;
+  }
+  
+  .filter-button-span span{
+    margin-left: 5px;
+  }
+
+  /* 숙소 목록 */
+  .slider-container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+
+  .listing-container {
+    margin: 20px auto; /* 중앙 정렬 */
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-top: 16px;
+    padding-left: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+  }
+
+  .listing-item {
+    width: 265px; /* 수정된 부분: listing-item의 너비를 265px로 지정 */
+    height: 300px; /* 수정된 부분: listing-item의 높이를 300px로 지정 */
+    margin-right: 20px; /* 수정된 부분: 우측 여백 추가 */
+    margin-bottom: 20px; /* 수정된 부분: 하단 여백 추가 */
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .listing-slider {
+    position: relative;
+    width: 100%; /* 수정된 부분: slider의 너비를 100%로 지정 */
+    height: 100%; /* 수정된 부분: slider의 높이를 100%로 지정 */
+  }
+
+  .listing-slider img{
+    border-radius: 15px;
+  }
+
+  .listing-item-content{
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  .listing-text{
+    display: inline-flex;
+    font-weight: bold;
+  }
+
+  .listing-price{
+    font-size: 14px;
+    font-weight: 200;
+  }
+
+  /* 여기부터 사진에 있는 버튼 부분 */
+  .prev-button,
+  .next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .prev-button {
+    left: 10px;
+  }
+
+  .next-button {
+    right: 10px;
+  }
+
+  .prev-button span,
+  .next-button span{
+    display: flex;
+    justify-content: center;
+  }
+
+  /* 팝업 스타일 */
+  .popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .popup-content {
+    background-color: #fefefe;
+    border-radius: 20px;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    width: 60%;
+  }
+  
+  .close-button {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close-button:hover,
+  .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* 지도보기 / 목록보기 버튼 */
+  #mapButton{
+    position: fixed;
+    width: 150px;
+    height: 50px;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 18px;
+    border-radius: 20px;
+  }
+
+  .mapButton-span{
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mapButton-icon{
+    margin-left: 8px;
+  }
+
+  .mapButton-icon svg{
+    --linaria-theme_palette-white: #ffffff;
+  }
+
+  /* 구글맵 마커 css */
+  .property {
+    align-items: center;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    color: #263238;
+    display: flex;
+    font-size: 14px;
+    gap: 15px;
+    height: 30px;
+    justify-content: center;
+    padding: 4px;
+    position: relative;
+    position: relative;
+    transition: all 0.3s ease-out;
+    width: 30px;
+  }
+
+  .property::after {
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 9px solid #FFFFFF;
+    content: "";
+    height: 0;
+    left: 50%;
+    position: absolute;
+    top: 95%;
+    transform: translate(-50%, 0);
+    transition: all 0.3s ease-out;
+    width: 0;
+    z-index: 1;
+  }
+
+  .price-tag{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: #4285F4;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 10px 15px;
+    position: relative;
+  }
+
+  .price-tag::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #4285F4;
+  }
+  .property.highlight {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+    height: 80px;
+    padding: 8px 15px;
+    width: auto;
+  }
+
+  .property.highlight::after {
+    border-top: 9px solid #FFFFFF;
+  }
+
+  .property.highlight .mapSlide-container {
+    display: flex;
+  }
+
+  .property.highlight .price-tag {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mapSlide-container{
+    display: none;
+    flex-direction: column;
+    flex: 1;
+  }
+
+
+  /* footer 경계선 스타일 */
+  footer{
+    border-top: 1px solid #cccccc;
+  }

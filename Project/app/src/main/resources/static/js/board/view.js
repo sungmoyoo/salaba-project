@@ -1,14 +1,16 @@
 "use strict"
 //댓글 작성
-let alarmContent = window.location.href;
-console.log(alarmContent);
-console.log(typeof alarmContent);
 $('#addCommendBtn').click(function(e) {
     e.preventDefault();
     let boardNo = $('#boardNum').text();
     let input = $('#commentContent')
     let content = input.val();
-    let memberNoForAlarm = $('#commentWriterNo').text();
+    let alarmContent = window.location.href;
+    console.log(alarmContent);
+    console.log(typeof alarmContent);
+    let memberNoForAlarm = $('#memberNoForAlarm').text();
+    console.log(memberNoForAlarm);
+    console.log(typeof memberNoForAlarm);
     if (content != '') {
         $.ajax({
             url: "/board/comment/add",
@@ -38,7 +40,8 @@ $('#addCommendBtn').click(function(e) {
                 newComment.children().find('.del').click(deleteComment);
                 newComment.children().find('.modi').click(modifyComment);
                 // $('#box').find('.repo')
-
+                
+                window.sendAlarm(memberNoForAlarm);
             },
             error: function() {
                 alert("권한이 없습니다.")
@@ -336,7 +339,7 @@ $(document).on('click', '#likeButton', function() {
     openPopup('report/form?targetType=0&targetNo=' + targetNo, title, width, height);
   });
 
-<!--// 댓글 신고 버튼-->
+// 댓글 신고 버튼-->
   $('#comment-report-btn').click(function() {
     var title = '신고하기';
     var width = 800;
@@ -346,7 +349,7 @@ $(document).on('click', '#likeButton', function() {
     openPopup('report/form?targetType=1&targetNo=' + targetNo, title, width, height);
   });
 
-<!--// 답글 신고 버튼-->
+// 답글 신고 버튼-->
     $('#reply-report-btn').click(function() {
     var title = '신고하기';
     var width = 800;
