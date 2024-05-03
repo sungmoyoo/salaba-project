@@ -14,4 +14,8 @@
 
 
 </body>
+<script data-th-inline="javascript">
+  let sessionInfo = /*[[${session.loginUser}]]*/ '';
+</script>
+<script data-th-src="@{/common/alarm.js}" src="common/alarm.js"></script>
 </html>

@@ -65,7 +65,6 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
 
     const messageObj = JSON.parse(message);
-
     const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
 
     chatFile.chatFileName = messageObj.chatName;
@@ -99,7 +98,6 @@ wss.on('connection', (ws) => {
     }
   });
 
-  // 클라이언트와의 WebSocket 연결이 끊겼을때
   ws.on('close', () =>{
     console.log("웹소켓 종료");
     deleteChatUser(ws);
@@ -110,13 +108,11 @@ wss.on('connection', (ws) => {
 function setChatRoom(ws, messageObj){
   if(!sentPreviousMessagesRooms.has(messageObj.reservationNo)){ // 예약번호에 대한 채팅방 존재 체크
     sentPreviousMessagesRooms.set( messageObj.reservationNo, new Map() ); // 없는경우 채팅방 생성
-    console.log("방 생성");
   }
 
   const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo); // 생성한 채팅방 가져옴
   const clientInfo = { sender: messageObj.sender, ws: ws }; // 채팅방에 접속한 클라이언트 정보 , sender / WebSocket 설정
   roomInfo.set( messageObj.memberNo , clientInfo ); // memberNo를 토대로 clientInfo 설정
-
 }
 
 // 채팅방에 유저 추가
@@ -126,7 +122,6 @@ function addChatUser(ws, messageObj){
   if(!clientInfo){
     const addInfo = { sender: messageObj.sender, ws:ws };
     roomInfo.set( messageObj.memberNo, addInfo );
-    console.log("유저 추가");
   }
 }
 
