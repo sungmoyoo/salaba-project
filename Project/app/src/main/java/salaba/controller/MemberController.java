@@ -13,12 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import salaba.service.BoardService;
 import salaba.service.HostService;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.board.Board;
 
 @RequiredArgsConstructor
 @Controller
@@ -29,6 +32,7 @@ public class MemberController implements InitializingBean {
 
   private final MemberService memberService;
   private final StorageService storageService;
+  private final BoardService boardService;
 
   private String uploadDir;
 
@@ -215,4 +219,93 @@ public class MemberController implements InitializingBean {
 
     model.addAttribute("themeList", memberService.themeList(sessionInfo));
   }
+
+  @GetMapping("boardHistory")  // 작성글 내역
+  public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize,
+      Model model,
+      HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    Member member = memberService.get(loginUser.getNo());
+
+    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
+      pageSize = 10;
+    }
+
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfRecord = boardService.countAllHistory(loginUser.getNo());
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    List<Board> boardList = boardService.boardHistory(pageNo, pageSize, loginUser.getNo());
+    model.addAttribute("list", boardList);
+
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("member", member);
+
+    //포인트
+    String memberPoint = memberService.getMemberPoint(member);
+    session.setAttribute("memberPoint", memberPoint);
+    //등급
+    Member memberGrade = memberService.getGrade(member);
+    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
+    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+
+  }
+
+
+  @GetMapping("commentHistory")  // 작성댓글 내역
+  public void commentHistory(@RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize,
+      Model model,
+      HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    Member member = memberService.get(loginUser.getNo());
+
+    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
+      pageSize = 10;
+    }
+
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfRecord = boardService.countAllCommentHistory(loginUser.getNo());
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
+
+
+    //commentList = sort(commentList); // 정렬 함수 호출
+    model.addAttribute("list", commentList);
+
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("member", member);
+
+    //포인트
+    String memberPoint = memberService.getMemberPoint(member);
+    session.setAttribute("memberPoint", memberPoint);
+    //등급
+    Member memberGrade = memberService.getGrade(member);
+    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
+    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+
+  }
+
 }

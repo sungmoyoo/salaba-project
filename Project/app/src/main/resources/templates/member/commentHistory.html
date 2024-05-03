@@ -50,7 +50,7 @@
         <li class="left-li"><a data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="member/myinfoCheckPassword">내정보 관리</a></li>
         <li class="left-li"><a data-th-href="@{/bookmark/bookmarkList}" data-th-if="${session.loginUser != null}" href="bookmark/bookmarkList">즐겨찾기</a></li>
         <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/board/boardHistory}" data-th-if="${session.loginUser != null}" href="board/boardHistory" style="color:#000;"><b>작성글 내역</b></a></li>
+        <li class="left-li"><a data-th-href="@{/member/boardHistory}" data-th-if="${session.loginUser != null}" href="member/boardHistory" style="color:#000;"><b>작성글 내역</b></a></li>
         <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
         <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList">고객센터</a></li>
       </ul>
@@ -58,8 +58,9 @@
     <td style="vertical-align:top;">
       <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
         <h1>작성글 내역</h1>
-        <a data-th-href="@{/board/boardHistory}" href="board/boardHistory" style="color:#000;"><b>작성글</b></a>
-        <a data-th-href="@{/board/commentHistory}" href="board/commentHistory">작성댓글</a>
+        <a data-th-href="@{/member/boardHistory}" href="member/boardHistory">작성글</a>
+        <a data-th-href="@{/member/commentHistory}" href="member/commentHistory" style="color:#000;"><b>작성댓글</b></a>
+
 <div id="header">
   <!-- 검색 폼 추가 -->
   <form id="search-form" action="/search" method="GET">
@@ -67,43 +68,38 @@
     <button type="submit" id="search-button">검색</button>
   </form>
 </div>
-<!-- 게시판 -->
+
 <table border='1'>
   <thead>
   <tr>
-    <th>카테고리</th>
-    <th>제목</th>
-    <th>작성일</th>
-    <th>추천수</th>
-    <th>조회수</th>
-    <th>첨부파일</th>
+    <th></th>
+    <th>작성된 글제목</th>
+    <th>내용</th>
+    <th>작성일/시간</th>
   </tr>
   </thead>
   <tbody>
   <tr data-th-each="board : ${list}" data-th-object="${board}">
-    <td data-th-text="*{categoryNm}"></td>
+    <td data-th-text="*{cnr}"></td>
     <td><a data-th-href="@{view(boardNo=*{boardNo},categoryNo=*{categoryNo})}" data-th-text="*{title}"
-           href="view.html"></a></td>
+           href="../board/view.html"></a></td>
+    <td data-th-text="*{content}"></td>
     <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}"></td>
-    <td data-th-text="*{likeCount}"></td>
-    <td data-th-text="*{viewCount}"></td>
-    <td data-th-text="*{fileCount}"></td>
   </tr>
   </tbody>
 </table>
-
 <!-- 페이지 설정 -->
 <p>
   [
   <a data-th-if="${pageNo} <= 1">이전</a>
   <a data-th-if="${pageNo > 1}"
-     data-th-href="@{boardHistory(pageNo=${pageNo - 1},pageSize=${pageSize})}"
+     data-th-href="@{commentHistory(pageNo=${pageNo - 1},pageSize=${pageSize})}"
      href="list">이전</a>
   ]
   [
   <a data-th-if="${pageNo >= numOfPage}">다음</a>
   <a data-th-if="${pageNo < numOfPage}"
-     data-th-href="@{boardHistory(pageNo=${pageNo + 1},pageSize=${pageSize})}"
+     data-th-href="@{commentHistory(pageNo=${pageNo + 1},pageSize=${pageSize})}"
      href="list">다음</a>
   ]
 </p>
