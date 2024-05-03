@@ -137,6 +137,5 @@
         INNER JOIN member m ON rh.member_no = m.member_no
         WHERE rh.state != '0'
         AND m.name like '%${keyword}%'
-
     </select>
 </mapper>
