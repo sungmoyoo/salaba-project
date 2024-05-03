@@ -20,5 +20,10 @@
         SELECT admin_no, id, authority FROM admin
         WHERE id = #{id} AND password = sha2(#{password}, 256)
     </select>
+
+    <select id="findByIdAndPassword" resultMap="AdminMap">
+        SELECT admin_no, id, authority FROM admin
+        WHERE id = #{id}
+    </select>
 </mapper>
 

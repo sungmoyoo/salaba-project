@@ -50,7 +50,53 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public int updateWarningCount(int reportNo) {
+    public int updateWarningCount(int writerNo) {
+        return memberDao.updateWarningCount(writerNo);
+    }
+
+    @Override
+    public int updateWarningCountBy(int reportNo) {
         return memberDao.updateWarningCount(reportNo);
+    }
+
+    @Override
+    public List<Member> getMemberByName(String keyword) {
+        List<Member> members = memberDao.findMemberByName(keyword);
+        for (Member member : members) {
+            member.setStateStr(Translator.memberState.get(member.getState()));
+        }
+        return members;
+    }
+
+    @Override
+    public List<Member> getMemberByEmail(String keyword) {
+        List<Member> members = memberDao.findMemberByEmail(keyword);
+        for (Member member : members) {
+            member.setStateStr(Translator.memberState.get(member.getState()));
+        }
+        return members;
+    }
+
+    @Override
+    public List<Member> getHostByName(String keyword) {
+        List<Member> members = memberDao.findHostByName(keyword);
+        for (Member member : members) {
+            member.setStateStr(Translator.memberState.get(member.getState()));
+        }
+        return members;
+    }
+
+    @Override
+    public List<Member> getHostByEmail(String keyword) {
+        List<Member> members = memberDao.findHostByEmail(keyword);
+        for (Member member : members) {
+            member.setStateStr(Translator.memberState.get(member.getState()));
+        }
+        return members;
+    }
+
+    @Override
+    public int updateGrade(String grade, int memberNo) {
+        return memberDao.updateGrade(grade, memberNo);
     }
 }

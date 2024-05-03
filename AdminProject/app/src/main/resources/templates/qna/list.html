@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-<div data-th-replace="header :: header">헤더</div>
-<h3 data-th-text="${menuName}">메뉴 이름</h3>
-<table border="1">
-    <thead>
-    <tr>
-        <th>No</th>
-        <th>제목</th>
-        <th>진행 상태</th>
-        <th>접수일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr data-th-each="qna : ${qnaList}" data-th-object="${qna}">
-        <td data-th-text="*{questionNo}">1</td>
-        <td><a data-th-text="*{title}" data-th-href="@{detail(qno=*{questionNo})}">제목</a></td>
-        <td data-th-text="*{stateStr}">진행 상태</td>
-        <td data-th-text="*{regDate}">접수일</td>
-    </tr>
-    </tbody>
-</table>
-<div data-th-replace="footer :: footer">풋터</div>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" data-th-href="@{/css/list.css}" href="../../static/css/list.css">
+  </head>
+  <body>
+    <div data-th-replace="header :: header">헤더</div>
+    <div data-th-replace="sidebar :: sidebar">사이드바</div>
+    <div class="container">
+    <h3 data-th-text="${menuName}">메뉴 이름</h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>제목</th>
+          <th>진행 상태</th>
+          <th>접수일</th>
+          <th>상새 보기</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-th-each="qna : ${qnaList}" data-th-object="${qna}">
+          <td data-th-text="*{questionNo}">1</td>
+          <td data-th-text="*{title}">제목</td>
+          <td data-th-text="*{stateStr}">진행 상태</td>
+          <td data-th-text="*{regDate}">접수일</td>
+          <td><button data-th-href="@{detail(qno=*{questionNo})}" class="view">view</button></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <td colspan="10" class="tablefoot"></td>
+        </tfoot>
+    </table>
+  </div>
+    <div data-th-replace="footer :: footer">풋터</div>
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent">
 
-</body>
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+      </div>
+      <button type="button" id="closeBtn">✕</button>
+    </div>
+    <script data-th-src="@{/js/list.js}"></script>
+  </body>
 </html>

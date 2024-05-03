@@ -39,4 +39,27 @@ public class DefaultRentalService implements RentalService {
         rental.setStateStr(Translator.rentalState.get(rental.getState()));
         return rental;
     }
+
+    @Override
+    public int updateState(int rentalNo, String rentalState) {
+        return rentalDao.updateState(rentalNo, rentalState);
+    }
+
+    @Override
+    public List<Rental> getAllByName(String keyword) {
+        List<Rental> rentals = rentalDao.findAllByName(keyword);
+        for(Rental rental : rentals) {
+            rental.setStateStr(Translator.rentalState.get(rental.getState()));
+        }
+        return rentals;
+    }
+
+    @Override
+    public List<Rental> getAllByHostName(String keyword) {
+        List<Rental> rentals = rentalDao.findAllByHostName(keyword);
+        for(Rental rental : rentals) {
+            rental.setStateStr(Translator.rentalState.get(rental.getState()));
+        }
+        return rentals;
+    }
 }

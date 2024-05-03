@@ -2,6 +2,7 @@ package org.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.admin.service.MemberService;
+import org.admin.service.RentalService;
 import org.admin.util.ReportType;
 import org.admin.domain.Report;
 import org.admin.service.RentalReportService;
@@ -25,6 +26,7 @@ public class ReportManageController {
     private final RentalReportService rentalReportService;
     private final TextReportService textReportService;
     private final MemberService memberService;
+    private final RentalService rentalService;
     @GetMapping("report/list")
     public String reportList(@RequestParam("menu") int menu,
                              HttpSession session,
@@ -93,21 +95,29 @@ public class ReportManageController {
 
     @Transactional
     @PostMapping("report/update")
-    public String dealReport(@RequestParam("selection") String selection,
+    public String dealReport(@RequestParam(value="selection1", defaultValue = "0") String selection1,
+                             @RequestParam(value="selection2", defaultValue = "0") String selection2,
+                             @RequestParam(value="writerNo", defaultValue = "0") int writerNo,
                              Report report,
                              HttpSession session) {
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
+        if (selection2.equals("0")) {
+            textReportService.updateState(report.getReportNo());
+            memberService.updateWarningCountBy(report.getReportNo());
+            textReportService.updateBoardState(report, selection1);
+        } else {
+            rentalReportService.updateState(report.getTargetNo(), writerNo);
+            memberService.updateWarningCount(writerNo);
+            rentalService.updateState(report.getTargetNo(), selection2);
+        }
 
-        textReportService.updateState(report.getReportNo());
-        memberService.updateWarningCount(report.getReportNo());
-        textReportService.updateBoardState(report, selection);
 
-
-        return "redirect:list";
+        return "redirect:list?menu=1";
 
     }
+
 
 
 

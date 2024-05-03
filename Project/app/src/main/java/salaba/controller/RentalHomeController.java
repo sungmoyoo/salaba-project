@@ -23,13 +23,12 @@ import salaba.vo.rental_home.RentalHomeReview;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/rentalHome")
 public class RentalHomeController {
 
   private final static Log log = LogFactory.getLog(RentalHomeController.class);
   private final RentalHomeService rentalHomeService; // RentalHomeService
 
-  @GetMapping("/search")
+  @GetMapping("/main")
   public String rentalHomeMain( HttpSession httpSession, Model model,
       @RequestParam( value = "regionName", defaultValue = "all") String regionName,
       @RequestParam( value = "checkInDate", required = false)
@@ -52,7 +51,6 @@ public class RentalHomeController {
     // LogIn User Check
     if(  loginUser == null   && ( regionName.equalsIgnoreCase("all") &&
         checkInDate == null && checkOutDate == null && capacity == 1 ) ){
-
       // 로그인하지 않은 경우 기본 숙소 목록 출력 검색 하지 않은 경우
       model.addAttribute("rentalHomeList", rentalHomeService.getRentalHomeMain());
     }
@@ -91,7 +89,7 @@ public class RentalHomeController {
     return "main";
   }
 
-  @GetMapping("/view")
+  @GetMapping("/rentalHome/view")
   public void rentalHomeView( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model){ // 숙소 상세 조회
     model.addAttribute("rentalHome", rentalHomeService.getRentalHomeDetailView(rentalHomeNo));
     model.addAttribute("rentalHomeReview", rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
@@ -100,21 +98,21 @@ public class RentalHomeController {
   }
 
 
-@PostMapping("/addReview")
+@PostMapping("/rentalHome/addReview")
   public String rentalHomeReviewAdd( RentalHomeReview rentalHomeReview, int rentalHomeNo) {
     log.debug(String.format("reservationNo : %s", rentalHomeReview.getReservationNo()));
     rentalHomeService.addRentalHomeReview(rentalHomeReview); // 숙소 리뷰 작성
     return "redirect:review?rentalHomeNo=" + rentalHomeNo; // 작성전 페이지로 돌아가기
   }
 
-  @GetMapping("/review")
+  @GetMapping("/rentalHome/review")
   public void rentalHomeReviewList( int rentalHomeNo, Model model ){
     // 숙소 리뷰 조회
     model.addAttribute("rentalHomeReviewList",
         rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
   }
 
-  @PostMapping("/report")
+  @PostMapping("/rentalHome/report")
   public String rentalHomeReportAdd( @RequestBody RentalHomeReport rentalHomeReport){
     rentalHomeService.addRentalHomeReport(rentalHomeReport); // 숙소 신고
 

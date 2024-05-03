@@ -62,21 +62,23 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     
     const messageObj = JSON.parse(message);
+    const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
+
+    console.log(messageObj.message);
     chatFile.chatFileName = messageObj.chatName;
     chatFile.chatFileFullPath = localFilePath+chatFile.chatFileName;
     console.log(messageObj);
     console.log(chatFile);
     console.log(sentPreviousMessagesRooms);
-    const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
-
-    // front로부터 받은 요청 확인 && 이전내용 중복 보내기 체크
-    if(messageObj.message === 'getChat' && (!roomInfo || !(roomInfo.includes(messageObj.sender)))){
-      sendPreviousMessages(ws);
-      if(!roomInfo){
-        sentPreviousMessagesRooms.set(messageObj.reservationNo, [messageObj.sender]);
+    
+    if(messageObj.message === 'getChat'){
+      if( !roomInfo ){
+        setChatRoom(ws, messageObj);
       }else{
-        roomInfo.push(messageObj.sender);
+        addChatUser(ws, messageObj);
       }
+        sendPreviousMessages(ws);
+        console.log(sentPreviousMessagesRooms);
     }
     else{
       console.log(chatContent);
@@ -85,21 +87,61 @@ wss.on('connection', (ws) => {
       console.log(chatContent);
       // 메시지를 파일에 저장
       saveMessage(chatContent);
-      // 모든 클라이언트에게 새로운 메시지 전송
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(chatContent));
+
+      // 방에 속한 클라이언트에게 새로운 메시지 전송
+      roomInfo.forEach(clientInfo => {
+        const ws = clientInfo.ws;
+        if( ws.readyState === WebSocket.OPEN ){
+          ws.send(JSON.stringify(chatContent));
         }
       });
       chatContent.pop();
     }
   });
 
-  // 클라이언트와의 WebSocket 연결이 끊겼을때
   ws.on('close', () =>{
-    uploadFile();
-  });
+    console.log("웹소켓 종료");
+    deleteChatUser(ws);
+  })
 });
+
+// 채팅방 설정
+function setChatRoom(ws, messageObj){
+  if(!sentPreviousMessagesRooms.has(messageObj.reservationNo)){ // 예약번호에 대한 채팅방 존재 체크
+    sentPreviousMessagesRooms.set( messageObj.reservationNo, new Map() ); // 없는경우 채팅방 생성
+  }
+
+  const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo); // 생성한 채팅방 가져옴
+  const clientInfo = { sender: messageObj.sender, ws: ws }; // 채팅방에 접속한 클라이언트 정보 , sender / WebSocket 설정
+  roomInfo.set( messageObj.memberNo , clientInfo ); // memberNo를 토대로 clientInfo 설정
+}
+
+// 채팅방에 유저 추가
+function addChatUser(ws, messageObj){
+  const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
+  const clientInfo = roomInfo.get(messageObj.memberNo);
+  if(!clientInfo){
+    const addInfo = { sender: messageObj.sender, ws:ws };
+    roomInfo.set( messageObj.memberNo, addInfo );
+  }
+}
+
+// 채팅방 유저 삭제
+function deleteChatUser(ws){
+  console.log("맵에서 웹소켓 삭제");
+  sentPreviousMessagesRooms.forEach((roomInfo, reservationNo) => { // Map에 대해 반복문 실행
+    roomInfo.forEach((clientInfo, memberNo) => {
+      if(clientInfo.ws === ws){ // 클라이언트에서 종료를한(웹소켓연결이 끊긴) 대상 체크
+        roomInfo.delete(memberNo); // map에서 삭제
+      }
+    });
+
+    if(roomInfo.size === 0){ // Map에 해당 채팅방에 사용자가 없는경우
+      sentPreviousMessagesRooms.delete(reservationNo); // 채팅방 완전 삭제
+      uploadFile(); // 스토리지 서버에 파일 업로드
+    }
+  });
+}
 
 // 이전 채팅기록 전송
 function sendPreviousMessages(ws) {
@@ -125,7 +167,7 @@ function saveMessage(message) {
     if (data) {
       messages = JSON.parse(data);
     }
-    messages.push(message); // 변수명 수정: message -> messageObj
+    messages.push(message);
     fs.writeFile(chatFile.chatFileFullPath, JSON.stringify(messages) + '\n', { flag: 'w' }, (err) => { // flag: 'a'를 사용하여 기존 데이터 덮어씌우지 않고 추가
       if (err) {
         console.error(err);

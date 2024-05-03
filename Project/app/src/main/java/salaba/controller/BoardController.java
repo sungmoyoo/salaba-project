@@ -26,9 +26,11 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.BoardService;
 import salaba.service.CommentService;
+import salaba.service.MemberService;
 import salaba.service.ReplyService;
 import salaba.service.StorageService;
 import salaba.util.Translator;
+import salaba.vo.Alarm;
 import salaba.vo.board.BoardFile;
 import salaba.vo.board.Board;
 import salaba.vo.board.Comment;
@@ -46,6 +48,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   private final StorageService storageService; // 스토리지 서비스
   private final CommentService commentService; // 댓글 서비스
   private final ReplyService replyService; // 답글 서비스
+  private final MemberService memberService; // 회원 서비스
 
 
   @Value("${ncpbucketname}")
@@ -54,7 +57,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @GetMapping("board/main")
   public void mainBoard(Model model) throws Exception {
     // 각 카테고리별로 최신 공지 2개와 일반 게시글 3개를 로드
-    List<Board> reviewBoardList = mainBoardContents(0, 1, 4);  // 후기 게시판에는 공지사항 없음
+    List<Board> reviewBoardList =  mainBoardContents(0, 1, 4);  // 후기 게시판에는 공지사항 없음
     List<Board> infoBoardList = mainBoardContents(1, 1, 3);    // 정보공유 게시판
     List<Board> communityBoardList = mainBoardContents(2, 1, 3); // 자유 게시판
 
@@ -417,7 +420,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @PostMapping("/board/comment/add") // 댓글 또는 답글 작성
   public ResponseEntity<?> addComment(
       Comment comment,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("memberNoForAlarm") int memberNoForAlarm,
       HttpSession session) throws Exception {
+
+    log.debug(String.format("comment : %s", comment.toString()));
+    log.debug(String.format("alarmContent : %s", alarmContent));
+    log.debug(String.format("memberNoForAlarm : %s", memberNoForAlarm));
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -426,6 +435,15 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     comment.setWriter(loginUser);
     commentService.addComment(comment);
+    
+    // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
+    if( memberNoForAlarm != loginUser.getNo() ){
+      Alarm alarm = new Alarm();
+      alarm.setMemberNo(memberNoForAlarm);
+      alarm.setContent(alarmContent);
+      // 알람 추가
+      memberService.insertNotifyHistory(alarm);
+    }
     comment.setCreatedDate(new Date());
     return ResponseEntity.ok(comment);
 
@@ -485,6 +503,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("/board/reply/add") // 답글 작성
   public ResponseEntity<?> addReply(Reply reply,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("commentWriterNo") int commentWriterNo,
       HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -494,6 +514,15 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     try {
       reply.setWriter(loginUser);
       replyService.addReply(reply);
+
+      // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
+      if( commentWriterNo != loginUser.getNo() ){
+        Alarm alarm = new Alarm();
+        alarm.setMemberNo(commentWriterNo);
+        alarm.setContent(alarmContent);
+        // 알람 추가
+        memberService.insertNotifyHistory(alarm);
+      }
       reply.setCreatedDate(new Date());
       return ResponseEntity.ok(reply);
     } catch (Exception e) {

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <sidebar data-th-fragment="sidebar">
+      <div id="tabBar">
+        <h4 class="subTitle">신고관리</h4>
+        <a class="menu" data-th-href="@{/report/list(menu=1)}" href="list"
+          >숙소 신고 내역</a
+        >
+        <a class="menu" data-th-href="@{/report/list(menu=2)}" href="list"
+          >게시글 신고 내역</a
+        >
+        <a class="menu" data-th-href="@{/report/list(menu=3)}" href="list"
+          >댓글 신고 내역</a
+        >
+
+        <h4 class="subTitle">회원 관리</h4>
+        <a class="menu" data-th-href="@{/user/list(menu=1)}" href="list"
+          >회원 목록</a
+        >
+        <a class="menu" data-th-href="@{/user/list(menu=2)}" href="list"
+          >호스트 목록</a
+        >
+        <h4 class="subTitle">숙소 관리</h4>
+        <a class="menu" data-th-href="@{/rental/list(menu=1)}" href="list"
+          >등록된 숙소 목록</a
+        >
+        <a class="menu" data-th-href="@{/rental/list(menu=2)}" href="list"
+          >숙소 등록 심사</a
+        >
+
+        <h4 class="subTitle">문의 관리</h4>
+        <a class="menu" data-th-href="@{/qna/list}" href="qna">1:1 문의 내역</a>
+      </div>
+      <style>
+        #tabBar {
+          padding-top: 20px;
+          padding-bottom: 20px;
+          background-color: #f0f0f0;
+          position: fixed;
+          left: 20px; /* 왼쪽 여백 */
+          top: 50%;
+          transform: translateY(-50%);
+          border-radius: 10px;
+          text-align: left;
+        }
+
+        .subTitle {
+          color: grey;
+          font-weight: normal;
+          margin-left: 10px;
+        }
+
+        a:link,
+        a:visited {
+          background-color: #f0f0f0c7;
+          color: black;
+          padding: 15px 40px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          display: block;
+          
+        }
+
+        a:hover,
+        a:active {
+          background-color: black;
+          color: white;
+        }
+      </style>
+    </sidebar>
+  </body>
+</html>

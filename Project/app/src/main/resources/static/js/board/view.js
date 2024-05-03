@@ -329,8 +329,6 @@ likeButton.click(function () {
   });
 
 
-
-
 // 신고창: 모달 사용
 $(document.body).on('click', '.report-btn', function (event) {
    console.log(event.target);

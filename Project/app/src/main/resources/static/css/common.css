@@ -1,9 +1,148 @@
-// 로고 - 검색엔진과 로고 사진을 둘다 사용하는 css로 수정
-  #logo {
-    background-image: url('https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png
-');
+/* 로고 - 검색엔진과 로고 사진을 둘다 사용하는 css로 수정 */
+ #logo {
     background-repeat: no-repeat;
     padding-top: 40px;
     height: 0px;
     overflow: hidden; /* 영역에서 밀려난 콘텐트를 숨김 */
+  }
+
+  .logo-div{
+    width: 150px;
+    height: 50px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    display: inline-block;
+  }
+
+  .main-menu{
+    position: fixed;
+    height: 50px;
+    display: inline-flex;
+    margin-top: 10px;
+    margin-left: 10px;
+    left: 48%;
+    transform: translate(-50%);
+  }
+
+  .main-menu-item{
+    margin-top: 10px;
+    margin-right: 20px;
+  }
+
+  .main-menu-item-s{
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 20px;
+    padding: 10px;
+  }
+
+  .main-menu-item-s a{
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .userInfo-container {
+    position: absolute;
+    display: inline-block;
+    right: 100px;
+  }
+  
+  .userInfo-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    border-radius: 10px;
+    display: none;
+  }
+
+  .userInfo-menu{
+    background-color: #f9f9f9;
+  }
+
+  .userInfo-button {
+    position: absolute; /* 버튼의 위치를 절대적으로 지정합니다. */
+    top: 10px; /* 위에서 10px 만큼 떨어지도록 설정합니다. */
+    width: 85px;
+    height: 50px;
+    display: inline-block;
+    border: 1px solid #cccccc;
+    border-radius: 25px;
+    background-color: #ffffff;
+    align-items: center;
+    display: flex;
+    padding-left: 14px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 8px;
+  }
+
+  .userInfo-button-icon,
+  .userInfo-button-photo{
+    display: inline-block;
+  }
+  
+  .userInfo-button-photo{
+    margin-left: 8px;
+    background-color: #ffffff;
+    align-self: center;
+  }
+
+  .userInfo-menu-item{
+    display: block;
+    text-decoration: none;
+    border-radius: 10px;
+  }
+
+  .userInfo-menu-item:hover{
+    background-color: #d6d3d3;
+  }
+
+  .userInfo-menu-item a{
+    color: inherit;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Circular', sans-serif;
+  }
+
+  .userInfo-menu-item a:visited{
+    color: inherit;
+  }
+  
+  .search-container {
+    width: 745px;
+    height: 40px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: #8b8b8b;
+    border-radius: 50px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1); /* 내부 그림자 및 외부 그림자 설정 */
+  }
+
+  #condition-search {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .search-input,
+  .search-button {
+    padding: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+  }
+
+  .search-button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+  }
+
+  .search-button:hover {
+    background-color: #0056b3;
   }

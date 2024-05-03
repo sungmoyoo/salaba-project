@@ -56,6 +56,7 @@
         FROM rental_home rh
         INNER JOIN member m ON rh.member_no = m.member_no
         WHERE rh.state != '0'
+
     </select>
 
     <select id="findApplied" resultMap="RentalMap">
@@ -103,5 +104,39 @@
             LEFT JOIN rental_home_photo rhp ON rh.rental_home_no = rhp.rental_home_no
         WHERE
             rh.rental_home_no = #{rentalNo}
+    </select>
+
+    <update id="updateState">
+        UPDATE rental_home SET state=#{rentalState}
+        WHERE rental_home_no = #{rentalNo}
+    </update>
+
+    <select id="findAllByName" resultMap="RentalMap">
+        SELECT
+        rh.rental_home_no,
+        rh.name,
+        m.name as host_name,
+        m.member_no as host_no,
+        rh.registe_date,
+        rh.state
+        FROM rental_home rh
+        INNER JOIN member m ON rh.member_no = m.member_no
+        WHERE rh.state != '0'
+        AND rh.name like '%${keyword}%'
+    </select>
+
+    <select id="findAllByHostName" resultMap="RentalMap">
+        SELECT
+        rh.rental_home_no,
+        rh.name,
+        m.name as host_name,
+        m.member_no as host_no,
+        rh.registe_date,
+        rh.state
+        FROM rental_home rh
+        INNER JOIN member m ON rh.member_no = m.member_no
+        WHERE rh.state != '0'
+        AND m.name like '%${keyword}%'
+
     </select>
 </mapper>
