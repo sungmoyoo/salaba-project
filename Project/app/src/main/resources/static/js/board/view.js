@@ -1,9 +1,11 @@
 "use strict";
 
+let replyForm = $('#reply-form');
+let reportForm = $('#report-form')
+let boardNo = $("#boardNum").text(); // 게시글 번호
 // 댓글 작성
-$("#addCommendBtn").click(function (e) {
+$("#addCommentBtn").click(function (e) {
   e.preventDefault(); // 기본 이벤트 방지
-  let boardNo = $("#boardNum").text(); // 게시글 번호
   let input = $("#commentContent"); // 댓글 내용
   let content = input.val(); // 입력 필드에 값 가져오기
   if (content != "") { // 댓글 내용이 비어있지 않은 경우
@@ -29,7 +31,7 @@ $("#addCommendBtn").click(function (e) {
                                         <button class="report-btn comment-report-btn">신고</button>
                                     </div>
                                 </div>`);
-        $("#box").append(newComment); // 새 댓글 추가
+        $("#comment-box").append(newComment); // 새 댓글 추가
         input.val(""); // 새 댓글 입력 필드 비우기
         newComment.children().first().click(addReply);
         newComment.children().find(".del").click(deleteComment);
@@ -52,7 +54,11 @@ $(".del").click(deleteComment);
 $(".modi").click(modifyComment);
 
 //댓글 - 답글달기
-$(document.body).on(".comment-text").click(addReply);
+$('#comment-box').on('click', '.comment-text', addReply);
+
+$('#addReplyBtn').click(event => {
+  replyForm.addClass('form-hidden');
+});
 
 //대댓글 삭제
 $(".del2").click(deleteReply);
@@ -138,10 +144,20 @@ function modifyComment(e) {
   }
 }
 
+/*답글 달기*/ 
 function addReply(e) {
-  e.stopPropagation();
-  let replyForm = $(".replyForm");// 댓글에 대한 답글 폼 가져오기
-  let commentNo = $(this).find(".commentNo").text(); // 클릭한 댓글 번호
+  console.log('==============>');
+  $(e.currentTarget).parent().append(replyForm);
+  replyForm.removeClass('form-hidden');  
+  
+  //e.stopPropagation();
+  // console.log("이벤트 전파 중지 완료");
+
+  // let replyForm = $(".replyForm");// 댓글에 대한 답글 폼 가져오기
+  // console.log("현재 페이지의 답글 폼:", replyForm.length > 0 ? "Y" : "N");
+
+  // let commentNo = $(this).find(".commentNo").text(); // 클릭한 댓글 번호
+  // console.log(commentNo);
 
   if (
     replyForm.length != 0 &&
@@ -199,6 +215,7 @@ function addReply(e) {
   }
 }
 
+/* 답글 삭제 */
 function deleteReply(e) {
   let replyDiv = $(this).parent();
   let replyNo = replyDiv.find(".replyNo").text();
@@ -217,6 +234,7 @@ function deleteReply(e) {
   });
 }
 
+/* 답글 수정 */
 function modifyReply(e) {
   let replyDiv = $(this).parent();
   let modifyForm = $(".replyModifyForm");
@@ -311,28 +329,62 @@ likeButton.click(function () {
   });
 
 
-// 신고: 모달 사용
-$(document.body).on(".report-btn").click(function (event) {
-  console.log(event.target);
-/*
-  let targetNo = $(this).closest("form").find("input[name='targetNo']").val();
-  let targetType = $(this).closest("form").find("input[name='targetType']").val();
 
+
+// 신고창: 모달 사용
+$(document.body).on('click', '.report-btn', function (event) {
+   console.log(event.target);
+  let div = $(this).parent()
+  let targetNo = div.find('.textContent').find('.targetNo').text();
+
+  let targetType;
+
+  if (div.attr('class') == 'comment') {
+    targetType = 1;
+  } else if (div.attr('class') == 'reply'){
+    targetType = 2;
+  } else {
+    targetNo = boardNo;
+    targetType = 0;
+  }
   console.log("Target No:", targetNo);  
   console.log("Target Type:", targetType);  
+
+
 
   // 모달 내 신고 대상 번호와 타입을 업데이트
   $("#reportModal").find("input[name='targetNo']").val(targetNo);
   $("#reportModal").find("input[name='targetType']").val(targetType);
 
-  // 모달 열기s
+  // 모달 열기
   $("#reportModal").modal('show');
-*/
+
 });
 
 
-$('#reportModal').on('hidden.bs.modal', function (e) {
-  // 모달이 닫힐 때 입력된 내용을 초기화
-  $(this).find("input[name='targetNo']").val('');
-  $(this).find("input[name='targetType']").val('');
-});
+  // 신고 제출 버튼을 클릭했을 때 폼을 AJAX로 전송
+  $("#submitBtn").click(function(e) {
+      e.preventDefault(); // 기본 폼 제출을 막음
+
+      // 폼 데이터 수집
+      let formData = new FormData($("#reportForm")[0]);
+
+      $.ajax({
+          type: "POST",
+          url: "/board/report/add", 
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+              // 성공 콜백 함수
+              console.log("신고가 성공적으로 제출되었습니다.");
+              // 모달 닫기
+              $("#reportModal").modal("hide");
+              // 필요한 추가 로직
+          },
+          error: function(xhr, status, error) {
+              // 에러 콜백 함수
+              console.log("에러가 발생했습니다: ", error);
+          }
+      });
+  });

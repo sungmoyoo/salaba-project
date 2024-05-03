@@ -79,17 +79,4 @@ public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트�
     boardReportService.addReport(boardReport);
     return "redirect:/board/list?categoryNo=" + categoryNo;
   }
-
-  @GetMapping("/board/report/form")
-  public void report(
-      @RequestParam("targetNo") int targetNo,
-      @RequestParam("targetType") String targetType,
-      Model model)
-      throws Exception { // 신고 폼
-
-    log.debug("-----aa------" + targetNo);
-    log.debug("-----bb------" + targetType);
-    model.addAttribute("targetNo", targetNo);
-    model.addAttribute("targetType", targetType);
-  }
 }
