@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" type="text/css" href="/css/board/view.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/board/view.css">  
 </head>
 
 <body>
@@ -73,7 +76,7 @@
 <!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
   <form id="reply-form" class="form-hidden">
     <input hidden name="commentNo">
-    <textarea id="content" name="content"></textarea>
+    <textarea id="reply-content" name="content"></textarea>
     <button type="button" id="addReplyBtn">답글 달기</button>
   </form>
 
@@ -85,9 +88,8 @@
         <span class="commentNo" data-th-text="*{commentNo}"></span>
         <span>삭제된 댓글입니다.</span>
       </div>
-      <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
+      <div data-th-if="*{!#strings.equals(state,'1')}" class="comment" data-th-data-no="*{commentNo}" data-no="100">
         <div class="textContent comment-text">
-          <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
             <!--프로필사진-->
             <!-- <div>
               <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + ${member.photo}}" data-th-if="${member.photo}">
@@ -174,6 +176,7 @@
 
   <div data-th-replace="footer :: footer">꼬리말</div>
   <script data-th-src="@{/js/board/view.js}"></script>
+
   console.log(se);
 </script>
 </body>
