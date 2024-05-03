@@ -31,7 +31,7 @@ const chatFile = {
 
 // 채팅 내역
 const chatContent = [];
-let lastDate = '';
+let lastDate = 'ㅁ';
 
 function setChatContent(messageObj){
 
@@ -83,10 +83,6 @@ wss.on('connection', (ws) => {
       sendPreviousMessages(ws);
 
     } else{
-      // 이전 날짜와 다르면 변경된 날짜 출력
-      checkAndUpdateDate(messageObj.timestamp);
-      // 날짜 변환(오전 00:00)
-      messageObj.timestamp = formatTime(messageObj.timestamp);
       // 메시지를 파일에 저장
       saveMessage(messageObj);
       // 채팅 메시지 설정
@@ -198,40 +194,6 @@ async function uploadFile(){
     Body: fs.createReadStream(chatFile.chatFileFullPath) // 로컬에 있는 파일 지정
 }).promise();
 }
-
-// 시간 포맷팅 함수
-function formatTime(timestamp) {
-  const currentTime = new Date(timestamp);
-  let hours = currentTime.getHours();
-  let minutes = currentTime.getMinutes();
-
-  // 시간을 오전 또는 오후로 변환
-  const ampm = hours >= 12 ? '오후' : '오전';
-
-  hours = hours % 12;
-  hours = hours ? hours : 12; // 0시를 12시로 표시
-
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-
-  return `${ampm} ${hours}:${minutes}`;
-}
-
-function checkAndUpdateDate(timestamp) {
-
-    const newDate = new Date(timestamp);
-    const year = newDate.getFullYear();
-    const month = newDate.getMonth() + 1;
-    const day = newDate.getDate();
-    const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
-
-    // 이전에 저장된 날짜와 현재 날짜가 다른 경우에만 출력
-    if (formattedDate !== lastDate) {
-        // 채팅방에 날짜 출력하는 코드 추가
-//        ws.send(formattedDate);
-        lastDate = formattedDate; // 현재 날짜를 이전 날짜로 저장
-    }
-}
-
 
 server.listen(8889, () => {
   console.log("채팅 서버 시작 port : 8889");

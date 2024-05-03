@@ -4,15 +4,53 @@
   <meta charset="UTF-8">
   <title>숙소 관리 내역</title>
   <style>
-    tr {
-      cursor: pointer;
+
+
+    #mainContainer {
+      margin-top: 50px;
+      border: 1px solid #CCCCCC;
     }
-    tr:hover {
-      background-color: #c3e6cb; /* 민트색 */
-      transition-duration: 0.3s; /* 변화 시간 */
+
+    #titleContainer {
+      border: 1px solid #CCCCCC;
+      padding: 10px;
     }
-    tr:active {
-      background-color: #bee5eb; /* 하늘색 */
+
+    .contentContainer {
+      border: 1px solid #CCCCCC;
+      position: relative;
+      max-height: 150px;
+    }
+
+    .table {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table-row {
+      display: table-row;
+    }
+
+
+    .table-cell {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .table-header {
+      font-weight: bold;
+      text-align: right;
+      background-color: #f2f2f2;
+    }
+
+    .rentalHomePhoto {
+      width: 150px;
+    }
+  </style>
+
+
   </style>
 </head>
 
@@ -21,75 +59,78 @@
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
 <div align="center">
-  <table border="1">
-    <thead>
-    <tr>
-      <th>숙소명</th>
-      <th>수용 인원</th>
-      <th>주소</th>
-      <th>가격</th>
-      <th>상태</th>
-      <th>호스팅 시작일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr data-th-each="rentalHome : ${list}" data-th-object="${rentalHome}" class="rows"
-        data-th-data-no="${rentalHome.rentalHomeNo}">
-      <td><img
-          data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=80,h=80,ttype=jpg)}"
-          src="/photo1.jpg"></td>
-      <td id="no" data-th-text="*{name}"><a
-          href=""
-          onclick="return false;"></a></td>
-      <td data-th-text="*{capacity}">2</td>
-      <td data-th-text="*{address}">제주 서귀포시 ...</td>
-      <td data-th-text="*{price} + '/주'">100000/주</td>
-      <td class="status" data-th-data-state="*{state}"></td>
-      <td data-th-text="${#dates.format(rentalHome.hostingStartDate,'yyyy-MM-dd')}">2024-04-06</td>
-    </tr>
-    </tbody>
-  </table>
-</div>
 
-<br>
-<br>
-<br>
+  <div id="mainContainer">
+    <div id="titleContainer" class="table">
+      <div class="table-row table-header">
+        <div class="table-cell">숙소명</div>
+        <div class="table-cell">수용 인원</div>
+        <div class="table-cell">주소</div>
+        <div class="table-cell">가격</div>
+        <div class="table-cell">상태</div>
+        <div class="table-cell">호스팅 시작일</div>
+      </div>
+    </div>
 
-<div align="center">
-  <a data-th-href="@{hostStart}">새 숙소</a>
-</div>
-
-<div class="footer" data-th-replace="footer :: footer">꼬리말</div>
-<script data-th-inline="javascript">
+    <div data-th-each="rentalHome : ${list}" data-th-object="${rentalHome}" class="rows" data-th-data-no="${rentalHome.rentalHomeNo}">
+      <div class="contentContainer table">
+        <div class="table-row">
+          <div class="table-cell rentalHomePhoto">
+            <img class="content img" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=150,h=150,ttype=jpg)}" src="/photo1.jpg">
+          </div>
+          <div class="table-cell name" data-th-text="*{name}"><a href=""></a></div>
+          <div class="table-cell capacity" data-th-text="*{capacity}">2</div>
+          <div class="table-cell address" data-th-text="*{address}">제주 서귀포시 ...</div>
+          <div class="table-cell price" data-th-text="*{price} + '/주'">100000/주</div>
+          <div class="table-cell status" data-th-data-state="*{state}"></div>
+          <div class="table-cell hostingStartDate" data-th-text="${#dates.format(rentalHome.hostingStartDate,'yyyy-MM-dd')}">2024-04-06</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-  statusList = document.querySelectorAll('.status');
 
-  statusList.forEach((statusTd) => {
-    let state = statusTd.getAttribute('data-state');
-    switch (state) {
-      case '0':
-        statusTd.textContent = "등록 심사중";
-        break;
-      case '1':
-        statusTd.textContent = "운영중";
-        break;
-      case '2':
-        statusTd.textContent = "운영 중지";
-        break;
-      default:
-        statusTd.textContent = "등록 심사중";
-        break;
-    }
-  });
+  <br>
+  <br>
+  <br>
 
-  var el = document.querySelectorAll('tbody > tr');
+  <div align="center">
+    <a data-th-href="@{hostStart}">새 숙소</a>
+  </div>
 
-  for (var e of el) {
-    e.addEventListener("click", function(e) {
-      window.location.href = "rentalHomeView?rentalHomeNo=" + e.currentTarget.getAttribute("data-no");
+  <div class="footer" data-th-replace="footer :: footer">꼬리말</div>
+  <script data-th-inline="javascript">
+
+
+    statusList = document.querySelectorAll('.status');
+
+    statusList.forEach((statusTd) => {
+      let state = statusTd.getAttribute('data-state');
+      switch (state) {
+        case '0':
+          statusTd.textContent = "등록 심사중";
+          break;
+        case '1':
+          statusTd.textContent = "운영중";
+          break;
+        case '2':
+          statusTd.textContent = "운영 중지";
+          break;
+        default:
+          statusTd.textContent = "등록 심사중";
+          break;
+      }
     });
-  }
-</script>
+
+    var el = document.querySelectorAll('.content');
+
+    for (var e of el) {
+      e.addEventListener("click", function(e) {
+        window.location.href = "rentalHomeView?rentalHomeNo=" + e.currentTarget.getAttribute("data-no");
+      });
+    }
+  </script>
+</div>
 </body>
 </html>
