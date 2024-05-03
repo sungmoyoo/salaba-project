@@ -113,6 +113,7 @@ h1 {
   display: flex;
   justify-content: center; /* 좋아요 버튼 중앙 정렬 */
   pointer-events: auto; /* 하트 버튼 영역에 대한 이벤트 활성화 */
+  margin-bottom: 30px;
 }
 
 .heart-btn.active i.fa-regular {
@@ -158,30 +159,46 @@ h1 {
   display: none; /*구현 시 숨기기*/
 }
 
-/*댓글*/
+/*댓글 작성하기*/
 #comment-form {
-  margin-top: 30px;
-  margin-bottom: 30px;
+  border: 1px solid #ccc; /* 테두리 스타일과 색상 설정 */
+  padding: 10px; /* 내부 여백 설정 */
+  height: 100px;
+  width: 80%; /* 폼의 너비 설정 */
+  margin: left;
+  margin-left: 20px;
+  background-color: #f9f9f9; /* 배경색 설정 */
+}
+
+/*댓글,답글 리스트*/
+#comment-box {
+  background-color: #c5c4c4; /* 연한 회색 */
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  width: 80%;
+  text-align: left;
+  overflow: hidden;
 }
 
 .comment {
   border: 1px solid #454545; /* 테두리 스타일과 색상 */
   margin-top: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #fdfdfd; /*댓글 경계선 묶기*/
   padding: 10px;
   margin-bottom: 10px;
+  border-radius: 2px; /* 테두리 모서리 둥글게 */
 }
 
 /*댓글 내용*/
 .comment-text {
   display: inline-block;
-  
 }
 
 .commentContent {  
   border: 1px solid black;
-  width: 100px;
-  height: 100px;
+  width: 300px;
+  height: 450px; 
 }
 
 .comment-date {
@@ -190,20 +207,50 @@ h1 {
 
 /*답글*/
 .reply {
-  border: 0.3px solid #ccc;
+  border: 1px solid #ccc;
   padding: 5px;
+  border: 1px solid #fdfdfd; /*댓글 경계선 묶기*/
   margin-bottom: 5px;
-  margin-left: 20px; /* 답글 들여쓰기. */
+  border-radius: 2px; /* 테두리 모서리 둥글게 */
+  margin-left: 30px; /* 답글 들여쓰기 */
+}
+
+.reply-content {
+  width: 100%;
+  box-sizing: border-box; 
+  resize: none; 
+}
+
+.reply-date {
+  color: gray;
 }
 
 /* 답글 폼 */
-#reply-form {
-  border: 1px solid red;
-}
-
 /*평소에 폼 숨기기 -> 이벤트 발생 시 나타나는 폼*/
 .form-hidden {
   display: none;
+  width: 100px;
+  height: 80px;
+  overflow: hidden;
+}
+#replyForm {
+  width: 200px;
+  height: 80px;
+  overflow: hidden;
+}
+
+/* 삭제, 수정, 신고 버튼 */
+.del, .del2, .modi, .modi2, .comment-report-btn, .reply-report-btn {
+  border: 1px solid #fff;
+}
+
+#addReplyBtn {
+  border: 1px solid #fff;
+  float: right; 
+}
+
+#addCommentBtn {
+  border: 1px solid #fff;
 }
 
 /*신고 폼 내부 디자인: 내용*/

@@ -62,66 +62,44 @@ $("#comment-box").on("click", ".comment-text", addReplyForm);
 
 $("#addReplyBtn").click((event) => {
   let commentNo = replyForm.parent().attr("data-no");
-  let replyContent = $("#replyContent").val();
-  console.log(commentNo, replyContent);
-  //   // AJAX 요청
-
+  let replyContent = $("#reply-content").val();
+  
+    // AJAX 요청
   //빈댓글 작성 금지
   if (replyContent != "") {
+    console.log(commentNo, replyContent);
     $.ajax({
       url: "/board/reply/add",
       type: "POST",
       dataType: "json",
       data: {
         commentNo: commentNo,
-        content: replyContent,
+        content: replyContent
       },
       success: function (data) {
-        //기존의 답글달기 폼을 안보여준다.
+        console.log(data);
+        // 기존의 답글달기 폼을 안보여준다.
         replyForm.addClass("form-hidden");
-
-        let newReply = $(`<div class="reply">
-                                            <span class="replyNo" hidden>${data.replyNo}</span>
+                  let newReply = $(`<div>
+                                      <div class="reply">
+                                      └ <div class="textContent comment-text">
+                                            <span class="targetNo replyNo" hidden>${data.replyNo}</span>
                                             <span>${data.writer.nickname}</span>
                                             <span class="replContent">${data.content}</span>
                                             <span>${data.createdDate}</span>
                                             <button class="del2">삭제</button>
                                             <button class="modi2">수정</button>
                                             <button class="report-btn reply-report-btn">신고</button>
-                                        </div>`);
+                                        </div>
+                                      </div>
+                                    </div>`);
+        $(this).parents('.reply-box').append(newReply);
+        console.log(newReply);
 
-
-
-<div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
-          <div class="reply">
-            └ <div class="textContent comment-text">
-              <span class="targetNo replyNo" data-th-text="*{replyNo}" hidden></span>
-              <!--프로필사진-->
-              <!-- <div>
-                <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + ${member.photo}}" data-th-if="${member.photo}">
-                  <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + ${member.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-                <a data-th-unless="${member.photo}" href='/img/default-photo.jpeg'>
-                  <img height='80px' src='/img/default-photo.jpeg'></a><br>
-                <input name='file' type='file'>
-              </div>  -->
-              <span data-th-text="*{writer.nickname}">댓글 작성자</span>
-              <span class="replContent" data-th-text="*{content}">댓글 내용</span>
-              <span data-th-text="*{createdDate}">댓글 작성시간</span>
-            </div>
-              <button class="del2">삭제</button>
-              <button class="modi2">수정</button>
-              <button type="button" class="report-btn reply-report-btn">신고</button>
-          </div>
-        </div>
-
-
-
-
-
-
-        .parent().append(newReply);
+    
         newReply.find(".del2").click(deleteReply);
         newReply.find(".modi2").click(modifyReply);
+
       },
       error: function () {
         window.alert("권한이 없습니다.");
@@ -131,9 +109,10 @@ $("#addReplyBtn").click((event) => {
     alert("내용을 작성하세요");
   }
 
-  replyForm.addClass("form-hidden");
-  $("#replyContent").val(""); // 내용 지우기
+  // replyForm.addClass("form-hidden");
+  // $("#replyContent").val(""); // 내용 지우기
 });
+
 
 //대댓글 삭제
 $(".del2").click(deleteReply);
@@ -326,7 +305,6 @@ likeButton.click(function () {
 });
 
 // beforeunload 이벤트 핸들러 추가
-
 $(window).on("beforeunload", function () {
   let url = myLikeCount === 1 ? "/board/like" : "/board/unlike";
   let boardNo = $("#boardNo").val();
@@ -384,7 +362,9 @@ $("#submitBtn").click(function (e) {
       console.log("신고가 성공적으로 제출되었습니다.");
       // 모달 닫기
       $("#reportModal").modal("hide");
-      // 필요한 추가 로직
+      // 신고창 초기화
+      $("#reportForm")[0].reset();
+
     },
     error: function (xhr, status, error) {
       // 에러 콜백 함수
@@ -392,3 +372,4 @@ $("#submitBtn").click(function (e) {
     },
   });
 });
+

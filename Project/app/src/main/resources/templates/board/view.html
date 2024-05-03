@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/css/board/view.css">  
+  <link rel="stylesheet" type="text/css" href="/css/common.css">  
 </head>
 
 <body>
@@ -66,13 +67,6 @@
     </button>
   </div>
 
-  <!--댓글 달기 폼-->
-  <form id="comment-form" method="post">
-    <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
-    <input id="commentContent" name="content" type="textarea">
-    <button id="addCommentBtn">댓글 작성</button>
-  </form>
-
 <!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
   <form id="reply-form" class="form-hidden">
     <input hidden name="commentNo">
@@ -88,16 +82,11 @@
         <span class="commentNo" data-th-text="*{commentNo}"></span>
         <span>삭제된 댓글입니다.</span>
       </div>
-      <div data-th-if="*{!#strings.equals(state,'1')}" class="comment" data-th-data-no="*{commentNo}" data-no="100">
+      <div data-th-if="*{!#strings.equals(state,'1')}" class="comment"> <!--data-th-data-no="*{commentNo}" data-no="100"--> 
         <div class="textContent comment-text">
+          <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
             <!--프로필사진-->
-            <!-- <div>
-              <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + ${member.photo}}" data-th-if="${member.photo}">
-                <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + ${member.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-              <a data-th-unless="${member.photo}" href='/img/default-photo.jpeg'>
-                <img height='80px' src='/img/default-photo.jpeg'></a><br>
-              <input name='file' type='file'>
-            </div>  -->
+              <img height='40px' src='/img/default-photo.jpeg'></a><br>
           <span data-th-text="*{writer.nickname}">댓글 작성자</span>
           <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
           <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span>
@@ -113,16 +102,10 @@
             └ <div class="textContent comment-text">
               <span class="targetNo replyNo" data-th-text="*{replyNo}" hidden></span>
               <!--프로필사진-->
-              <!-- <div>
-                <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + ${member.photo}}" data-th-if="${member.photo}">
-                  <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + ${member.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-                <a data-th-unless="${member.photo}" href='/img/default-photo.jpeg'>
-                  <img height='80px' src='/img/default-photo.jpeg'></a><br>
-                <input name='file' type='file'>
-              </div>  -->
+              <img height='40px' src='/img/default-photo.jpeg'></a><br>
               <span data-th-text="*{writer.nickname}">댓글 작성자</span>
               <span class="replContent" data-th-text="*{content}">댓글 내용</span>
-              <span data-th-text="*{createdDate}">댓글 작성시간</span>
+              <span class="reply-date" data-th-text="*{createdDate}">댓글 작성시간</span>
             </div>
               <button class="del2">삭제</button>
               <button class="modi2">수정</button>
@@ -133,6 +116,12 @@
     </div>
   </div>
   
+  <!--댓글 달기 폼-->
+  <form id="comment-form" method="post">
+    <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
+    <input id="commentContent" name="content" type="textarea">
+    <button id="addCommentBtn">댓글 작성</button>
+  </form>
 
   <!-- 신고: 모달 컨테이너 -->
   <div id="reportModal" class="modal fade" tabindex="-1" role="dialog">
@@ -146,8 +135,8 @@
         <div class="modal-body">
           <!--신고 폼 화면-->
           <form id="reportForm" action="add" enctype='multipart/form-data' method='post'>
-            <input id="targetTypeInput" name='targetType' type='hidden'>
-            <input id="targetNoInput" name='targetNo' type='hidden'>
+            <input id="targetTypeInput" name='targetType' type='text'>
+            <input id="targetNoInput" name='targetNo' type='text'>
             <div>
               신고 유형: <select name="categoryNo">
                 <option value="1">스팸홍보/도배</option>
@@ -171,13 +160,13 @@
       </div>
     </div>
   </div>
+  
   <!-- 페이지 맨 위로 올라가기-->
   <button id="scrollToTopBtn" onclick="scrollToTop()">🔝</button>
 
   <div data-th-replace="footer :: footer">꼬리말</div>
   <script data-th-src="@{/js/board/view.js}"></script>
-
-  console.log(se);
+  <script data-th-src="@{/js/common/alarm.js}"></script>
 </script>
 </body>
 </html>

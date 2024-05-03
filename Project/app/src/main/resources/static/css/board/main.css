@@ -7,14 +7,12 @@
   align-items: center; /* 가로축 기준 중앙 정렬 */
 }
 
-
-
 /* 정보공유, 자유게시판 행 클릭 이벤트 */
-  tbody tr:hover {
-    background-color: lightgray;
-    color: white;
+tbody tr:hover {
+  background-color: lightgray;
+  color: white;
   cursor: pointer;
-  }
+}
 
 /* 후기게시판 행 클릭 이벤트 */
   tbody tr:hover, .card:hover {
@@ -57,9 +55,9 @@
 
 /* 후기게시판 - 카드 형식으로 조회 */
 .card-deck {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start; /* 가운데 정렬 */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* 가운데 정렬 */
 }
 
 .card {
@@ -157,8 +155,10 @@ h3 a {
     margin-right: 20px; /* 버튼 사이의 간격을 20px로 설정 */
     margin-left: 20px; /* 처음 버튼의 왼쪽 간격도 20px로 설정 */
     padding: 10px 20px;      /* 내부 패딩 */
-    border-radius: 3px; /* 둥근 모서리 */
-    background-color: #E6E0F8;
+    border-radius: 5px; /* 둥근 모서리 */
+    background-color: #35C5B3; /*로고 색상*/
+    border: 2px solid rgb(206, 243, 222);
+    color: white;
     position: relative;
 }
 
