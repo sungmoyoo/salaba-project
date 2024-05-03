@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/css/list.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <header class="x-page-header"></header>
+    <!-- <div data-th-replace="header :: header">헤더</div> -->
+    <div data-th-replace="sidebar :: sidebar">사이드바</div>
+    <div class="container">
+      <h3 data-th-text="${menuName}">메뉴 이름</h3>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>신고유형</th>
+            <th>처리여부</th>
+            <th>접수일</th>
+            <th>상세 보기</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <td colspan="10" class="tablefoot"></td>
+        </tfoot>
+      </table>
+    </div>
+    <div data-th-replace="footer :: footer">풋터</div>
+
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent">
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+      </div>
+      <button type="button" id="closeBtn">✕</button>
+    </div>
+
+    <script id="tr-template" type="text/x-handlebars-template">
+      {{#each data}}
+      <tr data-th-each="report : ${list}" data-th-object="${report}">
+            <td>{{reportNo}}</td>
+            <td>{{categoryName}}</td>
+            <td>{{stateStr}}</td>
+            <td>{{reportDate}}</td>
+            <td>
+              <button
+                data-th-href="@{detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}"
+                class="view">
+                view
+              </button>
+            </td>
+          </tr>
+      {{/each}}
+    </script>
+
+
+    <script>
+      "use strict"
+      const body = $('tbody');
+
+      (function() {
+        axios.get
+      })
+    </script>
+    <script data-th-src="@{/js/list.js}"></script>
+  </body>
+</html>
+
+
