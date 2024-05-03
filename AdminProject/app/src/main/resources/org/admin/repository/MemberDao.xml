@@ -123,7 +123,7 @@
     ]]>
     </select>
 
-    <update id="updateWarningCount">
+    <update id="updateWarningCountBy">
         UPDATE member
         SET warning_count = warning_count + 1
         WHERE member_no = (
@@ -131,5 +131,94 @@
         FROM board_report_detail
         WHERE report_no = #{reportNo}
         );
+    </update>
+
+    <update id="updateWarningCount">
+        UPDATE member
+        SET warning_count = warning_count + 1
+        WHERE member_no = #{memberNo};
+    </update>
+
+    <select id="findMemberByName" resultMap="MemberMap">
+        SELECT
+        member_no,
+        name,
+        email,
+        nickname,
+        tel_no,
+        join_date,
+        state
+        FROM member
+        WHERE name like '%${keyword}%'
+    </select>
+
+    <select id="findMemberByEmail" resultMap="MemberMap">
+        SELECT
+        member_no,
+        name,
+        email,
+        nickname,
+        tel_no,
+        join_date,
+        state
+        FROM member
+        WHERE email like '%${keyword}%'
+    </select>
+
+    <select id="findHostByName" resultMap="MemberMap">
+        SELECT
+        m.member_no,
+        m.name,
+        m.email,
+        m.nickname,
+        m.tel_no,
+        m.join_date,
+        m.state,
+        (
+        select
+        count(rh.rental_home_no)
+        from
+        rental_home rh
+        where m.member_no = rh.member_no
+        ) as rental_count
+        FROM member m
+        WHERE
+        (
+        SELECT COUNT(rh.rental_home_no)
+        FROM rental_home rh
+        WHERE m.member_no = rh.member_no
+        ) > 0
+        AND name like '%${keyword}%'
+    </select>
+
+    <select id="findHostByEmail" resultMap="MemberMap">
+        SELECT
+        m.member_no,
+        m.name,
+        m.email,
+        m.nickname,
+        m.tel_no,
+        m.join_date,
+        m.state,
+        (
+        select
+        count(rh.rental_home_no)
+        from
+        rental_home rh
+        where m.member_no = rh.member_no
+        ) as rental_count
+        FROM member m
+        WHERE
+        (
+        SELECT COUNT(rh.rental_home_no)
+        FROM rental_home rh
+        WHERE m.member_no = rh.member_no
+        ) > 0
+        AND email like '%${keyword}%'
+    </select>
+
+    <update id="updateGrade">
+        UPDATE member set grade_no = #{grade}
+        WHERE member_no = #{memberNo}
     </update>
 </mapper>

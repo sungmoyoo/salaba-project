@@ -3,30 +3,31 @@ package salaba.dao;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import salaba.vo.Alarm;
 import salaba.vo.Member;
 import salaba.vo.Nation;
-import salaba.vo.rental_home.Theme;
+
 
 @Mapper
 public interface MemberDao {
 
-  public void add(Member member);
+  void add(Member member);
 
-  public Member selectMemberInfo(int no);
+  Member selectMemberInfo(int no);
 
-  public int myinfoUpdate(Member member);
+  int myinfoUpdate(Member member);
 
-  public Member checkNickname(String nickname);
+  Member checkNickname(String nickname);
 
-  public List<Nation> getNation();
+  List<Nation> getNation();
 
-  public int delete(Member member);
+  int delete(Member member);
 
-  public Member findByEmailAndPassword(
+  Member findByEmailAndPassword(
       @Param("email") String email,
       @Param("password") String password);
 
-  public Member findEmail(Member member);
+  Member findEmail(Member member);
 
   public Member findPassword(Member member);
 
@@ -34,9 +35,9 @@ public interface MemberDao {
 
   public Member myinfoCheckPassword(Member member);
 
-  public void insertPreference(Member member);
+  void insertPreference(Member member);
 
-  public void deletePreference(Member member);
+  void deletePreference(Member member);
 
   List<Member> findAllTheme(Member sessionInfo);
 
@@ -45,4 +46,10 @@ public interface MemberDao {
   Member getGrade(Member member);
 
   List<Member> findAllmyTheme(Member sessionInfo);
+
+  void addNotifyHistory(Alarm alarm);
+
+  List<Alarm> selectNotifyHistory(int memberNo);
+
+  void updateNotifyHistory(char state, int notifyNo);
 }

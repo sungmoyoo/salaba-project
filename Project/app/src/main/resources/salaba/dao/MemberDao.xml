@@ -32,6 +32,13 @@
     <result column="nation_name" property="nationName"/>
   </resultMap>
 
+  <resultMap id="AlarmMap" type="salaba.vo.Alarm">
+    <id column="notify_no" property="notifyNo"/>
+    <result column="member_no" property="memberNo"/>
+    <result column="content" property="content"/>
+    <result column="notify_date" property="notifyDate"/>
+  </resultMap>
+
   <insert id="add" parameterType="Member"><!--회원가입>-->
     insert into member(
       name,
@@ -226,4 +233,32 @@
       member_no = #{no}
   </delete>
 
+  <select id="selectNotifyHistory" resultMap="AlarmMap">
+    select
+      notify_no,
+      member_no,
+      content,
+      notify_date
+    from
+      notify_history
+    where
+      member_no = #{memberNo} and
+      state = '0'
+  </select>
+
+  <insert id="addNotifyHistory" parameterType="salaba.vo.Alarm">
+    insert into notify_history
+      (member_no,content)
+    values
+      (#{memberNo},#{content})
+  </insert>
+
+  <update id="updateNotifyHistory">
+    update
+      notify_history
+    set
+      state = #{state}
+    where
+      notify_no = #{notifyNo}
+  </update>
 </mapper>

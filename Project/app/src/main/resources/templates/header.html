@@ -5,15 +5,75 @@
   <title>사라바</title>
 </head>
 <body>
-
 <header data-th-fragment="header">
-  <img
-      src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
-  <a data-th-href="@{/home}" href="/home">한달살기</a>
-  <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
-  <a data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="/member/myinfoCheckPassword">마이페이지</a>
-  <a data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
-  <a data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
-
+  <div class="logo-div">
+    <a class="logo-link" data-th-href="@{/main}">
+      <img
+          src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
+    </a>
+  </div>
+  <div class="main-menu">
+    <div class="main-menu-item">
+      <span class="main-menu-item-s">
+        <a data-th-href="@{/main}" href="/main">한달살기</a>
+      </span>
+    </div>
+    <div class="main-menu-item">
+      <span class="main-menu-item-s">
+        <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
+      </span>
+    </div>
+  </div>
+  <div class="userInfo-container">
+    <button class="userInfo-button">
+      <div class="userInfo-button-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+          <g fill="none">
+            <path d="M2 16h28M2 24h28M2 8h28"></path>
+          </g>
+        </svg>
+      </div>
+      <div class="userInfo-button-photo">
+        <img data-th-if="${session.loginUser == null}" data-th-src="@{/img/default-photo.jpeg}" width="32px" height="32px">
+        <img data-th-if="${session.loginUser != null}" 
+        data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' +${session.loginUser.photo}+ .jpg(type=f,w=20,h=20,ttype=jpg)}">
+      </div>
+      <div class="userInfo-menu">
+        <span class="userInfo-menu-item">
+          <a class="userInfo-menu-item" data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="/member/myinfoCheckPassword">마이페이지</a>
+        </span>
+        <span class="userInfo-menu-item">
+          <a class="userInfo-menu-item" data-th-href="@{/host/hostCheck}" data-th-if="${session.loginUser != null}">호스트 전환</a>
+        </span>
+        <span class="userInfo-menu-item">
+          <a class="userInfo-menu-item" data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
+        </span>
+        <span class="userInfo-menu-item">
+          <a class="userInfo-menu-item" data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
+        </span>
+      </div>
+    </button>
+  </div>
+  <section>
+    <div class="search-container">
+      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
+        <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
+        <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
+        <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
+        <input class="search-input" type="number" name="capacity" id="guests" placeholder="인원">
+        <button class="search-button" type="submit">검색</button>
+      </form>
+    </div>
+  </section>
 </body>
+<script data-th-inline="javascript">
+  let sessionInfo = /*[[${session.loginUser}]]*/ '';
+</script>
+<script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script>
+<script data-th-src="@{/js/header.js}"></script>
+<script>
+  const se = sessionInfo;
+  console.log(se);
+</script>
+
 </html>
