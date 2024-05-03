@@ -23,7 +23,7 @@ axios.get('/sidebar.html', {
     responseType: 'text'
 })
 .then((response) => {
-    $('header').html(response.data)
+    $('sidebar').html(response.data)
 })
 
 // function loadUserInfo() {

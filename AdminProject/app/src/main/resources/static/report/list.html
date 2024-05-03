@@ -10,8 +10,8 @@
 
   <body>
     <header class="x-page-header"></header>
-    <!-- <div data-th-replace="header :: header">헤더</div> -->
-    <div data-th-replace="sidebar :: sidebar">사이드바</div>
+    <sidebar class="x-page-sidebar"></sidebar>
+
     <div class="container">
       <h3 data-th-text="${menuName}">메뉴 이름</h3>
       <table border="1">
@@ -21,7 +21,6 @@
             <th>신고유형</th>
             <th>처리여부</th>
             <th>접수일</th>
-            <th>상세 보기</th>
           </tr>
         </thead>
         <tbody>
@@ -31,7 +30,6 @@
         </tfoot>
       </table>
     </div>
-    <div data-th-replace="footer :: footer">풋터</div>
 
     <div id="detailModal" class="modal">
       <div class="modal-content" id="modalContent">
@@ -48,26 +46,34 @@
             <td>{{stateStr}}</td>
             <td>{{reportDate}}</td>
             <td>
-              <button
-                data-th-href="@{detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}"
-                class="view">
-                view
-              </button>
+              <button data-th-href="@{detail(no=*{targetNo},type=*{targetType},mno=*{reporter.memberNo})}" class="view">view</button>
             </td>
           </tr>
       {{/each}}
     </script>
 
+    <script src="/js/list.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/page-init.js"></script>
 
     <script>
       "use strict"
-      const body = $('tbody');
+      const tbody = $('tbody');
 
       (function() {
-        axios.get
-      })
+        axios.get(`${RESTAPI_HOST}/report/list/${pageContext.params.get("menu")}/`)
+        .then((response) => {
+          let result = response.data;
+          console.log(result);
+          if (response.status == "failure") {
+            alert(response.error);
+            return;
+          }
+          var trTemplate = Handlebars.compile($("#tr-template").html());
+          $("tbody").html(trTemplate(result));
+        })
+      })()
     </script>
-    <script data-th-src="@{/js/list.js}"></script>
   </body>
 </html>
 

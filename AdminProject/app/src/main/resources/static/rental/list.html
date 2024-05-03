@@ -6,11 +6,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="/js/list.js"></script>
-    <script src="/js/common.js"></script>
-    <script src="/js/page-init.js"></script>
 </head>
 <body>
+    <header class="x-page-header"></header>
+    <sidebar class="x-page-sidebar"></sidebar>
 <div class="container">
 <h3 data-th-text="${menuName}">메뉴 이름</h3>
 <form>
@@ -32,7 +31,6 @@
         <th data-th-if="${#strings.equals(menuName, '등록된 숙소 목록')}">호스트명</th>
         <th>등록일</th>
         <th>상태</th>
-        <th>상세 보기</th>
 
     </tr>
     </thead>
@@ -43,7 +41,6 @@
     </tfoot>
 </table>
 </div>
-<div data-th-replace="footer :: footer">풋터</div>
 
 <div id="detailModal" class="modal">
     <div class="modal-content" id="modalContent">
@@ -66,6 +63,9 @@
     {{/each}}
 </script>
 
+<script src="/js/list.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/page-init.js"></script>
 
 <script>
     "use strict"
@@ -88,9 +88,10 @@
             $('.rowItem').click(function() {
                 let modal = $('#detailModal').find('.modal-content');
                 let rentalNo = $(this).find('.rentalNo').text();
-
-                modal.load('/rental/detail.html');
-                console.log(rentalNo);
+                console.log(rentalNo, modal);
+                // modal.load('/detail.html', () => {
+                //     console.log("modal!")
+                // });
                     // axios.get(`${RESTAPI_HOST}/rental/view/${pageContext.params.get("menu")}/${rentalNo}`)
                     // .then((response) => {
                     //     let result = response.data;
@@ -98,7 +99,7 @@
                     // })
             
             
-        })
+            })
             
         });
     })();

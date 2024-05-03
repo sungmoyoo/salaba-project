@@ -20,7 +20,7 @@ public class MemberManageController {
     private static final Log log = LogFactory.getLog(ReportManageController.class);
     private final MemberService memberService;
     @GetMapping("/list/{menu}")
-    public RestResult userList(@PathVariable int menu) {
+    public RestResult memberList(@PathVariable int menu) {
         switch (menu) {
             case 1:
 
@@ -43,7 +43,7 @@ public class MemberManageController {
 
 
     @GetMapping("/view/{memberNo}/{menu}")
-    public RestResult userView(@RequestParam("mno") int memberNo,
+    public RestResult memberView(@RequestParam("mno") int memberNo,
                              @RequestParam("menu") int menu) {
 
         switch (menu) {
@@ -66,7 +66,7 @@ public class MemberManageController {
     }
 
     @GetMapping("/search/{keyword}/{filter}/{menu}")
-    public RestResult searchUser(@PathVariable String keyword,
+    public RestResult searchMember(@PathVariable String keyword,
                              @PathVariable String filter,
                              @PathVariable int menu) {
 
