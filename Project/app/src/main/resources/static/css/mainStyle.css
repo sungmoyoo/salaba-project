@@ -1,3 +1,13 @@
+/* <uniquifier>: Use a unique and descriptive class name */
+/* <weight>: Use a value from 100 to 900 */
+
+  html{
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
   header{
     position: fixed;
     top:0;
@@ -14,12 +24,11 @@
 
   body {
     height: 100vh;
-    font-family: Arial, sans-serif;
   }
 
   main{
     position: absolute;
-    top: 312px;
+    top: 332px;
     bottom: 100px;
     width: 100%;
     height: calc(100vh - 240px - 100px);
@@ -31,7 +40,6 @@
     width: 1920px;
   }
 
-
   html,body{
     height: 100%;
     margin: 0;
@@ -42,18 +50,22 @@
   .theme-section{
     position: fixed;
     top: 240px;
-    width: 82%;
-    padding-top:10px;
-    padding-left:65px;
+    width: 100%;
+    border-top: 0.5px solid #cccccc;
+    padding-top: 14px;
+    display: flex;
     z-index: 1000;
   }
 
   .theme-container{
     display: flex;
     overflow-x: hidden;
-    white-space: nowrap;
     align-items: center;
     position: relative;
+    overflow: hidden;
+    white-space: normal;
+    width: 83%;
+    left: 66px;
   }
 
   .theme-icon-container{
@@ -61,8 +73,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 12px;
+    margin-bottom: 10px;
     margin-left: 20px;
     margin-right: 20px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     width: 56px;
     height: 48px;
     flex-shrink: 0;
@@ -83,41 +99,79 @@
     text-align: center;
     text-decoration: none;
     color: inherit;
-    font-size: small;
   }
 
   .theme-name{
-    display: inline-block;
+    display: flex;
     margin-top: 2px;
-    word-break: break-all;
+    font-size: small;
+    white-space: nowrap;
   }
 
   .scroll-right-button{
     position: fixed;
-    right: 170px;
+    right: 150px;
     transform:translateY(-10%);
-    border-radius: 10px;
+    border-radius: 20px;
+    border: 1px solid #cccccc;
     background-color: #FFFFFF;
     z-index: 1;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18;
+    width: 28px;
+    height: 28px;
+    padding: 0px;
   }
 
   .scroll-left-button{
     position: fixed;
     left: 65px;
     transform: translateY(-10%);
-    border-radius: 10px;
+    border-radius: 20px;
+    border: 1px solid #cccccc;
     background-color: #FFFFFF;
     z-index: 1;
-    width: 30px;
-    height: 30px;
-    text-align: center;
+    width: 28px;
+    height: 28px;
+    padding: 0px;
+  }
+
+  .scroll-left-button span,
+  .scroll-right-button span{
+    display: flex;
+    justify-content: center;
+  }
+  
+
+  /* 필터버튼 스타일 */
+  .filter{
+    position: fixed;
+    right: 50px;
+    transform:translateY(20%);
+  }
+
+  .filter-button{
+    width: 82px;
+    height: 48px;
+    background-color: #FFFFFF;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
     font-weight: bold;
-    font-size: 18;
+    font-size: 15px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .filter-button-span{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 10px;
+  }
+  
+  .filter-button-span span{
+    margin-left: 5px;
   }
 
   /* 숙소 목록 */
@@ -132,6 +186,7 @@
     margin: 20px auto; /* 중앙 정렬 */
     margin-left: 20px;
     margin-right: 20px;
+    padding-top: 16px;
     padding-left: 30px;
     display: flex;
     flex-wrap: wrap;
@@ -143,7 +198,6 @@
     height: 300px; /* 수정된 부분: listing-item의 높이를 300px로 지정 */
     margin-right: 20px; /* 수정된 부분: 우측 여백 추가 */
     margin-bottom: 20px; /* 수정된 부분: 하단 여백 추가 */
-    border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     position: relative;
@@ -155,15 +209,23 @@
     height: 100%; /* 수정된 부분: slider의 높이를 100%로 지정 */
   }
 
-  .listing-text{
+  .listing-slider img{
+    border-radius: 15px;
+  }
+
+  .listing-item-content{
     display: inline-flex;
-    margin-top: 10px;
-    margin-left: 10px;
+    flex-direction: column;
   }
 
   .listing-text{
-    font-family: 'Circular', sans-serif;
-    font-weight: 600;
+    display: inline-flex;
+    font-weight: bold;
+  }
+
+  .listing-price{
+    font-size: 14px;
+    font-weight: 200;
   }
 
   /* 여기부터 사진에 있는 버튼 부분 */
@@ -172,16 +234,13 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     background-color: rgba(255, 255, 255, 0.5);
     border: none;
     border-radius: 50%;
     cursor: pointer;
     z-index: 2;
-    font-size: 20px;
-    line-height: 30px;
-    color: rgba(0, 0, 0, 0.54);
   }
 
   .prev-button {
@@ -192,9 +251,10 @@
     right: 10px;
   }
 
-  /* 필터 스타일 */
-  .filter{
-    display: inline-flex;
+  .prev-button span,
+  .next-button span{
+    display: flex;
+    justify-content: center;
   }
 
   /* 팝업 스타일 */
@@ -216,12 +276,12 @@
     border-radius: 20px;
     margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #cccccc;
     width: 60%;
   }
   
   .close-button {
-    color: #aaa;
+    color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -232,6 +292,36 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  /* 지도보기 / 목록보기 버튼 */
+  #mapButton{
+    position: fixed;
+    width: 150px;
+    height: 50px;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 18px;
+    border-radius: 20px;
+  }
+
+  .mapButton-span{
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mapButton-icon{
+    margin-left: 8px;
+  }
+
+  .mapButton-icon svg{
+    --linaria-theme_palette-white: #ffffff;
   }
 
   /* 구글맵 마커 css */
@@ -313,9 +403,14 @@
     height: 50px;
   }
 
-
   .mapSlide-container{
     display: none;
     flex-direction: column;
     flex: 1;
+  }
+
+
+  /* footer 경계선 스타일 */
+  footer{
+    border-top: 1px solid #cccccc;
   }

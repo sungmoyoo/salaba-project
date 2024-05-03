@@ -7,24 +7,45 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <link rel="stylesheet" type="text/css" href="/css/mainStyle.css">
   <link rel="stylesheet" type="text/css" href="/css/common.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
   <div data-th-replace="header :: header">header</div>
 <main>
   <section class="theme-section">
     <div class="theme-container">
-      <button class="scroll-left-button"onclick="scrollThemes(-480)">&lt;</button>
+      <button class="scroll-left-button"onclick="scrollThemes(-480)">
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+            <path fill="none" d="M20 28 8.7 16.7a1 1 0 0 1 0-1.4L20 4"></path>
+          </svg>
+        </span>
+      </button>
       <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
         <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
           <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
           <span class="theme-name" data-th-text="${theme.themeName}"></span>
         </a>
       </div>
-      <button class="scroll-right-button" onclick="scrollThemes(480)">&gt;</button>
+      <button class="scroll-right-button" onclick="scrollThemes(480)">
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+            <path fill="none" d="m12 4 11.3 11.3a1 1 0 0 1 0 1.4L12 28"></path>
+          </svg>
+        </span>
+      </button>
     </div>
     <div class="filter">
-      <button class="filter-button" onclick="openFilterPopup()">필터</button>
+      <button class="filter-button" onclick="openFilterPopup()">
+        <span class="filter-button-span">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+            <path fill="none" d="M7 16H3m26 0H15M29 6h-4m-8 0H3m26 20h-4M7 16a4 4 0 1 0 8 0 4 4 0 0 0-8 0zM17 6a4 4 0 1 0 8 0 4 4 0 0 0-8 0zm0 20a4 4 0 1 0 8 0 4 4 0 0 0-8 0zm0 0H3"></path>
+          </svg>
+          <span>필터</span>
+        </span>
+      </button>
     </div>
   </section>
   <section class="slider-container">
@@ -35,14 +56,29 @@
             <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
                  data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
           </a>
-          <button class="slide-button prev-button">&lt;</button>
-          <button class="slide-button next-button">&gt;</button>
-          <div class="listing-text">
-            <span data-th-text="${rentalHome.name}">숙소 이름</span>
-          </div>
-          <div class="listing-text">
-            <span data-th-text="${rentalHome.price}">숙소 가격</span>
-          </div>
+          <button class="slide-button prev-button">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+                <path fill="none" d="M20 28 8.7 16.7a1 1 0 0 1 0-1.4L20 4"></path>
+               </svg>
+            </span>
+          </button>
+          <button class="slide-button next-button">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+                <path fill="none" d="m12 4 11.3 11.3a1 1 0 0 1 0 1.4L12 28"></path>
+              </svg>
+            </span>
+          </button>
+          <div class="listing-item-content">
+            <div class="listing-text">
+              <span data-th-text="${rentalHome.name}">숙소 이름</span>
+            </div>
+             <div class="listing-price">
+              <span>$ </span>
+              <span data-th-text="${rentalHome.price}">숙소 가격</span>
+             </div>
+           </div>
         </div>
       </div>
     </div>
@@ -52,8 +88,19 @@
   
       </div>
   </section>
-  <button id="mapButton">지도로 보기</button>
-  <button id="listButton">목록으로 보기</button>
+  <button id="mapButton">
+    <span class="mapButton-span">
+      <span class="mapButton-text">지도 보기</span>
+      <div class="mapButton-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; height: 16px; width: 16px; fill: var(--linaria-theme_palette-white);" aria-hidden="true" role="presentation" focusable="false">
+          <path d="M31.25 3.75a2.29 2.29 0 0 0-1.01-1.44A2.29 2.29 0 0 0 28.5 2L21 3.67l-10-2L2.5 3.56A2.29 2.29 0 0 0 .7 5.8v21.95a2.28 2.28 0 0 0 1.06 1.94A2.29 2.29 0 0 0 3.5 30L11 28.33l10 2 8.49-1.89a2.29 2.29 0 0 0 1.8-2.24V4.25a2.3 2.3 0 0 0-.06-.5zM12.5 25.98l-1.51-.3L9.5 26H9.5V4.66l1.51-.33 1.49.3v21.34zm10 1.36-1.51.33-1.49-.3V6.02l1.51.3L22.5 6h.01v21.34z"></path>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="display: block; height: 16px; width: 16px; fill: var(--linaria-theme_palette-white);" aria-hidden="true" role="presentation" focusable="false">
+          <path fill-rule="evenodd" d="M2.5 11.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM15 12v2H6v-2h9zM2.5 6.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM15 7v2H6V7h9zM2.5 1.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM15 2v2H6V2h9z"></path>
+        </svg>
+      </div>
+    </span>
+  </button>
 </main>
 <div id="filterPopup" class="popup">
   <div class="popup-content">
@@ -93,7 +140,7 @@
     <button class="apply-filter-button" onclick="getFilterData()" th:text="${rentalHomeList.size + '개의 숙소 보기'}">버튼</button>
   </div>
 </div>
-<div data-th-replace="footer :: footer">footer</div>
+<div data-th-replace="footer :: footer" class="footer-div">footer</div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:inline="javascript">
@@ -102,294 +149,5 @@
   const loginUser = /*[[${session.loginUser}]]*/ null;
 </script>
 <script data-th-src="@{/js/header.js}"></script>
-<script>
-  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-    key: "AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk",
-    // Add other bootstrap parameters as needed, using camel case.
-    // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
-  });
-</script>
-<script>
-  const si = sessionInfo;
-  const sl = loginUser;
-
-  console.log(sessionInfo);
-  console.log(loginUser);
-
-  // 지도 보기 / 목록보기 버튼
-  const mapButton = document.getElementById('mapButton');
-  const listButton = document.getElementById('listButton');
-  const listContainer = document.querySelector('.listing-container');
-  const mapContainer = document.querySelector('.map-section');
-
-  // 지도로 보기 버튼
-  mapButton.addEventListener('click', function(){
-    mapContainer.style.display = 'block';
-    listContainer.style.display = 'none';
-    mapContainer.style.width = "1920px";
-    mapContainer.style.height = "1028px";
-    initMap();
-  });
-
-  // 목록 보기 버튼
-  listButton.addEventListener('click', function(){
-    mapContainer.style.display = 'none';
-    listContainer.style.display = 'flex';
-  });
-
-  // googleMap 초기화
-  async function initMap(){
-    let rentalHomeProp = [];
-    let rentalHome = rentalHomeList; // 숙소 목록
-    
-    let priceTag = document.createElement("div");
-    priceTag.className = "price-tag"
-
-    // 숙소 목록에 대한 정보 작성
-    rentalHomeList.forEach(rentalHome =>{
-      let photos = [];
-      rentalHome.rentalHomePhotos.forEach(photo =>{
-        photos.push( photo.uuidPhotoName );
-      });
-      rentalHomeProp.push( { 
-        photo: photos,
-        name: rentalHome.name,
-        price: rentalHome.price,
-        position: {lat:Number(rentalHome.lat) , lng:Number(rentalHome.lon)},
-       });
-    });
-
-    // googleMap 변수 / 라이브러리
-    const{ Map } = await google.maps.importLibrary("maps");
-    const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
-    
-    // google맵 초기 위치 설정
-    let map = new Map(document.getElementById("map"), {
-      zoom : 10,
-      center: {lat:rentalHomeProp[0].position.lat, lng:rentalHomeProp[0].position.lng},
-      mapId: '470e45162ba863f'
-    });
-
-    // 구글맵에 표시할 마커에 대한 정보 설정
-    for( const property of rentalHomeProp ){
-      const advancedMarkerView = new google.maps.marker.AdvancedMarkerElement({
-        map,
-        // content: buildContent(property), // 구글맵 마커 안쪽에서 표시할 것들 설정
-        position:property.position, // 구글맵 마커 위치 설정
-        title:property.name,
-      });
-      
-      // 마커 동작에 대한 event
-      const element = advancedMarkerView.element;
-      ["focus", "pointerenter"].forEach((event) => {
-        element.addEventListener(event, ()=>{
-          highlight(advancedMarkerView, property);
-        });
-      });
-      ["blur","pointerleave"].forEach((event)=>{
-        element.addEventListener(event, () =>{
-          unhighlight(advancedMarkerView, property);
-        });
-      });
-      advancedMarkerView.addListener("click",(event) =>{
-        unhighlight(advancedMarkerView, property);
-      });
-    }
-  }
-
-  function highlight(markerView, property){
-    markerView.content.classList.add("highlight");
-    markerView.element.style.zIndex = 1;
-  }
-
-  function unhighlight(markerView, property){
-    markerView.content.classList.remove("highlight");
-    markerView.element.style.zIndex = "";
-  }
-
-  // googleMap 마커 내용 설정
-  function buildContent(property){
-    let content = document.createElement("div");
-    
-    content.classList.add("property");
-    content.innerHTML = "<div class='price-tag'><span class='mapPrice'>"+property.price+"</span></div>";
-    
-    let mapSlideContainer = document.createElement("div");
-    mapSlideContainer.classList.add("mapSlide-container");
-    
-    // 숙소 이미지 설정 appendChild로 html에서 자식으로 부여되도록 함
-    for( var i = 0; i < property.photo.length; i++ ){
-      let img = document.createElement("img");
-      img.classList.add("mapSlider-image");
-      img.src = 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/" + property.photo[i] + "?type=f&w=150&h=150&ttype=jpg';
-      img.alt = "숙소이미지";
-      mapSlideContainer.appendChild(img);
-    }
-    content.appendChild(mapSlideContainer);
-  
-    content.innerHTML += "<button class='slide-button prev-button'>&lt;</button><button class='slide-button next-button'>&gt;</button><span>" + property.name + "</span><span>" + property.price + "</span>";
-
-    return content;
-  }
-
-  function openFilterPopup(){ // 필터 팝업창 열기
-    document.getElementById("filterPopup").style.display = "block";
-  }
-  function closeFilterPopup(){ // 필터 팝업창 닫기
-    document.getElementById("filterPopup").style.display = "none";
-  }
-  
-  // 버튼의 텍스트를 업데이트
-  function updateButtonLabel(count){
-    const button = document.querySelector(".apply-filter-button");
-    button.textContent = count+'개의 숙소 보기';
-  }
-  
-  let filteredRentalHomeList = rentalHomeList;
-  function getFilterData(){ // 필터 적용
-    let themes = [];
-    let checkboxes = document.querySelectorAll('input[name="theme"]:checked');
-    checkboxes.forEach(checkbox => {
-      themes.push(checkbox.value);
-    });
-    let minPrice = document.getElementById('minPrice').value;
-    let maxPrice = document.getElementById('maxPrice').value;
-
-    // 숙소List filter
-    filteredRentalHomeList = Object.values(rentalHomeList).filter(function(rentalHome){
-      if( themes != null ){ // theme를 선택했을때, 조건에 맞는 rentalHome return
-        return rentalHome.themes.some(theme => themes.includes(theme.themeName)) && rentalHome.price >= minPrice && rentalHome.price <= maxPrice;
-      }
-      if( themes == null ){ // theme를 선택 안했을때 해당 조건에 맞는 rentalHome return
-        return rentalHome.price >= minPrice && rentalHome.price <= maxPrice; 
-      }
-    });
-    
-    // 필터링된 숙소의 갯수 업데이트
-    updateButtonLabel( filteredRentalHomeList.length );
-
-    // 필터링된 숙소 리스트 업데이트
-    updateRentalHomeList(filteredRentalHomeList);
-
-    // 팝업 닫기
-    closeFilterPopup();
-  }
-
-  function scrollThemes(offset) { // 테마 스크롤 이벤트
-    const container = document.querySelector('.theme-container');
-    const currentScroll = container.scrollLeft;
-    const newScroll = currentScroll + offset;
-    container.scrollTo({
-      left:newScroll,
-      behavior:'smooth'
-    });
-
-    const scrollRightButton = document.querySelector('.scroll-right-button');
-    const scrollLeftButton = document.querySelector('.scroll-left-button');
-    const buttonWidth = scrollRightButton.offsetWidth;
-    const containerWidth = container.offsetWidth;
-
-    // 오른쪽 버튼
-    if( newScroll < container.scrollWidth - containerWidth ){
-      scrollRightButton.style.display = 'block';
-      scrollRightButton.style.right = '${containerWidth - buttonWidth}px';
-    }
-    
-    // 왼쪽 버튼
-    if( newScroll > 0 ){
-      scrollLeftButton.style.display = 'block';
-      scrollLeftButton.style.left = '${containerWidth - buttonWidth}px';
-    }
-
-  }
-
-  // 숙소 이미지 슬라이더 이벤트
-  function bindSliderEvents(listItem){
-    let $slideImages = listItem.find('.slide-image');
-    let currentIndex = 0;
-
-    function showSlide(index){
-      $slideImages.hide().eq(index).show();
-    }
-
-    function showNextSlide(){
-      currentIndex = (currentIndex + 1) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    function showPreviousSlide(){
-      currentIndex = (currentIndex -1 + $slideImages.length) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    listItem.find('.next-button').off('click').on('click', showNextSlide);
-    listItem.find('.prev-button').off('click').on('click', showPreviousSlide);
-
-    showSlide(currentIndex);
-  }
-
-  // 각 숙소의 이미지 슬라이더 처리
-  $('.listing-item').each(function () {
-    const $slideImages = $(this).find('.slide-image');
-    let currentIndex = 0;
-
-    function showSlide(index) {
-      $slideImages.hide().eq(index).show();
-    }
-
-    function showNextSlide() {
-      currentIndex = (currentIndex + 1) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    function showPreviousSlide() {
-      currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    $(this).find('.next-button').click(showNextSlide);
-    $(this).find('.prev-button').click(showPreviousSlide);
-
-    showSlide(currentIndex);
-  });
-
-  // 숙소 목록 재할당
- function updateRentalHomeList(newRentalHomeList){
-  let listContainer = $('.listing-container'); // 가장 바깥 html 태그의 class 아이디
-  listContainer.empty();
-
-  newRentalHomeList.forEach(function(rentalHome){ // html을 재할당된 숙소 목록으로 재작성
-    let listItem = $( '<div class="listing-item">' );
-    let sliderDiv = $( '<div class="listing-slider">' );
-    
-      rentalHome.rentalHomePhotos.forEach(function(photos){
-      let image = $( '<img class="slide-image">' )
-      .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + photos.uuidPhotoName + '?type=f&w=265&h=252&faceopt=false&ttype=jpg' )
-      .attr( 'alt', '숙소이미지' );
-      sliderDiv.append(image);
-    });
-    let imageLeftButton = $('<button class="slide-button prev-button"></button>');
-    let imageRightButton = $('<button class="slide-button next-button"></button>');
-    let nameSpan = $('<span>').text(rentalHome.name);
-    let priceSpan = $('<span>').text(rentalHome.price);
-    
-    sliderDiv.append(imageLeftButton);
-    sliderDiv.append(imageRightButton);
-    sliderDiv.append(nameSpan);
-    sliderDiv.append(priceSpan);
-    listItem.append(sliderDiv);
-
-    listContainer.append(listItem); // html 작성한것 적용
-    
-    // 사진 슬라이더 이벤트 재할당
-    bindSliderEvents(listItem);
-  });
- }
-
- // 테마 검색 후 숙소 목록 재할당
- function handleNewRentalHomeList(newRentalHomeList){
-  updateRentalHomeList(newRentalHomeList);
- }
-
-</script>
+<script data-th-src="@{/js/main.js}"></script>
 </html>

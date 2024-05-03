@@ -8,7 +8,7 @@
 
 <header data-th-fragment="header">
   <div class="logo-div">
-    <a class="logo-link" data-th-href="@{/rentalHome/search}">
+    <a class="logo-link" data-th-href="@{/main}">
       <img
           src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
     </a>
@@ -16,7 +16,7 @@
   <div class="main-menu">
     <div class="main-menu-item">
       <span class="main-menu-item-s">
-        <a data-th-href="@{/home}" href="/home">한달살기</a>
+        <a data-th-href="@{/main}" href="/main">한달살기</a>
       </span>
     </div>
     <div class="main-menu-item">
@@ -27,8 +27,15 @@
   </div>
   <div class="userInfo-container">
     <button class="userInfo-button">
-      <div>
-        <img data-th-if="${session.loginUser == null}" data-th-src="@{/img/default-photo.jpeg}" width="20px" height="20px">
+      <div class="userInfo-button-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+          <g fill="none">
+            <path d="M2 16h28M2 24h28M2 8h28"></path>
+          </g>
+        </svg>
+      </div>
+      <div class="userInfo-button-photo">
+        <img data-th-if="${session.loginUser == null}" data-th-src="@{/img/default-photo.jpeg}" width="32px" height="32px">
         <img data-th-if="${session.loginUser != null}" 
         data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' +${session.loginUser.photo}+ .jpg(type=f,w=20,h=20,ttype=jpg)}">
       </div>
