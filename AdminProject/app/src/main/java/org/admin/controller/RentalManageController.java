@@ -11,107 +11,78 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/rental")
 public class RentalManageController {
     private final RentalService rentalService;
     private static final Log log = LogFactory.getLog(RentalManageController.class);
 
-    @GetMapping("rental/list")
-    public String rentalList(@RequestParam("menu") int menu,
-                             HttpSession session,
-                             Model model) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
-
+    @GetMapping("/list/{menu}")
+    public RestResult rentalList(@PathVariable int menu) {
         switch (menu) {
             case 1:
-                log.debug(rentalService.getAll());
-                model.addAttribute("rentalList", rentalService.getAll());
-                model.addAttribute("menuName", "등록된 숙소 목록");
-                model.addAttribute("menu", menu);
-                break;
+                return RestResult.builder()
+                        .status(RestResult.SUCCESS)
+                        .data(rentalService.getAll())
+                        .build();
             case 2:
-                log.debug(rentalService.getAppliedRentals());
-                model.addAttribute("rentalList", rentalService.getAppliedRentals());
-                model.addAttribute("menuName", "숙소 등록 심사");
-                model.addAttribute("menu", menu);
-                break;
+                return RestResult.builder()
+                        .status(RestResult.SUCCESS)
+                        .data(rentalService.getAppliedRentals())
+                        .build();
         }
-        return "rental/list";
+        
+        return RestResult.builder()
+                .status(RestResult.FAILURE)
+                .data("Bad Request")
+                .build();
     }
 
-    @GetMapping("rental/detail")
-    public String rentalDetail(@RequestParam("menu") int menu,
-                               @RequestParam("rno") int rentalNo,
-                               HttpSession session,
-                               Model model) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
+    @GetMapping("/view/{menu}/{rentalNo}")
+    public RestResult rentalView(@PathVariable int menu,
+                               @PathVariable int rentalNo) {
 
-        Rental rental = rentalService.getBy(rentalNo);
-
-        log.debug(rental);
-        model.addAttribute("rental", rental);
-        switch (menu) {
-            case 1:
-                model.addAttribute("menuName", "숙소 상세");
-                model.addAttribute("menu", menu);
-                break;
-            case 2:
-                model.addAttribute("menuName", "숙소 등록 심사");
-                model.addAttribute("menu", menu);
-                break;
-        }
-        return "rental/detail";
+        return RestResult.builder()
+                .status(RestResult.SUCCESS)
+                .data(rentalService.getBy(rentalNo))
+                .build();
     }
 
-    @PostMapping("rental/update")
-    public String rentalUpdate(@RequestParam("value") String value,
-                               @RequestParam("rentalNo") int rentalNo,
-                               HttpSession session) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
+    @PutMapping("/update/{value}/{rentalNo}")
+    public RestResult rentalUpdate(@PathVariable String value,
+                               @PathVariable int rentalNo) {
+        
         rentalService.updateState(rentalNo, value);
-        return "redirect:list?menu=2";
+        return RestResult.builder()
+                .status(RestResult.SUCCESS)
+                .build();
     }
 
-    @PostMapping("rental/list/search")
-    public String searchRental(@RequestParam("keyword") String keyword,
-                               @RequestParam("filter") String filter,
-                               HttpSession session,
-                               Model model) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
-        model.addAttribute("menuName", "등록된 숙소 목록");
-        model.addAttribute("menu", 1);
+    @GetMapping("/search/{keyword}/{filter}")
+    public RestResult searchRental(@PathVariable String keyword,
+                               @PathVariable String filter) {
+        
         if (filter.equals("0")) {
             // 숙소명으로 검색
-            List<Rental> rentalList = rentalService.getAllByName(keyword);
-            log.debug(rentalList);
-            model.addAttribute("rentalList", rentalList);
+            return RestResult.builder()
+                    .status(RestResult.SUCCESS)
+                    .data(rentalService.getAllByName(keyword))
+                    .build();
         } else {
             // 호스트명로 검색
-            List<Rental> rentalList = rentalService.getAllByHostName(keyword);
-            log.debug(rentalList);
-            model.addAttribute("rentalList", rentalList);
+            return RestResult.builder()
+                    .status(RestResult.SUCCESS)
+                    .data(rentalService.getAllByHostName(keyword))
+                    .build();
 
         }
-
-
-        return "rental/list";
     }
 }

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/list.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/list.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/page-init.js"></script>
+</head>
+<body>
+<div class="container">
+<h3 data-th-text="${menuName}">메뉴 이름</h3>
+<form>
+    <div class="searchBar">
+      <select id="filter" name="filter">
+        <option value="0">숙소명</option>
+        <option value="1">호스트명</option>
+      </select>
+      <input class="searchInput" name="keyword" type="search" placeholder="검색" />
+      <button class="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+</form>
+<table border="1">
+    <thead>
+    <tr>
+        <th>No</th>
+        <th>숙소명</th>
+        <th data-th-if="${#strings.equals(menuName, '숙소 등록 심사')}">신청인</th>
+        <th data-th-if="${#strings.equals(menuName, '등록된 숙소 목록')}">호스트명</th>
+        <th>등록일</th>
+        <th>상태</th>
+        <th>상세 보기</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <tfoot>
+    <td colspan="10" class="tablefoot"></td>
+    </tfoot>
+</table>
+</div>
+<div data-th-replace="footer :: footer">풋터</div>
+
+<div id="detailModal" class="modal">
+    <div class="modal-content" id="modalContent">
+
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+    </div>
+    <button type="button" id="closeBtn">✕</button>
+</div>
+
+
+<script id="tr-template" type="text/x-handlebars-template">
+    {{#each data}}
+    <tr class="rowItem" data-th-each="rental : ${rentalList}" data-th-object="${rental}">
+        <td class="rentalNo">{{rentalNo}}</td>
+        <td>{{name}}</td>
+        <td>{{host.name}}</td>
+        <td>{{regDate}}</td>
+        <td>{{stateStr}}</td>
+    </tr>
+    {{/each}}
+</script>
+
+
+<script>
+    "use strict"
+    const tbody = $("tbody");
+    console.log(RESTAPI_HOST);
+
+    (function() {
+        axios.get(`${RESTAPI_HOST}/rental/list/${pageContext.params.get("menu")}`)
+        .then((response) => {
+            let result = response.data;
+            if (result.status == 'failure') {
+                alert(response.error);
+                return;
+            }
+
+            var trTemplate = Handlebars.compile($("#tr-template").html());
+            $("tbody").html(trTemplate(result));
+            
+
+            $('.rowItem').click(function() {
+                let modal = $('#detailModal').find('.modal-content');
+                let rentalNo = $(this).find('.rentalNo').text();
+
+                modal.load('/rental/detail.html');
+                console.log(rentalNo);
+                    // axios.get(`${RESTAPI_HOST}/rental/view/${pageContext.params.get("menu")}/${rentalNo}`)
+                    // .then((response) => {
+                    //     let result = response.data;
+                    //     console.log(result);
+                    // })
+            
+            
+        })
+            
+        });
+    })();
+
+    $('.searchBtn').click((event) => {
+        event.preventDefault();
+        let keyword = $('.searchInput').val();
+        let filter = $('#filter').val()
+        axios.get(`${RESTAPI_HOST}/rental/search/${keyword}/${filter}`)
+        .then((response) => {
+            let result = response.data;
+            console.log(result);
+            if(result.status == 'failure') {
+                alert(response.error);
+                console.log("failure")
+                return;
+            }
+
+            var trTemplate = Handlebars.compile($("#tr-template").html());
+            $("tbody").html(trTemplate(result));
+        })
+    });
+ 
+
+
+        
+        
+        
+
+        let closeButton = document.getElementById("closeBtn");
+        closeButton.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+
+
+
+
+</script>
+
+</body>
+</html>
+

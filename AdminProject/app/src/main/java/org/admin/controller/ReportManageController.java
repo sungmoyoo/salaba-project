@@ -9,116 +9,106 @@ import org.admin.service.RentalReportService;
 import org.admin.service.TextReportService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/report")
 public class ReportManageController {
     private static final Log log = LogFactory.getLog(ReportManageController.class);
     private final RentalReportService rentalReportService;
     private final TextReportService textReportService;
     private final MemberService memberService;
     private final RentalService rentalService;
-    @GetMapping("report/list")
-    public String reportList(@RequestParam("menu") int menu,
-                             HttpSession session,
-                             Model model) {
+
+    @GetMapping("/list/{menu}")
+    public RestResult reportList(@PathVariable("menu") int menu) {
         log.debug("관리자 - report/list");
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
         switch (menu) {
             case 1:
-                model.addAttribute("list", rentalReportService.getAll());
-                model.addAttribute("menuName", "숙소 신고내역");
-                break;
+                return RestResult.builder()
+                        .status(RestResult.SUCCESS)
+                        .data(rentalReportService.getAll())
+                        .build();
             case 2:
-                model.addAttribute("list", textReportService.getAllBy(ReportType.BOARD.getValue()));
-                model.addAttribute("menuName", "게시글 신고내역");
-                break;
+                return RestResult.builder()
+                        .status(RestResult.SUCCESS)
+                        .data(textReportService.getAllBy(ReportType.BOARD.getValue()))
+                        .build();
             case 3:
                 // 댓글과 답글리스트를 합쳐서 model에 담는다.
                 List<Report> comments = textReportService.getAllBy(ReportType.COMMENT.getValue());
                 List<Report> replies = textReportService.getAllBy(ReportType.REPLY.getValue());
                 comments.addAll(replies);
-                model.addAttribute("list", comments);
-                model.addAttribute("menuName", "댓글 신고내역");
-                break;
-            case 4:
-                model.addAttribute("menuName", "1:1 문의내역");
-                break;
-
+                return RestResult.builder()
+                        .status(RestResult.SUCCESS)
+                        .data(comments)
+                        .build();
         }
-        return "report/list";
+        return RestResult.builder()
+                .status(RestResult.FAILURE)
+                .error("No Content")
+                .build();
     }
 
 
-    @GetMapping("report/detail")
-    public String reportDetail(@RequestParam("no") int no,
-                               @RequestParam("type") String type,
-                               @RequestParam("mno") int memberNo,
-                               HttpSession session,
-                               Model model) {
+    @GetMapping("/view/{targetNo}/{type}/{mno}")
+    public RestResult textReportView(@PathVariable int targetNo,
+                                   @PathVariable String type,
+                                   @PathVariable int mno) {
 
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
-
-        model.addAttribute("type", type);
         if (type.equals("0")) {
-            Report report = textReportService.getBy(type, no, memberNo);
-            log.debug(report);
-            model.addAttribute("report", report);
-            model.addAttribute("name","게시글 신고");
-        } else if (type.equals("1")|| type.equals("2")) {
-            Report report = textReportService.getBy(type, no, memberNo);
-            log.debug(report);
-            model.addAttribute("report", report);
-            model.addAttribute("name", "댓글 신고");
-        } else {
-            Report report = rentalReportService.get(no, memberNo);
-            log.debug("abcdefg: " + report);
-            model.addAttribute("report", report);
-            model.addAttribute("name", "숙소 신고");
+            return RestResult.builder()
+                    .status(RestResult.SUCCESS)
+                    .data(textReportService.getBy(type, targetNo, mno))
+                    .build();
         }
-        return "report/detail";
+        if (type.equals("1") || type.equals("2")) {
+            return RestResult.builder()
+                    .status(RestResult.SUCCESS)
+                    .data(textReportService.getBy(type, targetNo, mno))
+                    .build();
+        }
+        return RestResult.builder()
+                .status(RestResult.FAILURE)
+                .error("Bad Request")
+                .build();
+    }
 
+    @GetMapping("/view/{rentalNo}/{memberNo}")
+    public RestResult rentalReportView(@PathVariable int rentalNo,
+                                   @PathVariable int memberNo) {
+
+        return RestResult.builder()
+                .status(RestResult.SUCCESS)
+                .data(rentalReportService.get(rentalNo, memberNo))
+                .build();
     }
 
     @Transactional
-    @PostMapping("report/update")
-    public String dealReport(@RequestParam(value="selection1", defaultValue = "0") String selection1,
-                             @RequestParam(value="selection2", defaultValue = "0") String selection2,
-                             @RequestParam(value="writerNo", defaultValue = "0") int writerNo,
-                             Report report,
-                             HttpSession session) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
+    @PutMapping("/update/{selection1}/{selection2}/{writerNo}")
+    public RestResult updateReport(@PathVariable String selection1, // 0-무시, 1-영구정지, 2-경고조치
+                                   @PathVariable String selection2,
+                                   @PathVariable int writerNo,
+                                   Report report) {
         if (selection2.equals("0")) {
             textReportService.updateState(report.getReportNo());
             memberService.updateWarningCountBy(report.getReportNo());
             textReportService.updateBoardState(report, selection1);
+            return RestResult.builder()
+                    .status(RestResult.SUCCESS)
+                    .build();
         } else {
             rentalReportService.updateState(report.getTargetNo(), writerNo);
             memberService.updateWarningCount(writerNo);
             rentalService.updateState(report.getTargetNo(), selection2);
+            return RestResult.builder()
+                    .status(RestResult.SUCCESS)
+                    .build();
         }
-
-
-        return "redirect:list?menu=1";
-
     }
-
-
 
 
 }

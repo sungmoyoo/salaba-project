@@ -25,6 +25,11 @@
         <result column="photo" property="photo"/>
         <result column="rental_count" property="rentalCount"/>
 
+        <association property="roles" javaType="Role">
+            <id column="role_no" property="roleNo"/>
+            <result column="role_name" property="roleName"/>
+        </association>
+
         <collection property="rentals" ofType="Rental">
             <id column="rental_home_no" property="rentalNo"/>
             <result column="rental_name" property="name"/>
@@ -221,4 +226,26 @@
         UPDATE member set grade_no = #{grade}
         WHERE member_no = #{memberNo}
     </update>
+
+    <insert id="add" parameterType="Member"
+            useGeneratedKeys="true" keyColumn="member_no" keyProperty="memberNo">
+        INSERT INTO member(name, email, password, nickname, birthday)
+        VALUES(#{name}, #{email},#{password},#{name}, '2023-11-14')
+    </insert>
+
+    <select id="findByEmailAndPassword" resultMap="MemberMap">
+        SELECT member_no, email,  FROM member
+        WHERE email = #{email} AND password = #{password}
+    </select>
+
+    <select id="findByEmail" resultMap="MemberMap">
+        SELECT
+            member_no,
+            email,
+            name,
+            password,
+            join_date
+        FROM member
+        WHERE email like '${email}'
+    </select>
 </mapper>
