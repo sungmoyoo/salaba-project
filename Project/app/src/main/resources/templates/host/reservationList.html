@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang='en'>
-  <head>
+<head>
   <meta charset='UTF-8'>
   <title>호스트 예약내역</title>
 </head>
@@ -9,12 +9,14 @@
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
 <h1>승인 대기중 예약</h1>
-<table border="1" >
+<table border="1">
   <thead>
   <tr>
     <th>숙소명</th>
     <th>게스트명</th>
     <th>이용 기간</th>
+    <th>남은 기간</th>
+
   </tr>
   </thead>
   <tbody>
@@ -28,21 +30,26 @@
     <td data-th-text="*{rentalHomeName}">그레이트 호텔</td>
     <td data-th-text="*{memberName}">홍길동</td>
     <td data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
-    '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01</td>
-    <td><form
-        action="update" data-th-action="@{reservationCheck}" method="post">
-      <input name="hostNo" data-th-value="*{hostNo}" type="hidden">
-      <input name="state" value="1" type="hidden">
-      <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
-      <button>예약 승인</button>
-    </form></td>
-    <td><form
-        action="update" data-th-action="@{reservationCheck}" method="post">
-      <input name="hostNo" data-th-value="*{hostNo}" type="hidden">
-      <input name="state" value="2" type="hidden">
-      <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
-      <button>예약 거절</button>
-    </form><td>
+    '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01
+    </td>
+    <td class="usage-status" data-th-data-start="${hostReservation.startDate}"
+        data-th-data-end="${hostReservation.endDate}"></td>
+    <td>
+      <form
+          action="update" data-th-action="@{reservationCheck}" method="post">
+        <input name="hostNo" data-th-value="*{hostNo}" type="hidden">
+        <input name="state" value="1" type="hidden">
+        <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
+        <button>예약 승인</button>
+      </form>
+      <form
+          action="update" data-th-action="@{reservationCheck}" method="post">
+        <input name="hostNo" data-th-value="*{hostNo}" type="hidden">
+        <input name="state" value="2" type="hidden">
+        <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
+        <button>예약 거절</button>
+      </form>
+    <td>
   </tr>
   </tbody>
 </table>
@@ -51,25 +58,69 @@
 
 <h1>승인된 예약</h1>
 <table border="1">
-  <thead >
+  <thead>
+  <tr>
+    <th>숙소명</th>
+    <th>게스트명</th>
+    <th>이용 기간</th>
+    <th>남은 기간</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr data-th-if="${hostReservation.state == 2}" data-th-each="hostReservation : ${list}"
+      data-th-object="${hostReservation}">
+    <td data-th-text="*{rentalHomeName}">그레이트 호텔</td>
+    <td data-th-text="*{memberName}">홍길동</td>
+    <td data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
+    '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01
+    </td>
+    <td class="usage-status" data-th-data-start="${hostReservation.startDate}"
+        data-th-data-end="${hostReservation.endDate}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<h1>거절된 예약</h1>
+<table border="1">
+  <thead>
   <tr>
     <th>숙소명</th>
     <th>게스트명</th>
     <th>이용 기간</th>
   </tr>
   </thead>
-  <tbody >
-  <tr data-th-if="${hostReservation.state == 1}"
+  <tbody>
+  <tr data-th-if="${hostReservation.state == 2}"
       data-th-each="hostReservation : ${list}" data-th-object="${hostReservation}">
     <td data-th-text="*{rentalHomeName}">그레이트 호텔</td>
     <td data-th-text="*{memberName}">홍길동</td>
     <td data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
-    '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01</td>
+      '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01
+    </td>
   </tr>
   </tbody>
 </table>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const today = new Date();
+    const statusCells = document.querySelectorAll('.usage-status');
+
+    statusCells.forEach(cell => {
+      const startDate = new Date(cell.dataset.start);
+      const endDate = new Date(cell.dataset.end);
+
+      if (today < startDate) {
+        cell.textContent = '남은 일수: ' + Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+      } else if (today >= startDate && today <= endDate) {
+        cell.textContent = '이용중';
+      } else {
+        cell.textContent = '이용 완료';
+      }
+    });
+  });
+</script>
 
 </body>
 </html>

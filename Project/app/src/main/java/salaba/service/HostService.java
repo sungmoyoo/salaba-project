@@ -1,6 +1,7 @@
 package salaba.service;
 
 import java.util.List;
+import salaba.vo.Region;
 import salaba.vo.host.HostReservation;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
@@ -12,6 +13,8 @@ public interface HostService {
   void rentalHomeAdd(RentalHome rentalHome); // 숙소 추가(기본정보, 시설, 테마 따로 DB에 저장)
 
   RentalHome getRentalHome(int rentalHomeNo);
+
+  int rentalHomeStateUpdate(String state, int rentalHomeNo); // 호스트 숙소상태 업데이트
 
   int rentalHomeUpdate(RentalHome rentalHome);
 
@@ -29,5 +32,5 @@ public interface HostService {
 
   int reservationStateUpdate(int state, int reservationNo); // 호스트 예약상태 업데이트
 
-
+  List<Region> regionList();
 }

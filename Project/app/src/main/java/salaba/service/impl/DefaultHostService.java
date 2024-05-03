@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import salaba.dao.FacilityDao;
 import salaba.dao.HostDao;
 import salaba.dao.PhotoDao;
+import salaba.dao.RentalHomeDao;
 import salaba.dao.ThemeDao;
 import salaba.service.HostService;
+import salaba.vo.Region;
 import salaba.vo.host.HostReservation;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
@@ -26,6 +28,7 @@ public class DefaultHostService implements HostService {
   private final ThemeDao themeDao;
   private final FacilityDao facilityDao;
   private final PhotoDao photoDao;
+  private final RentalHomeDao rentalHomeDao;
 
   // 호스트 숙소등록
   @Override
@@ -35,7 +38,7 @@ public class DefaultHostService implements HostService {
     // ParameterType을 사용해서 rentalHome 객체 자체를 파라미터로 넘겨 처리
     // Null 검사는 안함 -> 모두 N.N이기 때문
 
-      photoDao.addPhoto(rentalHome);
+    photoDao.addPhoto(rentalHome);
 
     themeDao.deleteAllTheme(rentalHome.getRentalHomeNo());
     themeDao.addTheme(rentalHome);
@@ -43,6 +46,7 @@ public class DefaultHostService implements HostService {
     facilityDao.deleteAllFacility(rentalHome.getRentalHomeNo());
     facilityDao.addFacility(rentalHome);
   }
+  
 
   @Override
   public RentalHome getRentalHome(int rentalHomeNo) {
@@ -66,6 +70,7 @@ public class DefaultHostService implements HostService {
   public List<RentalHome> rentalHomeList(int hostNo) {
     return hostDao.findAllRentalHome(hostNo);
   }
+
 
   @Override
   public int rentalHomeUpdate(RentalHome rentalHome) {
@@ -97,6 +102,14 @@ public class DefaultHostService implements HostService {
     return hostDao.reservationStateUpdate(state, reservationNo);
   }
 
+  // 예약내역을 업데이트하는 DAO 호출하는 메서드
+  @Transactional
+  @Override
+  public int rentalHomeStateUpdate(String state, int reservationNo) {
+    return hostDao.rentalHomeStateUpdate(state, reservationNo);
+  }
+
+
   @Override
   public int delete(int rentalHomeNo) {
     return hostDao.deleteRentalHome(rentalHomeNo);
@@ -107,5 +120,8 @@ public class DefaultHostService implements HostService {
     return photoDao.deletePhoto(photoNo);
   }
 
-
+  @Override
+  public List<Region> regionList() {
+    return rentalHomeDao.getAllRegion();
+  }
 }
