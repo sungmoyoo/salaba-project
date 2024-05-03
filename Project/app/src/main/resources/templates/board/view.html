@@ -26,10 +26,10 @@
         </div>
         <!--정보공유, 자유게시판이면 분류(말머리) 표기-->
         <div data-th-if="*{categoryNo != 0}">
-          <input class="head-input" data-th-value="*{headContent}" readonly name='headContent' type="text" aria-readonly="true">
+          <input class="head-input" data-th-value="*{headContent}" readonly name='headContent' type="text">
         </div>
         <div>
-          <input class="title-input" data-th-value="*{title}" name='title' type='text' readonly value="제목입니다." aria-readonly="true">
+          <input class="title-input" data-th-value="*{title}" name='title' type='text' readonly value="제목입니다.">
         </div>
         <div class="others-container">
           <input class="writer-input" data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
@@ -54,7 +54,7 @@
   </form>
 
   <!-- 추천 컨테이너 -->
-  <div id="interaction-container">
+  <div id="heart-container">
     <!-- 추천 버튼 -->
     <button id="likeButton" class="heart-btn">
       <i data-th-if="${isLiked == 0}" class="fa-regular fa-heart"></i>
@@ -62,6 +62,13 @@
       <span id="likeCount" data-th-text="${board.likeCount}"></span>
     </button>
   </div>
+
+  <!--댓글 달기 폼-->
+  <form id="comment-form" method="post">
+    <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
+    <input id="commentContent" name="content" type="textarea">
+    <button id="addCommentBtn">댓글 작성</button>
+  </form>
 
 <!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
   <form id="reply-form" class="form-hidden">
@@ -80,7 +87,7 @@
       </div>
       <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
         <div class="textContent comment-text">
-          <span class="targetNo commentNo" data-th-text="*{commentNo}"></span>
+          <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
             <!--프로필사진-->
             <!-- <div>
               <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + ${member.photo}}" data-th-if="${member.photo}">
@@ -91,7 +98,7 @@
             </div>  -->
           <span data-th-text="*{writer.nickname}">댓글 작성자</span>
           <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
-          <span data-th-text="*{createdDate}">댓글 작성시간</span>
+          <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span>
         </div>
         <button class="del">삭제</button>
         <button class="modi">수정</button>
@@ -124,12 +131,6 @@
     </div>
   </div>
   
-  <!--댓글 작성-->
-  <form id="commentForm" method="post">
-    <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
-    <input id="commentContent" name="content" type="textarea">
-    <button id="addCommentBtn">댓글 작성</button>
-  </form>
 
   <!-- 신고: 모달 컨테이너 -->
   <div id="reportModal" class="modal fade" tabindex="-1" role="dialog">
@@ -153,10 +154,10 @@
                 <option value="4">욕설/혐오적 표현입니다.</option>
               </select>
             </div>
-            <div>
-              내용: <textarea name='content' placeholder="내용을 입력하세요."></textarea>
+            <div class="report-content">
+              <textarea name='content' placeholder="내용을 입력하세요."></textarea>
             </div>
-            <div>
+            <div class="report-file">
               첨부 파일: <input type="file" multiple name="reportFiles">
             </div>
             <div class="modal-footer">

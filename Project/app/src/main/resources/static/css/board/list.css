@@ -194,8 +194,9 @@
       margin-left: 20px; /* 처음 버튼의 왼쪽 간격도 20px로 설정 */
       padding: 10px 20px;      /* 내부 패딩 */
       border-radius: 3px; /* 둥근 모서리 */
-      background-color: #E6E0F8;
+      background-color: rgb(142, 221, 166);
       position: relative;
+      border: 2px solid rgb(206, 243, 222);
   }
 
 

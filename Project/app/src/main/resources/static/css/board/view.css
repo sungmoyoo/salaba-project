@@ -1,5 +1,13 @@
+/*게시판 종류*/
+h1 {
+  text-align: left; /* 제목을 왼쪽 정렬 */
+  margin-left: 20px; /* 왼쪽 여백 추가 */
+  color: rgb(63, 57, 57);
+}
+
 /*제목*/
 .title-input {
+  pointer-events: none;
   text-align: center;
   font-weight: bold;
   width: 100%; 
@@ -11,6 +19,7 @@
 
 /*말머리 또는 지역*/
 .head-input, .region-input {
+  pointer-events: none;
   color: rgb(152, 152, 152);
   border: none;
   text-align: center;
@@ -20,6 +29,7 @@
 
 /*작성자*/
 .writer-input {
+  pointer-events: none;
   border: none;
   text-align: left;
   width: 10%; 
@@ -29,6 +39,7 @@
 
 /*작성일*/
 .date-input {
+  pointer-events: none;
   border: none;
   text-align: left;
   width: 10%; 
@@ -40,9 +51,9 @@
 
 /*게시글 신고 버튼 */
 .board-report-btn {
-  padding: 10px 20px;
-  height: 30;
-  width: 90px;
+  padding: 10px 10px;
+  height: 3%;
+  width: 7%;
   background-color:white;/* 신고 버튼 배경색 */
   color: black; /* 글자색 */
   justify-content: flex-end; /* 신고 버튼을 우측 정렬 */
@@ -71,6 +82,7 @@
   overflow-y: auto;
   background-color: white;
   padding: 40px; /* 패딩을 늘림 */
+  margin-top: 50px;
   margin-bottom: 20px;
   width: 100%; /* 너비를 늘림 */
   min-height: 200px; /* 최소 높이 설정 */
@@ -82,24 +94,6 @@
   border-top: 2px solid rgb(152, 152, 152); /* 상단에 구분선 추가 */
   border-bottom: 2px solid rgb(152, 152, 152); /* 하단에 구분선 추가 */
 }
-
-
-/* 맨 위로 올라가기 */
-#scrollToTopBtn {  
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 99;
-  border: none;
-  outline: none;
-  background-color: #35C5B3;
-  color: white;
-  cursor: pointer;
-  padding: 15px;
-  border-radius: 50%;
-}
-
 
 /* 추천수 버튼 */
 #heart {
@@ -118,6 +112,7 @@
   flex-grow: 1;
   display: flex;
   justify-content: center; /* 좋아요 버튼 중앙 정렬 */
+  pointer-events: auto; /* 하트 버튼 영역에 대한 이벤트 활성화 */
 }
 
 .heart-btn.active i.fa-regular {
@@ -140,7 +135,7 @@
   pointer-events: none; /* 숫자에 대한 클릭 이벤트 방지 */
 }
 
-#interaction-container {
+#heart-container {
   display: flex;
   gap: 20px; /* 버튼 사이의 간격 */
 }
@@ -154,29 +149,46 @@
   text-align: right;
   align-items: center; /* 중앙 정렬 */
   transform: translate(-50%, -50%); /* 숫자를 수직 및 수평으로 가운데 정렬 */
-  pointer-events: none; /* 숫자에 대한 클릭 이벤트 방지 */
 }
 
+/*내 좋아요 여부(0,1); 숨김 */
 #myLikeCount {
   position: relative;
   left: 55%;
   display: none; /*구현 시 숨기기*/
 }
 
-/* 게시글 내용 테두리 설정 */
-.content-box {
-  padding: 10px; /* 내용과 테두리 사이의 여백 설정 */
-  margin: 10px 0; /* 다른 요소와의 간격을 조정 */
+/*댓글*/
+#comment-form {
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
+
 .comment {
+  border: 1px solid #454545; /* 테두리 스타일과 색상 */
   margin-top: 20px;
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
 }
+
+/*댓글 내용*/
 .comment-text {
   display: inline-block;
+  
 }
+
+.commentContent {  
+  border: 1px solid black;
+  width: 200px;
+  height: 100px;
+}
+
+.comment-date {
+  color: gray;
+}
+
+/*답글*/
 .reply {
   border: 0.3px solid #ccc;
   padding: 5px;
@@ -184,15 +196,44 @@
   margin-left: 20px; /* 답글 들여쓰기. */
 }
 
-/* 게시글 답글 */
+/* 답글 폼 */
 #reply-form {
   border: 1px solid red;
 }
 
-/*폼 숨기기*/
+/*평소에 폼 숨기기 -> 이벤트 발생 시 나타나는 폼*/
 .form-hidden {
   display: none;
 }
 
+/*신고 폼 내부 디자인: 내용*/
+textarea[name='content'] {
+  width: 100%;
+  height: 200px;
+  padding: 10px; /* 내용과 테두리 사이 여백 */
+  border: 1px solid #ccc; /* 테두리 스타일과 색상 */
+  border-radius: 5px; /* 테두리 모서리 둥글게 */
+  resize: none; /* 사용자가 크기를 조절하지 못하도록 함 */
+  font-size: 16px; /* 폰트 크기 */
+  font-family: Arial, sans-serif; 
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 
+
+/* 맨 위로 올라가기 */
+#scrollToTopBtn {  
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #35C5B3;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 50%;
+}
