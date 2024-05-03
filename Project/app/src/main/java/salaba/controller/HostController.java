@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.HostService;
+import salaba.service.MemberService;
 import salaba.service.StorageService;
+import salaba.vo.Member;
+import salaba.vo.Region;
 import salaba.vo.host.HostReservation;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
@@ -37,11 +40,27 @@ public class HostController {
 
   private static final Log log = LogFactory.getLog(HostController.class);
   private final HostService hostService;
+  private final MemberService memberService;
   private final StorageService storageService;
   private String uploadDir = "rentalHome/";
 
   @Value("${ncpbucketname}")
   private String bucketName;
+
+  // 호스트 검사 페이지
+  @GetMapping("hostCheck")
+  public String hostCheck(HttpSession session) {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    StringBuilder url = new StringBuilder("redirect:");
+    if (!hostService.rentalHomeList(loginUser.getNo()).isEmpty()) {
+      url.append("reservationList?hostNo=").append(loginUser.getNo());
+    } else {
+      url.append("hostStart");
+    }
+
+    return url.toString();
+  }
+
 
   // 호스트 숙소등록 시작화면
   @GetMapping("hostStart")
@@ -53,17 +72,27 @@ public class HostController {
   public void rentalHomeForm() {
   }
 
-  // 호스트 숙소 기본정보 저장
   @PostMapping("rentalHomeSave")
   @ResponseBody
   public String rentalHomeSave(
-      Model model, RentalHome rentalHome,
+      HttpSession session,
+      Model model,
+      RentalHome rentalHome,
       MultipartFile[] photos,
       String[] photoExplanations) throws Exception {
+
+    List<Region> regionList = hostService.regionList();
+
+    for (Region region : regionList) {
+      if (rentalHome.getAddress().contains(region.getRegionName())) {
+        rentalHome.setRegion(region);
+      }
+    }
 
     rentalHome.setRentalHomePhotos(photoTransform(photos, photoExplanations, 0));
 
     model.addAttribute("rentalHome", rentalHome);
+
     return "success";
   }
 
@@ -75,11 +104,13 @@ public class HostController {
 
   // 호스트 숙소 테마 저장
   @PostMapping("themeSave")
-  public String themeSave(HttpSession session,
+  public String themeSave(
+      HttpSession session,
       Model model,
       @RequestParam List<Integer> themeNos,
       @RequestParam List<String> themeNames,
       @RequestParam String type) {
+
     RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
 
     rentalHome.setThemes(themeTransform(themeNos, themeNames, type));
@@ -97,7 +128,8 @@ public class HostController {
 
   // 호스트 숙소 시설 저장
   @PostMapping("rentalHomeFacilitySave")
-  public String rentalHomeFacilitySave(HttpSession session,
+  public String rentalHomeFacilitySave(
+      HttpSession session,
       Model model,
       @RequestParam int capacity,
       @RequestParam List<Integer> facilityCount,
@@ -119,6 +151,7 @@ public class HostController {
   // 호스트 숙소 등록 최종 확인
   @GetMapping("rentalHomeConfirm")
   public void rentalHomeConfirm() {
+
   }
 
   // DB에 숙소 등록
@@ -129,13 +162,13 @@ public class HostController {
       SessionStatus sessionStatus) {
 
     RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
-
+    Member loginUser = (Member) session.getAttribute("loginUser");
     hostService.rentalHomeAdd(rentalHome);
 
     // 숙소 등록 후 임시 정보 값 제거
     sessionStatus.setComplete();
 
-    return "rentalHomeList?hostNo=1";
+    return "rentalHomeList?hostNo=" + loginUser.getNo();
   }
 
   // 숙소 관리 리스트
@@ -148,15 +181,23 @@ public class HostController {
     model.addAttribute("list", list);
   }
 
+  // 숙소 상태 변경
+  @PostMapping("rentalHomeStateUpdate")
+  public String rentalHomeStateUpdate(int rentalHomeNo, String state) {
+
+    hostService.rentalHomeStateUpdate(state, rentalHomeNo);
+
+    return "redirect:rentalHomeView?rentalHomeNo=" + rentalHomeNo;
+  }
+
   // 숙소 상세(수정)
   @GetMapping("rentalHomeView")
   public void rentalHomeView(int rentalHomeNo, Model model, SessionStatus sessionStatus)
       throws Exception {
-    RentalHome rentalHome = hostService.getRentalHome(rentalHomeNo);
 
     model.addAttribute("themeList", hostService.themeList());
     model.addAttribute("facilityList", hostService.facilityList());
-    model.addAttribute("rentalHome", rentalHome);
+    model.addAttribute("rentalHome", hostService.getRentalHome(rentalHomeNo));
 
     // 자동 바인딩 문제
     sessionStatus.setComplete();
@@ -177,6 +218,14 @@ public class HostController {
       @RequestParam List<String> facilityNames,
       SessionStatus sessionStatus
   ) throws Exception {
+
+    List<Region> regionList = hostService.regionList();
+
+    for (Region region : regionList) {
+      if (rentalHome.getAddress().contains(region.getRegionName())) {
+        rentalHome.setRegion(region);
+      }
+    }
 
     if (rentalHome.getRentalHomePhotos() == null) {
       System.out.println("true");
@@ -230,6 +279,32 @@ public class HostController {
     hostService.reservationStateUpdate(hostReservation.getState(),
         hostReservation.getReservationNo());
     return "redirect:reservationList?hostNo=" + hostReservation.getHostNo();
+  }
+
+  //채팅방 리스트
+  @GetMapping("chatList")
+  public void chatList(Model model, int hostNo) {
+    List<HostReservation> reservationList = hostService.reservationList(hostNo);
+    List<HostReservation> filteredList = new ArrayList<>();
+
+    for (HostReservation reservation : reservationList) {
+      if (reservation.getState() != 0) {
+        filteredList.add(reservation);
+      }
+    }
+    List<String> uuidPhotoNames = new ArrayList<>();
+
+    for (HostReservation reservation : filteredList) {
+      String photo = memberService.get(reservation.getMemberNo()).getPhoto();
+      if (photo != null) {
+        uuidPhotoNames.add(photo);
+      } else {
+        uuidPhotoNames.add("default-photo.jpeg");
+      }
+    }
+
+    model.addAttribute("list", filteredList);
+    model.addAttribute("photoNames", uuidPhotoNames);
   }
 
 

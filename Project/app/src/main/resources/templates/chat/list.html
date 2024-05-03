@@ -3,13 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <style>
+    #list {
+      cursor: pointer;
+      text-align: center;
+      border: 2px solid #35C5B3; /* 테두리 색상 */
+      margin-bottom: 100px;
+    }
+
+  </style>
 </head>
 <body>
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 <div class="container">
   <div>
     <div data-th-each="reservation : ${list}" data-th-object="${reservation}">
-      <span data-th-onclick="'enterChatRoom(' + ${reservation.reservationNo} + ')'"
+      <span id="list" data-th-onclick="'enterChatRoom(' + ${reservation.reservationNo} + ')'"
             data-th-text="*{memberName} + '님과의 대화'"
             data-th-data-no="*{reservationNo}">
         *{memberName}님과의 대화

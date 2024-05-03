@@ -26,10 +26,8 @@
     e.preventDefault();
     const message = messageInput.value;
     if (message.trim() !== '') {
-      // 현재 페이지의 URL에서 예약번호 추출
-      const reservationNo = window.location.pathname.replace('/', '');
       // 메시지와 예약번호를 함께 보내기
-      socket.emit('chat message', { message, reservationNo });
+      socket.emit('chat message', { message });
       messageInput.value = '';
     }
   });

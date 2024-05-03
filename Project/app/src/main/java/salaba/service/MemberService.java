@@ -1,6 +1,7 @@
 package salaba.service;
 
 import java.util.List;
+import salaba.vo.Alarm;
 import salaba.vo.Member;
 import salaba.vo.Nation;
 import salaba.vo.rental_home.Theme;
@@ -35,4 +36,9 @@ public interface MemberService {
 
   List<Member> themeList(Member sessionInfo);
 
+  void insertNotifyHistory(Alarm alarm);
+
+  List<Alarm> selectNotifyHistory(int memberNo);
+
+  void updateNotifyHistory(int notifyNo);
 }
