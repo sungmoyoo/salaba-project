@@ -13,8 +13,10 @@
     "express": "^4.19.2",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
+    "path": "^0.12.7",
     "properties": "^1.2.1",
     "properties-parser": "^0.6.0",
+    "uuid": "^9.0.1",
     "ws": "^8.16.0"
   }
 }

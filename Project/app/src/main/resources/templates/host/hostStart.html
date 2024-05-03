@@ -17,10 +17,23 @@
       padding-left: 100px;
       padding-right: 100px;
     }
+    #validator {
+      background-color: #35C5B3;
+      border: 0;
+      color: white;
+      border-radius: 2px;
+      box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+      margin: 10px;
+      padding: 0 0.5em;
+      font: 400 18px Roboto, Arial, sans-serif;
+      overflow: hidden;
+      height: 40px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
   </style>
 </head>
 <body>
-
 
 
 <div class="left-box">
@@ -33,13 +46,15 @@
 
   <br>
 
-  <a data-th-href="@{rentalHomeForm}" href="form" type="button">시작하기</a>
+  <button id="validator">시작하기</button>
 </div>
 
 <div class="right-box">
   <p>
     1. 숙소정보를 알려주세요
-    <img src="../../static/img/homeRegister1.png" height="120" width="120" align="right">
+    <img
+        src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/icon/homeRegister1.png?type=f&w=150&h=150&ttype=jpg"
+        height="120" width="120" align="right">
   </p>
 
   <br>
@@ -49,7 +64,9 @@
 
   <p>
     2. 숙소를 돋보이게 하세요
-    <img src="../../static/img/homeRegister2.png" height="120" width="120" align="right">
+    <img
+        src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/icon/homeRegister2.png?type=f&w=150&h=150&ttype=jpg"
+        height="120" width="120" align="right">
   </p>
 
   <br>
@@ -59,14 +76,29 @@
 
   <p>
     3. 등록을 완료하세요
-    <img src="../../static/img/homeRegister3.png" height="120" width="120" align="right">
+    <img
+        src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/icon/homeRegister3.png?type=f&w=150&h=150&ttype=jpg"
+        height="120" width="120" align="right">
   </p>
 </div>
 
 
+<script data-th-inline="javascript">
+  var loginUser = [[${session.loginUser}]];
+  console.log(loginUser);
 
+  var validator = document.getElementById('validator');
+  validator.onclick = () => {
+    console.log(loginUser.name);
+    if (loginUser.telNo != null) {
+      window.location.href= "rentalHomeForm";
+    } else {
+      window.alert("숙소 등록은 본인 인증 후 가능합니다.");
+      window.location.href= "/member/chkPw";
+    }
+  };
 
-
+</script>
 
 
 </body>

@@ -53,6 +53,11 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
+  public int isLiked(int memberNo, int boardNo) { // 내 추천 여부
+    return boardDao.isLiked(memberNo, boardNo);
+  }
+
+  @Override
   public Board getBoardNo(int boardNo) { // 댓글 조회
     increaseViewCount(boardNo); // 조회수 증가
     return boardDao.findByBoardNo(boardNo);
@@ -93,6 +98,11 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   } // 게시글 첨부파일 삭제
 
   @Override
+  public List<BoardFile> getBoardThumbnail(int boardNo) { // 썸네일 처리
+    return boardDao.boardThumbnail(boardNo);
+  }
+
+  @Override
   public int countAll(int categoryNo) {
     return boardDao.countAll(categoryNo);
   } // count 공지사항 제외 페이징 처리
@@ -123,18 +133,22 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
-  public List<Board> search(String keyword, String type) {
+  public List<Board> search(String keyword, String type) { // 검색 기능
     return boardDao.searchByKeyword(keyword, type);
   }
 
   @Override
-  public List<Board> searchByTitle(String title) {
+  public List<Board> searchByTitle(String title) {  // 제목으로 검색
     return boardDao.searchByKeyword(title, "title");
   }
 
   @Override
-  public List<Board> searchByContent(String content) {
+  public List<Board> searchByContent(String content) { // 내용으로 검색
     return boardDao.searchByKeyword(content, "content");
+  }
+  @Override
+  public int countFiltered(int categoryNo, String type, String keyword) { // 검색 결과 페이징 처리
+    return boardDao.countFiltered(categoryNo, type, keyword);
   }
 
   @Override
