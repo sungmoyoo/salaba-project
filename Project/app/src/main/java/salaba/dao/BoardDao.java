@@ -24,6 +24,8 @@ public interface BoardDao {  // 게시판 인터페이스
 
   Board findBy(@Param("boardNo") int boardNo, @Param("categoryNo") int categoryNo); // 상세조회
 
+  int isLiked(@Param("memberNo") int memberNo, @Param("boardNo")int boardNo); // 내 추천 여부
+
 
   List<BoardFile> boardThumbnail(int boardNo);  // 게시글 썸네일
 
@@ -34,13 +36,13 @@ public interface BoardDao {  // 게시판 인터페이스
   int countAll(int categoryNo);// (공지사항 제외) 목록 페이징 처리
   void increaseViewCount(int boardNo); // 조회수 증가
 
-  int increaseLikeCount(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 추천수 증가
+  int increaseLikeCount(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 추천수 증가(board_like insert)
 
-  int decreaseLikeCount(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 추천 취소
-
-  int countLike(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 한 회원의 추천수
+  int decreaseLikeCount(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 추천 취소(board_like delete)
 
   List<Board> searchByKeyword(@Param("keyword") String keyword, @Param("type") String type); // 검색
+
+  int countFiltered(int categoryNo, String type, String keyword); // 검색으로 필터링해 페이징 처리
 
   List<Board> findHistory( // 작성글 내역
       @Param("offset") int offset,

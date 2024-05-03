@@ -227,6 +227,26 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       throw new Exception("번호가 유효하지 않습니다.");
     }
 
+    Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인
+//    if (loginUser == null) {
+//      model.addAttribute("message", "로그인이 필요합니다.");
+//      return "auth/form";  // 로그인 페이지로 리다이렉트
+//    }
+
+    // 공개 범위에 따라 접근 제어
+    switch (board.getScopeNo()) {
+      case 2: // 작성자만
+        if (loginUser == null || board.getWriter().getNo() != loginUser.getNo()) {
+          model.addAttribute("title", "비공개 게시글입니다.");
+          return "block";
+        }
+      case 1: // 로그인한 회원만
+        if (loginUser == null) {
+          model.addAttribute("title", "회원만 열람이 가능한 게시물입니다.");
+          return "block";
+        }
+    }
+
     //댓글을 가져온다.
     List<Comment> commentList = commentService.list(boardNo);
     Iterator<Comment> iterator = commentList.iterator();
@@ -258,29 +278,18 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     // 조회수 증가 (게시글 존재 및 접근 가능 확인 후)
     boardService.increaseViewCount(boardNo);
 
-    Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인
 
-    // 공개 범위에 따라 접근 제어
-    switch (board.getScopeNo()) {
-      case 2: // 작성자만
-        if (loginUser == null || board.getWriter().getNo() != loginUser.getNo()) {
-          model.addAttribute("title", "비공개 게시글입니다.");
-          return "block";
-        }
-      case 1: // 로그인한 회원만
-        if (loginUser == null) {
-          model.addAttribute("title", "회원만 열람이 가능한 게시물입니다.");
-          return "block";
-        }
-    }
+    int isLiked = boardService.isLiked(loginUser.getNo(), boardNo); // 추천수 처리(내 추천 여부 확인)
+
     model.addAttribute("categoryNo", categoryNo); // 카테고리 별 분류
     model.addAttribute("board", board); // 게시판
     model.addAttribute("boardName", categoryNo == 0 ? "후기게시판"
         : (categoryNo == 1 ? "정보공유게시판" : "자유게시판")); // 0: 후기 게시판 - 1 : 정보공유게시판
     model.addAttribute("loginUser", session.getAttribute("loginUser"));
-
+    model.addAttribute("isLiked", isLiked);
     return "board/view";
   }
+
   @PostMapping("board/update")
   public String updateBoard( // 게시글 수정
       Board board, HttpSession session, SessionStatus sessionStatus) throws Exception {
@@ -576,8 +585,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   // 추천수
   @PostMapping("/board/like")
-  @ResponseBody
-  public Object likeBoard(
+  public ResponseEntity likeBsoard(
       @RequestParam("boardNo") int boardNo,
       HttpSession session) {
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -585,31 +593,27 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인을 해주세요!");
     }
 
-    Map<String,Object> result = new HashMap<>();
     try {
       log.debug(("ffff") + boardNo);
-      boardService.increaseLikeCount(boardNo, loginUser.getNo());
-
-      result.put("status", "success");
+      int result = boardService.increaseLikeCount(boardNo, loginUser.getNo()); // 추천수 증가: board_like 테이블에 추가
+      return ResponseEntity.ok(result);
 
     } catch (Exception e) {
-      log.error("추천 처리 중 오류 발생", e);
-      result.put("status", "fail");
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    return result;
   }
 
   @PostMapping("/board/unlike")      // 추천 취소 로직
-  @ResponseBody
   public Object removeLike(
-      @RequestParam int boardNo,
+      @RequestParam("boardNo") int boardNo,
       HttpSession session) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
     Map<String,Object> result = new HashMap<>();
     try {
-      boardService.decreaseLikeCount(boardNo, loginUser.getNo());
+      boardService.decreaseLikeCount(boardNo, loginUser.getNo()); // 추천수 감소: board_like 테이블에서 삭제
+
       result.put("status", "success");
     } catch (Exception e) {
       log.error("추천 처리 중 오류 발생", e);
@@ -624,6 +628,8 @@ public String searchBoard(
     @RequestParam("categoryNo") int categoryNo, // 카테고리 번호를 요청 파라미터로 받음
     @RequestParam("type") String type,
     @RequestParam("keyword") String keyword,
+    @RequestParam(defaultValue = "1") int pageNo,
+    @RequestParam(defaultValue = "8") int pageSize,
     Model model) {
 
   List<Board> filteredBoardList;
@@ -639,11 +645,19 @@ public String searchBoard(
     model.addAttribute("message", "검색 결과가 없습니다");
   }
 
+  // 페이징 처리를 위해 검색 결과의 총 개수를 계산
+  int numOfRecord = boardService.countFiltered(categoryNo, type, keyword);
+  int numOfPage = (numOfRecord / pageSize) + (numOfRecord % pageSize > 0 ? 1 : 0);
+  pageNo = Math.max(1, Math.min(pageNo, numOfPage));
+
   // 필터링된 게시글 목록을 화면에 전달
   model.addAttribute("list", filteredBoardList);
   model.addAttribute("categoryNo", categoryNo);
   model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
   model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
+  model.addAttribute("pageNo", pageNo);
+  model.addAttribute("pageSize", pageSize);
+  model.addAttribute("numOfPage", numOfPage);
 
   return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
   }

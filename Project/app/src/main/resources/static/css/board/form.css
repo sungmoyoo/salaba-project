@@ -1,0 +1,74 @@
+body {
+    padding-left: 10px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/*게시글 제목 위치*/
+h1 {
+    text-align: left; /* 제목을 가운데 정렬 */
+    margin-left: 20px; /* 좌측 여백을 40px로 설정 */
+    margin-top: 20px; /* 상단 여백 추가 */
+    margin-bottom: 20px; /* 하단 여백 추가 */
+}
+
+/*분류~공개범위 묶기*/
+.info-box {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 20px; /* 상단 마진 */
+    margin-bottom: 20px; /* 하단 마진 */
+    width: 70%;
+    max-width: 600px;
+    height: 100px; /* 높이를 지정 */
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    font-size: medium;
+    flex-direction: column;
+    justify-content: center; /* 수직 중앙 정렬 */
+    align-items: center; /* 모든 내부 요소를 수평 중앙으로 정렬 */
+    text-align: left; /* 모든 텍스트 정렬 */
+}
+
+.info-box > div {
+    margin-bottom: 10px;
+    width: 100%; /* 또는 너비를 필요에 따라 조절하여 중앙 정렬을 조절할 수 있습니다 */
+}
+
+
+#write-button-container {
+    text-align: right;
+    margin-top: 40px; /* 버튼과 게시판 내용 사이의 간격 */
+    margin-right: 25px; /* 오른쪽 여백 추가 */
+    margin-bottom: 40px;
+  }
+
+  #write-button {
+    padding: 10px 20px; /* 글쓰기 버튼의 패딩 */
+    background-color: #718de0;
+    color: white; /* 글자 색상 */
+    border-radius: 5px; /* 둥근 모서리 */
+    text-decoration: none; /* 밑줄 없애기 */
+    border: 2px solid #A9BCF5; /* 테두리 추가 */
+    transition: all 0.3s ease; /* 호버 시 효과를 위한 전환 */
+  }
+
+  #write-button:hover {
+    background-color: #E6E0F8; /* 버튼 호버 시 배경색 변경 */
+    border-color: #E6E0F8; /* 버튼 호버 시 테두리 색 변경 */
+  }
+
+  input[name='title'] {
+    width: 100%; /* 전체 너비를 사용 */
+    padding: 10px; /* 적당한 패딩으로 편안한 타이핑 제공 */
+    height:auto;
+    box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 설정 */
+    border: 1px solid #ccc; /* 경계선 설정 */
+    border-radius: 4px; /* 약간 둥근 모서리 */
+    font-size: 16px; /* 충분히 큰 글꼴 크기로 가독성 향상 */
+    margin-bottom: 10px;
+}

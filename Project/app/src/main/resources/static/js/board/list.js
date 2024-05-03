@@ -80,19 +80,25 @@ document.querySelectorAll(".card-deck .card").forEach(card => {
 
 // 검색
     // 페이지가 로드될 때 저장된 검색어가 있는지 확인 -> 있으면 검색창에 남겨두기
-  window.onload = function() {
+  window.addEventListener('DOMContentLoaded', (event) => {
+    initSlider();
+    console.log("검색1")
     var savedKeyword = localStorage.getItem('searchKeyword');
     if (savedKeyword) {
       document.getElementById('search-input').value = savedKeyword;
       // 검색어를 가져왔으면 -> 다시 로컬 스토리지에서 삭제
+      console.log("검색2")
       localStorage.removeItem('searchKeyword');
     }
-  };
-
-  // 검색 버튼 클릭 시 검색어를 로컬 스토리지에 저장
-  document.getElementById('search-button').addEventListener('click', function() {
-    var keyword = document.getElementById('search-input').value;
-    localStorage.setItem('searchKeyword', keyword);
   });
 
+
+  // 검색 버튼 클릭 시 검색어를 로컬 스토리지에 저장
+  document.getElementById('search-button').addEventListener('click', function(event) {
+    event.preventDefault();
+    var keyword = document.getElementById('search-input').value;
+    localStorage.setItem('searchKeyword', keyword);
+    document.getElementById('search-form').submit();
+        console.log("검색3")
+  });
 

@@ -91,13 +91,16 @@
         m.member_no,
         m.nickname,
         r.region_no,
-        r.region_name
+        r.region_name,
+        bf.file_no,
+        bf.uuid_file_name
       FROM
         board b
-      INNER JOIN head h ON b.head_no = h.head_no
-      INNER JOIN member m ON b.member_no = m.member_no
-      LEFT JOIN board_like bl ON b.board_no = bl.board_no
-      LEFT JOIN region r ON b.region_no = r.region_no
+        INNER JOIN head h ON b.head_no = h.head_no
+        INNER JOIN member m ON b.member_no = m.member_no
+        LEFT JOIN board_like bl ON b.board_no = bl.board_no
+        LEFT JOIN region r ON b.region_no = r.region_no
+        LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
       WHERE
         b.board_category_no = 0
       AND b.state != '1'
@@ -230,12 +233,12 @@
       (select count(*) from board_like where board_no=b.board_no and member_no=m.member_no) as my_like_count
     from
       board b
-    left join head h on b.head_no=h.head_no
-    inner join board_scope bs on b.scope_no=bs.scope_no
-    inner join member m on b.member_no=m.member_no
-    left outer join comment c on b.board_no = c.board_no
-    left outer join reply rp on c.comment_no = rp.comment_no
-    left join region r on b.region_no=r.region_no
+      left join head h on b.head_no=h.head_no
+      inner join board_scope bs on b.scope_no=bs.scope_no
+      inner join member m on b.member_no=m.member_no
+      left outer join comment c on b.board_no = c.board_no
+      left outer join reply rp on c.comment_no = rp.comment_no
+      left join region r on b.region_no=r.region_no
     where
       b.board_no= #{boardNo}
     and
@@ -244,7 +247,7 @@
       b.created_date desc,
       b.like_count desc
   </select>
-  
+
   <!-- 게시글 썸네일 사진 가져오기-->
   <select id="boardThumbnail" resultMap="fileList">
     SELECT
@@ -303,6 +306,7 @@
     VALUES (#{boardNo}, #{memberNo})
   </insert>
 
+  <!-- 추천수 감소 -->
   <delete id="decreaseLikeCount">
     delete from
       board_like
@@ -312,17 +316,19 @@
       member_no = #{memberNo}
   </delete>
 
-  <!-- 회원 추천수 -->
-  <select id="countLike" resultType="int">
+
+  <!-- 자신의 추천 여부 -->
+  <select id="isLiked" resultType="int">
     select
       count(*)
     from
       board_like
     where
       board_no = #{boardNo}
-    AND
+    and
       member_no = #{memberNo}
   </select>
+
 
   <!-- 검색 결과 -->
   <select id="searchByKeyword" parameterType="map" resultMap="BoardMap">
@@ -371,10 +377,10 @@
           r.region_name
         FROM
           board b
-        inner join head h on b.head_no=h.head_no
-        inner join member m on b.member_no=m.member_no
-        left join board_file bf on b.board_no=bf.board_no
-        left join region r on b.region_no=r.region_no
+          inner join head h on b.head_no=h.head_no
+          inner join member m on b.member_no=m.member_no
+          left join board_file bf on b.board_no=bf.board_no
+          left join region r on b.region_no=r.region_no
         WHERE
           content LIKE CONCAT('%', #{keyword}, '%')
         AND
@@ -402,6 +408,40 @@
     AND
       board_category_no = #{value}
   </select>
+
+  <!-- 검색 결과 페이징 처리 -->
+  <select id="countFiltered" resultType="int" parameterType="map">
+    <choose>
+      <when test='type.equals("title")'>
+        SELECT
+          COUNT(*)
+        FROM
+          board b
+          INNER JOIN head h ON b.head_no = h.head_no
+        WHERE
+          b.title
+          LIKE CONCAT('%', #{keyword}, '%')
+        AND b.board_category_no = #{categoryNo}
+        AND b.state != '1'
+      </when>
+      <when test='type.equals("content")'>
+        SELECT
+          COUNT(*)
+        FROM
+          board b
+          INNER JOIN head h ON b.head_no = h.head_no
+        WHERE
+          b.content
+          LIKE CONCAT('%', #{keyword}, '%')
+        AND b.board_category_no = #{categoryNo}
+        AND b.state != '1'
+      </when>
+      <otherwise>
+        SELECT 0  <!-- 검색 유형이 유효하지 않을 경우 0 반환 -->
+      </otherwise>
+    </choose>
+  </select>
+
 
   <!-- 작성글 내역 -->
   <select id="findHistory" resultMap="BoardMap">
