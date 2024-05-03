@@ -12,7 +12,7 @@
   <insert id="addTheme" parameterType="RentalHome">
     insert into rental_home_theme(rental_home_no, theme_no)
     values
-    <foreach collection="rentalHomeThemes" item="item" separator=",">
+    <foreach collection="themes" item="item" separator=",">
       (#{rentalHomeNo}, #{item.themeNo})
     </foreach>
   </insert>

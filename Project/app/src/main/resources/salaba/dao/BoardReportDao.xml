@@ -5,31 +5,36 @@
 
 <mapper namespace="salaba.dao.BoardReportDao">
 
+  <!-- 게시판 신고 -->
   <resultMap id="BoardReportMap" type="BoardReport">
     <id column="report_no" property="reportNo"/>
-    <result column="category_no" property="categoryNo"/>
+    <result column="report_category_no" property="categoryNo"/>
     <result column="content" property="content"/>
     <result column="report_date" property="reportDate"/>
     <result column="state" property="state"/>
-    <result column="target_no" property="targetNo"/>
-    <result column="target_type" property="targetType"/>
+    <result column="report_target_no" property="targetNo"/>
+    <result column="report_target_type" property="targetType"/>
 
+    <!-- 회원 정보 가져오기 -->
   <association property="writer" javaType="Member">
     <id column="member_no" property="no"/>
     <result column="name" property="name"/>
+    <result column="nickname" property="nickname"/>
   </association>
 
-  <collection property="fileList" ofType="BoardFile">
-    <id column="file_no" property="fileNo"/>
+    <!-- 신고 첨부 파일 -->
+  <collection property="reportFileList" ofType="BoardReportFile">
+    <result column="report_no" property="reportNo"/>
     <result column="ori_file_name" property="oriFileName"/>
     <result column="uuid_file_name" property="uuidFileName"/>
   </collection>
   </resultMap>
 
-  <insert id="add" parameterType="BoardReport"
+  <insert id="addReport" parameterType="BoardReport"
     useGeneratedKeys="true" keyColumn="report_no" keyProperty="reportNo">
-    insert into boardReport(content,writer,category_no)
-    values(#{content},#{writer.no},#{categoryNo})
+<!-- id => BoardDao에 속한 메서드 이름 -->
+    insert into board_report_detail(report_target_no,report_target_type,content,member_no,report_category_no)
+    values(#{targetNo},#{targetType},#{content},#{writer.no},#{categoryNo})
   </insert>
 
   <select id="findAll" resultMap="BoardReportMap">
@@ -38,6 +43,7 @@
     content,
     state,
     report_date,
+    report_target_no,
     report_target_type
     from
     board_report_detail
@@ -67,13 +73,6 @@
     t1.report_no = t2.report_no and
     t1.report_category_no = t3.report_category_no
   </select>
-
-  <update id="update" parameterType="BoardReport">
-    update board_report_detail set
-    state=#{state}
-    where
-    report_no=#{reportNo}
-  </update>
 
   <select id="countAll" resultType="int" parameterType="int">
     select count(*) from board_report_detail where category_no=#{value}

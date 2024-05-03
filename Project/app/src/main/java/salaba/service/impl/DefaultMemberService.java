@@ -63,18 +63,18 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public Member findPw(Member member) {
-    return memberDao.findPw(member);
+  public Member findPassword(Member member) {
+    return memberDao.findPassword(member);
   }
 
   @Override
-  public void chgPwSave(Member member) {
-    memberDao.chgPwSave(member);
+  public void changePasswordSave(Member member) {
+    memberDao.changePasswordSave(member);
   }
 
   @Override
-  public Member chkPw(Member member) {
-    return memberDao.chkPw(member);
+  public Member myinfoCheckPassword(Member member) {
+    return memberDao.myinfoCheckPassword(member);
   }
 
   @Override
@@ -90,5 +90,20 @@ public class DefaultMemberService implements MemberService {
   @Override
   public List<Member> themeList(Member sessionInfo) {
     return memberDao.findAllTheme(sessionInfo);
+  }
+
+  @Override
+  public  String getMemberPoint(Member member) {
+    return memberDao.getMemberPoint(member);
+  }
+
+  @Override
+  public  Member getGrade(Member member) {
+    return memberDao.getGrade(member);
+  }
+
+  @Override
+  public List<Member> mythemeList(Member sessionInfo) {
+    return memberDao.findAllmyTheme(sessionInfo);
   }
 }

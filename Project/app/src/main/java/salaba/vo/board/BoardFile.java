@@ -1,4 +1,4 @@
-package salaba.vo;
+package salaba.vo.board;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
@@ -6,10 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor // Mybatis 가 사용할 기본 생성자를 만들어야 한다.
-@AllArgsConstructor
 @Builder
 @Data // 클래스 내의 모든 필드에 대한 Getter와 Setter 메서드를 생성
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardFile implements Serializable { // 게시판, 신고 첨부파일
 
   private static final long serialVersionUID = 100L;

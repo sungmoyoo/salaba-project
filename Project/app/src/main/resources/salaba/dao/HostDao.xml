@@ -15,11 +15,12 @@
     <result column="end_date" property="endDate"/>
     <result column="state" property="state"/>
     <result column="payment_date" property="paymentDate"/>
+    <result column="amount" property="amount"/>
+    <result column="number_of_people" property="numberOfPeople"/>
   </resultMap>
 
   <resultMap id="RentalHomeMap" type="RentalHome">
     <id column="rental_home_no" property="rentalHomeNo"/>
-    <result column="region_no" property="regionNo"/>
     <result column="name" property="name"/>
     <result column="explanation" property="explanation"/>
     <result column="address" property="address"/>
@@ -33,6 +34,15 @@
     <result column="registe_Date" property="registeDate"/>
     <result column="rental_home_rule" property="rentalHomeRule"/>
     <result column="clean_fee" property="cleanFee"/>
+
+    <association property="region" javaType="Region">
+      <id column="region_no" property="regionNo"/>
+      <result column="region_name" property="regionName"/>
+      <association property="nation" javaType="Nation">
+        <id column="nation_no" property="nationNo"/>
+        <result column="nation_name" property="nationName"/>
+      </association>
+    </association>
 
     <collection property="rentalHomeFacilities" ofType="RentalHomeFacility">
       <id column="facility_no" property="facilityNo"/>
@@ -93,21 +103,47 @@
     );
   </insert>
 
-
+  <update id="updateRentalHome" parameterType="RentalHome">
+    update
+      rental_home
+    set
+      name = #{name},
+      explanation = #{explanation},
+      rental_home_rule = #{rentalHomeRule},
+      capacity = #{capacity},
+      region_no = 2,
+      address = '대한민국 제주도 제주 중앙로 304',
+      lat = '33.49349680955714',
+      lon = '126.53430217348503',
+      price = #{price},
+      clean_fee = #{cleanFee},
+      hosting_start_date = #{hostingStartDate},
+      hosting_end_date = #{hostingEndDate}
+    where
+      rental_home_no = #{rentalHomeNo};
+  </update>
 
   <select id="findAllRentalHome" resultMap="RentalHomeMap" parameterType="int">
     select
-      rental_home_no,
-      name,
-      explanation,
-      address,
-      price,
-      capacity,
-      state,
-      hosting_start_date,
-      hosting_end_date
+      r.rental_home_no,
+      r.name,
+      r.explanation,
+      r.address,
+      r.price,
+      r.clean_fee,
+      r.capacity,
+      r.state,
+      r.hosting_start_date,
+      r.hosting_end_date,
+      r.registe_date,
+      rp.photo_no,
+      rp.ori_photo_name,
+      rp.uuid_photo_name,
+      rp.photo_explanation,
+      rp.photo_order
     from
-      rental_home
+      rental_home r
+      inner join rental_home_photo rp on rp.rental_home_no = r.rental_home_no
     where
       member_no = #{value}
     order by
@@ -150,6 +186,12 @@
       r.rental_home_no=#{value}
   </select>
 
+  <update id="reservationStateUpdate" parameterType="int">
+    update reservation
+    set state = #{state}
+    where reservation_no = #{reservationNo};
+  </update>
+
   <select id="findAllReservation" resultMap="HostReservationMap" parameterType="int">
     select
       rent.name as rentalHomeName,
@@ -161,26 +203,17 @@
       rv.start_date,
       rv.end_date,
       rv.state,
-      p.payment_date
+      rv.number_of_people,
+      p.payment_date,
+      p.amount
     from
-      member m
-    inner join
-      reservation rv on m.member_no = rv.member_no
-    inner join
-      rental_home rent on rv.rental_home_no = rent.rental_home_no
-    inner join
-      payment p on rv.reservation_no = p.reservation_no
+    member m
+      inner join reservation rv on m.member_no = rv.member_no
+      inner join rental_home rent on rv.rental_home_no = rent.rental_home_no
+      inner join payment p on rv.reservation_no = p.reservation_no
     where
-      rent.member_no = #{value}
-    order by
-      rv.start_date asc;
+      rent.member_no = #{value};
   </select>
-
-  <update id="reservationStateUpdate" parameterType="int">
-    update reservation
-    set state = #{state}
-    where reservation_no = #{reservationNo};
-  </update>
 
   <delete id="deleteRentalHome" parameterType="int">
     delete from

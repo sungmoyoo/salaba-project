@@ -9,7 +9,6 @@
     <id column="member_no" property="no"/>
     <result column="email" property="email"/>
     <result column="name" property="name"/>
-    <result column="password" property="password"/>
     <result column="nickname" property="nickname"/>
     <result column="birthday" property="birthday"/>
     <result column="tel_no" property="telNo"/>
@@ -20,14 +19,18 @@
     <result column="my_theme_yn" property="myThemeYn"/>
     <result column="theme_no" property="themeNo"/>
     <result column="theme_name" property="themeName"/>
+
+    <!-- grade 정보 가져오기 -->
+    <association property="grade" javaType="Grade">
+      <id column="grade_no" property="gradeNo"/>
+      <result column="grade_name" property="gradeName"/>
+    </association>
   </resultMap>
 
   <resultMap id="NationMap" type="Nation"><!--국가선택 준비-->
     <id column="nation_no" property="nationNo"/>
     <result column="nation_name" property="nationName"/>
   </resultMap>
-
-
 
   <insert id="add" parameterType="Member"><!--회원가입>-->
     insert into member(
@@ -109,10 +112,14 @@
   <select id="findByEmailAndPassword" resultMap="MemberMap"><!--로그인>-->
     select
       member_no,
+      email,
       name,
       nickname,
       birthday,
-      email,
+      tel_no,
+      nation_no,
+      address,
+      sex,
       photo,
       state
     from
@@ -133,7 +140,7 @@
       and birthday=#{birthday}
   </select>
 
-  <select id="findPw" resultMap="MemberMap"><!--비밀번호 찾기>-->
+  <select id="findPassword" resultMap="MemberMap"><!--비밀번호 찾기>-->
     select
       member_no
     from
@@ -143,7 +150,7 @@
       and name= #{name}
   </select>
 
-  <update id="chgPwSave" parameterType="Member"><!--비밀번호 변경>-->
+  <update id="changePasswordSave" parameterType="Member"><!--비밀번호 변경>-->
     update
       member
     set
@@ -153,9 +160,9 @@
       member_no=#{no}
   </update>
 
-  <select id="chkPw" resultMap="MemberMap"><!--비밀번호 확인>-->
+  <select id="myinfoCheckPassword" resultMap="MemberMap"><!--비밀번호 확인>-->
     select
-      password
+      member_no
     from
       member
     where
@@ -178,19 +185,37 @@
       end as my_theme_yn
     from
       theme t
-    left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
+      left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
   </select>
 
-  <select id="joinThemeList" resultMap="MemberMap">
+  <select id="findAllmyTheme" resultMap="MemberMap">
     select
-      theme_no,
-      theme_name,
-      case when m.theme_no is null then 'N'
-      else 'Y'
-      end as my_theme_yn
+      theme_no
     from
-      theme t
-    left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
+      member_preference
+    where
+      member_no = #{no}
+  </select>
+
+  <select id="getMemberPoint" resultType="String">
+    select
+      SUM(save_point)
+    from
+      point_history
+    where
+      member_no = #{no}
+  </select>
+
+  <select id="getGrade" resultMap="MemberMap">
+    select
+      m.member_no,
+      m.grade_no,
+      g.grade_name
+    from
+      member m
+      inner join grade g on m.grade_no = g.grade_no
+    where
+      m.member_no= #{no}
   </select>
 
   <delete id="deletePreference" parameterType="Member">

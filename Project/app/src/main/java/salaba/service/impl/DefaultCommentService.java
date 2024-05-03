@@ -3,10 +3,10 @@ package salaba.service.impl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import salaba.dao.BoardDao;
+import org.springframework.web.bind.annotation.RequestParam;
 import salaba.dao.CommentDao;
 import salaba.service.CommentService;
-import salaba.vo.Comment;
+import salaba.vo.board.Comment;
 
 @RequiredArgsConstructor
 @Service
@@ -15,7 +15,7 @@ public class DefaultCommentService implements CommentService { // 댓글
   private final CommentDao commentDao;
 
   @Override
-  public void addComment(Comment comment) {
+  public void addComment(Comment comment){
     commentDao.addComment(comment);
   } // 댓글 작성
 
@@ -33,9 +33,9 @@ public class DefaultCommentService implements CommentService { // 댓글
   } // 댓글 삭제
 
   @Override
-  public Comment getComment(int commentNo) {
-    return null;
-  }
+  public Comment getBy(int commentNo) {
+    return commentDao.findBy(commentNo);
+  } // 댓글 찾기
 
 
 }

@@ -1,5 +1,6 @@
 package salaba.controller;
 
+import java.util.List;
 import salaba.service.MemberService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +60,18 @@ public class AuthController {
         model.addAttribute("memberEmail",member.getEmail());
         model.addAttribute("memberState",member.getState());
       }else {//로그인 성공
+        /* 세션 설정*/
+        //선호사항
+        List<Member> preferenceList = memberService.mythemeList(member);
+        session.setAttribute("preference", preferenceList);
+        //포인트
+        String memberPoint = memberService.getMemberPoint(member);
+        session.setAttribute("memberPoint", memberPoint);
+        //등급
+        Member memberGrade = memberService.getGrade(member);
+        session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
+        session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+        //회원정보
         session.setAttribute("loginUser", member);
       }
     }else{//이메일주소 또는 암호가 맞지 않을 경우

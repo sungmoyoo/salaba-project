@@ -11,5 +11,4 @@ public class Region implements Serializable {
 
   private int regionNo;
   private String regionName;
-  //private Nation nation;
 }

@@ -1,5 +1,6 @@
 package salaba.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -9,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import salaba.dao.BoardFileDao;
 import salaba.dao.BoardDao;
 import salaba.service.BoardService;
-import salaba.vo.BoardFile;
-import salaba.vo.Board;
+import salaba.vo.board.BoardFile;
+import salaba.vo.board.Board;
 
 @RequiredArgsConstructor
 @Service
@@ -34,14 +35,27 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
-  public List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo) {  // 목록 조회
-    return boardDao.findAll(categoryNo, pageSize * (pageNo - 1), pageSize, headNo);
+  public List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo) { // 게시글 목록 조회
+    // 일반 게시글 조회
+    List<Board> normalPosts = boardDao.findAll(categoryNo, pageNo, pageSize, headNo);
+
+    return normalPosts;
   }
 
+  @Override
+  public List<Board> findAnnouncements(int categoryNo, int limit) { // 공지사항 찾기
+    return boardDao.findAnnouncements(categoryNo, limit);
+  }
 
   @Override
   public Board getBoard(int boardNo, int categoryNo) { // 상세 조회
     return boardDao.findBy(boardNo, categoryNo);
+  }
+
+  @Override
+  public Board getBoardNo(int boardNo) { // 댓글 조회
+    increaseViewCount(boardNo); // 조회수 증가
+    return boardDao.findByBoardNo(boardNo);
   }
 
   @Transactional
@@ -72,6 +86,7 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
     return boardFileDao.findByNo(fileNo);
   }
 
+  @Transactional
   @Override
   public int deleteBoardFile(int fileNo) {
     return boardFileDao.delete(fileNo);
@@ -80,24 +95,54 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   @Override
   public int countAll(int categoryNo) {
     return boardDao.countAll(categoryNo);
-  } // count
+  } // count 공지사항 제외 페이징 처리
 
+  @Transactional
   @Override
   public void addAllFiles(List<BoardFile> boardFiles) {
     boardFileDao.addAll(boardFiles);
   }
 
+
   @Transactional
   @Override
-  public void incrementViewCount(int boardNo, int categoryNo) { // 조회수 증가
-    Board board = boardDao.findBy(boardNo, categoryNo); // 해당 게시글 조회
-    if (board != null) {
-      int currentViewCount = board.getViewCount(); // 현재 조회수 가져오기
-      board.setViewCount(currentViewCount + 1); // 조회수 증가
-      boardDao.updateBoard(board); // 증가된 조회수를 데이터베이스에 업데이트
-    } else {
-      log.error("게시글이 존재하지 않습니다. 게시글 번호: " + boardNo);
-    }
+  public void increaseViewCount(int boardNo) {
+    boardDao.increaseViewCount(boardNo); // DAO 메서드 호출
+  }
+
+  @Transactional
+  @Override
+  public int increaseLikeCount(int boardNo, int memberNo) { // 게시물의 추천 수 증가 메서드 호출
+    return boardDao.increaseLikeCount(boardNo, memberNo);
+
+  }
+
+  @Override
+  public int decreaseLikeCount(int boardNo, int memberNo) { // 게시물의 추천 수 감소 메서드 호출
+    return boardDao.decreaseLikeCount(boardNo, memberNo);
+  }
+
+  @Override
+  public List<Board> search(String keyword, String type) {
+    return boardDao.searchByKeyword(keyword, type);
+  }
+
+  @Override
+  public List<Board> searchByTitle(String title) {
+    return boardDao.searchByKeyword(title, "title");
+  }
+
+  @Override
+  public List<Board> searchByContent(String content) {
+    return boardDao.searchByKeyword(content, "content");
+  }
+
+
+
+
+  @Override
+  public List<Board> boardHistory(int pageNo, int pageSize, int no) {  // 작성글 내역
+    return boardDao.findHistory(pageSize * (pageNo - 1), pageSize, no);
   }
 
   @Override
@@ -106,18 +151,12 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   } // count
 
   @Override
-  public List<Board> boardHistory(int pageNo, int pageSize, int no) {  // 목록 조회
-    return boardDao.findHistory(pageSize * (pageNo - 1), pageSize, no);
+  public List<Board> commentHistory(int pageNo, int pageSize, int no) {  // 작성댓글 내역
+    return boardDao.findCommentHistory(pageSize * (pageNo - 1), pageSize, no);
   }
 
   @Override
   public int countAllCommentHistory(int no) {
     return boardDao.countAllCommentHistory(no);
   } // count
-
-  @Override
-  public List<Board> commentHistory(int pageNo, int pageSize, int no) {  // 목록 조회
-    return boardDao.findCommentHistory(pageSize * (pageNo - 1), pageSize, no);
-  }
-
 }

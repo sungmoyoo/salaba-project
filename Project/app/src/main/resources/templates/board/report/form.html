@@ -6,7 +6,12 @@
 </head>
 <body>
 <h1 data-th-text="${boardReportName}">신고</h1>
+<<<<<<< HEAD
+<form id="reportForm" action="add" data-th-action="@{add}" enctype='multipart/form-data' method='post'>
+  <input data-th-value="${targetType}" name='targetType' type='hidden'>
+=======
 <form action="addReport" data-th-action="@{addReport}" enctype='multipart/form-data' method='post'>
+>>>>>>> origin/dev
   <input data-th-value="${targetNo}" name='targetNo' type='hidden'>
     <div>
       신고 유형: <select name="categoryNo">
@@ -19,6 +24,49 @@
     <div>
     내용: <textarea name='content'></textarea>
   </div>
+<<<<<<< HEAD
+  <div>
+    첨부 파일: <input type="file" multiple name="reportFiles">
+  </div>
+
+  <div>
+    <button id="submitBtn">등록</button>
+  </div>
+</form>
+
+<!--<script data-th-src="@{/board/boardReport.js}"></script>-->
+</body>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#submitBtn').click(function(event) {
+      event.preventDefault(); // 기본 폼 제출 동작 방지
+      var formData = new FormData($('#reportForm')[0]); // 폼 데이터 수집
+
+      $.ajax({
+        url: $('#reportForm').attr('action'), // 폼의 action 속성 사용
+        type: 'POST',
+        data: formData,
+        processData: false,  // 데이터를 쿼리 문자열로 변환하지 않음
+        contentType: false,  // contentType을 false로 설정하여 데이터를 multipart/form-data로 전송
+        success: function(response) {
+          alert('신고 완료');
+          window.close(); // 팝업 창 닫기
+        },
+        error: function() {
+          console.log(formData);
+          alert('신고 처리에 실패했습니다. 다시 시도해주세요.');
+        }
+      });
+    });
+  });
+</script>
+
+
+</html>
+
+=======
 <!--  <div>-->
 <!--    첨부 파일: <input type="file" name="boardFile">-->
 <!--  </div>-->
@@ -59,3 +107,4 @@
 
 </body>
 </html>
+>>>>>>> origin/dev

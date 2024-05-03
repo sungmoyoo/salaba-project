@@ -5,27 +5,48 @@
   <title>비트캠프 데브옵스 5기</title>
 
   <style>
-    .image-item {
-      width: 265px; /* 원하는 너비를 지정합니다. */
-      height: 252px; /* 원하는 높이를 지정합니다. */
-      object-fit: cover; /* 이미지를 화면에 꽉 차게 표시하되, 비율은 유지합니다. */
-      margin-bottom: 10px; /* 이미지 간의 간격을 설정합니다. */
-    }
     .image-container {
-      display: inline-block; /* 요소를 인라인 블록 요소로 설정하여 너비를 이미지에 맞춥니다. */
-      text-align: center; /* 이미지와 설명을 가운데 정렬합니다. */
-      margin-right: 20px; /* 이미지 컨테이너 간의 간격을 설정합니다. */
-      margin-top: 30px; /* 이미지 컨테이너와 선택 버튼 간격 설정 */
-      position: relative; /* 상대 위치 설정 */
+      display: inline-block;
+      text-align: center;
+      margin-right: 20px;
+      margin-top: 30px;
+      position: relative;
     }
+    .image-item {
+      width: 265px;
+      height: 252px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      position: relative; /* 이미지 상대 위치 설정 */
+    }
+
     .image-description {
-      width: 100%; /* 설명 입력 필드를 이미지의 너비에 맞춰 설정합니다. */
-      box-sizing: border-box; /* 경계 상자 크기를 너비와 높이에 포함합니다. */
-      position: absolute; /* 절대 위치 설정 */
-      bottom: 0; /* 아래쪽에 정렬 */
-      left: 0; /* 왼쪽에 정렬 */
-      margin: 0; /* 마진 초기화 */
-      padding: 5px; /* 패딩 추가 */
+        width: 100%;
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: 0;
+        padding: 5px;
+    }
+
+    .delete-button {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        position: absolute;
+        top: 0; /* 이미지의 위쪽 여백 */
+        right: 0; /* 이미지의 오른쪽 여백 */
+        transform: translate(50%, -50%); /* 삭제 버튼을 이미지의 오른쪽 상단에 정확히 위치시키기 위해 */
+    }
+    .input-file-button{
+      padding: 6px 25px;
+      background-color:#35C5B3;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -39,7 +60,7 @@
 <div align="center">
   <form action="update" data-th-action="@{StateUpdate}" enctype='multipart/form-data' method='post'
         data-th-object="${rentalHome}">
-
+    <input type="hidden" data-th-value="*{rentalHomeNo}" id="rentalHomeNo" value="1"/>
 
     <script>
       // JavaScript로 DB에서 가져온 값을 사용하여 기본값 설정
@@ -60,7 +81,6 @@
       });
     </script>
     <h2>숙소 상태 관리</h2>
-    <p>현재 상태 관리</p>
     <label>
       <input type="hidden" id="state" value="0" data-th-value="${rentalHome.state}"/>
       <select id="statusSelect" name="state">
@@ -73,79 +93,34 @@
   </form>
 
 
+  <br>
+  <br>
+  <br>
 
-    <br>
-    <br>
-    <br>
+
+  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data'
+        method='post'
+        data-th-object="${rentalHome}">
 
 
-  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data' method='post'
-  data-th-object="${rentalHome}">
-
-    <script>
-      function photoCountAndDisplay(files, existFiles) {
-        var fileInput = document.getElementById('photoInput');
-        var files = photoInput.files
-        var existInput = document.getElementById('existInput');
-        var existFiles = existInput.files
-        var minFileCount = 3; // 최소 필요한 파일 개수
-
-        if ((files.length + existFiles.length) < minFileCount) {
-          alert('등록해야 할 사진의 개수는 최소 ' + minFileCount + '입니다.');
-          return; // 파일 개수가 최소 요구 개수보다 적으면 함수를 종료합니다.
-        }
-
-        var imageContainer = document.getElementById('imageContainer');
-        imageContainer.innerHTML = ''; // 이미지를 표시하기 전에 이전에 표시된 이미지를 모두 제거합니다.
-
-        for (var i = 0; i < files.length; i++) {
-          var file = files[i];
-
-          // FileReader 객체를 사용하여 파일을 읽습니다.
-          var reader = new FileReader();
-
-          reader.onload = function(e) {
-            var container = document.createElement('div');
-            container.classList.add('image-container'); // 이미지와 설명을 감싸는 컨테이너에 CSS 클래스를 추가합니다.
-
-            var imgElement = document.createElement('img');
-            imgElement.classList.add('image-item'); // 이미지에 CSS 클래스를 추가합니다.
-
-            // 이미지를 화면에 표시합니다.
-            imgElement.src = e.target.result;
-            container.appendChild(imgElement); // 이미지를 컨테이너에 추가합니다.
-
-            // 이미지 설명을 입력할 수 있는 입력 필드를 생성합니다.
-            var descriptionInput = document.createElement('input');
-            descriptionInput.type = 'text';
-            descriptionInput.placeholder = '이미지 설명';
-            descriptionInput.classList.add('image-description'); // 입력 필드에 CSS 클래스를 추가합니다.
-            descriptionInput.name = 'photoExplanations'; // form을 통해 보낼 데이터 이름 지정
-            container.appendChild(descriptionInput); // 입력 필드를 컨테이너에 추가합니다.
-
-            imageContainer.appendChild(container); // 컨테이너를 이미지 컨테이너에 추가합니다.
-          };
-
-          reader.readAsDataURL(file); // 파일을 데이터 URL로 읽습니다.
-        }
-      }
-    </script>
     <h2>숙소 사진</h2>
-    <input multiple name='rentalHomePhotos' id="photoInput" type='file'
-           onchange="photoCountAndDisplay(this.files, ${rentalHome.rentalHomePhotos})"/>
-    <div id="imageContainer"></div>
     <div>
+      <label class="input-file-button" for="photoInput">사진 추가</label>
+      <input type="file" multiple id="photoInput" name="photos" style="display:none;"
+             onchange="photoCountAndDisplay(this.files)"/>
+      <div id="imageContainer"></div>
+
       <div class="image-container"
-           data-th-each="photo : ${rentalHome.rentalHomePhotos}" data-th-object="${rentalHomePhoto}">
-        <img class="image-item"
+           data-th-each="photo : ${rentalHome.rentalHomePhotos}" data-th-object="${photo}">
+        <img
             data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}"
             src="/home1.jpg"/>
-        <!--        [<a data-th-href="@{file/delete(category=${category},no=*{no})}"-->
-        <!--            href="file-delete.html">삭제</a>]-->
-        <input class="image-description" type="text" placeholder="이미지 설명" name="photoExplanation"
+        <a class="delete-button"
+           data-th-href="@{photoDelete(photoNo=*{photoNo}, rentalHomeNo=${rentalHome.rentalHomeNo})}"
+           href="file-delete.html">X</a>
+        <input class="image-description" type="text" placeholder="이미지 설명"
                data-th-value="${photo.photoExplanation}"/>
       </div>
-
     </div>
 
 
@@ -156,13 +131,15 @@
 
     <h2>숙소 기본 정보</h2>
     <div>
-      숙소명: <input readonly data-th-value="*{name}" type='text' value="호텔">
+      숙소명: <input readonly data-th-value="*{name}" name="name" id="name" type='text' value="호텔">
     </div>
     <div>
-      숙소 설명: <textarea data-th-text="*{explanation}" name="explanation"></textarea>
+      숙소 설명: <textarea data-th-text="*{explanation}" name="explanation"
+                       data-th-value="*{explanation}" id="explanation"></textarea>
     </div>
     <div>
-      숙소 이용규칙: <textarea data-th-text="*{rentalHomeRule}" name="rentalHomeRule"></textarea>
+      숙소 이용규칙: <textarea data-th-text="*{rentalHomeRule}" name="rentalHomeRule"
+                         data-th-value="*{rentalHomeRule}" id="rentalHomeRule"></textarea>
     </div>
 
     <h2>숙소 위치</h2>
@@ -180,17 +157,19 @@
         const price = Number(document.getElementById("price").value);
         const cleanFee = Number(document.getElementById("cleanFee").value);
         document.getElementById("income").value = Math.round((price + cleanFee) * 0.97);
-      }
 
+      }
       window.onload = calc;
+
+
     </script>
     <div>
-      이용요금(주 기준) <input type="text" data-th-value="*{price}" value="10000" name="price"
-                        id="price"/>
+      이용요금(주 기준) <input type="number" data-th-value="*{price}" value="10000" name="price"
+                        id="price" onkeyup="calc(this.value)"/>
     </div>
     <div>
-      청소비  <input type="text" data-th-value="*{cleanFee}" value="100" name="cleanFee"
-                  id="cleanFee"/>
+      청소비 <input type="number" data-th-value="*{cleanFee}" value="100" name="cleanFee"
+                 id="cleanFee" onkeyup="calc(this.value)"/>
     </div>
     <div>
       정산금액 <input readonly type="text" id="income"/>
@@ -202,10 +181,12 @@
 
     <h2>호스팅 기간</h2>
     <div>
-      호스팅 시작일: <input data-th-value='*{hostingStartDate}' value="2024-03-24" name="hostingStartDate" type='date'>
+      호스팅 시작일: <input readonly data-th-value='*{hostingStartDate}' id="hostingStartDate"
+                      value="2024-03-24" name="hostingStartDate" type='date'>
     </div>
     <div>
-      호스팅 종료일: <input data-th-value='*{hostingEndDate}' value="2024-03-24" name="hostingEndDate" type='date'>
+      호스팅 종료일: <input data-th-value='*{hostingEndDate}' id="hostingEndDate"
+                      value="2024-03-24" name="hostingEndDate" type='date'>
     </div>
 
     <br>
@@ -219,13 +200,13 @@
              data-th-each="theme : ${themeList}" style="width: 25%;">
             <span style="display: inline-block;">
               <label data-th-text="${theme.themeName}"></label>
-              <input type="radio" data-th-name="type"
-                     data-th-checked="${rentalHome.rentalHomeThemes.indexOf(theme) != -1}"
+              <input type="radio" data-th-name="type" id="type"
+                     data-th-checked="${rentalHome.themes.indexOf(theme) != -1}"
                      data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
         </span>
-          </div>
         </div>
       </div>
+    </div>
 
     <br>
     <br>
@@ -236,10 +217,13 @@
     <div id="rentalHomeTheme">
       <div style="display: flex; flex-wrap: wrap;">
         <!-- themeList 반복 -->
-        <div data-th-if="${theme.themeNo >= 10}" data-th-each="theme : ${themeList}" style="width: 25%;">
+        <div data-th-if="${theme.themeNo >= 10}" data-th-each="theme : ${themeList}"
+             data-th-object="${theme}" style="width: 25%;">
       <span style="display: inline-block;">
-        <label data-th-text="${theme.themeName}"></label>
-        <input type="checkbox" data-th-value="${theme.themeNo}" data-th-checked="${rentalHome.rentalHomeThemes.indexOf(theme) != -1}"/><br>
+        <label data-th-text="*{themeName}"></label>
+        <input type="checkbox" data-th-value="${theme.themeNo}" class="themeNos"
+               data-th-checked="${rentalHome.themes.indexOf(theme) != -1}"/><br>
+        <input type="hidden" class="themeNames" data-th-value="*{themeName}"/>
       </span>
         </div>
       </div>
@@ -251,14 +235,23 @@
 
     <h2>숙소 시설</h2>
     <div id="rentalHomeFacility">
+      <div>
+        <div style="display: inline-block;">
+          <label>수용인원</label><br>
+          <input type="number" name="capacity" id="capacity" data-th-value="${rentalHome.capacity}"
+                 value="0">
+        </div>
+      </div>
       <div data-th-if="${rentalHomeFacility.facilityNo < 4}" style="width: 20%;"
            data-th-each="rentalHomeFacility : ${rentalHome.rentalHomeFacilities}">
         <div style="display: inline-block;">
-          <label data-th-text="${rentalHomeFacility.facilityName}"></label>
-          <input type="text" value="2" name="facilityCount"
-                     data-th-value="${rentalHomeFacility.facilityCount}"/><br>
-          <input type="hidden" name="facilityNames" data-th-value="${rentalHomeFacility.facilityName}"/>
-          <input type="hidden" name="facilityNos" data-th-value="${rentalHomeFacility.facilityNo}"/>
+          <label data-th-text="${rentalHomeFacility.facilityName}"></label><br>
+          <input type="number" value="2" class="facilityCount"
+                 data-th-value="${rentalHomeFacility.facilityCount}"/>
+          <input type="hidden" class="facilityNos"
+                 data-th-value="${rentalHomeFacility.facilityNo}"/>
+          <input type="hidden" class="facilityNames"
+                 data-th-value="${rentalHomeFacility.facilityName}"/>
         </div>
       </div>
     </div>
@@ -274,29 +267,168 @@
              data-th-each="facility : ${facilityList}" style="width: 20%;">
             <span style="display: inline-block;">
               <label data-th-text="${facility.facilityName}"></label>
-              <input type="checkbox" name="facilityCount" value="1"
+              <input type="checkbox" class="facilityCount" value="1"
                      data-th-checked="${rentalHome.rentalHomeFacilities.indexOf(facility)} != -1"/>
-              <input type="hidden" name="facilityNos" data-th-value="${facility.facilityNo}"/>
-              <input type="hidden" name="facilityNames" data-th-value="${facility.facilityName}"/>
+              <input type="hidden" class="facilityNos" data-th-value="${facility.facilityNo}"/>
+              <input type="hidden" class="facilityNames" data-th-value="${facility.facilityName}"/>
             </span>
-          </div>
         </div>
       </div>
-
-
-    <br>
-    <br>
-    <br>
-
-
-    <div>
-      <button>저장</button> <button>취소</button>
-  <!--    <a data-th-href="@{delete(category=${category},no=*{no})}">[삭제]</a>-->
     </div>
+
+
+    <br>
+    <br>
+    <br>
+
+
   </form>
+  <div>
+    <button type="submit" onclick="submitForm()">저장</button>
+    <button type="button" data-th-onclick="|location.href='@{rentalHomeList(hostNo=1)}'|">취소
+    </button>
+  </div>
 </div>
 <div data-th-replace="footer :: footer">꼬리말</div>
 
+<script>
+  var filesArray = []; // 이미지 배열
+  var formData = new FormData(); // 폼데이터
 
+  function submitForm() {
+    formData.append('rentalHomeNo', document.getElementById('rentalHomeNo').value);
+
+    formData.append('name', document.getElementById('name').value);
+    formData.append('explanation', document.getElementById('explanation').value);
+    formData.append('rentalHomeRule', document.getElementById('rentalHomeRule').value);
+
+    formData.append('price', document.getElementById('price').value);
+    formData.append('cleanFee', document.getElementById('cleanFee').value);
+    formData.append('hostingStartDate', document.getElementById('hostingStartDate').value);
+    formData.append('hostingEndDate', document.getElementById('hostingEndDate').value);
+
+    formData.append('capacity', document.getElementById('capacity').value);
+
+    formData.append('type', document.getElementById('type').value);
+
+    // 모든 테마 요소들
+    let checkedTheme = document.querySelectorAll('.themeNos');
+
+    // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
+    checkedTheme.forEach(function(e, index) {
+        // 선택되었을 때
+        if (e.checked) {
+            // 값과 해당 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
+            formData.append('themeNos', e.value);
+            formData.append('themeNames', document.querySelectorAll('.themeNames')[index].value);
+        }
+    });
+
+
+    // 선택된 시설 요소들
+    let checkedFacility = document.querySelectorAll('.facilityCount');
+
+    // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
+    checkedFacility.forEach(function(e, index) {
+
+        // 값이 1 이상일 때(선택 또는 입력되었을 때, 기본 시설은 최소 1개 이상임)
+        if (e.checked) {
+            // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
+            formData.append('facilityCount', e.value);
+            formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
+            formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
+        }
+        // 시설 개수는 checked 요소가 없기에 가장 첫 인덱스 3개를 폼데이터에 추가
+        if (index < 3) {
+          formData.append('facilityCount', e.value);
+          formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
+          formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
+        }
+    });
+
+
+
+    updateFormData(); // FormData 업데이트
+
+    console.log(formData.getAll('photos'));
+
+    fetch('rentalHomeUpdate', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      console.log('Response data:', data);
+        window.location.href = data; // 자동으로 리디렉션
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+  }
+
+  // FormData 업데이트 함수
+  function updateFormData() {
+    if (filesArray.length > 0) {
+      filesArray.forEach(obj => {
+        formData.append('photos', obj.file);
+        formData.append('photoExplanations', obj.description.value);
+      });
+    }
+  }
+
+  function photoCountAndDisplay(files) {
+      var imageContainer = document.getElementById('imageContainer');
+
+      for (var i = 0; i < files.length; i++) {
+        let file = files[i];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          var container = document.createElement('div');
+          container.classList.add('image-container');
+
+          var imgElement = document.createElement('img');
+          imgElement.classList.add('image-item');
+          imgElement.src = e.target.result;
+          container.appendChild(imgElement);
+
+          var descriptionInput = document.createElement('input');
+          descriptionInput.type = 'text';
+          descriptionInput.placeholder = '이미지 설명';
+          descriptionInput.classList.add('image-description');
+          descriptionInput.name = 'photoExplanations'; // 이미지 설명의 이름 설정
+          container.appendChild(descriptionInput);
+
+          var deleteButton = document.createElement('button');
+          deleteButton.textContent = 'X';
+          deleteButton.classList.add('delete-button');
+          deleteButton.onclick = function () {
+            var index = filesArray.findIndex(obj => obj.file === file);
+            if (index > -1) {
+              filesArray.splice(index, 1);
+              container.remove();
+            }
+          };
+          container.appendChild(deleteButton);
+
+          imageContainer.appendChild(container);
+
+          // 파일과 설명을 하나의 객체로 연결하여 배열에 추가
+          filesArray.push({
+            file: file,
+            description: descriptionInput
+          });
+        };
+
+        reader.readAsDataURL(file);
+      }
+    }
+</script>
 </body>
 </html>

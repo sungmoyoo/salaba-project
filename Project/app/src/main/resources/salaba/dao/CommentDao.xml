@@ -11,57 +11,75 @@
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
     <result column="state" property="state"/>
+    <result column="board_no" property="boardNo"/>
 
     <!-- 회원정보 가져오기 -->
-   <association property="writer" javaType="Member">
-     <id column="member_no" property="no"/>
-     <result column="nickname" property="nickname"/>
-   </association>
+    <association property="writer" javaType="Member">
+      <id column="member_no" property="no"/>
+      <result column="nickname" property="nickname"/>
+      <result column="photo" property="photo"/>
+    </association>
   </resultMap>
 
-  <insert id="add" parameterType="Comment"
+  <!-- 댓글 작성 -->
+  <insert id="addComment" parameterType="Comment"
     useGeneratedKeys="true" keyColumn="comment_no" keyProperty="commentNo">
-    insert into comment(content,writer)
-    values(#{content},#{writer.no})
+    insert into comment(board_no, member_no, content)
+    values(#{boardNo},#{writer.no},#{content})
   </insert>
 
   <!-- 댓글 삭제 -->
-  <delete id="delete" parameterType="int">
-    update
-    comment
-    set
-    state=${state};
+  <update id="deleteComment">
+    update comment set
+    state='1'
     where
-    comment_no=${commentNo}
-    content=${content};
-  </delete>
+    comment_no=#{commentNo}
+  </update>
 
   <!-- 게시판 번호로 댓글 찾기 -->
   <select id="findAll" resultMap="CommentMap">
     select
-      b.board_no,
-      c.comment_no,
-      c.content,
-      c.created_date,
-      m.member_no,
-      m.nickname,
-      m.photo
+    b.board_no,
+    c.comment_no,
+    c.content,
+    c.created_date,
+    c.state,
+    m.member_no,
+    m.nickname,
+    m.photo
     from
-     comment c
+    comment c
     inner join member m on c.member_no=m.member_no
     left join board b on c.board_no=b.board_no
     where
-      b.board_no=#{boardNo}
+    b.board_no=#{boardNo}
     order by
-      c.created_date desc;
+    c.created_date asc
   </select>
 
-  <update id="update" parameterType="Comment">
-    update board set
-    state=${state};
+  <select id="findBy" resultMap="CommentMap">
+    select
+    b.board_no,
+    c.comment_no,
+    c.content,
+    c.created_date,
+    m.member_no,
+    m.nickname,
+    m.photo
+    from
+    comment c
+    inner join member m on c.member_no=m.member_no
+    left join board b on c.board_no=b.board_no
     where
-    comment_no=${commentNo}
-    content=${content};
+    c.comment_no=#{commentNo}
+  </select>
+
+
+  <update id="updateComment" parameterType="Comment">
+    update comment set
+    content=#{content}
+    where
+    comment_no=#{commentNo}
   </update>
 
 </mapper>

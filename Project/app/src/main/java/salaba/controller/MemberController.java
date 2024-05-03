@@ -80,13 +80,15 @@ public class MemberController implements InitializingBean {
 
     //닉네임 중복체크
     String nickcheck = request.getParameter("nickcheck");
-
-    session.setAttribute("loginUser", member);
+    model.addAttribute("nickcheck", nickcheck);
 
     //조회한 결과 model 에 add
     model.addAttribute("member", member);
     model.addAttribute("nationList", nationList);
-    model.addAttribute("nickcheck", nickcheck);
+
+    //회원정보
+    session.setAttribute("loginUser", member);
+
   }
 
   @PostMapping("myinfoUpdate")
@@ -127,57 +129,67 @@ public class MemberController implements InitializingBean {
   public void findEmail(Member member) throws Exception { // 이메일 찾기
   }
 
-  @GetMapping("findPw")
-  public void findPw(Member member) throws Exception { // 비밀번호 찾기
+  @GetMapping("findPassword")
+  public void findPassword(Member member) throws Exception { // 비밀번호 찾기
   }
 
-  @PostMapping("schEmail")
-  public String schEmail(Member member, Model model) throws Exception { // 이메일 조회
+  @PostMapping("searchEmail")
+  public String searchEmail(Member member, Model model) throws Exception { // 이메일 조회
     Member info = memberService.findEmail(member);
     if (info == null) {
-      return "/member/findEmailFail";
+      model.addAttribute("findYn", "N");
     } else {
       model.addAttribute("member", info);
-      return "/member/findEmailSuc";
+      model.addAttribute("findYn", "Y");
     }
+    return "/member/findEmailResult";
   }
 
-  @PostMapping("schPw")
-  public String schPw(Member member, Model model) throws Exception { // 비밀번호 조회
-    Member info = memberService.findPw(member);
+  @PostMapping("searchPassword")
+  public String searchPassword(Member member, Model model) throws Exception { // 비밀번호 조회
+    Member info = memberService.findPassword(member);
     if (info == null) {
-      return "/member/findPwFail";
+      model.addAttribute("findYn", "N");
     } else {
       model.addAttribute("member", info);
-      return "/member/findPwSuc";
+      model.addAttribute("findYn", "Y");
     }
+      return "/member/findPasswordResult";
   }
 
-  @PostMapping("chgPwSave")
-  public String chgPwSave(Member member, Model model) throws Exception { // 비밀번호 변경
-    memberService.chgPwSave(member);
+  @PostMapping("changePasswordSave")
+  public String changePasswordSave(Member member, Model model) throws Exception { // 비밀번호 변경
+    memberService.changePasswordSave(member);
     return "redirect:/auth/form";
   }
 
-  @GetMapping("chkPw")
-  public void chkPw(Member member, Model model, HttpServletRequest request) throws Exception {
-    String pwcheck = request.getParameter("pwcheck");
-    model.addAttribute("pwcheck", pwcheck);
+  @PostMapping("myInfoChangePasswordSave")
+  public String myInfoChangePasswordSave(Member member, Model model) throws Exception { // 비밀번호 변경
+    memberService.changePasswordSave(member);
+    return "redirect:/member/myinfo";
   }
 
-  @PostMapping("checkPw")
-  public String checkPw(Member member, Model model, HttpSession session)
+  @GetMapping("myinfoCheckPassword")
+  public void myinfoCheckPassword(Member member, Model model, HttpServletRequest request) throws Exception {
+    String pwcheck = request.getParameter("pwcheck");
+    model.addAttribute("pwcheck", pwcheck);
+
+  }
+
+  @PostMapping("checkPassword")
+  public String checkPassword(Member member, Model model, HttpSession session)
       throws Exception { // 비밀번호 확인
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     member.setNo(sessionInfo.getNo());
 
-    Member info = memberService.chkPw(member);
+    Member info = memberService.myinfoCheckPassword(member);
     if (info == null) {
       String pwcheck = "Y";
-      return "redirect:chkPw?pwcheck=" + pwcheck;
+      return "redirect:myinfoCheckPassword?pwcheck=" + pwcheck;
     } else {
       return "redirect:myinfo";
     }
+
   }
 
   @PostMapping("themeSave")
@@ -203,5 +215,4 @@ public class MemberController implements InitializingBean {
 
     model.addAttribute("themeList", memberService.themeList(sessionInfo));
   }
-
 }

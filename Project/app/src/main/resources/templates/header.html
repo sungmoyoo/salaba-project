@@ -3,38 +3,17 @@
 <head>
   <meta charset='UTF-8'>
   <title>사라바</title>
-  <title>테스트</title>
-  <title>비트캠프 데브옵스 5기</title>
 </head>
 <body>
 
 <header data-th-fragment="header">
-  <img src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
-    <!-- 로고 사진 넣기 -->
-    <a data-th-href="@{/home}" href="/home">한달살기</a>
-    <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
-    <a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="/member/chkPw">마이페이지</a>
-    <a data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
-    <a data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
-
-
-  <img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png'>
-    <a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="member/chkPw">내 정보</a>
-    <a data-th-href="@{/point_history/pointList}" data-th-if="${session.loginUser != null}" href="point_history/pointList">포인트내역</a>
-    <a data-th-href="@{/question/questionForm}" data-th-if="${session.loginUser != null}" href="question/questionForm">고객센터</a>
-    <a data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
-    <a data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
-<!-- 로고 사진 넣기 -->
-  <a data-th-href="@{/board}" href="/board">한달살기</a>
+  <img
+      src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
+  <a data-th-href="@{/home}" href="/home">한달살기</a>
   <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
-
-  <span data-th-if="${session.loginUser != null}"
-        data-th-text="${session.loginUser.name}">홍길동</span>
-  <a data-th-href="@{/member/list}" href="member/list">회원</a>
-  <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">로그아웃</a>
-  <a data-th-if="${session.loginUser == null}" data-th-href="@{/auth/form}" href="auth/form">로그인</a>
-
-</header>
+  <a data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="/member/myinfoCheckPassword">마이페이지</a>
+  <a data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
+  <a data-th-href="@{/auth/form}" data-th-if="${session.loginUser == null}" href="auth/form">로그인</a>
 
 </body>
 </html>

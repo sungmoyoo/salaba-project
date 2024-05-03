@@ -28,11 +28,11 @@ public interface MemberDao {
 
   public Member findEmail(Member member);
 
-  public Member findPw(Member member);
+  public Member findPassword(Member member);
 
-  public void chgPwSave(Member member);
+  public void changePasswordSave(Member member);
 
-  public Member chkPw(Member member);
+  public Member myinfoCheckPassword(Member member);
 
   public void insertPreference(Member member);
 
@@ -40,4 +40,9 @@ public interface MemberDao {
 
   List<Member> findAllTheme(Member sessionInfo);
 
+  String getMemberPoint(Member member);
+
+  Member getGrade(Member member);
+
+  List<Member> findAllmyTheme(Member sessionInfo);
 }
