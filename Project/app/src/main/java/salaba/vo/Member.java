@@ -28,6 +28,7 @@ public class Member implements Serializable { // 회원
   private Date exitDate; // 회원탈퇴 날짜
   private Grade grade;
 
+
   private List<Theme> themes; // 테마
 
   private List<String> myThemes;

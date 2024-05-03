@@ -31,7 +31,6 @@
     <id column="nation_no" property="nationNo"/>
     <result column="nation_name" property="nationName"/>
   </resultMap>
-
   <resultMap id="AlarmMap" type="salaba.vo.Alarm">
     <id column="notify_no" property="notifyNo"/>
     <result column="member_no" property="memberNo"/>
@@ -41,79 +40,79 @@
 
   <insert id="add" parameterType="Member"><!--회원가입>-->
     insert into member(
-      name,
-      nickname,
-      birthday,
-      email,
-      password)
+    name,
+    nickname,
+    birthday,
+    email,
+    password)
     values(
-      #{name},
-      #{nickname},
-      STR_TO_DATE(#{birthday}, '%Y-%m-%d'), <!--생년월일 입력형식을 바꿔주는 sql문법-->
-      #{email},
-      sha2(#{password},256))
+    #{name},
+    #{nickname},
+    STR_TO_DATE(#{birthday}, '%Y-%m-%d'), <!--생년월일 입력형식을 바꿔주는 sql문법-->
+    #{email},
+    sha2(#{password},256))
   </insert>
 
   <select id="selectMemberInfo" resultMap="MemberMap" parameterType="int"><!--내정보>-->
     select
-      member_no,
-      name,
-      nickname,
-      email,
-      tel_no,
-      birthday,
-      nation_no,
-      sex,
-      address,
-      photo
+    member_no,
+    name,
+    nickname,
+    email,
+    tel_no,
+    birthday,
+    nation_no,
+    sex,
+    address,
+    photo
     from
-      member
+    member
     where
-      member_no=#{value}
+    member_no=#{value}
   </select>
 
   <select id="getNation" resultMap="NationMap" ><!--국가선택>-->
     select
-      nation_no,
-      nation_name
+    nation_no,
+    nation_name
     from nation
     order by nation_name
   </select>
 
   <update id="myinfoUpdate" parameterType="Member"><!--내정보 저장>-->
     update
-      member
+    member
     set
-      name=#{name},
-      nickname=#{nickname},
-      email=#{email},
-      tel_no=#{telNo},
-      birthday=#{birthday},
-      sex=#{sex},
-      address=#{address},
-      photo=#{photo},
-      nation_no=#{nationNo}
+    name=#{name},
+    nickname=#{nickname},
+    email=#{email},
+    tel_no=#{telNo},
+    birthday=#{birthday},
+    sex=#{sex},
+    address=#{address},
+    photo=#{photo},
+    nation_no=#{nationNo}
     where
-      member_no=#{no}
+    member_no=#{no}
   </update>
 
   <select id="checkNickname" resultMap="MemberMap" parameterType="String"><!--닉넴 중복체크>-->
     select
-      nickname
+    nickname
     from
-      member
+    member
     where
-      nickname=#{value}
+    nickname=#{value}
   </select>
 
   <update id="delete" parameterType="Member"><!--회원탈퇴>-->
     update
-      member
+    member
     set
-      state=#{state},
-      exit_date=now()
+    state=#{state},
+    exit_date=now()
     where
-      member_no=#{no}
+    member_no=#{no}
   </update>
 
   <select id="findByEmailAndPassword" resultMap="MemberMap"><!--로그인>-->
@@ -130,51 +129,51 @@
       photo,
       state
     from
-      member
+    member
     where
-      email= #{email}
-      and password=sha2(#{password},256)
+    email= #{email}
+    and password=sha2(#{password},256)
   </select>
 
   <select id="findEmail" resultMap="MemberMap"><!--이메일 찾기>-->
     select
-      email,
-      name
+    email,
+    name
     from
-      member
+    member
     where
-      name= #{name}
-      and birthday=#{birthday}
+    name= #{name}
+    and birthday=#{birthday}
   </select>
 
   <select id="findPassword" resultMap="MemberMap"><!--비밀번호 찾기>-->
     select
-      member_no
+    member_no
     from
-      member
+    member
     where
-      email= #{email}
-      and name= #{name}
+    email= #{email}
+    and name= #{name}
   </select>
 
   <update id="changePasswordSave" parameterType="Member"><!--비밀번호 변경>-->
     update
-      member
+    member
     set
-      password = sha2(#{password},256),
-      state = case when state = '4' then '0' else state end
+    password = sha2(#{password},256),
+    state = case when state = '4' then '0' else state end
     where
-      member_no=#{no}
+    member_no=#{no}
   </update>
 
   <select id="myinfoCheckPassword" resultMap="MemberMap"><!--비밀번호 확인>-->
     select
       member_no
     from
-      member
+    member
     where
-      member_no=#{no}
-      and password = sha2(#{password},256)
+    member_no=#{no}
+    and password = sha2(#{password},256)
   </select>
 
   <insert id="insertPreference" parameterType="Member">
@@ -185,11 +184,11 @@
 
   <select id="findAllTheme" resultMap="MemberMap">
     select
-      t.theme_no,
-      t.theme_name,
-      case when m.theme_no is null then 'N'
-      else 'Y'
-      end as my_theme_yn
+    t.theme_no,
+    t.theme_name,
+    case when m.theme_no is null then 'N'
+    else 'Y'
+    end as my_theme_yn
     from
       theme t
       left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
@@ -228,9 +227,9 @@
   <delete id="deletePreference" parameterType="Member">
     delete
     from
-      member_preference
+    member_preference
     where
-      member_no = #{no}
+    member_no = #{no}
   </delete>
 
   <select id="selectNotifyHistory" resultMap="AlarmMap">
