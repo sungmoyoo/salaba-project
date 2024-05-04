@@ -21,10 +21,10 @@
     <result column="theme_name" property="themeName"/>
 
     <!-- grade 정보 가져오기 -->
-    <association property="grade" javaType="Grade">
-      <id column="grade_no" property="gradeNo"/>
-      <result column="grade_name" property="gradeName"/>
-    </association>
+<!--    <association property="grade" javaType="Grade">-->
+<!--      <id column="grade_no" property="gradeNo"/>-->
+<!--      <result column="grade_name" property="gradeName"/>-->
+<!--    </association>-->
   </resultMap>
 
   <resultMap id="NationMap" type="Nation"><!--국가선택 준비-->
