@@ -102,3 +102,23 @@ document.querySelectorAll(".card-deck .card").forEach(card => {
         console.log("검색3")
   });
 
+
+// 상단으로 올라가기
+let scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+// 20px 내려가면 버튼이 보이도록 하기
+window.onscroll = function() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    scrollToTopBtn.style.display = "block";
+  } else {
+    scrollToTopBtn.style.display = "none";
+  }
+};
+
+// 상단으로 올리기
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}

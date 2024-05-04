@@ -49,7 +49,7 @@ h1 {
   color: rgb(152, 152, 152);
 }
 
-/*게시글 신고 버튼 */
+/* 게시글 신고 버튼 */
 .board-report-btn {
   padding: 10px 10px;
   height: 3%;
@@ -59,6 +59,16 @@ h1 {
   justify-content: flex-end; /* 신고 버튼을 우측 정렬 */
   margin-right: 10px;
   border: 1px solid gray;
+}
+
+/* 게시글 수정 버튼 */
+.board-modify {
+  border: 1px solid gray;
+  padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
+  font-size: 14px; /* 글꼴 크기를 조절 */
+  background-color:white;/* 신고 버튼 배경색 */
+  margin-left: 20px;
+  margin-right: 7px;
 }
 
 /*작성자와 작성일, 게시글 신고를 나란히 배치*/
@@ -82,8 +92,7 @@ h1 {
   overflow-y: auto;
   background-color: white;
   padding: 40px; /* 패딩을 늘림 */
-  margin-top: 50px;
-  margin-bottom: 20px;
+  margin-top: 20px;
   width: 100%; /* 너비를 늘림 */
   min-height: 200px; /* 최소 높이 설정 */
   margin-left: auto; /* 자동 마진으로 중앙 정렬 */
@@ -161,18 +170,27 @@ h1 {
 
 /*댓글 작성하기*/
 #comment-form {
-  border: 1px solid #ccc; /* 테두리 스타일과 색상 설정 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2dfdf; /* 테두리 스타일과 색상 설정 */
   padding: 10px; /* 내부 여백 설정 */
   height: 100px;
   width: 80%; /* 폼의 너비 설정 */
-  margin: left;
   margin-left: 20px;
   background-color: #f9f9f9; /* 배경색 설정 */
 }
 
+#comment-content {
+  border: 1px solid rgb(155, 155, 155);
+  height: 80%;
+  width: 80%;
+}
+
 /*댓글,답글 리스트*/
 #comment-box {
-  background-color: #c5c4c4; /* 연한 회색 */
+  background-color: rgb(223, 223, 207);
   padding: 20px;
   margin-bottom: 20px;
   margin-left: 20px;
@@ -181,67 +199,137 @@ h1 {
   overflow: hidden;
 }
 
-.comment {
-  border: 1px solid #454545; /* 테두리 스타일과 색상 */
+.comment, .reply {
+  /* border: 1px solid #454545; 테두리 스타일과 색상 */
   margin-top: 20px;
-  border: 1px solid #fdfdfd; /*댓글 경계선 묶기*/
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 2px; /* 테두리 모서리 둥글게 */
 }
 
-/*댓글 내용*/
+.comment {
+  border-top: 1px groove #ffffff; /* 댓글 상단에 구분선 추가 */
+  padding-top: 10px; /* 구분선과 내용 사이의 간격 조정 */
+  margin-top: 5px; /* 이전 댓글과의 간격 조정 */
+  padding-bottom: 10px;
+}
+
+/* 댓글 내용 정렬 조정 */
 .comment-text {
-  display: inline-block;
+  display:block;
+  align-items: center;
+  gap: 10px; /* 요소 간의 간격 */
 }
 
-.commentContent {  
-  border: 1px solid black;
-  width: 300px;
-  height: 450px; 
+/*답글 */
+.reply-text {
+  display:block;
+  align-items: center;
+  gap: 10px; /* 요소 간의 간격 */
+  margin-left: 30px;
 }
 
-.comment-date {
+/*수정, 삭제, 신고를 묶어둔 컨테이너*/
+.button-container {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
+}
+
+/* 댓글, 답글 내용 크기 조정 */
+.commentContent, .replContent {  
+  flex: 1; /* 부모 요소에서 남은 공간을 차지  */
+  height: 80%; 
+  width: 500px;
+  font-size: 16px; /* 댓글과 답글 내용의 글꼴 크기를 키움 */
+  margin-left: 7.5%; 
+}
+
+/*댓글, 답글 작성일*/
+.comment-date, .reply-date {
   color: gray;
+  margin-left: 10px;
 }
 
-/*답글*/
-.reply {
-  border: 1px solid #ccc;
+/*컨텐츠*/
+.textContent {
   padding: 5px;
-  border: 1px solid #fdfdfd; /*댓글 경계선 묶기*/
+  border: 1px solid #fdfdfd; /*댓글, 답글 경계선 묶기 */
   margin-bottom: 5px;
   border-radius: 2px; /* 테두리 모서리 둥글게 */
-  margin-left: 30px; /* 답글 들여쓰기 */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+/*작성자명*/
+.nickname {
+  margin-top: 5px;
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 13pt;
 }
 
 .reply-content {
   width: 100%;
   box-sizing: border-box; 
-  resize: none; 
-}
-
-.reply-date {
-  color: gray;
+  resize: none;
+  margin-bottom: 20px;
 }
 
 /* 답글 폼 */
 /*평소에 폼 숨기기 -> 이벤트 발생 시 나타나는 폼*/
 .form-hidden {
   display: none;
-  width: 100px;
-  height: 80px;
-  overflow: hidden;
-}
-#replyForm {
-  width: 200px;
-  height: 80px;
+  width: 90%;
+  height: 50%;
   overflow: hidden;
 }
 
+#replyForm {
+  width: 200px;
+  height: 60px;
+  overflow: hidden;
+}
+
+/* 프로필 사진 원형 만들기 */
+.profile-img1, .profile-img2 {
+  width: 40px; /* 이미지의 가로 크기 */
+  height: 40px; /* 이미지의 세로 크기 */
+  object-fit: cover; /* 이미지를 요소 크기에 맞게 조정 */
+  border-radius: 50%; /* 둥근 모서리로 설정 */
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+
 /* 삭제, 수정, 신고 버튼 */
-.del, .del2, .modi, .modi2, .comment-report-btn, .reply-report-btn {
+.del, .del2, .modi, .modi2, .comment-report-btn, .reply-report-btn, .comtModiConfirm, .comtModiCancel, .replModiConfirm, .replModiCancel {
   border: 1px solid #fff;
+  padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
+  font-size: 14px; /* 글꼴 크기를 조절 */
+}
+
+
+.commentModifyForm, .replyModifyForm {
+  gap: 10px; /* 요소들 사이의 간격 */
+  border: 1px solid #ccc; /* 테두리 설정 */
+  padding: 10px; /* 내부 여백 */
+  border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
+  background-color: #f9f9f9; /* 배경색 */
+  margin-top: 10px;
+  width: 60%;
+}
+
+.newContent {
+  width: 85%; /* 가로 크기를 부모 요소의 전체 크기로 설정 */
+  height: 60px; /* 높이 설정 */
+  border: 1px solid #ccc; /* 상자 테두리 색상 및 스타일 */
+  border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
+  padding: 10px; /* 내부 여백 설정 */
+  box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+  resize: none; /* 사용자가 크기를 조절하지 못하도록 설정 */
 }
 
 #addReplyBtn {
@@ -267,20 +355,27 @@ textarea[name='content'] {
   margin-bottom: 10px;
 }
 
-
-
 /* 맨 위로 올라가기 */
-#scrollToTopBtn {  
+#scrollToTopBtn2 {
   display: none;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 99;
-  border: none;
-  outline: none;
-  background-color: #35C5B3;
-  color: white;
   cursor: pointer;
-  padding: 15px;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 3%;
+}
+
+#scrollToTopBtn2 button {
+  background: rgb(229, 229, 182);
+  border-radius: 50%; /* 둥근 모서리 */
+  border: none;
+  cursor: pointer;
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  height: 100%; /* 부모 요소의 높이에 맞춤 */
 }

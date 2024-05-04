@@ -320,14 +320,13 @@ $(window).on("beforeunload", function () {
 // 신고창: 모달 사용
 $(document.body).on("click", ".report-btn", function (event) {
   console.log(event.target);
-  let div = $(this).parent();
-  let targetNo = div.find(".textContent").find(".targetNo").text();
+  let div = $(this).closest(".comment, .reply"); // 가장 가까운 comment 또는 reply 요소 찾기
+  let targetNo = div.find(".targetNo").text();
 
   let targetType;
-
-  if (div.attr("class") == "comment") {
+  if (div.hasClass("comment")) {
     targetType = 1;
-  } else if (div.attr("class") == "reply") {
+  } else if (div.hasClass("reply")) {
     targetType = 2;
   } else {
     targetNo = boardNo;
@@ -373,3 +372,23 @@ $("#submitBtn").click(function (e) {
   });
 });
 
+
+// 상단으로 올라가기
+let scrollToTopBtn = document.getElementById("scrollToTopBtn2");
+
+// 20px 내려가면 버튼이 보이도록 하기
+window.onscroll = function() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    scrollToTopBtn.style.display = "block";
+  } else {
+    scrollToTopBtn.style.display = "none";
+  }
+};
+
+// 상단으로 올리기
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}

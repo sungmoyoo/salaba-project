@@ -52,8 +52,8 @@
       <input id="boardNo" data-th-value="*{boardNo}" name='boardNo' type='hidden' value="100">
     </div>
     <div data-th-if="${loginUser != null && board.writer.no == loginUser.no}">
-      <button data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html">수정하기</button>
-      <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
+      <button data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html" class="board-modify">수정하기</button>
+      <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}"><i class="fa-regular fa-trash-can"></i></a>
     </div>
   </form>
 
@@ -78,38 +78,44 @@
   <!--댓글, 답글 리스트-->
   <div id="comment-box">
     <div data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
-      <div data-th-if="*{#strings.equals(state,'1')}" class="comment">
-        <span class="commentNo" data-th-text="*{commentNo}"></span>
+      <div data-th-if="*{#strings.equals(state,'1')}" class="textContent">
+        <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
         <span>삭제된 댓글입니다.</span>
       </div>
       <div data-th-if="*{!#strings.equals(state,'1')}" class="comment"> <!--data-th-data-no="*{commentNo}" data-no="100"--> 
         <div class="textContent comment-text">
           <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
             <!--프로필사진-->
-              <img height='40px' src='/img/default-photo.jpeg'></a><br>
-          <span data-th-text="*{writer.nickname}">댓글 작성자</span>
-          <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
-          <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span>
+              <img class="profile-img1" height='40px' src='/img/default-photo.jpeg'></a>
+              <i class="fa-solid fa-reply"></i>
+          <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
+          <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
+          <span class="commentContent" data-th-text="*{content}">댓글 내용</span><br>
         </div>
-        <button class="del">삭제</button>
-        <button class="modi">수정</button>
-        <button type="button" class="report-btn comment-report-btn">신고</button>
+        <div class="button-container">
+          <button class="del"><i class="fa-regular fa-trash-can"></i></button>
+          <button class="modi">수정</button>
+          <button type="button" class="report-btn comment-report-btn">신고</button>
+        </div>
       </div>
       <!--답글-->
       <div class="reply-box"> 
         <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
           <div class="reply">
-            └ <div class="textContent comment-text">
+          <div class="textContent reply-text">
               <span class="targetNo replyNo" data-th-text="*{replyNo}" hidden></span>
               <!--프로필사진-->
-              <img height='40px' src='/img/default-photo.jpeg'></a><br>
-              <span data-th-text="*{writer.nickname}">댓글 작성자</span>
-              <span class="replContent" data-th-text="*{content}">댓글 내용</span>
-              <span class="reply-date" data-th-text="*{createdDate}">댓글 작성시간</span>
+              <img class="profile-img2"  height='40px' src='/img/default-photo.jpeg'></a>
+              <i class="fa-solid fa-reply"></i>
+              <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
+              <span class="reply-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
+              <span class="replContent" data-th-text="*{content}">답글 내용</span><br>
             </div>
-              <button class="del2">삭제</button>
+            <div class="button-container">
+              <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
               <button class="modi2">수정</button>
               <button type="button" class="report-btn reply-report-btn">신고</button>
+            </div>
           </div>
         </div>
       </div>
@@ -119,7 +125,7 @@
   <!--댓글 달기 폼-->
   <form id="comment-form" method="post">
     <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
-    <input id="commentContent" name="content" type="textarea">
+    <input id="comment-content" name="content" type="textarea">
     <button id="addCommentBtn">댓글 작성</button>
   </form>
 
@@ -162,11 +168,18 @@
   </div>
   
   <!-- 페이지 맨 위로 올라가기-->
-  <button id="scrollToTopBtn" onclick="scrollToTop()">🔝</button>
+  <div id="scrollToTopBtn2">
+    <button onclick="scrollToTop()">🔝</button>
+  </div>
+
+  
+  </style>
 
   <div data-th-replace="footer :: footer">꼬리말</div>
   <script data-th-src="@{/js/board/view.js}"></script>
   <script data-th-src="@{/js/common/alarm.js}"></script>
+  <script data-th-src="@{/js/header.js}"></script>
+
 </script>
 </body>
 </html>

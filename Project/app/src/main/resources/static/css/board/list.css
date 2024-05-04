@@ -163,7 +163,7 @@
   }
 
   .card-body {
-        padding: 5px;
+    padding: 5px;
   }
 
   /*게시글 제목 위치*/
@@ -215,7 +215,7 @@
   th, td {
       padding: 12px 15px; /* 셀 내부 패딩 */
       text-align: left; /* 텍스트 왼쪽 정렬 */
-      border-bottom: 1px solid #ddd; /* 하단 테두리 선 */
+      border-bottom: 1px solid #000000; /* 하단 테두리 선 */
       border-left: none; /* 좌측 테두리 제거 */
       border-right: none; /* 우측 테두리 제거 */
   }
@@ -247,18 +247,27 @@
       color: #000; /* 링크 마우스 오버 시 색상 변경 */
   }
 
-  /* 맨 위로 올라가기 */
-.scrollToTopBtn1 {  
+/* 맨 위로 올라가기 */
+#scrollToTopBtn {
   display: none;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 99;
-  border: none;
-  outline: none;
-  background-color: #35C5B3;
-  color: white;
   cursor: pointer;
-  padding: 15px;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 3%;
+}
+
+#scrollToTopBtn button {
+  background: rgb(229, 229, 182);
+  border-radius: 50%; /* 둥근 모서리 */
+  border: none;
+  cursor: pointer;
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  height: 100%; /* 부모 요소의 높이에 맞춤 */
 }
