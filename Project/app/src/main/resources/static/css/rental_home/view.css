@@ -1,0 +1,75 @@
+/* main */
+main{
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+/* google map */
+#map{
+    height: 500px;
+    width: 80%;
+}
+.map-section{
+    display: flex;
+    justify-content: center;
+}
+
+
+/* 숙소 사진 */
+.photo-container{
+    display: flex;
+}
+
+.photo-container-item{
+    margin: 10px;
+}
+
+/* 숙소 내용 */
+.rentalHome-content-section{
+    display: flex;
+}
+
+.rentalHome-name{
+    padding-left: 80px;
+}
+
+/* 숙소 소개 */
+.explanationModal{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.explanation-modal-content{
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.explanation-modal-close{
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.explanation-modal-close:hover,
+.explanation-modal-close:focus{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 숙소 리뷰 */
+.review-section{
+    border-top: 0.5px solid #cccccc;
+    margin-top: 20px;
+}
