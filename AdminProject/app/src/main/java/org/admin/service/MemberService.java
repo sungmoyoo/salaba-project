@@ -1,7 +1,6 @@
 package org.admin.service;
 
 import org.admin.domain.Member;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,9 +9,9 @@ public interface MemberService {
 
     List<Member> getAllHosts();
 
-    Member getMemberBy(int memberNo);
+    Member getMemberBy(long memberNo);
 
-    Member getHostBy(int memberNo);
+    Member getHostBy(long memberNo);
 
     int updateWarningCountBy(int reportNo);
     int updateWarningCount(int writerNo);
@@ -23,5 +22,11 @@ public interface MemberService {
     List<Member> getHostByName(String keyword);
     List<Member> getHostByEmail(String keyword);
 
-    int updateGrade(String grade, int memberNo);
+    int updateGrade(String grade, long memberNo);
+
+    void add(Member member);
+
+    Member login(String email, String password);
+
+    Member getByEmail(String email);
 }
