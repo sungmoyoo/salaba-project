@@ -93,6 +93,8 @@ public class MemberController implements InitializingBean {
     //회원정보
     session.setAttribute("loginUser", member);
 
+    session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
+
   }
 
   @PostMapping("myinfoUpdate")
@@ -174,9 +176,10 @@ public class MemberController implements InitializingBean {
   }
 
   @GetMapping("myinfoCheckPassword")
-  public void myinfoCheckPassword(Member member, Model model, HttpServletRequest request) throws Exception {
+  public void myinfoCheckPassword(Member member, Model model, HttpServletRequest request, HttpSession session) throws Exception {
     String pwcheck = request.getParameter("pwcheck");
     model.addAttribute("pwcheck", pwcheck);
+    session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
 
   }
 

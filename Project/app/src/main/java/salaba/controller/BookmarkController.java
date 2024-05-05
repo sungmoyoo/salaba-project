@@ -41,12 +41,6 @@ public class BookmarkController {
     model.addAttribute("bookmark", bookmarkService.bookmark(bookmark));
     model.addAttribute("member", member);
 
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+    session.setAttribute("myInfoMenuId", bookmark.getMyInfoMenuId());
   }
 }
