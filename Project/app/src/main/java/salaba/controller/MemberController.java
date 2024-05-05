@@ -82,32 +82,23 @@ public class MemberController implements InitializingBean {
     //국가 리스트를 받아옴
     List<Nation> nationList = memberService.getNation();
 
-    //닉네임 중복체크
-    String nickcheck = request.getParameter("nickcheck");
-    model.addAttribute("nickcheck", nickcheck);
-
     //조회한 결과 model 에 add
     model.addAttribute("member", member);
     model.addAttribute("nationList", nationList);
 
-    //회원정보
-    session.setAttribute("loginUser", member);
+    //닉네임 중복체크
+    String nickcheck = request.getParameter("nickcheck");
+    String newNickName = request.getParameter("newNickName");
+    if("N".equals(nickcheck)){
+      member.setNickname(newNickName);
+    }
+    model.addAttribute("nickcheck", nickcheck);
+
   }
 
   @PostMapping("myinfoUpdate")
-  public String myinfoUpdate(Member member, MultipartFile file) throws Exception { // 내정보 수정
+  public String myinfoUpdate(Member member, MultipartFile file, HttpSession session) throws Exception { // 내정보 수정
 
-    String oldNickname = member.getOldNickname();//수정전 닉네임
-    String nickname = member.getNickname();//수정후 닉네임
-    //닉네임이 수정되었을 경우에만 중복체크를 한다.
-    if (!oldNickname.equals(nickname)) { //문자열 비교 시에는 .equals()
-      //닉네임 중복체크
-      Member check = memberService.checkNickname(member.getNickname());
-      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
-        String nickcheck = "Y";
-        return "redirect:myinfo?nickcheck=" + nickcheck;
-      }
-    }
     Member old = memberService.get(member.getNo());
 
     if (file.getSize() > 0) {
@@ -119,7 +110,23 @@ public class MemberController implements InitializingBean {
       member.setPhoto(old.getPhoto());
     }
     memberService.myinfoUpdate(member);
+
+    Member memberSave = memberService.get(member.getNo());
+    //회원정보
+    session.setAttribute("loginUser", memberSave);
+
     return "redirect:myinfo";
+  }
+
+  @PostMapping("myinfoNickNameCheck")
+  public String myinfoNickNameCheck(Member member) throws Exception { // 내정보 수정
+      //닉네임 중복체크
+      Member check = memberService.checkNickname(member.getNickname());
+      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
+        return "redirect:myinfo?nickcheck=Y";
+      }else{
+        return "redirect:myinfo?nickcheck=N&newNickName="+member.getNickname();
+      }
   }
 
   @GetMapping("delete")
