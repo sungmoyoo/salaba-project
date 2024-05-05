@@ -46,6 +46,7 @@
     #checkButtons {
       text-align: center;
       border-left: 1px solid #CCCCCC;
+      min-width: 230px;
     }
 
     .btn-custom {
@@ -64,6 +65,12 @@
       text-align: center;
     }
 
+    .date {
+      min-width: 250px;
+    }
+
+
+
   </style>
 </head>
 
@@ -76,7 +83,8 @@
   <div class="table-header">
     <div class="table-cell header">숙소명</div>
     <div class="table-cell header">게스트명</div>
-    <div class="table-cell header">이용 기간</div>
+    <div class="table-cell header date">이용 기간</div>
+    <div class="table-cell header">이용 인원</div>
     <div class="table-cell header">남은 기간</div>
     <div id="checkName" class="table-cell header">예약 처리</div>
   </div>
@@ -89,9 +97,10 @@
        data-th-object="${hostReservation}" class="table-row">
     <div class="table-cell" data-th-text="*{rentalHomeName}">그레이트 호텔</div>
     <div class="table-cell" data-th-text="*{memberName}">홍길동</div>
-    <div class="table-cell" data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
+    <div class="table-cell date" data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
     '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01
     </div>
+    <div class="table-cell" data-th-text="*{numberOfPeople} + '명'">3</div>
     <div class="table-cell status" data-th-data-start="${hostReservation.startDate}"
          data-th-data-end="${hostReservation.endDate}"></div>
     <div class="table-cell" id="checkButtons">
@@ -106,50 +115,49 @@
         </button>
     </div>
 
-      <!-- 예약 승인 모달 -->
-      <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="approveModalLabel">예약 승인</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              예약을 승인하시겠습니까?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <form action="update" data-th-action="@{reservationCheck}" method="post">
-                <input name="hostNo" id="approveHostNo" type="hidden">
-                <input name="state" value="1" type="hidden">
-                <input name="reservationNo" id="approveReservationNo" type="hidden">
-                <button type="submit" class="btn btn-custom">확인</button>
-              </form>
-            </div>
+    <!-- 예약 승인 모달 -->
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="approveModalLabel">예약 승인</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            예약을 승인하시겠습니까?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <form action="update" data-th-action="@{reservationCheck}" method="post">
+              <input name="hostNo" data-th-value="${session.loginUser.no}" type="hidden">
+              <input name="state" value="1" type="hidden">
+              <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
+              <button type="submit" class="btn btn-custom">확인</button>
+            </form>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 예약 거절 모달 -->
-      <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="rejectModalLabel">예약 거절</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              예약을 거절하시겠습니까?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <form action="update" data-th-action="@{reservationCheck}" method="post">
-                <input name="hostNo" id="rejectHostNo" type="hidden">
-                <input name="state" value="2" type="hidden">
-                <input name="reservationNo" id="rejectReservationNo" type="hidden">
-                <button type="submit" class="btn btn-danger">확인</button>
-              </form>
-            </div>
+    <!-- 예약 거절 모달 -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="rejectModalLabel">예약 거절</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            예약을 거절하시겠습니까?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <form action="update" data-th-action="@{reservationCheck}" method="post">
+              <input name="hostNo" data-th-value="${session.loginUser.no}" type="hidden">
+              <input name="state" value="2" type="hidden">
+              <input name="reservationNo" data-th-value="*{reservationNo}" type="hidden">
+              <button type="submit" class="btn btn-danger">확인</button>
+            </form>
           </div>
         </div>
       </div>
@@ -164,16 +172,18 @@
   <div class="table-header">
     <div class="table-cell header">숙소명</div>
     <div class="table-cell header">게스트명</div>
-    <div class="table-cell header">이용 기간</div>
+    <div class="table-cell header date">이용 기간</div>
+    <div class="table-cell header">이용 인원</div>
     <div class="table-cell header">남은 기간</div>
   </div>
-  <div data-th-if="${hostReservation.state == 2}" data-th-each="hostReservation : ${list}"
+  <div data-th-if="${hostReservation.state == 1}" data-th-each="hostReservation : ${list}"
        data-th-object="${hostReservation}" class="table-row">
     <div class="table-cell" data-th-text="*{rentalHomeName}">그레이트 호텔</div>
     <div class="table-cell" data-th-text="*{memberName}">홍길동</div>
-    <div class="table-cell" data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
+    <div class="table-cell date" data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
     ' ~ ' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01
     </div>
+    <div class="table-cell" data-th-text="*{numberOfPeople} + '명'">3</div>
     <div class="table-cell status" data-th-data-start="${hostReservation.startDate}"
          data-th-data-end="${hostReservation.endDate}"></div>
   </div>
@@ -184,15 +194,17 @@
   <div class="table-header">
     <div class="table-cell header">숙소명</div>
     <div class="table-cell header">게스트명</div>
-    <div class="table-cell header">이용 기간</div>
+    <div class="table-cell header date">이용 기간</div>
+    <div class="table-cell header">이용 인원</div>
   </div>
   <div data-th-if="${hostReservation.state == 2}"
        data-th-each="hostReservation : ${list}" data-th-object="${hostReservation}" class="table-row">
     <div class="table-cell" data-th-text="*{rentalHomeName}">그레이트 호텔</div>
     <div class="table-cell" data-th-text="*{memberName}">홍길동</div>
-    <div class="table-cell" data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
+    <div class="table-cell date" data-th-text="${#dates.format(hostReservation.startDate,'yyyy-MM-dd')} +
     '~' + ${#dates.format(hostReservation.endDate,'yyyy-MM-dd')}">2024-02-01 ~ 2024-04-01
     </div>
+    <div class="table-cell" data-th-text="*{numberOfPeople} + '명'">3</div>
   </div>
 </div>
 

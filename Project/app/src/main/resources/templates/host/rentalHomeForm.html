@@ -159,46 +159,41 @@
 
 <div align="center">
   <form id="myForm" enctype="multipart/form-data" method='post'>
-    <br>
 
-    <h2>숙소 기본 정보</h2>
-    <div>
-      <input style="width:500px" type="text" name="name" id="name" placeholder="숙소명" required>
+    <div id="basic-info">
+      <h2>숙소 기본 정보</h2>
+      <div>
+        <input style="width:500px" type="text" name="name" id="name" placeholder="숙소명" required>
+      </div>
+      <div>
+        <textarea style="width:500px" name="explanation" id="explanation"
+                  placeholder="숙소 설명" required></textarea>
+      </div>
+      <div>
+        <textarea style="width:500px" name="rentalHomeRule" id="rentalHomeRule"
+                  placeholder="숙소 이용규칙" required></textarea>
+      </div>
     </div>
-    <div>
-      <textarea style="width:500px" name="explanation" id="explanation"
-                placeholder="숙소 설명" required></textarea>
+
+    <div id="location-info">
+      <h2>숙소 위치</h2>
+      <section>
+        <div id="map"></div>
+      </section>
+
+      <input type="text" name="lat" id="lat">
+      <input type="text" name="lon" id="lon">
+      <div>
+        <input type="text" style="width:500px" name="basicAddress" id="basicAddress"
+               placeholder="기본 주소" required>
+      </div>
+      <div>
+        <input type="text" style="width:500px" name="detailAddress" id="detailAddress"
+               placeholder="상세 주소" required>
+      </div>
     </div>
-    <div>
-      <textarea style="width:500px" name="rentalHomeRule" id="rentalHomeRule"
-                placeholder="숙소 이용규칙" required></textarea>
 
-      <input type="file" multiple/>
-    </div>
-
-    <br>
-    <br>
-    <br>
-
-    <h2>숙소 위치</h2>
-    <section>
-      <div id="map"></div>
-    </section>
-
-    <input type="text" name="lat" id="lat">
-    <input type="text" name="lon" id="lon">
-    <div>
-      <input type="text" style="width:500px" name="basicAddress" id="basicAddress"
-             placeholder="기본 주소" required>
-    </div>
-    <div>
-      <input type="text" style="width:500px" name="detailAddress" id="detailAddress"
-             placeholder="상세 주소" required>
-    </div>
-    <br>
-    <br>
-    <br>
-
+    <div id="photo-info"></div>
     <h2>숙소 사진</h2>
 
     <div>
@@ -208,35 +203,29 @@
       <div id="imageContainer"></div>
     </div>
 
-    <br>
-    <br>
-    <br>
-
-    <h2>요금설정</h2>
-    <script>
-      function calc() {
-        const price = Number(document.getElementById("price").value);
-        const cleanFee = Number(document.getElementById("cleanFee").value)
-        document.getElementById("income").value = Math.round((price + cleanFee) * 0.97)
-      }
-    </script>
-    <div>
-      <input style="width:500px" type="number" name="price" id="price" placeholder="이용요금(주 기준)"
-             onkeyup="calc(this.value)" required>
-    </div>
-    <div>
-      <input style="width:500px" type="number" name="cleanFee" id="cleanFee" placeholder="청소비"
-             onkeyup="calc(this.value)" required>
-    </div>
-    <div>
-      <input style="width:500px" readonly type="text" id="income" placeholder="정산금액">
+    <div class="price-info">
+      <h2>요금설정</h2>
+      <script>
+        function calc() {
+          const price = Number(document.getElementById("price").value);
+          const cleanFee = Number(document.getElementById("cleanFee").value)
+          document.getElementById("income").value = Math.round((price + cleanFee) * 0.97)
+        }
+      </script>
+      <div>
+        <input style="width:500px" type="number" name="price" id="price" placeholder="이용요금(주 기준)"
+               onkeyup="calc(this.value)" required>
+      </div>
+      <div>
+        <input style="width:500px" type="number" name="cleanFee" id="cleanFee" placeholder="청소비"
+               onkeyup="calc(this.value)" required>
+      </div>
+      <div>
+        <input style="width:500px" readonly type="text" id="income" placeholder="정산금액">
+      </div>
     </div>
 
-
-    <br>
-    <br>
-    <br>
-
+    <div class="duration-info"></div>
     <h2>호스팅 기간</h2>
     <div>
       호스팅 시작일: <input name='hostingStartDate' id="hostingStartDate" type='date' required>
@@ -244,12 +233,6 @@
     <div>
       호스팅 종료일: <input name='hostingEndDate' id="hostingEndDate" type='date' required>
     </div>
-
-
-    <br>
-    <br>
-    <br>
-
   </form>
 
   <div>
