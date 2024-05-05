@@ -20,174 +20,173 @@
 <div data-th-replace="header :: header">머리말</div>
 <h1 data-th-text="${boardName}" hidden>게시판</h1>
 
-<div id="board-header">
-  <!-- 게시판 버튼 -->
-  <button type="button" id="review-board" name="review" data-href="/board/list?categoryNo=0" onclick="setActiveAndNavigate(this.id, this.dataset.href)">후기게시판</button>
-  <button type="button" id="inform-board" name="inform" data-href="/board/list?categoryNo=1" onclick="setActiveAndNavigate(this.id, this.dataset.href)">정보공유게시판</button>
-  <button type="button" id="community-board" name="community" data-href="/board/list?categoryNo=2" onclick="setActiveAndNavigate(this.id, this.dataset.href)">자유게시판</button>
-</div>
-
-
-  <!-- 검색 폼 -->
-  <div id="bsearch-container">
-    <form id="bsearch-form" action="/board/search" data-th-action="@{search}" method="GET">
-      <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">
-      <select name="type">
-        <option value="title">제목</option>
-        <option value="content">내용</option>
-      </select>
-      <input type="text" id="bsearch-input" name="keyword" placeholder="검색어를 입력하세요" value="">
-      <button id="bsearch-button">검색</button>
-    </form>
+  <div id="board-header">
+    <!-- 게시판 버튼 -->
+    <button type="button" id="review-board" name="review" data-href="/board/list?categoryNo=0" onclick="setActiveAndNavigate(this.id, this.dataset.href)">후기게시판</button>
+    <button type="button" id="inform-board" name="inform" data-href="/board/list?categoryNo=1" onclick="setActiveAndNavigate(this.id, this.dataset.href)">정보공유게시판</button>
+    <button type="button" id="community-board" name="community" data-href="/board/list?categoryNo=2" onclick="setActiveAndNavigate(this.id, this.dataset.href)">자유게시판</button>
   </div>
 
-<!-- 게시판 -->
-<table border='1'>
-<thead>
-<!-- 후기 게시판 카드형식 목록 -->
-<tr data-th-if="*{categoryNo == 0}" data-no="1">
-  <div class="container">
-    <div class="card-deck">
-      <div data-th-each="board : ${list}" data-th-object="${board}" class="card">
-        <div class="card-thumbnail-container">
-          <div class="card-region" data-th-text="${board.region != null ? board.region.regionName : '미정'}">지역명</div>
-          <!--  thumbnail-->
-          <!-- Image Slider Container -->
-          <div class="slider">
-            <div class="slides">
-              <div data-th-each="boardFile : ${board.fileList}" class="slide">
-                <img data-th-src="|https://kr.object.ncloudstorage.com/tp3-salaba/board/review/${boardFile.uuidFileName}|" alt="thumbnail">
+    <!-- 검색 폼 -->
+    <div id="bsearch-container">
+      <form id="bsearch-form" action="/board/search" data-th-action="@{search}" method="GET">
+        <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">
+        <select name="type">
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+        </select>
+        <input type="text" id="bsearch-input" name="keyword" placeholder="검색어를 입력하세요" value="">
+        <button id="bsearch-button">검색</button>
+      </form>
+    </div>
+
+  <!-- 게시판 -->
+  <table border='1'>
+  <thead>
+  <!-- 후기 게시판 카드형식 목록 -->
+  <tr data-th-if="*{categoryNo == 0}" data-no="1">
+    <div class="container">
+      <div class="card-deck">
+        <div data-th-each="board : ${list}" data-th-object="${board}" class="card">
+          <div class="card-thumbnail-container">
+            <div class="card-region" data-th-text="${board.region != null ? board.region.regionName : '미정'}">지역명</div>
+            <!--  thumbnail-->
+            <!-- Image Slider Container -->
+            <div class="slider">
+              <div class="slides">
+                <div data-th-each="boardFile : ${board.fileList}" class="slide">
+                  <img data-th-src="|https://kr.object.ncloudstorage.com/tp3-salaba/board/review/${boardFile.uuidFileName}|" alt="thumbnail">
+                </div>
               </div>
             </div>
-          </div>
-        <div class="card-body">
-          <h3><a data-th-href="@{view(categoryNo=0,boardNo=*{boardNo})}" data-th-text="*{title}"
-                    href="view.html">제목:제목입니다.</a></h3>
-            <p class="card-text"><span data-th-text="${board.writer.nickname}">홍길동</span></p>
-          <div class="card-footer">
-            <p class="card-text"><span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
-            <i class="fa-solid fa-heart"> <span data-th-text="${board.likeCount}"></span></i>
-          </div>
+          <div class="card-body">
+            <h3><a data-th-href="@{view(categoryNo=0,boardNo=*{boardNo})}" data-th-text="*{title}"
+                      href="view.html">제목:제목입니다.</a></h3>
+              <p class="card-text"><span data-th-text="${board.writer.nickname}">홍길동</span></p>
+            <div class="card-footer">
+              <p class="card-text"><span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></p>
+              <i class="fa-solid fa-heart"> <span data-th-text="${board.likeCount}"></span></i>
+            </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</tr>
-</thead>
-</table>
-
-<!-- 정보공유 게시판-->
-<table border='1'>
-  <thead>
-  <tr data-th-if="*{categoryNo == 1}" data-no="2">
-    <th>분류</th>
-    <th>제목</th>
-    <th>작성자</th>
-    <th>작성일</th>
-    <th>추천수</th>
-    <th>조회수</th>
   </tr>
   </thead>
-  <tbody>
-  <!-- 조건부 렌더링: 공지사항과 일반 게시글 분리 -->
-  <tr data-th-if="*{categoryNo == 1}"
-      data-th-each="board : ${list}"
-      data-th-object="${board}"
-      data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}">
-    <td data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
-    <td>
-      <a data-th-href="@{view(categoryNo=1,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
-        <span data-th-text="*{title}">제목입니다.</span>
-        <!-- 파일 아이콘을 첨부파일이 있는 경우에만 표시 -->
-        <i data-th-if="${board.fileCount > 0}" class="fa-regular fa-file"></i>
-      </a>
-    </td>
-    <td data-th-text="*{writer.nickname}">홍길동</td>
-    <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
-    <td data-th-text="${board.likeCount}"></td>
-    <td data-th-text="${board.viewCount}"></td>
-  </tr>
-  </tbody>
-</table>
+  </table>
+
+  <!-- 정보공유 게시판-->
+  <table border='1'>
+    <thead>
+    <tr data-th-if="*{categoryNo == 1}" data-no="2">
+      <th>분류</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>작성일</th>
+      <th>추천수</th>
+      <th>조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 조건부 렌더링: 공지사항과 일반 게시글 분리 -->
+    <tr data-th-if="*{categoryNo == 1}"
+        data-th-each="board : ${list}"
+        data-th-object="${board}"
+        data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}">
+      <td data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
+      <td>
+        <a data-th-href="@{view(categoryNo=1,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
+          <span data-th-text="*{title}">제목입니다.</span>
+          <!-- 파일 아이콘을 첨부파일이 있는 경우에만 표시 -->
+          <i data-th-if="${board.fileCount > 0}" class="fa-regular fa-file"></i>
+        </a>
+      </td>
+      <td data-th-text="*{writer.nickname}">홍길동</td>
+      <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
+      <td data-th-text="${board.likeCount}"></td>
+      <td data-th-text="${board.viewCount}"></td>
+    </tr>
+    </tbody>
+  </table>
 
 
-<!-- 자유게시판 -->
-<table border='1'>
-  <thead>
-  <tr data-th-if="*{categoryNo == 2}" data-no="3">
-    <th>분류</th> <!-- headName -->
-    <th>제목</th>
-    <th>작성자</th>
-    <th>작성일</th>
-    <th>추천수</th>
-    <th>조회수</th> <!-- 목록에서는 정보공유 게시판과 자유 게시판에서만 표시됨 -->
-  </tr>
-  </thead>
-  <tbody>
-  <tr data-th-if="*{categoryNo == 2}"
-      data-th-each="board : ${list}"
-      data-th-object="${board}"
-      data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}">
-    <td class="head-box" data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
-    <td>
-      <a data-th-href="@{view(categoryNo=2,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
-        <span data-th-text="*{title}">제목입니다.</span>
-        <!-- 파일 아이콘을 첨부파일이 있는 경우에만 표시 -->
-        <i data-th-if="${board.fileCount > 0}" class="fa-regular fa-file"></i>
-      </a>
-    </td>
-    <td data-th-text="*{writer.nickname}">홍길동</td>
-    <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
-    <td data-th-text="${board.likeCount}"></td>
-    <td data-th-text="${board.viewCount}"></td>
-  </tr>
-  </tbody>
-</table>
+  <!-- 자유게시판 -->
+  <table border='1'>
+    <thead>
+    <tr data-th-if="*{categoryNo == 2}" data-no="3">
+      <th>분류</th> <!-- headName -->
+      <th>제목</th>
+      <th>작성자</th>
+      <th>작성일</th>
+      <th>추천수</th>
+      <th>조회수</th> <!-- 목록에서는 정보공유 게시판과 자유 게시판에서만 표시됨 -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-if="*{categoryNo == 2}"
+        data-th-each="board : ${list}"
+        data-th-object="${board}"
+        data-th-class="${board.headNo == 1 ? 'announcement' : 'regular'}">
+      <td class="head-box" data-th-text="'[' + ${board.headContent} + ']'">분류 내용</td>
+      <td>
+        <a data-th-href="@{view(categoryNo=2,boardNo=${board.boardNo})}" href="view.html" onclick="return false;">
+          <span data-th-text="*{title}">제목입니다.</span>
+          <!-- 파일 아이콘을 첨부파일이 있는 경우에만 표시 -->
+          <i data-th-if="${board.fileCount > 0}" class="fa-regular fa-file"></i>
+        </a>
+      </td>
+      <td data-th-text="*{writer.nickname}">홍길동</td>
+      <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</td>
+      <td data-th-text="${board.likeCount}"></td>
+      <td data-th-text="${board.viewCount}"></td>
+    </tr>
+    </tbody>
+  </table>
 
-<!-- 글쓰기 버튼 -->
-<div id="write-button-container">
-  <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">
-    글쓰기 <i class="fa-solid fa-pen"></i></a>
-</div>
-
-
-
-<!-- 페이지네이션: 게시판용 페이징처리 적용-->
-<nav aria-label="Page navigation example" data-th-if="${categoryNo != 0}">
-  <ul class="pagination justify-content-center">
-    <!-- '이전' 페이지 버튼 -->
-    <li class="page-item" data-th-classappend="${pageNo == 1} ? 'disabled' : ''">
-      <a class="page-link" data-th-if="${pageNo > 1}" data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${pageNo - 1}, pageSize=${pageSize})}" href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-      <span class="page-link" data-th-unless="${pageNo > 1}" aria-hidden="true">&laquo;</span>
-    </li>
-
-    <!-- 동적 페이지 번호 링크 -->
-    <li data-th-each="i : ${#numbers.sequence(1, numOfPage)}" class="page-item" data-th-classappend="${pageNo == i} ? 'active' : ''">
-      <a class="page-link" data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${i}, pageSize=${pageSize})}" data-th-text="${i}" href="#">1</a>
-    </li>
-
-    <!-- '다음' 페이지 버튼 -->
-    <li class="page-item" data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''">
-      <a class="page-link" data-th-if="${pageNo < numOfPage}" data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${pageNo + 1}, pageSize=${pageSize})}" href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-      <span class="page-link" data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&raquo;</span>
-    </li>
-  </ul>
-</nav>
-
-  <!-- 페이지 맨 위로 올라가기-->
-  <div id="scrollToTopBtn" data-th-if="*{categoryNo == 0}">
-  <button onclick="scrollToTop()">🔝</button>
+  <!-- 글쓰기 버튼 -->
+  <div id="write-button-container">
+    <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">
+      글쓰기 <i class="fa-solid fa-pen"></i></a>
   </div>
-<div data-th-replace="footer :: footer">꼬리말</div>
 
-<script data-th-src="@{/js/board/list.js}"></script>
-<script data-th-src="@{/js/common/alarm.js}"></script>
-<script data-th-src="@{/js/header.js}"></script>
+
+
+  <!-- 페이지네이션: 게시판용 페이징처리 적용-->
+  <nav aria-label="Page navigation example" data-th-if="${categoryNo != 0}">
+    <ul class="pagination justify-content-center">
+      <!-- '이전' 페이지 버튼 -->
+      <li class="page-item" data-th-classappend="${pageNo == 1} ? 'disabled' : ''">
+        <a class="page-link" data-th-if="${pageNo > 1}" data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${pageNo - 1}, pageSize=${pageSize})}" href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+        <span class="page-link" data-th-unless="${pageNo > 1}" aria-hidden="true">&laquo;</span>
+      </li>
+
+      <!-- 동적 페이지 번호 링크 -->
+      <li data-th-each="i : ${#numbers.sequence(1, numOfPage)}" class="page-item" data-th-classappend="${pageNo == i} ? 'active' : ''">
+        <a class="page-link" data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${i}, pageSize=${pageSize})}" data-th-text="${i}" href="#">1</a>
+      </li>
+
+      <!-- '다음' 페이지 버튼 -->
+      <li class="page-item" data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''">
+        <a class="page-link" data-th-if="${pageNo < numOfPage}" data-th-href="@{list(categoryNo=*{categoryNo}, pageNo=${pageNo + 1}, pageSize=${pageSize})}" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+        <span class="page-link" data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&raquo;</span>
+      </li>
+    </ul>
+  </nav>
+
+    <!-- 페이지 맨 위로 올라가기-->
+    <div id="scrollToTopBtn" data-th-if="*{categoryNo == 0}">
+    <button onclick="scrollToTop()">🔝</button>
+    </div>
+  <div data-th-replace="footer :: footer">꼬리말</div>
+
+  <script data-th-src="@{/js/board/list.js}"></script>
+  <script data-th-src="@{/js/common/alarm.js}"></script>
+  <script data-th-src="@{/js/header.js}"></script>
 
 </body>
 </html>

@@ -47,29 +47,29 @@ function setActiveAndNavigate(selectedId, url) {
 
   const buttons = document.querySelectorAll('#board-header button');
   buttons.forEach(button => {
-      if (button.id === selectedId) {
-          button.style.backgroundColor = '#35C5B3'; // 배경색 변경
-          button.style.color = 'white'; // 텍스트 색상 변경
-      } else {
-          button.style.backgroundColor = 'transparent'; // 배경색을 투명으로
-          button.style.color = 'black'; // 텍스트 색상을 검정색으로
-      }
+      button.style.backgroundColor = 'transparent'; // 모든 버튼의 배경색을 투명으로 설정
+      button.style.color = 'black'; // 모든 버튼의 텍스트 색상을 검정색으로 설정
   });
+
+  const selectedButton = document.getElementById(selectedId);
+  selectedButton.style.backgroundColor = '#35C5B3'; // 선택된 버튼의 배경색 변경
+  selectedButton.style.color = 'white'; // 선택된 버튼의 텍스트 색상 변경
 
   location.href = url; // 페이지 이동
 }
 
-/*페이지 이동 후에 버튼 색상이 사라지는 문제 해결 */
+/* 페이지 로드 시 선택된 버튼의 색상 적용 */
 document.addEventListener('DOMContentLoaded', function() {
   const selectedButtonId = localStorage.getItem('selectedButtonId');
   if (selectedButtonId) {
       const selectedButton = document.getElementById(selectedButtonId);
       if (selectedButton) {
-          selectedButton.style.backgroundColor = '#35C5B3'; // 배경색 변경
-          selectedButton.style.color = 'white'; // 텍스트 색상 변경
+          selectedButton.style.backgroundColor = '#35C5B3'; // 선택된 버튼의 배경색 변경
+          selectedButton.style.color = 'white'; // 선택된 버튼의 텍스트 색상 변경
       }
   }
 });
+
 
 // 후기 게시판 목록
 // 카드 컨테이너에 대한 클릭 이벤트 리스너
@@ -109,28 +109,25 @@ document.querySelectorAll(".card-deck .card").forEach(card => {
     });
 
 
-// 검색
+    // 검색
     // 페이지가 로드될 때 저장된 검색어가 있는지 확인 -> 있으면 검색창에 남겨두기
   window.addEventListener('DOMContentLoaded', (event) => {
     initSlider();
-    console.log("검색1")
     var savedKeyword = localStorage.getItem('searchKeyword');
     if (savedKeyword) {
       document.getElementById('search-input').value = savedKeyword;
       // 검색어를 가져왔으면 -> 다시 로컬 스토리지에서 삭제
-      console.log("검색2")
       localStorage.removeItem('searchKeyword');
     }
   });
 
 
   // 검색 버튼 클릭 시 검색어를 로컬 스토리지에 저장
-  document.getElementById('search-button').addEventListener('click', function(event) {
+  document.getElementById('bsearch-button').addEventListener('click', function(event) {
     event.preventDefault();
-    var keyword = document.getElementById('search-input').value;
+    var keyword = document.getElementById('bsearch-input').value;
     localStorage.setItem('searchKeyword', keyword);
-    document.getElementById('search-form').submit();
-        console.log("검색3")
+    document.getElementById('bsearch-form').submit();
   });
 
 

@@ -38,7 +38,9 @@
   }
 
   #bsearch-container {
-    margin-bottom: 40px; /* 검색 폼 아래에 여백 추가 */
+    position: absolute; 
+    right: 20px;      
+    top: 130px;          
   }
 
   /* 정보공유, 자유게시판 행 클릭 이벤트 */
@@ -195,11 +197,11 @@
 
   /* 정보공유, 자유 게시판 비율 조정 */
   table {
-      width: 96%; /* 테이블 너비를 96%로 조정 */
+      width: 95%; /* 테이블 너비를 96%로 조정 */
       margin: 20px auto; /* 상하 여백은 그대로 유지하고, 좌우 마진을 auto로 설정 */
       border-collapse: collapse; /* 테이블 경계선 겹쳐서 보이게 */
       position:relative;
-  }
+          }
 
   /* 테이블 헤더와 셀 스타일 */
   th, td {

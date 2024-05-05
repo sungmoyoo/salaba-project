@@ -1,4 +1,12 @@
-/*게시판 종류*/
+body {
+  display: flex;
+  justify-content: center; /* 가로 방향 가운데 정렬 */
+  align-items: center; /* 세로 방향 가운데 정렬 */
+  min-height: 100vh; /* 화면의 최소 높이를 화면 전체로 설정 */
+  margin: 0; /* body 요소의 기본 마진 제거 */
+}
+
+*게시판 종류*/
 h1 {
   text-align: left; /* 제목을 왼쪽 정렬 */
   margin-left: 20px; /* 왼쪽 여백 추가 */
@@ -185,9 +193,13 @@ h1 {
 
 #comment-content {
   border: 1px solid rgb(155, 155, 155);
-  height: 50%;
+  height: 5em; /* 고정 높이 사용 */
   width: 80%;
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
+  text-align: left;
+  box-sizing: border-box; 
+  line-height: normal; /* line-height를 normal로 설정 */
+
 }
 
 #reply-content {
@@ -197,8 +209,11 @@ h1 {
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
   text-align: right; /* 텍스트를 오른쪽에 정렬 */
   align-self: flex-end; /* 자신을 오른쪽으로 정렬 */
-
+  box-sizing: border-box; 
+  text-align: left;
+  margin-bottom: 20px;
 }
+
 
 /*댓글,답글 리스트*/
 #comment-box {
@@ -213,7 +228,6 @@ h1 {
 }
 
 .comment, .reply {
-  /* border: 1px solid #454545; 테두리 스타일과 색상 */
   margin-top: 20px;
   padding: 10px;
   margin-bottom: 10px;
@@ -222,9 +236,6 @@ h1 {
 
 .comment {
   border-top: 2px groove #ffffff; /* 댓글 상단에 구분선 추가 */
-  padding-top: 10px; /* 구분선과 내용 사이의 간격 조정 */
-  margin-top: 5px; /* 이전 댓글과의 간격 조정 */
-  padding-bottom: 10px;
 }
 
 /* 댓글 내용 정렬 조정 */
@@ -264,6 +275,11 @@ h1 {
   color: gray;
   margin-left: 10px;
 }
+/*댓글 수정 폼*/
+.commentModifyForm {
+  align-items: flex-end;
+
+}
 
 /*컨텐츠*/
 .textContent {
@@ -284,13 +300,7 @@ h1 {
   font-size: 13pt;
 }
 
-#reply-content {
-  width: 100%; 
-  box-sizing: border-box; 
-  resize: none;
-  text-align: left;
-  margin-bottom: 20px;
-}
+
 
 /* 답글 폼 */
 /*평소에 폼 숨기기 -> 이벤트 발생 시 나타나는 폼*/
@@ -307,19 +317,6 @@ h1 {
   text-align: left; /* 폼 내용을 왼쪽으로 정렬 */
 
 }
-
-/* 답글 달기 버튼 */
-#addReplyBtn {
-  border: 1px solid #fff;
-  padding: 3px 6px; /* 패딩을 줄여서 버튼 크기를 작게 조정 */
-  font-size: 14px; /* 글꼴 크기를 조절 */
-  height: 30px; /* 버튼의 높이를 작게 조정 */
-  width: 80px; /* 버튼의 너비를 작게 조정 */
-  margin-top: 10px; /* 버튼을 폼의 하단에 띄우기 */
-  align-self: flex-end; /* 버튼을 오른쪽으로 정렬 */
-  margin-left: 10px; /* 폼과의 간격 조정 */
-}
-
 
 /* 폼을 보여줄 때 */
 #replyForm.active {
@@ -347,7 +344,7 @@ h1 {
   font-size: 14px; /* 글꼴 크기를 조절 */
 }
 
-
+/*수정 폼*/
 .commentModifyForm, .replyModifyForm {
   gap: 10px; /* 요소들 사이의 간격 */
   border: 1px solid #ccc; /* 테두리 설정 */
@@ -355,7 +352,7 @@ h1 {
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
   background-color: #f9f9f9; /* 배경색 */
   margin-top: 10px;
-  width: 60%;
+  width: 80%;
 }
 
 .newContent {
@@ -368,7 +365,7 @@ h1 {
   resize: none; /* 사용자가 크기를 조절하지 못하도록 설정 */
 }
 
-
+/*댓글 달기 버튼*/
 #addCommentBtn  {
   border: 1px solid #fff;
   padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
@@ -378,6 +375,17 @@ h1 {
   margin-right:280px;
 }
 
+/* 답글 달기 버튼 */
+#addReplyBtn, #cancelReplyBtn {
+  border: 1px solid #fff;
+  padding: 3px 6px; /* 패딩을 줄여서 버튼 크기를 작게 조정 */
+  font-size: 14px; /* 글꼴 크기를 조절 */
+  height: 30px; /* 버튼의 높이를 작게 조정 */
+  width: 80px; /* 버튼의 너비를 작게 조정 */
+  margin-top: 10px; /* 버튼을 폼의 하단에 띄우기 */
+  align-self: flex-end; /* 버튼을 오른쪽으로 정렬 */
+  margin-left: 10px; /* 폼과의 간격 조정 */
+}
 
 
 /**************************************************************************************************************/

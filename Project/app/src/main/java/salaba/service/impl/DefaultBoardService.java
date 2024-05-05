@@ -133,18 +133,18 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
-  public List<Board> search(String keyword, String type) { // 검색 기능
-    return boardDao.searchByKeyword(keyword, type);
+  public List<Board> search(String keyword, String type, int categoryNo) { // 검색 기능
+    return boardDao.searchByKeyword(keyword, type, categoryNo);
   }
 
   @Override
-  public List<Board> searchByTitle(String title) {  // 제목으로 검색
-    return boardDao.searchByKeyword(title, "title");
+  public List<Board> searchByTitle(String title, int categoryNo) {  // 제목으로 검색
+    return boardDao.searchByKeyword(title, "title", categoryNo);
   }
 
   @Override
-  public List<Board> searchByContent(String content) { // 내용으로 검색
-    return boardDao.searchByKeyword(content, "content");
+  public List<Board> searchByContent(String content, int categoryNo) { // 내용으로 검색
+    return boardDao.searchByKeyword(content, "content", categoryNo);
   }
   @Override
   public int countFiltered(int categoryNo, String type, String keyword) { // 검색 결과 페이징 처리

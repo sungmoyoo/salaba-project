@@ -445,7 +445,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     }
     comment.setCreatedDate(new Date());
     return ResponseEntity.ok(comment);
-
   }
 
   @PostMapping("/board/comment/update") // 답글 또는 댓글 수정
@@ -635,9 +634,9 @@ public String searchBoard(
 
   // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
   if ("title".equals(type)) {
-    filteredBoardList = boardService.searchByTitle(keyword);
+    filteredBoardList = boardService.searchByTitle(keyword, categoryNo);
   } else if ("content".equals(type)) {
-    filteredBoardList = boardService.searchByContent(keyword);
+    filteredBoardList = boardService.searchByContent(keyword, categoryNo);
   } else {
     // 유효하지 않은 검색 유형을 처리하는 경우
     filteredBoardList = Collections.emptyList(); // 빈 리스트 반환

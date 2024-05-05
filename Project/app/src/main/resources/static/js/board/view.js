@@ -52,7 +52,7 @@ $("#addCommentBtn").click(function (e) {
       },
       error: function () {
         // 오류 메시지 날리기
-        alert("권한이 없습니다.zsA");
+        alert("권한이 없습니다.");
       },
     });
   } else {
@@ -60,6 +60,38 @@ $("#addCommentBtn").click(function (e) {
     alert("내용을 작성하세요");
   }
 });
+
+
+$("#addCommentBtn").click(function (e) {
+    e.preventDefault(); // 기본 이벤트 방지
+    let content = $("#commentContent").val(); // 댓글 내용
+    let boardNo = $("#boardNum").data("th-text"); // 게시글 번호 가져오기
+    let alarmContent = "새로운 댓글이 달렸습니다."; // 알람 내용 설정
+    let memberNoForAlarm = $("#postAuthor").data("member-no"); // 게시글 작성자 번호, HTML 마크업에서 추출
+
+    if (content != "") {
+        $.ajax({
+            url: "/board/comment/add",
+            type: "POST",
+            dataType: "json",
+            data: {
+                boardNo: boardNo,
+                content: content,
+                alarmContent: alarmContent, // 추가된 필드
+                memberNoForAlarm: memberNoForAlarm // 추가된 필드
+            },
+            success: function (data) {
+                // 성공적으로 댓글을 추가했을 때의 로직
+            },
+            error: function () {
+                alert("댓글 추가에 실패했습니다.");
+            }
+        });
+    } else {
+        alert("내용을 작성하세요");
+    }
+});
+
 
 //댓글 삭제
 $(".del").click(deleteComment);
@@ -146,45 +178,42 @@ function deleteComment(e) {
   });
 }
 
+// 댓글 수정 기능
 function modifyComment(e) {
   e.stopPropagation();
-  let commentDiv = $(this).parent();
-  let commentNo = commentDiv.children().first().text();
+  let commentDiv = $(this).closest('.comment');
+  let commentNo = commentDiv.find('.commentNo').text();
   let oldContent = commentDiv.find(".commentContent").text();
   let modifyForm = $(".commentModifyForm");
 
-  if (
-    modifyForm.length != 0 &&
-    modifyForm.children().first().val() != commentNo
-  ) {
+  // 기존의 수정 폼 제거 조건 검사
+  if (modifyForm.length != 0 && modifyForm.find("input[type='hidden']").val() != commentNo) {
     modifyForm.remove();
   }
 
-  const updateFormHTML = $(`<form class="commentModifyForm">
-                                <input hidden value="${commentNo}">
+  // 수정 폼 생성 및 삽입
+  if ($(".commentModifyForm").length == 0) {
+    const updateFormHTML = $(`<form class="commentModifyForm">
+                                <input type="hidden" value="${commentNo}">
                                 <textarea class="newContent">${oldContent}</textarea>
                                 <button type="button" class="comtModiConfirm">수정</button>
                                 <button type="button" class="comtModiCancel">취소</button>
                             </form>`);
 
-  if ($(".commentModifyForm").length == 0) {
-    updateFormHTML.find(".newContent").click((e) => e.stopPropagation());
-    commentDiv.append(updateFormHTML);
+    updateFormHTML.insertAfter(commentDiv); // 댓글 바로 다음에 폼 삽입
 
-    //수정하기 폼의 수정버튼
-    $(".comtModiConfirm").click(function (e) {
+    // 수정 확인 버튼 클릭 이벤트
+    updateFormHTML.find(".comtModiConfirm").click(function (e) {
       e.stopPropagation();
       let newContent = updateFormHTML.find(".newContent").val();
-      console.log(newContent);
-      console.log(commentNo);
-      if (newContent != "") {
+      if (newContent.trim() !== "") { // 공백만 있는 내용을 제거
         $.ajax({
           url: "/board/comment/update",
           type: "POST",
           dataType: "json",
           data: {
             commentNo: commentNo,
-            content: newContent,
+            content: newContent
           },
           success: function (data) {
             updateFormHTML.remove();
@@ -193,27 +222,34 @@ function modifyComment(e) {
           error: function (error) {
             window.alert("수정 권한이 없습니다.");
             updateFormHTML.remove();
-          },
+          }
         });
       } else {
-        alert("내용을 작성하세요");
+        alert("내용을 작성하세요.");
       }
     });
 
-    //수정하기 폼의 취소 버튼
-    $(".comtModiCancel").click(function (e) {
+    // 취소 버튼 클릭 이벤트
+    updateFormHTML.find(".comtModiCancel").click(function (e) {
       e.stopPropagation();
-      $(".commentModifyForm").remove();
+      updateFormHTML.remove();
     });
   }
 }
 
+
 /*답글 달기*/
 function addReplyForm(e) {
-  console.log("Adding reply form");
+  e.stopPropagation(); // 이벤트 버블링 방지
+  let commentContainer = $(e.currentTarget).closest('.comment');
 
-  // 클릭된 버튼의 상위 요소(댓글 컨테이너)를 찾아서 그 위치에 답글 폼을 이동
-  var commentContainer = $(e.currentTarget).closest('.comment');
+  // 수정 폼이 활성화된 경우, 답글 폼을 표시하지 않음
+  if (commentContainer.find('.commentModifyForm').length > 0) {
+    console.log("수정 폼이 활성화되어 있어 답글 폼을 표시하지 않습니다.");
+    return;
+  }
+
+  console.log("답글 폼 추가");
   
   // 댓글 번호를 추출하여 답글 폼의 hidden input에 설정
   var commentNo = commentContainer.find('.commentNo').text();
@@ -226,9 +262,17 @@ function addReplyForm(e) {
   replyForm.removeClass("form-hidden");
 }
 
+// 답글 폼 취소(닫기)
+function cancelReplyForm() {
+  replyForm.addClass("form-hidden");
+  replyForm.find('textarea').val(''); 
+}
+
 $(document).ready(function() {
-  $('.modi').on('click', addReplyForm); // 모든 modi 클래스 버튼에 이벤트 리스너 추가
+  $("#comment-box").on("click", ".comment-text", addReplyForm);
+  $("#cancelReplyBtn").click(cancelReplyForm);
 });
+
 
 
 /* 답글 삭제 */
@@ -308,6 +352,8 @@ function modifyReply(e) {
   }
 }
 
+/*************************************************************************************/
+
 //추천수
 let myLikeCount = parseInt($("#myLikeCount").text()); // 내 추천수(0 or 1)
 let initialCount = myLikeCount;
@@ -356,6 +402,7 @@ function requireLogin() {
   alert('로그인이 필요합니다.');
 }
 
+/**********************************************************************************************/
 
 // 신고창: 모달 사용
 $(document.body).on("click", ".report-btn", function (event) {
