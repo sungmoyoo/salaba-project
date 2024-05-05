@@ -92,9 +92,6 @@ public class MemberController implements InitializingBean {
 
     //회원정보
     session.setAttribute("loginUser", member);
-
-    session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
-
   }
 
   @PostMapping("myinfoUpdate")
@@ -201,7 +198,7 @@ public class MemberController implements InitializingBean {
 
   @PostMapping("themeSave")
   public String themeSave(Member member, Model model, HttpSession session)
-      throws Exception { // 비밀번호 확인
+      throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     member.setNo(sessionInfo.getNo());
@@ -217,7 +214,7 @@ public class MemberController implements InitializingBean {
 
   // 선호사항 폼
   @GetMapping("mytheme")
-  public void mytheme(Model model, HttpSession session){
+  public void mytheme(Member member, Model model, HttpSession session){
     Member sessionInfo = (Member) session.getAttribute("loginUser");
 
     model.addAttribute("themeList", memberService.themeList(sessionInfo));
@@ -226,11 +223,11 @@ public class MemberController implements InitializingBean {
   @GetMapping("boardHistory")  // 작성글 내역
   public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "10") int pageSize,
+      Member member,
       Model model,
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(loginUser.getNo());
 
     if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
       pageSize = 10;
@@ -253,15 +250,8 @@ public class MemberController implements InitializingBean {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
-    model.addAttribute("member", member);
+    session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
 
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
 
   }
 
@@ -273,7 +263,6 @@ public class MemberController implements InitializingBean {
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(loginUser.getNo());
 
     if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
       pageSize = 10;
@@ -299,15 +288,6 @@ public class MemberController implements InitializingBean {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
-    model.addAttribute("member", member);
-
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
 
   }
 

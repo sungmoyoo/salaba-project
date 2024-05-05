@@ -34,9 +34,9 @@ public class BookmarkController {
       Model model,
       HttpSession session) throws Exception {
 
-    Member sessionInfo = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(sessionInfo.getNo());
-    bookmark.setNo(sessionInfo.getNo());
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    Member member = memberService.get(loginUser.getNo());
+    bookmark.setNo(loginUser.getNo());
 
     model.addAttribute("bookmark", bookmarkService.bookmark(bookmark));
     model.addAttribute("member", member);

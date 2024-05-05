@@ -39,38 +39,17 @@ public class ReservationController {
       HttpSession session) throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(sessionInfo.getNo());
     reservation.setNo(sessionInfo.getNo());
 
     model.addAttribute("reservationList", reservationService.reservationList(reservation));
-    model.addAttribute("member", member);
-
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+    session.setAttribute("myInfoMenuId", reservation.getMyInfoMenuId());
   }
 
   @GetMapping("reservationView")
-  public void reservationView(int reservationNo,Model model,HttpSession session) throws Exception {
-
-    Member sessionInfo = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(sessionInfo.getNo());
+  public void reservationView(int reservationNo,Model model) throws Exception {
 
     Reservation reservation = reservationService.get(reservationNo);
     model.addAttribute("reservation", reservation);
-    model.addAttribute("member", member);
-
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
   }
 
 }

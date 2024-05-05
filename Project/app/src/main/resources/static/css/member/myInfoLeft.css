@@ -14,15 +14,6 @@ body{
   border-bottom: 1px solid #ccc;
   height: 28px;
 }
-.left-li:last-child{
-  list-style-type:none;
-  width: 110px;
-  text-align: center;
-  padding: 17px 5px 10px 5px;
-  background-color: #f8f8f8;
-  border-bottom: 0px;
-  height: 28px;
-}
 .left-li:hover{
   font-weight: bold;
 }

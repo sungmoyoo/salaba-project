@@ -31,12 +31,12 @@
     </tr>
   </table>
   <ul style="padding-left: 39px;">
-    <li class="left-li" data-th-class="${session.myInfoMenuId == 'myinfoCheckPassword'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/member/myinfoCheckPassword?myInfoMenuId=myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="member/myinfoCheckPassword">내정보 관리</a></li>
-    <li class="left-li" data-th-class="${session.myInfoMenuId == 'bookmark'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/bookmark/bookmark?myInfoMenuId=bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
-    <li class="left-li" data-th-class="${session.myInfoMenuId == 'reservationList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/reservation/reservationList?myInfoMenuId=reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
-    <li class="left-li" data-th-class="${session.myInfoMenuId == 'boardHistory'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/member/boardHistory?myInfoMenuId=boardHistory}" data-th-if="${session.loginUser != null}" href="member/boardHistory">작성글 내역</a></li>
-    <li class="left-li" data-th-class="${session.myInfoMenuId == 'pointList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/pointHistory/pointList?myInfoMenuId=pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
-    <li class="left-li" data-th-class="${session.myInfoMenuId == 'questionList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/question/questionList?myInfoMenuId=questionList}" data-th-if="${session.loginUser != null}" href="question/questionList">고객센터</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'myinfoCheckPassword'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/member/myinfoCheckPassword?myInfoMenuId=myinfoCheckPassword}" data-th-if="${session.loginUser != null}">내정보 관리</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'bookmark'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/bookmark/bookmark?myInfoMenuId=bookmark}" data-th-if="${session.loginUser != null}">즐겨찾기</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'reservationList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/reservation/reservationList?myInfoMenuId=reservationList}" data-th-if="${session.loginUser != null}">예약 내역</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'boardHistory'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/member/boardHistory?myInfoMenuId=boardHistory}" data-th-if="${session.loginUser != null}">작성글 내역</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'pointList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/pointHistory/pointList?myInfoMenuId=pointList}" data-th-if="${session.loginUser != null}">포인트 내역</a></li>
+    <li class="left-li" style="border-bottom: 0px;" data-th-class="${session.myInfoMenuId == 'questionList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/question/questionList?myInfoMenuId=questionList}" data-th-if="${session.loginUser != null}">고객센터</a></li>
   </ul>
 </div>
 </body>

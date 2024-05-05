@@ -33,6 +33,7 @@ public class PointHistoryController {
     pointHistory.setNo(sessionInfo.getNo());
 
     model.addAttribute("pointList", pointHistoryService.pointList(pointHistory));
+    session.setAttribute("myInfoMenuId", pointHistory.getMyInfoMenuId());
 
   }
 }

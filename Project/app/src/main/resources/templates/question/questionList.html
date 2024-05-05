@@ -1,20 +1,6 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <style>
-    .left-li{
-      list-style-type:none;
-      width: 110px;
-      background-color: #b9b9b9;
-      text-align: center;
-      margin-top: 10px;
-      padding: 10px 5px 10px 5px;
-    }
-    li a {
-      text-decoration-line: none;
-      color: #fff;
-    }
-  </style>
   <script>
     function fn_save(){ // submit하기 전에 확인하는 옵션
 
@@ -36,47 +22,17 @@
   </script>
   <meta charset='UTF-8'>
   <title>사라바</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
 
 </head>
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
-<table style="width:100%;height:540px;">
-  <tr>
-    <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
-      <table style="width:200px;background-color: #f5f1f1;">
-        <tr>
-          <td colspan="2" style="text-align:center;padding-top: 10px;">
-            <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
-               data-th-if="*{session.loginUser.photo}">
-              <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{session.loginUser.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-            <a data-th-unless="*{session.loginUser.photo}" href='/img/default-photo.jpeg'>
-              <img height='80px' src='/img/default-photo.jpeg'></a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align:center;">[[${session.loginUser.nickname}]]</td>
-        </tr>
-        <tr>
-          <td style="text-align:right;width: 35%;">등급:</td>
-          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberGradeName}'></td>
-        </tr>
-        <tr>
-          <td style="text-align:right;width: 35%;">포인트:</td>
-          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberPoint}'></td>
-        </tr>
-      </table>
-      <ul>
-        <li class="left-li"><a data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="member/myinfoCheckPassword">내정보 관리</a></li>
-        <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
-        <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/board/boardHistory}" data-th-if="${session.loginUser != null}" href="board/boardHistory">작성글 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList" style="color:#000;"><b>고객센터</b></a></li>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">
-      <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
+<div class="rootDiv">
+  <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
+
+  <div style="margin-left: 20px;">
         <h1 data-th-text="고객센터"></h1>
 
         <form name="frm" action="questionAdd" data-th-action="@{questionAdd}" enctype='multipart/form-data' method='post' onsubmit="return false;">
@@ -112,12 +68,11 @@
           </tbody>
         </table>
       </div>
-    </td>
-  </tr>
-</table>
+</div>
 
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script data-th-src="@{/js/header.js}"></script>
 </html>
