@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,43 +42,46 @@ public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트�
   @Value("${ncpbucketname}")
   private String bucketName;
 
-  @PostMapping("/board/report/add") // 신고 작성
-  public String addReport(
+  @PostMapping("/board/report/add")
+  public ResponseEntity<?> addReport(
       BoardReport boardReport,
-      @RequestParam("targetNo") int targetNo, // 타겟(게시글, 댓글, 답글) 번호
-      @RequestParam("targetType") String targetType, // 타겟 타입(0,1,2)
-      @RequestParam("categoryNo") int categoryNo, // 신고 카테고리 번호
+      @RequestParam("targetNo") int targetNo,
+      @RequestParam("targetType") String targetType,
+      @RequestParam("categoryNo") int categoryNo,
       MultipartFile[] reportFiles,
-      HttpSession session) throws Exception {
+      HttpSession session) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인하시기 바랍니다!");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인하시기 바랍니다!");
     }
-    log.debug("-----------" + reportFiles);
-
-    // 필요한 값
-    boardReport.setWriter(loginUser);
-    boardReport.setCategoryNo(boardReport.getCategoryNo());
-    boardReport.setTargetNo(targetNo);
-    boardReport.setTargetType(targetType);
 
     List<BoardReportFile> reportFileList = new ArrayList<>();
-    if (reportFiles != null && reportFiles.length > 0) {
-      for (MultipartFile file: reportFiles) {
-        if (file.getSize() == 0) {
-          throw new Exception("첨부파일을 등록하세요!");
+    try {
+      for (MultipartFile file : reportFiles) {
+        if (file.isEmpty()) { // 첨부파일 검사 변경
+          throw new RuntimeException("첨부파일을 등록하세요!");
         }
         String filename = storageService.upload(this.bucketName, this.uploadDir, file);
-        reportFileList.add(BoardReportFile.builder().uuidFileName(filename).oriFileName(file.getName()).build());
+        reportFileList.add(BoardReportFile.builder().uuidFileName(filename).oriFileName(file.getOriginalFilename()).build());
       }
-    }
 
-    if (reportFileList.size() > 0) {
-      boardReport.setReportFileList(reportFileList);
-    }
+      if (!reportFileList.isEmpty()) {
+        boardReport.setReportFileList(reportFileList);
+      }
 
-    boardReportService.addReport(boardReport);
-    return "redirect:/board/list?categoryNo=" + categoryNo;
+      boardReport.setWriter(loginUser);
+      boardReport.setCategoryNo(categoryNo);
+      boardReport.setTargetNo(targetNo);
+      boardReport.setTargetType(targetType);
+
+      boardReportService.addReport(boardReport);
+      return ResponseEntity.ok("신고가 성공적으로 제출되었습니다.");
+    } catch (RuntimeException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
+
 }

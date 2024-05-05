@@ -141,9 +141,9 @@
         </div>
         <div class="modal-body">
           <!--신고 폼 화면-->
-          <form id="reportForm" action="add" enctype='multipart/form-data' method='post'>
-            <input id="targetTypeInput" name='targetType' type='text'>
-            <input id="targetNoInput" name='targetNo' type='text'>
+          <form id="reportForm" action="/board/report/add" method="post" enctype="multipart/form-data">
+            <input id="targetTypeInput" name='targetType' type='hidden'>
+            <input id="targetNoInput" name='targetNo' type='hidden'>
             <div>
               신고 유형: <select name="categoryNo">
                 <option value="1">스팸홍보/도배</option>

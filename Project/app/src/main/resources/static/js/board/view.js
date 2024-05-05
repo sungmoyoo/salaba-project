@@ -383,35 +383,28 @@ $(document.body).on("click", ".report-btn", function (event) {
   $("#reportModal").modal("show");
 });
 
-// 신고 제출 버튼을 클릭했을 때 폼을 AJAX로 전송
-$("#submitBtn").click(function (e) {
-  e.preventDefault(); // 기본 폼 제출을 막음
-
-  // 폼 데이터 수집
+$("#submitBtn").click(function(e) {
+  e.preventDefault();
   let formData = new FormData($("#reportForm")[0]);
 
   $.ajax({
-    type: "POST",
-    url: "/board/report/add",
-    data: formData,
-    processData: false,
-    contentType: false,
-    success: function (response) {
-      // 성공 콜백 함수
-      console.log("신고가 성공적으로 제출되었습니다.");
-      // 모달 닫기
-      $("#reportModal").modal("hide");
-      // 신고창 초기화
-      $("#reportForm")[0].reset();
-
-    },
-    error: function (xhr, status, error) {
-      // 에러 콜백 함수
-      console.log("에러가 발생했습니다: ", error);
-    },
+      type: "POST",
+      url: "/board/report/add",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+          alert("신고가 성공적으로 제출되었습니다.");
+          window.location.href = "/board/main"; // 성공 시 메인 페이지로 이동
+      },
+      error: function(response) {
+          alert(response.responseText); // 서버로부터의 응답 메시지를 경고창으로 표시
+      }
   });
 });
 
+
+/************************************************************************************/
 
 // 상단으로 올라가기
 let scrollToTopBtn = document.getElementById("scrollToTopBtn2");
