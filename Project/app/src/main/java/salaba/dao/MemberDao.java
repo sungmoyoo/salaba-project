@@ -29,17 +29,23 @@ public interface MemberDao {
 
   Member findEmail(Member member);
 
-  Member findPw(Member member);
+  public Member findPassword(Member member);
 
-  void chgPwSave(Member member);
+  public void changePasswordSave(Member member);
 
-  Member chkPw(Member member);
+  public Member myinfoCheckPassword(Member member);
 
   void insertPreference(Member member);
 
   void deletePreference(Member member);
 
   List<Member> findAllTheme(Member sessionInfo);
+
+  String getMemberPoint(Member member);
+
+  Member getGrade(Member member);
+
+  List<Member> findAllmyTheme(Member sessionInfo);
 
   void addNotifyHistory(Alarm alarm);
 

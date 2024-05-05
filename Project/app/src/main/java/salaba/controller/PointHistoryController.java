@@ -1,5 +1,6 @@
 package salaba.controller;
 
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import salaba.service.MemberService;
 import salaba.service.PointHistoryService;
 import salaba.vo.Member;
 import salaba.vo.PointHistory;
@@ -19,6 +21,7 @@ public class PointHistoryController {
 
   private static final Log log = LogFactory.getLog(PointHistoryController.class);
   private final PointHistoryService pointHistoryService;
+  private final MemberService memberService;
 
   @GetMapping("pointList")
   public void pointList(

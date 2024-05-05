@@ -18,18 +18,18 @@ public class Reservation implements Serializable {
   private String endDate; // 체크아웃
   private String numberOfPeople; // 인원수
   private String state; // 예약상태
-  private String stateNm; // 예약상태 명
+  private String statenm; // 예약상태명
   private String photo; // 회원사진파일 명
   private String lat;
   private String lon;
   private List<RentalHomePhoto> photoList; //숙소사진파일 리스트
-
   private String paymentDate; // 결제일
   private String nickname; // 닉네임
   private String telNo; // 전화번호
   private String rentalHomeRule; // 이용규칙
   private String address; // 주소
   private String amount; // 결제금액
-  private String rtnDate; // 환불정책 일자
+
+  private String refundDate; // 환불정책 일자
 
 }
