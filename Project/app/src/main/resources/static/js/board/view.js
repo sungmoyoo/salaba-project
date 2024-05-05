@@ -1,8 +1,18 @@
 "use strict";
 
-let replyForm = $("#reply-form");
+let replyForm = $("#replyForm");
 let reportForm = $("#report-form");
 let boardNo = $("#boardNum").text(); // 게시글 번호
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  // 댓글이 없는 게시글인지 확인
+  var commentBox = document.getElementById("comment-box");
+  if (commentBox && commentBox.children.length === 0) {
+    commentBox.style.display = "none"; // 댓글이 없는 경우 comment-box 숨기기
+  }
+});
+
 
 //댓글 작성
 $("#addCommentBtn").click(function (e) {
@@ -114,10 +124,10 @@ $("#addReplyBtn").click((event) => {
 });
 
 
-//대댓글 삭제
+//답글 삭제
 $(".del2").click(deleteReply);
 
-//대댓글 수정
+//답글 수정
 $(".modi2").click(modifyReply);
 
 function deleteComment(e) {
@@ -200,10 +210,26 @@ function modifyComment(e) {
 
 /*답글 달기*/
 function addReplyForm(e) {
-  console.log("==============>");
-  $(e.currentTarget).parent().append(replyForm);
+  console.log("Adding reply form");
+
+  // 클릭된 버튼의 상위 요소(댓글 컨테이너)를 찾아서 그 위치에 답글 폼을 이동
+  var commentContainer = $(e.currentTarget).closest('.comment');
+  
+  // 댓글 번호를 추출하여 답글 폼의 hidden input에 설정
+  var commentNo = commentContainer.find('.commentNo').text();
+  replyForm.find('input[name="commentNo"]').val(commentNo);
+  
+  // 답글 폼을 해당 댓글의 'reply-box' 클래스를 가진 하위 요소에 삽입
+  commentContainer.find('.reply-box').append(replyForm);
+  
+  // 답글 폼을 보이게 함
   replyForm.removeClass("form-hidden");
 }
+
+$(document).ready(function() {
+  $('.modi').on('click', addReplyForm); // 모든 modi 클래스 버튼에 이벤트 리스너 추가
+});
+
 
 /* 답글 삭제 */
 function deleteReply(e) {
@@ -287,6 +313,14 @@ let myLikeCount = parseInt($("#myLikeCount").text()); // 내 추천수(0 or 1)
 let initialCount = myLikeCount;
 console.log("myLikecount: ", myLikeCount);
 
+// 로그인 여부 확인
+let isLoggedIn = $("#loginUser").length > 0; // 예를 들어, 로그인 상태를 나타내는 DOM 요소의 존재 여부로 판단
+
+// 로그인 필요 알림 함수
+function requireLogin() {
+    alert('로그인이 필요합니다.');
+}
+
 let likeButton = $("#likeButton");
 // 하트 아이콘 색깔 변경
 likeButton.click(function () {
@@ -316,6 +350,12 @@ $(window).on("beforeunload", function () {
     });
   }
 });
+
+// 로그인한 사용자만 추천수 버튼을 누를 수 있음
+function requireLogin() {
+  alert('로그인이 필요합니다.');
+}
+
 
 // 신고창: 모달 사용
 $(document.body).on("click", ".report-btn", function (event) {

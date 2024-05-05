@@ -1,3 +1,12 @@
+body {
+  display: flex;
+  justify-content: center; /* 가로 방향 가운데 정렬 */
+  align-items: center; /* 세로 방향 가운데 정렬 */
+  min-height: 100vh; /* 화면의 최소 높이를 화면 전체로 설정 */
+  margin: 0; /* body 요소의 기본 마진 제거 */
+}
+
+
 /* 게시판 공통 컨테이너 설정 */
 .all-board {
   width: 90%; /* 전체 너비의 90% 사용 */
@@ -67,7 +76,8 @@ tbody tr:hover {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       transition: 0.3s;
       width: 20%; /* 각 카드의 너비를 조절하여 한 줄에 4개의 카드가 들어가도록 설정 */
-      margin-right: 40px; /* 각 카드 사이의 간격을 설정 */
+      margin-left: 5px;
+      margin-right: 60px; /* 각 카드 사이의 간격을 설정 */
       margin-top: 25px; /* 카드 위쪽 여백 추가 */
       margin-bottom: 25px; /* 카드 아래 여백을 설정 */
       display: inline-block; /* 카드들이 일렬로 표시되도록 설정 */
@@ -166,6 +176,7 @@ h3 a {
 /* 정보공유, 자유 게시판 비율 조정 */
 .board-container {
   display: flex; /* Flexbox 사용 */
+  margin-bottom: 40px;
 }
 
 .board-container table {

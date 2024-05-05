@@ -67,13 +67,6 @@
     </button>
   </div>
 
-<!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
-  <form id="reply-form" class="form-hidden">
-    <input hidden name="commentNo">
-    <textarea id="reply-content" name="content"></textarea>
-    <button type="button" id="addReplyBtn">답글 달기</button>
-  </form>
-
 
   <!--댓글, 답글 리스트-->
   <div id="comment-box">
@@ -95,8 +88,14 @@
         <div class="button-container">
           <button class="del"><i class="fa-regular fa-trash-can"></i></button>
           <button class="modi">수정</button>
-          <button type="button" class="report-btn comment-report-btn">신고</button>
+          <button type="button" class="report-btn comment-report-btn">신고</button><br>
         </div>
+          <!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
+        <form id="replyForm" class="form-hidden">
+          <input hidden name="commentNo">
+          <textarea id="reply-content" name="content"></textarea>
+          <button type="button" id="addReplyBtn">답글 달기</button>
+        </form>
       </div>
       <!--답글-->
       <div class="reply-box"> 
@@ -114,7 +113,7 @@
             <div class="button-container">
               <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
               <button class="modi2">수정</button>
-              <button type="button" class="report-btn reply-report-btn">신고</button>
+              <button type="button" class="report-btn reply-report-btn">신고</button><br>
             </div>
           </div>
         </div>
@@ -128,6 +127,8 @@
     <input id="comment-content" name="content" type="textarea">
     <button id="addCommentBtn">댓글 작성</button>
   </form>
+
+
 
   <!-- 신고: 모달 컨테이너 -->
   <div id="reportModal" class="modal fade" tabindex="-1" role="dialog">

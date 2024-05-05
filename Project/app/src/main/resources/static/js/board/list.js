@@ -38,7 +38,38 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+/*게시판 버튼 색상 넣기*/
+function setActiveAndNavigate(selectedId, url) {
+  console.log("Function called with ID:", selectedId, "and URL:", url);
 
+  // 선택된 버튼 ID 저장
+  localStorage.setItem('selectedButtonId', selectedId);
+
+  const buttons = document.querySelectorAll('#board-header button');
+  buttons.forEach(button => {
+      if (button.id === selectedId) {
+          button.style.backgroundColor = '#35C5B3'; // 배경색 변경
+          button.style.color = 'white'; // 텍스트 색상 변경
+      } else {
+          button.style.backgroundColor = 'transparent'; // 배경색을 투명으로
+          button.style.color = 'black'; // 텍스트 색상을 검정색으로
+      }
+  });
+
+  location.href = url; // 페이지 이동
+}
+
+/*페이지 이동 후에 버튼 색상이 사라지는 문제 해결 */
+document.addEventListener('DOMContentLoaded', function() {
+  const selectedButtonId = localStorage.getItem('selectedButtonId');
+  if (selectedButtonId) {
+      const selectedButton = document.getElementById(selectedButtonId);
+      if (selectedButton) {
+          selectedButton.style.backgroundColor = '#35C5B3'; // 배경색 변경
+          selectedButton.style.color = 'white'; // 텍스트 색상 변경
+      }
+  }
+});
 
 // 후기 게시판 목록
 // 카드 컨테이너에 대한 클릭 이벤트 리스너
@@ -121,4 +152,5 @@ function scrollToTop() {
     top: 0,
     behavior: "smooth"
   });
-}
+};
+

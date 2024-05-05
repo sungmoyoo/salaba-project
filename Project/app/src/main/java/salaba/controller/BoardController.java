@@ -228,10 +228,6 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     }
 
     Member loginUser = (Member) session.getAttribute("loginUser"); // 로그인
-//    if (loginUser == null) {
-//      model.addAttribute("message", "로그인이 필요합니다.");
-//      return "auth/form";  // 로그인 페이지로 리다이렉트
-//    }
 
     // 공개 범위에 따라 접근 제어
     switch (board.getScopeNo()) {
@@ -278,8 +274,11 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     // 조회수 증가 (게시글 존재 및 접근 가능 확인 후)
     boardService.increaseViewCount(boardNo);
 
-
-    int isLiked = boardService.isLiked(loginUser.getNo(), boardNo); // 추천수 처리(내 추천 여부 확인)
+    int isLiked = 0; // 기본값으로 0을 설정해야 로그인하지 않고도 조회 가능
+    if (loginUser != null) {
+      // loginUser가 null이 아닐 때만 메소드 호출
+      isLiked = boardService.isLiked(loginUser.getNo(), boardNo);
+    }
 
     model.addAttribute("categoryNo", categoryNo); // 카테고리 별 분류
     model.addAttribute("board", board); // 게시판
@@ -420,13 +419,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @PostMapping("/board/comment/add") // 댓글 또는 답글 작성
   public ResponseEntity<?> addComment(
       Comment comment,
-//      @RequestParam("alarmContent") String alarmContent,
-//      @RequestParam("memberNoForAlarm") int memberNoForAlarm,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("memberNoForAlarm") int memberNoForAlarm,
       HttpSession session) throws Exception {
 
     log.debug(String.format("comment : %s", comment.toString()));
-//    log.debug(String.format("alarmContent : %s", alarmContent));
-//    log.debug(String.format("memberNoForAlarm : %s", memberNoForAlarm));
+    log.debug(String.format("alarmContent : %s", alarmContent));
+    log.debug(String.format("memberNoForAlarm : %s", memberNoForAlarm));
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -437,13 +436,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     commentService.addComment(comment);
     
     // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-//    if( memberNoForAlarm != loginUser.getNo() ){
-//      Alarm alarm = new Alarm();
-//      alarm.setMemberNo(memberNoForAlarm);
-//      alarm.setContent(alarmContent);
-//      // 알람 추가
-//      memberService.insertNotifyHistory(alarm);
-//    }
+    if( memberNoForAlarm != loginUser.getNo() ){
+      Alarm alarm = new Alarm();
+      alarm.setMemberNo(memberNoForAlarm);
+      alarm.setContent(alarmContent);
+      // 알람 추가
+      memberService.insertNotifyHistory(alarm);
+    }
     comment.setCreatedDate(new Date());
     return ResponseEntity.ok(comment);
 
@@ -503,8 +502,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("/board/reply/add") // 답글 작성
   public ResponseEntity<?> addReply(Reply reply,
-//      @RequestParam("alarmContent") String alarmContent,
-//      @RequestParam("commentWriterNo") int commentWriterNo,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("commentWriterNo") int commentWriterNo,
       HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -516,13 +515,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       replyService.addReply(reply);
 
       // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-//      if( commentWriterNo != loginUser.getNo() ){
-//        Alarm alarm = new Alarm();
-//        alarm.setMemberNo(commentWriterNo);
-//        alarm.setContent(alarmContent);
-//        // 알람 추가
-//        memberService.insertNotifyHistory(alarm);
-//      }
+      if( commentWriterNo != loginUser.getNo() ){
+        Alarm alarm = new Alarm();
+        alarm.setMemberNo(commentWriterNo);
+        alarm.setContent(alarmContent);
+        // 알람 추가
+        memberService.insertNotifyHistory(alarm);
+      }
       reply.setCreatedDate(new Date());
       return ResponseEntity.ok(reply);
     } catch (Exception e) {

@@ -18,14 +18,15 @@
 </head>
 <body>
 <div data-th-replace="header :: header">머리말</div>
-<h1 data-th-text="${boardName}">게시판</h1>
+<h1 data-th-text="${boardName}" hidden>게시판</h1>
 
-<div id="header">
+<div id="board-header">
   <!-- 게시판 버튼 -->
-  <button type="button" name="review" onclick="location.href='/board/list?categoryNo=0'">후기게시판</button>
-  <button type="button" name="inform" onclick="location.href='/board/list?categoryNo=1'">정보공유게시판</button>
-  <button type="button" name="community" onclick="location.href='/board/list?categoryNo=2'">자유게시판</button>
+  <button type="button" id="review-board" name="review" data-href="/board/list?categoryNo=0" onclick="setActiveAndNavigate(this.id, this.dataset.href)">후기게시판</button>
+  <button type="button" id="inform-board" name="inform" data-href="/board/list?categoryNo=1" onclick="setActiveAndNavigate(this.id, this.dataset.href)">정보공유게시판</button>
+  <button type="button" id="community-board" name="community" data-href="/board/list?categoryNo=2" onclick="setActiveAndNavigate(this.id, this.dataset.href)">자유게시판</button>
 </div>
+
 
   <!-- 검색 폼 -->
   <div id="bsearch-container">
