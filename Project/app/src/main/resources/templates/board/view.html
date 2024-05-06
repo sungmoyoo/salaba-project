@@ -68,8 +68,6 @@
   </div>
 
 
-
-
   <!--댓글, 답글 리스트-->
   <div id="comment-box">
     <div data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
@@ -87,8 +85,8 @@
           <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
           <span class="commentContent" data-th-text="*{content}">댓글 내용</span><br>
         </div>
-        <div class="button-container">
-          <button class="del"><i class="fa-regular fa-trash-can"></i></button>
+        <div class="button-container1">
+          <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
           <button class="modi">수정</button>
           <button type="button" class="report-btn comment-report-btn">신고</button><br>
         </div>
@@ -113,7 +111,7 @@
               <span class="reply-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
               <span class="replContent" data-th-text="*{content}">답글 내용</span><br>
             </div>
-            <div class="button-container">
+            <div class="button-container2">
               <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
               <button class="modi2">수정</button>
               <button type="button" class="report-btn reply-report-btn">신고</button><br>

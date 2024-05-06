@@ -47,7 +47,10 @@ $("#addCommentBtn").click(function (e) {
         input.val(""); // 새 댓글 입력 필드 비우기
         newComment.children().first().click(addReply);
         newComment.children().find(".del").click(deleteComment);
+        console.log("Delete button clicked");
+
         newComment.children().find(".modi").click(modifyComment);
+
         // $('#box').find('.repo')
       },
       error: function () {
@@ -61,40 +64,10 @@ $("#addCommentBtn").click(function (e) {
   }
 });
 
-
-$("#addCommentBtn").click(function (e) {
-    e.preventDefault(); // 기본 이벤트 방지
-    let content = $("#commentContent").val(); // 댓글 내용
-    let boardNo = $("#boardNum").data("th-text"); // 게시글 번호 가져오기
-    let alarmContent = "새로운 댓글이 달렸습니다."; // 알람 내용 설정
-    let memberNoForAlarm = $("#postAuthor").data("member-no"); // 게시글 작성자 번호, HTML 마크업에서 추출
-
-    if (content != "") {
-        $.ajax({
-            url: "/board/comment/add",
-            type: "POST",
-            dataType: "json",
-            data: {
-                boardNo: boardNo,
-                content: content,
-                alarmContent: alarmContent, // 추가된 필드
-                memberNoForAlarm: memberNoForAlarm // 추가된 필드
-            },
-            success: function (data) {
-                // 성공적으로 댓글을 추가했을 때의 로직
-            },
-            error: function () {
-                alert("댓글 추가에 실패했습니다.");
-            }
-        });
-    } else {
-        alert("내용을 작성하세요");
-    }
-});
-
-
 //댓글 삭제
-$(".del").click(deleteComment);
+$("#comment-box").on("click", ".del", deleteComment);
+console.log("Delete button clicked");
+
 
 //댓글 수정
 $(".modi").click(modifyComment);
@@ -124,7 +97,7 @@ $("#addReplyBtn").click((event) => {
         replyForm.addClass("form-hidden");
                   let newReply = $(`<div>
                                       <div class="reply">
-                                      └ <div class="textContent comment-text">
+                                        <div class="textContent comment-text">
                                             <span class="targetNo replyNo" hidden>${data.replyNo}</span>
                                             <span>${data.writer.nickname}</span>
                                             <span class="replContent">${data.content}</span>
@@ -229,7 +202,7 @@ function modifyComment(e) {
       }
     });
 
-    // 취소 버튼 클릭 이벤트
+    // 취소 버튼
     updateFormHTML.find(".comtModiCancel").click(function (e) {
       e.stopPropagation();
       updateFormHTML.remove();
@@ -296,58 +269,55 @@ function deleteReply(e) {
 
 /* 답글 수정 */
 function modifyReply(e) {
-  let replyDiv = $(this).parent();
-  let modifyForm = $(".replyModifyForm");
+  e.preventDefault();
+  let replyDiv = $(this).closest('.reply');
   let replyNo = replyDiv.find(".replyNo").text();
   let oldContent = replyDiv.find(".replContent").text();
+  let modifyForm = replyDiv.find(".replyModifyForm");
 
-  if (
-    modifyForm.length != 0 &&
-    modifyForm.children().first().val() != replyNo
-  ) {
+  // 기존 폼이 있고, 현재 답글 번호와 다르면 기존 폼을 제거
+  if (modifyForm.length > 0 && modifyForm.find("input[type='hidden']").val() != replyNo) {
     modifyForm.remove();
+    modifyForm = $(); // 폼 객체를 초기화
   }
 
-  const updateFormHTML = $(`<form class="replyModifyForm">
-                                <input hidden value="${replyNo}">
-                                <textarea class="newContent">${oldContent}</textarea>
-                                <button type="button" class="replModiConfirm">수정</button>
-                                <button type="button" class="replModiCancel">취소</button>
-                            </form>`);
-  //대댓글의 수정하기 버튼(수정하기 폼이 나타남)
-  if ($(".replyModifyForm").length == 0) {
-    replyDiv.append(updateFormHTML);
-    //수정하기 폼의 수정버튼
-    $(".replModiConfirm").click(function () {
-      let newContent = updateFormHTML.find(".newContent").val();
-      console.log(newContent);
-      console.log(replyNo);
-      if (newContent != "") {
+  // 수정 폼이 없으면 새로 생성
+  if (modifyForm.length === 0) {
+    modifyForm = $(`<form class="replyModifyForm">
+                      <input type="hidden" value="${replyNo}">
+                      <textarea class="newContent">${oldContent}</textarea>
+                      <button type="button" class="replModiConfirm">수정</button>
+                      <button type="button" class="replModiCancel">취소</button>
+                    </form>`);
+
+    replyDiv.append(modifyForm); // 답글 div에 폼을 추가
+
+    // 수정 확인
+    modifyForm.find(".replModiConfirm").on("click", function () {
+      let newContent = modifyForm.find(".newContent").val();
+      if (newContent.trim() !== "") {
         $.ajax({
           url: "/board/reply/update",
           type: "POST",
           dataType: "json",
-          data: {
-            replyNo: replyNo,
-            content: newContent,
-          },
-          success: function (data) {
-            updateFormHTML.remove();
+          data: { replyNo: replyNo, content: newContent },
+          success: function () {
             replyDiv.find(".replContent").text(newContent);
+            modifyForm.remove();
           },
-          error: function (error) {
-            window.alert("수정 권한이 없습니다.");
-            updateFormHTML.remove();
-          },
+          error: function () {
+            alert("수정 권한이 없습니다.");
+            modifyForm.remove();
+          }
         });
       } else {
         alert("내용을 작성하세요");
       }
     });
 
-    //수정하기 폼의 취소 버튼
-    $(".replModiCancel").click(function () {
-      $(".replyModifyForm").remove();
+    // 수정 취소
+    modifyForm.find(".replModiCancel").on("click", function () {
+      modifyForm.remove();
     });
   }
 }
@@ -387,7 +357,7 @@ likeButton.click(function () {
 // beforeunload 이벤트 핸들러 추가
 $(window).on("beforeunload", function () {
   let url = myLikeCount === 1 ? "/board/like" : "/board/unlike";
-  let boardNo = $("#boardNo").val();
+  boardNo = $("#boardNo").val();
   if (initialCount != myLikeCount) {
     $.ajax({
       type: "POST",
