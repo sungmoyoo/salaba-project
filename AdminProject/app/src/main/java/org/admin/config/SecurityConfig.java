@@ -18,7 +18,7 @@ import java.util.List;
 import static org.springframework.http.HttpMethod.*;
 
 // Spring Security 설정.
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -43,8 +43,11 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청은 허용한다. https://velog.io/@jijang/%EC%82%AC%EC%A0%84-%EC%9A%94%EC%B2%AD-Preflight-request
                 .mvcMatchers( "/auth/**", "/", "/css/**").permitAll()
-                .mvcMatchers(GET,"/**", "/report/**", "/home").hasAnyRole( "MANAGER", "ADMIN")
-                .mvcMatchers(POST,"*/detail").hasAnyRole( "ADMIN")
+                .mvcMatchers(POST, "/auth/join", "/auth/login", "/", "/css/**").permitAll()
+                .mvcMatchers(GET,"/**").hasAnyRole( "MANAGER", "ADMIN")
+                .mvcMatchers(POST,"/**").hasAnyRole( "ADMIN")
+                .mvcMatchers(PUT,"/**").hasAnyRole( "ADMIN")
+                .mvcMatchers(DELETE,"/**").hasAnyRole( "ADMIN")
                 .anyRequest().hasAnyRole("MANAGER", "ADMIN")
                 .and()
                 .exceptionHandling()
