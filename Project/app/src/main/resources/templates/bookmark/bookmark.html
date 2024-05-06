@@ -4,6 +4,10 @@
   <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
   <style>
+    a{
+      text-decoration-line: none;
+      color: inherit;
+    }
     .listing-container {
       margin: 20px auto; /* 중앙 정렬 */
       display: flex;
@@ -95,7 +99,7 @@
 <div class="rootDiv">
   <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
 
-  <div style="margin-left: 20px;">
+  <div class="rightDiv">
       <h1 data-th-text="즐겨찾기"></h1>
       <table style="width:800px;height:540px;">
         <tr data-th-each="bookmark : ${bookmark}" data-th-object="${bookmark}">

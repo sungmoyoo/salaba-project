@@ -257,7 +257,13 @@ public class MemberController implements InitializingBean {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
-    session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
+
+    if(member.getMyInfoMenuId() == null || "".equals(member.getMyInfoMenuId())){
+      session.setAttribute("myInfoMenuId", "boardHistory");
+    }else {
+      session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
+    }
+
 
 
   }

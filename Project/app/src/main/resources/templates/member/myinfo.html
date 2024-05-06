@@ -92,6 +92,17 @@
       frm.action = "/member/myinfoNickNameCheck";
       frm.submit();
     }
+
+    //선호사항 편집 버튼 클릭 시 호출되는 함수
+    function fn_mytheme(){
+      frm.action = "/member/mytheme";
+      frm.submit();
+    }
+    //회원탈퇴 버튼 클릭 시 호출되는 함수
+    function fn_memberDelete(){
+      frm.action = "/member/delete";
+      frm.submit();
+    }
   </script>
 </head>
 <body>
@@ -100,13 +111,14 @@
 <div class="rootDiv">
   <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
 
-        <div style="margin-left: 20px;">
+        <div class="rightDiv">
         <h2>내 정보</h2>
         <form name="frm" data-th-object="${member}"
               enctype='multipart/form-data'
               method='post' onsubmit="return false;">
           <input type="hidden" data-th-value='*{no}' name="no"/>
           <input type="hidden" data-th-value='*{nickname}' name="oldNickname" />
+
           <table class="table_view">
               <colgroup>
                 <col width="100px"/>
@@ -162,8 +174,10 @@
               <td><input type="text" class="formInput" data-th-value='*{address}' name="address" /></td>
             </tr>
             <tr>
-              <th></th>
-              <td><a href="mytheme">선호사항 편집</a></td>
+              <th>선호사항</th>
+              <td>
+                <button onclick="fn_mytheme();">편집</button>
+              </td>
             </tr>
             <tr>
               <th>사진</th>
@@ -180,7 +194,7 @@
             <tr>
               <th>비밀번호</th>
               <td>
-                <a href="javascript:fn_showChangePassword();">[변경]</a>
+                <button onclick="fn_showChangePassword();">변경</button>
                 <table style="width:100%;display:none;" id="passwordChangeTable">
                   <tr>
                     <td>비밀번호</td>
@@ -198,15 +212,14 @@
                 </table>
               </td>
             </tr>
-            <tr>
-              <th></th>
-              <td>
-                <a data-th-href="@{delete(no=*{no})}" href="delete.html">[회원탈퇴]</a>
-              </td>
-            </tr>
             </tbody>
           </table>
-          <button onclick="fn_save();">정보 저장</button>
+          <table style="width:354px;">
+            <tr>
+              <td align="left"><button onclick="fn_save();">정보 저장</button></td>
+              <td align="right"><button onclick="fn_memberDelete();" style="background-color: #fb4d4d;color:#fff;border:0px solid">회원탈퇴</button></td>
+            </tr>
+          </table>
         </form>
       </div>
 </div>

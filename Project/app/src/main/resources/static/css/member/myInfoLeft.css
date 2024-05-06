@@ -11,8 +11,9 @@ body{
   text-align: center;
   padding: 17px 5px 10px 5px;
   background-color: #f8f8f8;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc !important;
   height: 28px;
+  display: inline-table;
 }
 .left-li:hover{
   font-weight: bold;
@@ -38,4 +39,8 @@ li a {
 }
 .rootDiv{
   display: flex;
+}
+.rightDiv{
+  margin-left: 20px;
+  width:87%;
 }

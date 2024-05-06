@@ -12,7 +12,7 @@
 <div class="rootDiv">
   <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
 
-  <div style="margin-left: 20px;">
+  <div class="rightDiv">
         <h1>문의 내용 보기</h1>
         <form data-th-object="${question}" enctype='multipart/form-data' method='post'>
           <input type="hidden" data-th-value='*{questionNo}' name='questionNo'>
