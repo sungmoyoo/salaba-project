@@ -5,6 +5,7 @@
                 src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo2.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png"
         />
         <h1 id="title">관리자 페이지</h1>
+        <a id="logout">로그아웃</a>
     </div>
 
 
@@ -27,5 +28,37 @@
           vertical-align: middle; /* 수직 정렬 */
         }
 
+        #logout {
+          left: 30px;
+        }
+
     </style>
+    <script src="/js/common.js"></script>
+    <script src="/js/page-init.js"></script>
+    <script>
+      const accessToken = sessionStorage.getItem('accessToken');
+      if (!accessToken) {
+        $('#logout').hide();
+      }
+
+      $('#logout').click((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let refreshToken = sessionStorage.getItem("refreshToken");
+        if (accessToken) {
+          const logoutData = {
+            refreshToken: refreshToken
+          }
+          axios.delete(`${RESTAPI_HOST}/auth/logout`, refreshToken)
+          .then((response) => {
+            alert('로그아웃 하였습니다.');
+            window.location.href = '/';
+          })
+          .catch((error) => {
+            alert('로그아웃에 실패하였습니다.');
+          })
+        }
+      });
+
+    </script>
 

@@ -61,6 +61,13 @@
                                 return;
                             }
                         })
+                        .catch((error) => {
+                            // 에러가 발생했을 때의 처리
+                            if (error.response.status === 403) {
+                                alert('권한이 없습니다.');
+                              // 특정 작업 수행
+                            }
+                        });
                     }) 
                 })
                 
