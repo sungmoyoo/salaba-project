@@ -21,18 +21,15 @@ public class DefaultMemberService implements MemberService {
     @Override
     public List<Member> getAll() {
         List<Member> members = memberDao.findAll();
-        for (Member member : members) {
-            member.setStateStr(Translator.memberState.get(member.getState()));
-        }
+        members.forEach((member) ->  member.setStateStr(Translator.memberState.get(member.getState())));
+
         return members;
     }
 
     @Override
     public List<Member> getAllHosts() {
         List<Member> members = memberDao.findAllHosts();
-        for (Member member : members) {
-            member.setStateStr(Translator.memberState.get(member.getState()));
-        }
+        members.forEach((member) ->  member.setStateStr(Translator.memberState.get(member.getState())));
         return members;
     }
 
@@ -100,8 +97,8 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public int updateGrade(String grade, long memberNo) {
-        return memberDao.updateGrade(grade, memberNo);
+    public int updateGrade(int gradeNo, long memberNo) {
+        return memberDao.updateGrade(gradeNo, memberNo);
     }
 
 

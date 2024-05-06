@@ -43,8 +43,8 @@ public class MemberManageController {
 
 
     @GetMapping("/view/{memberNo}/{menu}")
-    public RestResult memberView(@RequestParam("mno") int memberNo,
-                             @RequestParam("menu") int menu) {
+    public RestResult memberView(@PathVariable int memberNo,
+                             @PathVariable int menu) {
 
         switch (menu) {
             case 1:
@@ -102,13 +102,12 @@ public class MemberManageController {
         }
     }
 
-    @PutMapping("/update/{grade}/{memberNo}")
-    public RestResult updateGrade(@PathVariable String grade,
-                              @PathVariable int memberNo) {
+    @PutMapping("/update")
+    public RestResult updateGrade(@RequestBody Member member) {
 
         return RestResult.builder()
                 .status(RestResult.SUCCESS)
-                .data(memberService.updateGrade(grade, memberNo))
+                .data(memberService.updateGrade(member.getGradeNo(), member.getMemberNo()))
                 .build();
     }
 }

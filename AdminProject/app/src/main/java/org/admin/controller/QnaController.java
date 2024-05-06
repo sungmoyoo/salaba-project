@@ -27,7 +27,7 @@ public class QnaController {
                 .build();
     }
 
-    @GetMapping("/view/{qno}")
+    @GetMapping("/view/{qnaNo}")
     public RestResult qnaView(@PathVariable int qnaNo) {
         return RestResult.builder()
                 .status(RestResult.SUCCESS)
@@ -35,9 +35,8 @@ public class QnaController {
                 .build();
     }
 
-    @PostMapping("qna/update")
-    public RestResult addAnswer(HttpSession session,
-                            Qna qna) {
+    @PostMapping("/update")
+    public RestResult addAnswer(@RequestBody Qna qna) {
         qnaService.addAnswer(qna);
         return RestResult.builder()
                 .status(RestResult.SUCCESS)
