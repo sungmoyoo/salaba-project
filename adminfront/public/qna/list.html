@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/css/list.css" />
+    <link rel="stylesheet" type="text/css" href="/css/detail.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"
+      integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <header class="x-page-header"></header>
+    <sidebar class="x-page-sidebar"></sidebar>
+    <div class="container">
+      <h3>1:1 문의내역</h3>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>제목</th>
+            <th>진행 상태</th>
+            <th>접수일</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <td colspan="10" class="tablefoot"></td>
+        </tfoot>
+      </table>
+    </div>
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent">
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+      </div>
+      <button type="button" id="closeBtn">✕</button>
+    </div>
+    <script id="tr-template" type="text/x-handlebars-template">
+      {{#each data}}
+        <tr class="rowItem">
+          <td class="qno">{{questionNo}}</td>
+          <td>{{title}}</td>
+          <td>{{stateStr}}</td>
+          <td>{{regDate}}</td>
+        </tr>
+      {{/each}}
+    </script>
+
+    <script id="detail-template" type="text/x-handlebars-template">
+      <h4>문의 내용</h4>
+      <div class="content">
+        <form>
+          <div class="infoBox">
+            <div class="info">
+              <span>문의번호</span>
+              <span>{{questionNo}}</span>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+            <div class="info">
+              <span>작성자</span>
+              <span>{{writer.name}}</span>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+            <div class="info">
+              <span>제목</span>
+              <span>{{title}}</span>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+            <div class="info">
+              <span>내용</span>
+              <span>{{content}}</span>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+            <div class="info">
+              <span>등록일</span>
+              <span>{{regDate}}</span>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <h4 class="partTitle">첨부 파일</h4>
+
+          <div class="infoBox">
+            <div class="info">
+              <span>답변</span>
+              <textarea id="answer">{{answer}}</textarea>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+            <div class="info">
+              <span>답변 날짜</span>
+              <span>{{ansDate}}</span>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+            <div class="info">
+              <span>처리 상태</span><span>{{stateStr}}</span>
+            </div>
+            <div class="hr"></div>
+          </div>
+          <button class="dealBtn">답변</button>
+        </form>
+      </div>
+    </script>
+    <script src="/js/list.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/page-init.js"></script>
+    <script src="list.js"></script>
+
+  </body>
+</html>
