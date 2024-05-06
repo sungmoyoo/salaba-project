@@ -419,13 +419,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @PostMapping("/board/comment/add") // 댓글 또는 답글 작성
   public ResponseEntity<?> addComment(
       Comment comment,
-      @RequestParam("alarmContent") String alarmContent,
-      @RequestParam("memberNoForAlarm") int memberNoForAlarm,
+//      @RequestParam("alarmContent") String alarmContent,
+//      @RequestParam("memberNoForAlarm") int memberNoForAlarm,
       HttpSession session) throws Exception {
 
     log.debug(String.format("comment : %s", comment.toString()));
-    log.debug(String.format("alarmContent : %s", alarmContent));
-    log.debug(String.format("memberNoForAlarm : %s", memberNoForAlarm));
+//    log.debug(String.format("alarmContent : %s", alarmContent));
+//    log.debug(String.format("memberNoForAlarm : %s", memberNoForAlarm));
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -436,13 +436,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     commentService.addComment(comment);
     
     // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-    if( memberNoForAlarm != loginUser.getNo() ){
-      Alarm alarm = new Alarm();
-      alarm.setMemberNo(memberNoForAlarm);
-      alarm.setContent(alarmContent);
-      // 알람 추가
-      memberService.insertNotifyHistory(alarm);
-    }
+//    if( memberNoForAlarm != loginUser.getNo() ){
+//      Alarm alarm = new Alarm();
+//      alarm.setMemberNo(memberNoForAlarm);
+//      alarm.setContent(alarmContent);
+//      // 알람 추가
+//      memberService.insertNotifyHistory(alarm);
+//   }
     comment.setCreatedDate(new Date());
     return ResponseEntity.ok(comment);
   }
@@ -501,8 +501,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("/board/reply/add") // 답글 작성
   public ResponseEntity<?> addReply(Reply reply,
-      @RequestParam("alarmContent") String alarmContent,
-      @RequestParam("commentWriterNo") int commentWriterNo,
+//      @RequestParam("alarmContent") String alarmContent,
+//      @RequestParam("commentWriterNo") int commentWriterNo,
       HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -514,13 +514,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       replyService.addReply(reply);
 
       // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-      if( commentWriterNo != loginUser.getNo() ){
-        Alarm alarm = new Alarm();
-        alarm.setMemberNo(commentWriterNo);
-        alarm.setContent(alarmContent);
-        // 알람 추가
-        memberService.insertNotifyHistory(alarm);
-      }
+//      if( commentWriterNo != loginUser.getNo() ){
+//        Alarm alarm = new Alarm();
+//        alarm.setMemberNo(commentWriterNo);
+//        alarm.setContent(alarmContent);
+//        // 알람 추가
+//        memberService.insertNotifyHistory(alarm);
+//      }
       reply.setCreatedDate(new Date());
       return ResponseEntity.ok(reply);
     } catch (Exception e) {
@@ -583,7 +583,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   // 추천수
   @PostMapping("/board/like")
-  public ResponseEntity likeBsoard(
+  public ResponseEntity likeBoard(
       @RequestParam("boardNo") int boardNo,
       HttpSession session) {
     Member loginUser = (Member) session.getAttribute("loginUser");

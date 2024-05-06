@@ -6,7 +6,7 @@ body {
   margin: 0; /* body 요소의 기본 마진 제거 */
 }
 
-*게시판 종류*/
+/*게시판 종류*/
 h1 {
   text-align: left; /* 제목을 왼쪽 정렬 */
   margin-left: 20px; /* 왼쪽 여백 추가 */
@@ -180,7 +180,7 @@ h1 {
 /**************************************************************************************************************/
 
 /*댓글 작성하기*/
-#comment-form {
+#commentForm {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* 왼쪽 정렬로 변경 */
@@ -191,15 +191,14 @@ h1 {
   margin-left: 20px;
 }
 
-#comment-content {
+#commentContent {
   border: 1px solid rgb(155, 155, 155);
   height: 5em; /* 고정 높이 사용 */
   width: 80%;
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
   text-align: left;
   box-sizing: border-box; 
-  line-height: normal; /* line-height를 normal로 설정 */
-
+  line-height: normal; 
 }
 
 #reply-content {
@@ -216,7 +215,7 @@ h1 {
 
 
 /*댓글,답글 리스트*/
-#comment-box {
+#box {
   background-color: rgb(223, 223, 207);
   padding: 20px;
   margin-bottom: 20px;
@@ -246,17 +245,11 @@ h1 {
 }
 
 /*답글 */
-.reply-text {
+.reply {
   gap: 10px; /* 요소 간의 간격 */
   margin-left: 30px;
 }
 
-/*수정, 삭제, 신고를 묶어둔 컨테이너*/
-.button-container1, .button-container2 {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
-}
 
 /* 댓글, 답글 내용 크기 조정 */
 .commentContent, .replContent {  
@@ -298,10 +291,9 @@ h1 {
 }
 
 
-
 /* 답글 폼 */
 /*평소에 폼 숨기기 -> 이벤트 발생 시 나타나는 폼*/
-#replyForm.form-hidden {
+.form-hidden {
   display: none;
   overflow: hidden;
 }
@@ -312,16 +304,7 @@ h1 {
   margin-right: 30px;
   margin-right: 10px; /* 폼의 오른쪽 여백 설정 */
   text-align: left; /* 폼 내용을 왼쪽으로 정렬 */
-
 }
-
-/* 폼을 보여줄 때 */
-#replyForm.active {
-  display: flex;
-  justify-content: flex-end; /* 폼을 오른쪽으로 정렬 */
-}
-
-
 
 /* 프로필 사진 원형 만들기 */
 .profile-img1, .profile-img2 {
@@ -336,7 +319,7 @@ h1 {
 
 
 /* 삭제, 수정, 신고 버튼 */
-.del, .del2, .modi, .modi2, .comment-report-btn, .reply-report-btn, .comtModiConfirm, .comtModiCancel, .replModiConfirm, .replModiCancel {
+.del, .del2, .modi, .modi2, .repo, .repo2, .comtModiConfirm, .comtModiCancel, .replModiConfirm {
   border: 1px solid #fff;
   padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
   font-size: 14px; /* 글꼴 크기를 조절 */
@@ -370,11 +353,11 @@ h1 {
   font-size: 14px; /* 글꼴 크기를 조절 */
   margin-top: 10px;
   align-self: flex-end; /* 자신을 오른쪽으로 정렬 */
-  margin-right:280px;
+  margin-right:240px;
 }
 
 /* 답글 달기 버튼 */
-#addReplyBtn, #cancelReplyBtn {
+#addReplyBtn {
   border: 1px solid #fff;
   padding: 3px 6px; /* 패딩을 줄여서 버튼 크기를 작게 조정 */
   font-size: 14px; /* 글꼴 크기를 조절 */

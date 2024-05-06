@@ -115,12 +115,11 @@ document.querySelectorAll(".card-deck .card").forEach(card => {
     initSlider();
     var savedKeyword = localStorage.getItem('searchKeyword');
     if (savedKeyword) {
-      document.getElementById('search-input').value = savedKeyword;
+      document.getElementById('bsearch-input').value = savedKeyword;
       // 검색어를 가져왔으면 -> 다시 로컬 스토리지에서 삭제
       localStorage.removeItem('searchKeyword');
     }
   });
-
 
   // 검색 버튼 클릭 시 검색어를 로컬 스토리지에 저장
   document.getElementById('bsearch-button').addEventListener('click', function(event) {

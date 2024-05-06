@@ -347,12 +347,15 @@
           h.head_content,
           (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
           r.region_no,
-          r.region_name
+          r.region_name,
+          bf.file_no,
+          bf.uuid_file_name
         FROM
           board b
         inner join head h on b.head_no=h.head_no
         inner join member m on b.member_no=m.member_no
         left join region r on b.region_no=r.region_no
+        LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
         WHERE
           b.board_category_no = #{categoryNo}
         AND
@@ -376,13 +379,16 @@
           h.head_content,
           (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
           r.region_no,
-          r.region_name
+          r.region_name,
+          bf.file_no,
+          bf.uuid_file_name
         FROM
           board b
           inner join head h on b.head_no=h.head_no
           inner join member m on b.member_no=m.member_no
           left join board_file bf on b.board_no=bf.board_no
           left join region r on b.region_no=r.region_no
+          LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
         WHERE
           b.board_category_no = #{categoryNo}
         AND
