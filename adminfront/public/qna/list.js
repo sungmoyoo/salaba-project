@@ -2,7 +2,7 @@
 const tbody = $("tbody");
 
 (function () {
-  axios.get(`${RESTAPI_HOST}/qna/list`).then((response) => {
+  axiosInstance.get(`${RESTAPI_HOST}/qna/list`).then((response) => {
     let result = response.data;
     if (response.status == "failure") {
       alert(response.error);
@@ -19,7 +19,7 @@ const tbody = $("tbody");
       console.log("modal!");
       modal.css("display", "block"); // 모달을 보이도록 설정
       modalContent.css("display", "block"); // 모달을 보이도록 설정
-      axios
+      axiosInstance
         .get(`${RESTAPI_HOST}/qna/view/${$(this).find(".qno").text()}`)
         .then((response) => {
           let data = response.data.data;
@@ -43,7 +43,7 @@ const tbody = $("tbody");
               questionNo: data.questionNo,
               answer: $("#answer").text(),
             };
-            axios.post(`${RESTAPI_HOST}/qna/update`, requestData)
+            axiosInstance.post(`${RESTAPI_HOST}/qna/update`, requestData)
               .then((response) => {
                 if (response.status == "failure") {
                   alert("이미 처리되었습니다.");
@@ -51,13 +51,7 @@ const tbody = $("tbody");
                 }
                 closeButton.click();
               })
-              .catch((error) => {
-                // 에러가 발생했을 때의 처리
-                if (error.response.status === 403) {
-                    alert('권한이 없습니다.');
-                  // 특정 작업 수행
-                }
-              });
+           
           });
         });
 

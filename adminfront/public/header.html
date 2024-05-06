@@ -29,17 +29,17 @@
         }
 
         #logout {
+          transition: color 0.3s ease; 
           left: 30px;
         }
 
+        #logout:hover {
+          color: red;
+        }
+
     </style>
-    <script src="/js/common.js"></script>
-    <script src="/js/page-init.js"></script>
     <script>
       const accessToken = sessionStorage.getItem('accessToken');
-      if (!accessToken) {
-        $('#logout').hide();
-      }
 
       $('#logout').click((e) => {
         e.preventDefault();
@@ -59,6 +59,10 @@
           })
         }
       });
+
+      $('#logo').click((e) => {
+        window.location.href = '/home';
+      })
 
     </script>
 

@@ -1,7 +1,7 @@
 const tbody = $("tbody");
 let menu = pageContext.params.get("menu");
 (function () {
-    axios.get(`${RESTAPI_HOST}/member/list/${menu}`).then((response) => {
+    axiosInstance.get(`${RESTAPI_HOST}/member/list/${menu}`).then((response) => {
         let result = response.data;
         console.log(result);
         if (response.status == "failure") {
@@ -26,7 +26,7 @@ let menu = pageContext.params.get("menu");
             let modalContent = $("#modalContent");
             let rentalNo = here.find(".rentalNo").text();
             // detail.html이 로드된 후에 실행되는 부분
-            axios.get(`${RESTAPI_HOST}/member/view/${here.find(".memberNo").text()}/${menu}`)
+            axiosInstance.get(`${RESTAPI_HOST}/member/view/${here.find(".memberNo").text()}/${menu}`)
                 .then((response2) => {
                     let result2 = response2.data.data;
                     if (response2.status == 'failure') {
@@ -55,7 +55,7 @@ let menu = pageContext.params.get("menu");
                             gradeNo: selection
                             
                         }
-                        axios.put(`${RESTAPI_HOST}/member/update`, requestData)
+                        axiosInstance.put(`${RESTAPI_HOST}/member/update`, requestData)
                         .then((response) => {
                             if (response.status == 'failure') {
                                 alert('등급 변경 오류');

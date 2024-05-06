@@ -49,6 +49,18 @@ router.get('/qna/list', (req, res) => {
   res.sendFile(filePath);
 });
 
+router.get('/chart/boardCount', (req, res) => {
+});
+
+router.get('/chart/joinCount', (req, res) => {
+});
+
+router.get('/chart/gradeCount', (req, res) => {
+});
+
+router.get('/chart/rentalCount', (req, res) => {
+});
+
 router.post("/qna/update", (req, res) => {
   // 클라이언트에서 전송한 데이터는 req.body에 있습니다.
   const data = req.body;
@@ -83,6 +95,14 @@ router.put("/member/update", (req, res) => {
 
 
 router.put("/rental/update", (req, res) => {
+  // 클라이언트에서 전송한 데이터는 req.body에 있습니다.
+  const data = req.body;
+
+  // 여기서 data를 사용하여 요청을 처리하고 필요에 따라 응답을 반환합니다.
+  // 예를 들어, 데이터베이스에 업데이트를 수행하거나 다른 작업을 수행할 수 있습니다.
+});
+
+router.delete("/auth/logout", (req, res) => {
   // 클라이언트에서 전송한 데이터는 req.body에 있습니다.
   const data = req.body;
 

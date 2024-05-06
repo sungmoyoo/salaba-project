@@ -4,7 +4,7 @@ const tbody = $('tbody');
 let menu = pageContext.params.get("menu");
 (function () {
     console.log(`${RESTAPI_HOST}/report/list/${menu}`);
-    axios.get(`${RESTAPI_HOST}/report/list/${menu}`)
+    axiosInstance.get(`${RESTAPI_HOST}/report/list/${menu}`)
         .then((response) => {
             let result = response.data;
             console.log(result);
@@ -27,7 +27,7 @@ let menu = pageContext.params.get("menu");
                 modalContent.css('display', 'block'); // 모달을 보이도록 설정
 
                 if (menu == 1) {
-                    axios.get(`${RESTAPI_HOST}/report/view/${rentalNo}/${reporterNo}`)
+                    axiosInstance.get(`${RESTAPI_HOST}/report/view/${rentalNo}/${reporterNo}`)
                         .then((response) => {
                             let data = response.data.data;
                             console.log(data);
@@ -42,7 +42,7 @@ let menu = pageContext.params.get("menu");
                                 let requestData = {
                                     targetNo: targetNo
                                 }
-                                axios.put(`${RESTAPI_HOST}/report/update/0/${$('#selection2').val()}/${data.reporter.memberNo}`, requestData)
+                                axiosInstance.put(`${RESTAPI_HOST}/report/update/0/${$('#selection2').val()}/${data.reporter.memberNo}`, requestData)
                                     .then((response) => {
                                         if (response.status == 'failure') {
                                             alert('이미 처리되었습니다');
@@ -62,7 +62,7 @@ let menu = pageContext.params.get("menu");
                         })
                 } else {
                     console.log(targetNo, targetType, reporterNo);
-                    axios.get(`${RESTAPI_HOST}/report/view/${targetNo}/${targetType}/${reporterNo}`)
+                    axiosInstance.get(`${RESTAPI_HOST}/report/view/${targetNo}/${targetType}/${reporterNo}`)
                         .then((response) => {
                             let data = response.data.data;
                             console.log(data);
@@ -87,7 +87,7 @@ let menu = pageContext.params.get("menu");
                                     targetNo: targetNo,
                                     targetType: targetType
                                 }
-                                axios.put(`${RESTAPI_HOST}/report/update/${$('#selection').val()}/0/${data.reporter.memberNo}`, requestData)
+                                axiosInstance.put(`${RESTAPI_HOST}/report/update/${$('#selection').val()}/0/${data.reporter.memberNo}`, requestData)
                                     .then((response) => {
                                         if (response.status == 'failure') {
                                             alert('이미 처리되었습니다');

@@ -4,7 +4,7 @@
     console.log(RESTAPI_HOST);
     let menu = pageContext.params.get("menu");
     (function() {
-        axios.get(`${RESTAPI_HOST}/rental/list/${menu}`)
+        axiosInstance.get(`${RESTAPI_HOST}/rental/list/${menu}`)
         .then((response) => {
             let result = response.data;
             if (result.status == 'failure') {
@@ -35,7 +35,7 @@
                 console.log("modal!")
                 modal.css('display', 'block'); // 모달을 보이도록 설정
                 modalContent.css('display', 'block'); // 모달을 보이도록 설정
-                axios.get(`${RESTAPI_HOST}/rental/view/${pageContext.params.get("menu")}/${rentalNo}`)
+                axiosInstance.get(`${RESTAPI_HOST}/rental/view/${pageContext.params.get("menu")}/${rentalNo}`)
                 .then((response) => {
                     let data = response.data.data;
                     console.log(data);
@@ -54,7 +54,7 @@
                             rentalNo: rentalNo,
                             state: value
                         }
-                        axios.put(`${RESTAPI_HOST}/rental/update`, requestData)
+                        axiosInstance.put(`${RESTAPI_HOST}/rental/update`, requestData)
                         .then((response) => {
                             if (response.state == 'failure') {
                                 alert('숙소 승인/거부 오류')
@@ -87,7 +87,7 @@
         event.preventDefault();
         let keyword = $('.searchInput').val();
         let filter = $('#filter').val()
-        axios.get(`${RESTAPI_HOST}/rental/search/${keyword}/${filter}`)
+        axiosInstance.get(`${RESTAPI_HOST}/rental/search/${keyword}/${filter}`)
         .then((response) => {
             let result = response.data;
             console.log(result);
