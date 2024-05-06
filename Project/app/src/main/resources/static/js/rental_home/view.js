@@ -59,6 +59,7 @@ document.getElementById("reportForm").addEventListener("submit",(event)=>{
   });
 });
 
+// 숙소 소개
 document.addEventListener("DOMContentLoaded", function(){
   const explanationContent = rentalHomeModel.explanation; // 숙소 소개
   const modal = document.querySelector('.explanationModal'); // modal 창
@@ -76,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function(){
     showMoreExplanation.style.display = "block"; // 더 보기 버튼 표시
   }else{
     rentalHomeExplanation.innerHTML = explanationContent;
-    showMoreExplanation.style.display = none;
+    showMoreExplanation.style.display = "none";
   }
 
   // 더 보기 버튼 클릭 시
@@ -98,6 +99,28 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 
+// 숙소 시설
+document.addEventListener("DOMContentLoaded", function(){
+  const showMoreFacilitiesBtn = document.querySelector('.facility-modal-button');
+  const modal = document.querySelector('.facility-modal');
+  const closeBtn = modal.querySelector('.facility-modal-close');
+
+  showMoreFacilitiesBtn.addEventListener("click", function(){
+    modal.style.display = "block";
+  });
+
+  closeBtn.addEventListener("click", function(){
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function(event){
+    if(event.target == modal){
+      modal.style.display = "none";
+    }
+  });
+});
+
+// 숙소 리뷰
 let startIndex = 0;
 const batchSize = 5;
 let rentalHomeReviews = rentalHomeReviewModel;
@@ -145,6 +168,8 @@ if (rentalHomeReviews.length <= 2) {
 }
 });
 
+
+// google map
 async function initMap(){
 const rentalHome = rentalHomeModel;
 const position = { lat:Number(rentalHome.lat) , lng:Number(rentalHome.lon) };
@@ -168,3 +193,135 @@ const marker = new google.maps.marker.AdvancedMarkerElement({
 }
 
 initMap();
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const checkInDateInput = document.getElementById("checkInDateInput");
+  const checkOutDateInput = document.getElementById("checkOutDateInput");
+  const calendar = document.querySelector(".calendar");
+
+  const priceElement = document.querySelector('.reservation-price');
+  const durationElement = document.querySelector('.reservation-duration');
+  const priceTotalElement = document.querySelector('.reservation-price-total');
+
+  let checkInDate = null;
+  let checkOutDate = null;
+  let isSelectCheckOut = false; // 이전에 선택한 것이 체크아웃인지 여부
+
+   // 달력 열기/닫기 이벤트 처리
+   checkInDateInput.addEventListener("click", function() {
+    calendar.classList.add("open");
+    calendar.classList.remove("select-check-out");
+    isSelectCheckOut = false;
+  });
+
+  checkOutDateInput.addEventListener("click", function() {
+    calendar.classList.add("open");
+    calendar.classList.add("select-check-out");
+    isSelectCheckOut = true;
+  });
+
+  window.addEventListener("click",function(event){
+    const isCalendarClicked = calendar.contains(event.target);
+    const isCheckInInputClicked = checkInDateInput.contains(event.target);
+    const isCheckOutInputClicked = checkOutDateInput.contains(event.target);
+
+    if (!isCalendarClicked && !isCheckInInputClicked && !isCheckOutInputClicked) {
+      calendar.classList.remove("open");
+    }
+  });
+
+  // 달력 생성 함수
+  function generateCalendar() {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+    
+    let html = "<table>";
+    html += "<tr><th colspan='7'>" + currentYear + "년 " + (currentMonth + 1) + "월</th></tr>";
+    html += "<tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>";
+    html += "<tr>";
+    
+    // 공백 채우기
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      html += "<td></td>";
+    }
+
+    // 날짜 채우기
+    let count = firstDayOfMonth;
+    for (let i = 1; i <= daysInMonth; i++) {
+      if (count % 7 === 0) {
+        html += "</tr><tr>";
+      }
+      html += "<td>" + i + "</td>";
+      count++;
+    }
+
+    html += "</tr>";
+    html += "</table>";
+    
+    calendar.innerHTML = html;
+
+    // 날짜 클릭 이벤트 처리
+    calendar.querySelectorAll("td").forEach(function(td) {
+      td.addEventListener("click", function() {
+        const selectedDate = new Date(currentYear, currentMonth, parseInt(td.textContent));
+
+        // 체크인 날짜 선택
+        if (!checkInDate || calendar.classList.contains("select-check-out")) {
+          checkInDate = selectedDate;
+          checkInDateInput.value = checkInDate.toLocaleDateString();
+          checkOutDate = null;
+          checkOutDateInput.value = "";
+          calendar.classList.remove("select-check-out");
+        } 
+        // 체크아웃 날짜 선택
+        else {
+          checkOutDate = selectedDate;
+          checkOutDateInput.value = checkOutDate.toLocaleDateString();
+          calendar.classList.remove("open");
+        }
+
+        // 선택된 날짜 표시
+        calendar.querySelector(".selected-date")?.classList.remove("selected-date");
+        td.classList.add("selected-date");
+        updateReservationInfo();
+      });
+    });
+  }
+
+  generateCalendar();
+
+  // 예약 정보 업데이트
+  function updateReservationInfo(){
+    if(checkInDate && checkOutDate){
+      const rentalHome = rentalHomeModel;
+      const duration = caculateDuration(checkInDate, checkOutDate);
+      const price = calculatePrice(duration, rentalHome);
+      const total = price + rentalHome.cleanFee;
+
+      durationElement.textContent = "이용 기간 : " + duration + "박 " + (duration + 1) + "일";
+      priceElement.textContent = "가격 : " + price;
+      priceTotalElement.textContent = "총액 : " + total;
+      
+    }
+  }
+
+  updateReservationInfo();
+
+  // 날짜 계산
+  function caculateDuration(checkInDate, checkOutDate){
+    const millisecondsInOneDay = 1000 * 60 * 60 * 24;
+    const durationMilliseconds = checkOutDate.getTime() - checkInDate.getTime();
+    return Math.floor(durationMilliseconds / millisecondsInOneDay);
+  }
+
+  // 가격 계산 함수
+  function calculatePrice(duration, rentalHome){
+    const pricePerNight = rentalHome.price;
+    return duration * pricePerNight;
+  }
+
+});
