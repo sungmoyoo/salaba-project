@@ -47,26 +47,22 @@
 
                     $('.dealBtn').click((e) => {
                         e.stopPropagation();
-                        e.preventDefault();
+                        e.preventDefault(); 
                         let rentalNo = $('#rentalNo').text();
                         let value = (e.target.id == 'approve') ? '1' : '4';
                         const requestData = {
                             rentalNo: rentalNo,
                             state: value
                         }
+                        
                         axiosInstance.put(`${RESTAPI_HOST}/rental/update`, requestData)
                         .then((response) => {
                             if (response.state == 'failure') {
                                 alert('숙소 승인/거부 오류')
                                 return;
                             }
-                        })
-                        .catch((error) => {
-                            // 에러가 발생했을 때의 처리
-                            if (error.response.status === 403) {
-                                alert('권한이 없습니다.');
-                              // 특정 작업 수행
-                            }
+                            alert('처리 되었습니다.')
+                            closeButton.click();
                         });
                     }) 
                 })
