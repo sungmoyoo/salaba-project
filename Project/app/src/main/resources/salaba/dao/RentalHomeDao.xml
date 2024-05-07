@@ -5,28 +5,6 @@
 
 <mapper namespace="salaba.dao.RentalHomeDao">
 
-  <resultMap id="RentalHomeMap" type="RentalHome">
-    <id column="rental_home_no" property="rentalHomeNo"/>
-    <result column="name" property="name"/>
-    <result column="price" property="price"/>
-    <result column="explanation" property="explanation"/>
-    <result column="address" property="address"/>
-    <result column="capacity" property="capacity" javaType="int"/>
-    <result column="lat" property="lat"/>
-    <result column="lon" property="lon"/>
-    <result column="hosting_start_date" property="hostingStartDate"/>
-    <result column="hosting_end_date" property="hostingEndDate"/>
-    <result column="registe_date" property="registeDate"/>
-    <result column="clean_fee" property="cleanFee"/>
-    <result column="state" property="state"/>
-    <result column="rental_home_rule" property="rentalHomeRule"/>
-    <result column="like_count" property="rentalHomeLikeCount"/>
-
-    <association property="region" resultMap="region"/>
-    <collection property="rentalHomePhotos" resultMap="rentalHomePhotos" javaType="java.util.List"/>
-    <collection property="themes" resultMap="themeMap" javaType="java.util.List"/>
-  </resultMap>
-
   <resultMap id="rentalHomeFacilityMap" type="RentalHomeFacility">
     <id column="facility_no" property="facilityNo"/>
     <result column="facility_name" property="facilityName"/>
@@ -62,6 +40,8 @@
     <id column="rental_home_no" property="rentalHomeNo"/>
     <result column="name" property="name"/>
     <result column="price" property="price"/>
+    <result column="address" property="address"/>
+    <result column="clean_fee" property="cleanFee"/>
     <result column="like_count" property="rentalHomeLikeCount"/>
     <result column="lat" property="lat"/>
     <result column="lon" property="lon"/>
@@ -75,6 +55,7 @@
     <id column="rental_home_no" property="rentalHomeNo"/>
     <result column="name" property="name"/>
     <result column="price" property="price"/>
+    <result column="address" property="address"/>
     <result column="explanation" property="explanation"/>
     <result column="capacity" property="capacity"/>
     <result column="lat" property="lat"/>
@@ -428,6 +409,25 @@
       region_name
     from
       region
+  </select>
+
+  <!-- 숙소 예약하기 화면 정보-->
+  <select id="getReservationInfo" resultMap="rentalHomeSearch">
+    select
+      t1.rental_home_no,
+      t1.name,
+      t1.address,
+      t1.price,
+      t1.lat,
+      t1.lon,
+      t1.clean_fee,
+      t2.uuid_photo_name
+    from
+      rental_home t1
+      inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
+    where
+      t1.rental_home_no = #{rentalHomeNo} and
+      t2.photo_order = 1
   </select>
 
 </mapper>

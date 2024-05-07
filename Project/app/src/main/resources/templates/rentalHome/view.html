@@ -10,11 +10,15 @@
     const sessionMemberNo = /*[[${session.memberNo}]]*/ null;
     const rentalHomeNoModel = /*[[${rentalHome.rentalHomeNo}]]*/ null;
     const rentalHomeReviewModel = /*[[${rentalHomeReview}]]*/ null;
+    const rentalHomePhoto = /*[[${rentalHomePhoto}]]*/ null;
+    const sessionInfo = /*[[${session.loginUser}]]*/ null;
 
     console.log(rentalHomeModel);
+    console.log(rentalHomePhoto);
+    console.log(sessionInfo);
   </script>
-  <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/rental_home/view.css">
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
@@ -39,13 +43,17 @@
         <span data-th-text="${rentalHome.name}">숙소 이름</span>
       </div>
       <div>
-        <div>
-          <h3 data-th-text="${rentalHome.address}">숙소 주소</h3>
+        <div class="rentalHome-address">
+          <span data-th-text="${rentalHome.address}">숙소 주소</span>
         </div>
         <div class="rentalHome-explanation">
           <span class="rentalHome-explanation-h" data-th-text="${rentalHome.explanation}">숙소 소개</span>
         </div>
-        <button class="showMoreExplanation">더 보기</button>
+        <div class="showMoreExplanation-btn">
+          <button class="showMoreExplanation">
+            <span>더 보기</span>
+          </button>
+        </div>
         <div class="explanationModal">
           <div class="explanation-modal-content">
             <span class="explanation-modal-close">&times;</span>
@@ -120,9 +128,12 @@
         </div>
         <div class="reservation-container-content">
           <div class="calendar-container">
-            <input type="text" id="checkInDateInput" readonly placeholder="체크인">
-            <input type="text" id="checkOutDateInput" readonly placeholder="체크아웃">
+            <input type="text" id="checkInDateInput" name="checkInDate" readonly placeholder="체크인">
+            <input type="text" id="checkOutDateInput" name="checkOutDate" readonly placeholder="체크아웃">
             <div class="calendar"></div>
+          </div>
+          <div>
+            <input type="number" id="guests" name="guests" placeholder="인원수">
           </div>
         </div>
         <div class="reservation-price-info">
@@ -140,11 +151,14 @@
           </div>
         </div>
         <div>
-          <button class="reservation-button">예약하기</button>
+          <button class="reservation-button">
+            <a data-th-href="@{reservation(rentalHomeNo=${rentalHome.rentalHomeNo})}">
+              <span>예약하기</span>
+            </a>
+          </button>
         </div>
       </div>
     </div>
-
 
   </section>
   <section class="map-section">
@@ -176,7 +190,7 @@
 </main>
   <div data-th-replace="footer :: footer" class="footer-div">footer</div>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script data-th-src="@{/js/header.js}"></script>
 <script data-th-src="@{/js/rental_home/view.js}"></script>
 </html>

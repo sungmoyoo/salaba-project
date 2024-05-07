@@ -118,5 +118,10 @@ public class RentalHomeController {
     return "redirect:view?rentalHomeNo="+ rentalHomeReport.getRentalHomeNo(); // 작성전 페이지로 돌아가기
   }
 
+  @GetMapping("/rentalHome/reservation")
+  public String getReservationInfo( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model ){
+    model.addAttribute("reservationInfo", rentalHomeService.getReservationInfo(rentalHomeNo));
+    return "/rentalHome/reservation";
+  }
 }
 

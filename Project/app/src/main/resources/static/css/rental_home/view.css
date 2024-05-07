@@ -8,12 +8,11 @@ html{
 
 /* header */
 header{
-    position: fixed;
+    position: relative;
     border-bottom: 1px solid #cccccc;
     top:0;
-    height: 210px;
     width: 100%;
-    z-index: 1000;
+    z-index: 900;
   }
 
 /* footer */
@@ -22,19 +21,20 @@ footer{
     border-top: 1px solid #cccccc;
     bottom: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 900;
  }
 
 body{
     height: 100vh;
+    margin: 0;
 }
 
 /* main */
 main{
-    position: relative;
-    top: 210px;
-    bottom: 100px;
+    position: absolute;
+    top: 250px;
     width: 100%;
+    bottom: 100px;
     height: calc(100vh - 240px - 100px);
     overflow-y: auto;
 }
@@ -46,12 +46,17 @@ main{
 }
 .map-section{
     padding-top: 20px;
-    margin-left: 80px;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
     display: block;
 }
 
 #map-title{
+    padding-top: 10px;
     margin-bottom: 20px;
+    border-top: 1px solid #cccccc;
 }
 
 #map-title span{
@@ -64,26 +69,26 @@ main{
 .photo-gallery{
     width: 100%;
     overflow: hidden;
+    display: flex;
 }
 
 .photo-container{
     display: flex;
-    transition: transform 0.5s ease-in-out;
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-top: 2%;
     overflow-x: hidden;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
 .photo-container-item{
     display: flex;
-    box-sizing: border-box;
     margin-right: 10px;
 }
 
 .photo-container-item img{
     border-radius: 10px;
-    max-width: 100%;
-    height: auto;
 }
 
 /* 신고하기 버튼 */
@@ -91,6 +96,7 @@ main{
     border: 2px solid #cccccc;
     border-radius: 6px;
     padding-left: 4px;
+    width: 60%;
 }
 #reportButton,
 #reportModal button{
@@ -134,17 +140,22 @@ main{
 /* 숙소 내용 */
 .rentalHome-content-section{
     display: flex;
+    align-items: center;
+    text-align: center;
     padding-top: 20px;
-    padding-left: 80px;
-    padding-right: 80px;
     padding-bottom: 20px;
 }
+
 
 #rentalHome-content-left,
 #rentalHome-content-right{
     width: 50%;
     padding-bottom: 20px;
-    border-bottom: 1px solid #cccccc;
+}
+
+#rentalHome-content-left{
+    padding-left: 5%;
+    margin-left: 10%;
 }
 
 #rentalHome-content-right{
@@ -154,22 +165,42 @@ main{
     font-family: "Noto Sans KR", sans-serif;
     font-size: 26px;
     font-weight: 600;
+    text-align: left;
 }
 
 /* 숙소 소개 */
 .rentalHome-explanation{
+    text-align: left;
     margin-bottom: 5px;
 }
+
+.showMoreExplanation-btn{
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.showMoreExplanation{ /* 더 보기 버튼 */
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+}
+
+.showMoreExplanation span{
+    font-family: "Noto Sans KR";
+    font-size: 15px;
+    font-weight: 500;
+}
+
 .explanationModal{
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .explanation-modal-content{
@@ -197,6 +228,10 @@ main{
 /* 숙소 편의 시설 */
 .facility-container{
     border-top: 0.5px solid #cccccc;
+}
+
+.facility-container div{
+    text-align: left;
 }
 
 .facility-container-title{
@@ -293,15 +328,17 @@ main{
 
 /* 숙소 리뷰 */
 .review-section{
-    border-top: 0.5px solid #cccccc;
     margin-top: 20px;
-    margin-left: 80px;
-    margin-right: 80px;
+    margin-left: 10%;
+    margin-right: 10%;
     margin-bottom: 20px;
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
 #reviewsContainer{
-    margin-top: 5px;
+    border-top: 0.5px solid #cccccc;
+    padding-top: 10px;
     font-family: "Noto Sans KR";
     font-size: 24px;
     font-weight: 600;
@@ -313,7 +350,7 @@ main{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-top: 10px;
     font-family: "Noto Sans KR";
-    width: calc(100% - 300px);
+    width: 60%;
     text-align: center;
     align-items: center;
 }
@@ -352,15 +389,17 @@ main{
 
 /* 숙소 규칙 */
 .rentalHomeRule-section{
-    border-top: 0.5px solid #cccccc;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left: 80px;
-    margin-right: 80px;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 .rule-container-title{
-    margin-top: 5px;
+    border-top: 0.5px solid #cccccc;
+    padding-top: 10px;
     margin-bottom: 20px;
 }
 

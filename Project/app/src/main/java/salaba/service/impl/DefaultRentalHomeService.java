@@ -88,4 +88,9 @@ public class DefaultRentalHomeService implements RentalHomeService {
   public List<RentalHomeFacility> getAllFacilities() { // 편의 시설 전체 조회
     return rentalHomeDao.getAllFacilities();
   }
+
+  @Override
+  public RentalHome getReservationInfo(int rentalHomeNo) {
+    return rentalHomeDao.getReservationInfo(rentalHomeNo);
+  }
 }

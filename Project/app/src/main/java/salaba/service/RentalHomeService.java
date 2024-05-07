@@ -35,4 +35,6 @@ public interface RentalHomeService {
   void addRentalHomeReport( RentalHomeReport rentalHomeReport);
 
   List<RentalHomeReview> getRentalHomeReviewList( int rentalHomeNo );
+
+  RentalHome getReservationInfo(int rentalHomeNo);
 }

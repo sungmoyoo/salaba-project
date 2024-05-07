@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const checkInDateInput = document.getElementById("checkInDateInput");
   const checkOutDateInput = document.getElementById("checkOutDateInput");
   const calendar = document.querySelector(".calendar");
-
+  
   const priceElement = document.querySelector('.reservation-price');
   const durationElement = document.querySelector('.reservation-duration');
   const priceTotalElement = document.querySelector('.reservation-price-total');
@@ -323,5 +323,34 @@ document.addEventListener("DOMContentLoaded", function() {
     const pricePerNight = rentalHome.price;
     return duration * pricePerNight;
   }
+
+});
+
+document.addEventListener("DOMContentLoaded", function(){
+  let checkInDate = document.getElementById("checkInDateInput");
+  let checkOutDate = document.getElementById("checkOutDateInput");
+  let guests = document.getElementById("guests");
+
+  const reservationBtn = document.querySelector(".reservation-button");
+
+  reservationBtn.addEventListener("click", function(){
+    if( checkInDate == null || checkOutDate == null || guests == null ){
+      alert("날짜 및 인원수를 확인해주세요.");
+    }else{
+      $.ajax({
+        url: "/rentalHome/reservation",
+        type: "GET",
+        date: {
+          rentalHomeNo:rentalHomeNoModel
+        },
+        success: () =>{
+          href = "/reservation.html"
+        },
+        error: () =>{
+          alert("예약 오류");
+        }
+      })
+    }
+  })
 
 });
