@@ -2,6 +2,7 @@ package salaba.service;
 
 import java.sql.Date;
 import java.util.List;
+import salaba.vo.Reservation2;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;
@@ -37,4 +38,8 @@ public interface RentalHomeService {
   List<RentalHomeReview> getRentalHomeReviewList( int rentalHomeNo );
 
   RentalHome getReservationInfo(int rentalHomeNo);
+
+  void addReservation( Reservation2 reservation);
+
+  int getReservationKey();
 }

@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // 체크인 날짜 선택
         if (!checkInDate || calendar.classList.contains("select-check-out")) {
           checkInDate = selectedDate;
-          checkInDateInput.value = checkInDate.toLocaleDateString();
+          checkInDateInput.value = formatDate(checkInDate);
           checkOutDate = null;
           checkOutDateInput.value = "";
           calendar.classList.remove("select-check-out");
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // 체크아웃 날짜 선택
         else {
           checkOutDate = selectedDate;
-          checkOutDateInput.value = checkOutDate.toLocaleDateString();
+          checkOutDateInput.value = formatDate(checkOutDate);
           calendar.classList.remove("open");
         }
 
@@ -290,6 +290,14 @@ document.addEventListener("DOMContentLoaded", function() {
         updateReservationInfo();
       });
     });
+  }
+
+  function formatDate(date){
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2,'0');
+    const day = date.getDate().toString().padStart(2,'0');
+
+    return `${year}년 ${month}월 ${day}일`;
   }
 
   generateCalendar();
@@ -327,24 +335,28 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function(){
-  let checkInDate = document.getElementById("checkInDateInput");
-  let checkOutDate = document.getElementById("checkOutDateInput");
-  let guests = document.getElementById("guests");
-
+  console.log(111111);
   const reservationBtn = document.querySelector(".reservation-button");
-
+  
   reservationBtn.addEventListener("click", function(){
-    if( checkInDate == null || checkOutDate == null || guests == null ){
+    let checkInDate = document.getElementById("checkInDateInput").value;
+    let checkOutDate = document.getElementById("checkOutDateInput").value;
+    let guests = document.getElementById("reservationGuests").value;
+    console.log("-----");
+    console.log(checkInDate);
+    console.log(checkOutDate);
+    console.log(guests);
+    console.log(rentalHomeNoModel);
+    console.log(typeof rentalHomeNoModel);
+    console.log("-----");
+    if( checkInDate == "" || checkOutDate == "" || guests == "" ){
       alert("날짜 및 인원수를 확인해주세요.");
     }else{
       $.ajax({
-        url: "/rentalHome/reservation",
+        url: "/rentalHome/reservation?rentalHomeNo=" + rentalHomeNoModel + "&checkInDate=" + checkInDate + "&checkOutDate=" + checkOutDate + "&guests=" + guests,
         type: "GET",
-        date: {
-          rentalHomeNo:rentalHomeNoModel
-        },
-        success: () =>{
-          href = "/reservation.html"
+        success: (data) =>{
+          location.href = "/rentalHome/reservation?rentalHomeNo=" + rentalHomeNoModel + "&checkInDate=" + checkInDate + "&checkOutDate=" + checkOutDate + "&guests=" + guests;
         },
         error: () =>{
           alert("예약 오류");
@@ -352,5 +364,4 @@ document.addEventListener("DOMContentLoaded", function(){
       })
     }
   })
-
 });

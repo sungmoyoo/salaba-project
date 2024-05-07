@@ -133,7 +133,7 @@
             <div class="calendar"></div>
           </div>
           <div>
-            <input type="number" id="guests" name="guests" placeholder="인원수">
+            <input type="number" id="reservationGuests" name="guests" placeholder="인원수">
           </div>
         </div>
         <div class="reservation-price-info">
@@ -152,9 +152,7 @@
         </div>
         <div>
           <button class="reservation-button">
-            <a data-th-href="@{reservation(rentalHomeNo=${rentalHome.rentalHomeNo})}">
               <span>예약하기</span>
-            </a>
           </button>
         </div>
       </div>

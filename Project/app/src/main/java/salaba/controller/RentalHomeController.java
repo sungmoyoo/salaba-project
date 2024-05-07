@@ -1,5 +1,7 @@
 package salaba.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -7,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
+import salaba.vo.Reservation2;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
@@ -119,9 +123,29 @@ public class RentalHomeController {
   }
 
   @GetMapping("/rentalHome/reservation")
-  public String getReservationInfo( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model ){
+  public void getReservationInfo(
+      @RequestParam("rentalHomeNo") int rentalHomeNo,
+      @RequestParam("checkInDate") String checkInDate,
+      @RequestParam("checkOutDate") String checkOutDate,
+      @RequestParam("guests") int guests,
+      Model model ){
     model.addAttribute("reservationInfo", rentalHomeService.getReservationInfo(rentalHomeNo));
-    return "/rentalHome/reservation";
+    model.addAttribute("checkInDate", checkInDate);
+    model.addAttribute("checkOutDate", checkOutDate);
+    model.addAttribute("guests", guests);
+  }
+
+  @PostMapping("/rentalHome/reservation")
+  public ResponseEntity<String> addReservation(@RequestBody Reservation2 reservation)
+      throws IOException {
+    int reservationNo = rentalHomeService.getReservationKey();
+    reservation.setChatFileName("chat-"+reservationNo);
+    rentalHomeService.addReservation(reservation);
+
+    File file = new File("src/main/resources/chat/log/"+reservation.getChatFileName()+".json");
+    file.createNewFile();
+
+    return ResponseEntity.ok("예약 신청이 완료됐습니다.");
   }
 }
 
