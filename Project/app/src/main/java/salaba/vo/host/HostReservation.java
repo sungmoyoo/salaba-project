@@ -17,7 +17,7 @@ public class HostReservation implements Serializable { // 호스트 예약내역
   private int rentalHomeNo; // 숙소 번호
   private Date startDate; // 시작일
   private Date endDate; // 종료일
-  private int state; // 상태
+  private char state; // 상태
   private Date paymentDate; // 결제일
   private int amount; // 결제금액
   private int numberOfPeople; // 이용 인원수

@@ -3,73 +3,197 @@
 <head>
   <meta charset='UTF-8'>
   <title>숙소 시설 입력 폼</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <style>
-    button[type="button"],
-    button[type="submit"] {
-      background-color: #35C5B3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+      form {
+        text-align: center;
+        margin: 30px;
+      }
 
-    button[type="button"]:hover,
-    button[type="submit"]:hover {
-      background-color: #1C9189;
-    }
+      #basic-facility {
+        display: flex;
+        justify-content: center;
+        flex-direction: column; /* 요소를 세로로 나열합니다. */
+        text-align: center;
+        margin: 25px auto;
+      }
+
+      .convenience-facility {
+        display: flex;
+        justify-content: center; /* 가로 방향으로 가운데 정렬합니다. */
+        align-items: center; /* 세로 방향으로 가운데 정렬합니다. */
+        flex-wrap: wrap; /* 내용이 넘칠 경우 다음 줄에 배치합니다. */
+        max-width: 600px;
+        margin: 25px auto; /* 좌우 여백을 자동으로 조절하여 가운데 정렬합니다. */
+
+      }
+
+      .facility-option {
+        flex: 1 1 calc(20% - 10px);
+        width: 100px;
+        height: 90px;
+        border: 2px solid #CCCCCC;
+        border-radius: 10px;
+        margin: 10px; /* 요소 간 간격을 조정합니다. */
+        cursor: pointer;
+        padding-top: 10px;
+      }
+
+      .quantity {
+        margin: 20px auto; /* 가운데 정렬 */
+        font-size: 20px;
+        border-bottom: 2px solid #CCCCCC;
+        padding-bottom: 30px;
+        max-width: 550px;
+        text-align: center; /* 가운데 정렬을 위해 추가 */
+      }
+
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;/* input type:number 마우스오버시 보이는 화살표 제거 */
+      }
+
+      .fa-solid {
+        font-size: 25px;
+        margin: 15px;
+      }
+
+      input[type="checkbox"] {
+        -webkit-appearance: none; /* Chrome, Safari, Edge 등의 웹킷 기반 브라우저 */
+        -moz-appearance: none; /* Firefox 브라우저 */
+        appearance: none; /* 일반적인 브라우저 */
+      }
+
+      .facility-option.selected {
+        border-color: #35C5B3;
+      }
+
+      button[type="submit"] {
+        background-color: #35C5B3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button[type="submit"]:hover {
+        transition: background-color 0.3s ease;
+        background-color: #1C9189;
+      }
+
+      button[type="button"] {
+        background-color: #FF99B3;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+
+      }
+      button[type="button"]:hover {
+        transition: background-color 0.3s ease;
+        background-color: #FF66A3;
+      }
   </style>
 </head>
 <body>
 
-
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
-<div align="center">
-
+<div id="main-container">
   <form action="facilityForm" data-th-action="@{rentalHomeFacilitySave}" method='post'>
 
-    <h2>숙소 시설</h2>
+    <h1>숙소 시설</h1>
+    <h4>숙소의 기본 시설 개수를 입력해주세요</h4>
+    <div id="basic-facility">
+      <div class="quantity">
+        <a>인원</a>
+        <i class="fa-solid fa-circle-minus"></i>
+        <input type="number" name="capacity" id="capacity" value="0">
+        <i class="fa-solid fa-circle-plus"></i>
+      </div>
+
+      <div class="quantity" data-th-if="${facility.facilityNo < 4} " data-th-each="facility : ${facilityList}"
+           data-th-object="${facility}">
+        <a data-th-text="*{facilityName}">시설</a>
+        <i class="fa-solid fa-circle-minus"></i>
+        <input type="number" name="facilityCount" value="0"/>
+        <i class="fa-solid fa-circle-plus"></i>
+        <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+        <input type="hidden" name="facilityNames"
+               data-th-value="*{facilityName}"/>
+      </div>
+    </div>
+    <h1>숙소 편의시설</h1>
+    <h4>편의시설을 최소 1개 이상 선택해주세요.</h4>
+    <div class="convenience-facility">
+        <div class="facility-option" data-th-if="${facility.facilityNo >= 10}"
+           data-th-each="facility : ${facilityList}" data-th-object="${facility}">
+          <div>
+          <img class="icon" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/facility/' + ${facility.facilityName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+          </div>
+          <a data-th-text="*{facilityName}"></a>
+          <input type="checkbox" name="facilityCount" value="1"/>
+          <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+          <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+        </div>
+    </div>
     <div>
-      수용인원 <input class="roomFacility" type="number" name="capacity" value="0">
+        <button type="button" onclick="window.history.back()">이전</button>
+        <button type="submit" id="next-button">다음</button>
     </div>
-    <div data-th-if="${facility.facilityNo < 4} " data-th-each="facility : ${facilityList}"
-         data-th-object="${facility}">
-      <a data-th-text="*{facilityName}">시설</a>
-      <input class="roomFacility" type="number" name="facilityCount" value="0"/>
-      <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
-      <input type="hidden" name="facilityNames"
-             data-th-value="*{facilityName}"/>
-    </div>
-
-
-    <br>
-    <br>
-    <br>
-
-    <h2>숙소 편의시설</h2>
-    <p data-th-if="${facility.facilityNo >= 10}"
-       data-th-each="facility : ${facilityList}" data-th-object="${facility}">
-      <a data-th-text="*{facilityName}"></a>
-      <input type="checkbox" name="facilityCount" value="1"/>
-      <input type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
-      <input type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
-    </p>
-
-
-    <div>
-      <button type="button" onclick="window.history.back()">이전</button>
-      <button type="submit" id="next-button">다음</button>
-    </div>
-
 
   </form>
 </div>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 <script>
+  // + - 버튼 상호작용
+  document.addEventListener('DOMContentLoaded', function() {
+    const plusButtons = document.querySelectorAll('.fa-circle-plus');
+    const minusButtons = document.querySelectorAll('.fa-circle-minus');
+
+    plusButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const input = this.parentNode.querySelector('input[type="number"]');
+        input.value = parseInt(input.value) + 1;
+        checkRequiredFields(); // 필수 입력 필드 확인
+      });
+    });
+
+    minusButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const input = this.parentNode.querySelector('input[type="number"]');
+        if (parseInt(input.value) > 0) {
+          input.value = parseInt(input.value) - 1;
+          checkRequiredFields(); // 필수 입력 필드 확인
+        }
+      });
+    });
+  });
+
+  const facilityOptions =  document.querySelectorAll('.facility-option');
+  facilityOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const checkbox = this.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked; // 클릭할 때마다 체크 여부를 반전시킴
+        // 선택 클래스를 토글
+        if (checkbox.checked) {
+          this.classList.add('selected');
+        } else {
+          this.classList.remove('selected');
+        }
+        checkRequiredFields(); // 필수 입력 필드 확인
+      });
+    });
 
   function checkRequiredFields() {
     let roomFacility = Array.prototype.slice.call(document.querySelectorAll(".roomFacility"));
@@ -86,9 +210,12 @@
       nextButton.disabled = false;
       nextButton.style.backgroundColor = '#35C5B3';
     }
+
+
   }
 
-    // 페이지 로드 시, 입력 필드가 변경될 때마다 확인
+
+  // 페이지 로드 시, 입력 필드가 변경될 때마다 확인
   window.onload = function() {
     // 입력 필드가 변경될 때마다 확인
     document.querySelectorAll('input').forEach(element => {
@@ -102,6 +229,7 @@
     checkRequiredFields();
   };
 </script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,108 +1,205 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset='UTF-8'>
-  <title>숙소 테마 입력 폼</title>
-  <style>
-    button[type="button"],
-    button[type="submit"] {
-      background-color: #35C5B3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+  form {
+    text-align: center;
+    margin: 30px;
+  }
 
-    button[type="button"]:hover,
-    button[type="submit"]:hover {
-      background-color: #1C9189;
-    }
-  </style>
+  .room-theme,
+  .room-type {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 600px;
+    margin: 25px auto;
+  }
+
+  .type-option {
+    flex: 1 1 calc(25% - 20px);
+    width: 100px;
+    height: 90px;
+    border: 2px solid #CCCCCC;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding-top: 10px;
+    justify-content: center;
+  }
+
+  .theme-option {
+    flex: 1 1 calc(20% - 10px);
+    width: 100px;
+    height: 90px;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding-top: 10px;
+    justify-content: center;
+  }
+
+  .icon {
+    border-radius: 5px;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    -webkit-appearance: none; /* Chrome, Safari, Edge 등의 웹킷 기반 브라우저 */
+    -moz-appearance: none; /* Firefox 브라우저 */
+    appearance: none; /* 일반적인 브라우저 */
+  }
+
+  .theme-option.selected,
+  .type-option.selected {
+    border-color: #35C5B3;
+  }
+
+
+  button[type="submit"] {
+    background-color: #35C5B3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button[type="submit"]:hover {
+    transition: background-color 0.3s ease;
+    background-color: #1C9189;
+  }
+
+  button[type="button"] {
+    color: white;
+    background-color: #FF99B3;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+
+  }
+  button[type="button"]:hover {
+    transition: background-color 0.3s ease;
+    background-color: #FF66A3;
+  }
+
+
+
+</style>
 </head>
 <body>
 
-
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
-<div align="center">
+<div class="main-container">
+  <form action="themeForm" data-th-action="@{themeSave}"  method='post'>
 
-<form action="themeForm" data-th-action="@{themeSave}"  method='post'>
-  <br>
-  <br>
-  <br>
+    <h1>숙소 타입</h1>
+    <h5>가장 부합하는 1가지를 선택하세요.</h5>
+    <br>
+    <div class="room-type">
+      <!-- 반복되는 항목 -->
+      <div class="type-option" data-th-if="${theme.themeNo < 10}" data-th-each="theme : ${themeList}" data-th-object="${theme}">
+        <div >
+          <img class="icon" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+        </div>
+        <div class="type-name" data-th-text="*{themeName}">모텔</div>
+        <input type="radio" id="type${theme.themeNo}" name="type" data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
+      </div>
+    </div>
 
-  <h2>숙소 타입</h2>
-  <div>
-    <table border="1">
-      <thead>
-      <th>유형</th>
-      <th>선택</th>
-      </thead>
-      <tbody>
-      <tr data-th-if="${theme.themeNo < 10}" data-th-each="theme : ${themeList}"
-          data-th-object="${theme}">
-        <td data-th-text="*{themeName}">모텔</td>
-        <td>
-          <input id="type" type="radio" name="type" data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
-        </td>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <h1>숙소 테마</h1>
+    <h5>숙소가 가진 테마를 최소 1개 이상 선택하세요.</h5>
+    <br>
+    <div class="room-theme">
+      <!-- 반복되는 항목 -->
+      <div class="theme-option" data-th-if="${theme.themeNo >= 10}" data-th-each="theme : ${themeList}" data-th-object="${theme}">
+        <div>
+          <img class="icon" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+        </div>
+        <div class="theme-name" data-th-text="*{themeName}">테마 이름</div>
+        <input type="checkbox" class="theme-checkbox" id="theme${theme.themeNo}" name="themeNos" data-th-value="*{themeNo}">
+        <input type="hidden" name="themeNames" data-th-value="*{themeName}"/>
+      </div>
+    </div>
 
+    <br>
+    <br>
 
+    <div>
+      <button type="button" onclick="window.history.back()">이전</button>
+      <button type="submit" id="next-button">다음</button>
+    </div>
 
-  <br>
-  <br>
-  <br>
-
-  <h2>숙소 테마</h2>
-  <p data-th-if="${theme.themeNo >= 10}"
-       data-th-each="theme : ${themeList}" data-th-object="${theme}">
-    <a data-th-text="*{themeName}"></a>
-    <input class="theme" type="checkbox" name="themeNos" data-th-value="*{themeNo}"/>
-    <input type="hidden" name="themeNames" data-th-value="*{themeName}"/>
-  </p>
-  <br>
-  <br>
-
-  <div>
-    <button type="button" onclick="window.history.back()">이전</button>
-    <button type="submit" id="next-button">다음</button>
-  </div>
-  <br>
-  <br>
-  <br>
-
-
-
-</form>
+    <br>
+    <br>
+    <br>
+  </form>
 </div>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script>
-  function checkRequiredFields() {
-    let radioChecked = document.querySelector('input[type="radio"]:checked');
-    let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+  document.addEventListener('DOMContentLoaded', function() {
+    const typeOptions = document.querySelectorAll('.type-option');
+    const themeOptions =  document.querySelectorAll('.theme-option');
+
+    typeOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        // 선택된 항목 해제
+        typeOptions.forEach(otherOption => {
+          otherOption.classList.remove('selected');
+          otherOption.querySelector('input[type="radio"]').checked = false;
+        });
+        // 현재 항목 선택
+        this.classList.add('selected');
+        this.querySelector('input[type="radio"]').checked = true;
+      });
+    });
+
+    themeOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const checkbox = this.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked; // 클릭할 때마다 체크 여부를 반전시킴
+        // 선택 클래스를 토글
+        if (checkbox.checked) {
+          this.classList.add('selected');
+        } else {
+          this.classList.remove('selected');
+        }
+        checkRequiredFields(); // 필수 입력 필드 확인
+      });
+    });
+
 
     const nextButton = document.getElementById('next-button');
 
-    if (radioChecked && checkboxes.length > 0) {
-      nextButton.disabled = false;
-      nextButton.style.backgroundColor = '#35C5B3';
-    } else {
-      nextButton.disabled = true;
-      nextButton.style.backgroundColor = '#CCCCCC';
-    }
-  }
+    function checkRequiredFields() {
+      const radioChecked = document.querySelector('input[type="radio"]:checked');
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
 
-  // 페이지 로드 시, 입력 필드가 변경될 때마다 확인
-  window.onload = function() {
+      if (radioChecked && checkboxes.length > 0) {
+        nextButton.disabled = false;
+        nextButton.style.backgroundColor = '#35C5B3';
+      } else {
+        nextButton.disabled = true;
+        nextButton.style.backgroundColor = '#CCCCCC';
+      }
+    }
+
     // 입력 필드가 변경될 때마다 확인
     document.querySelectorAll('input[type="radio"]').forEach(element => {
       element.addEventListener('change', checkRequiredFields);
@@ -112,9 +209,10 @@
       element.addEventListener('change', checkRequiredFields);
     });
 
-    checkRequiredFields();
-  };
+    checkRequiredFields(); // 페이지 로드 시 확인
+  });
 </script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

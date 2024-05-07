@@ -6,30 +6,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>숙소 기본 정보 입력</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
   <style>
+    #main-container {
+      text-align: center;
+      align-items: center;
+      font-size: 20px;
+    }
+
+    .info {
+      margin: 50px 0 220px 0;
+    }
+
+    .basic-info {
+      width: 500px;
+    }
+
+    .location-info {
+      width: 50%;
+      margin: 0 auto;
+    }
+
+    .duration-info {
+      margin: 25px 0;
+    }
+
     .image-container {
       display: inline-block;
       text-align: center;
-      margin-right: 20px;
-      margin-top: 30px;
+      margin: 20px;
       position: relative;
+      max-width: 690px;
     }
+
     .image-item {
-      width: 265px;
-      height: 252px;
+      width: 256px;
+      height: 230px;
       object-fit: cover;
       margin-bottom: 10px;
-      position: relative; /* 이미지 상대 위치 설정 */
+      position: relative;
+      border-radius: 5px;
     }
 
     .image-description {
         width: 100%;
-        box-sizing: border-box;
         position: absolute;
-        bottom: 0;
+        bottom: -20px;
         left: 0;
         margin: 0;
-        padding: 5px;
     }
 
     .delete-button {
@@ -39,10 +68,11 @@
         padding: 5px 10px;
         cursor: pointer;
         position: absolute;
-        top: 0; /* 이미지의 위쪽 여백 */
-        right: 0; /* 이미지의 오른쪽 여백 */
-        transform: translate(50%, -50%); /* 삭제 버튼을 이미지의 오른쪽 상단에 정확히 위치시키기 위해 */
+        top: 0;
+        right: 0;
+        border-radius: 5px;
     }
+
 
     .input-file-button,
     button[type="submit"] {
@@ -54,6 +84,7 @@
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin: 50px 0 100px 0;
     }
 
     .input-file-button:hover,
@@ -61,11 +92,17 @@
       background-color: #1C9189;
     }
 
+    #nextButton {
+      margin: 250px 0 50px 0;
+    }
+
+
     /* 지도 */
     #map {
-    height: 513px;
-    width: 912px;
-    border-radius: 4px;
+      height: 600px;
+      border-radius: 5px;
+      width: 65%;
+      margin: 0 auto;
     }
 
     html,
@@ -82,7 +119,7 @@
       border: 0;
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-      margin: 10px;
+      margin: 10px 0 10px 0;
       padding: 0 0.5em;
       font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
@@ -90,6 +127,8 @@
       margin-right: 0;
       min-width: 25%;
     }
+
+
 
     input[type=button] {
       background-color: #fff;
@@ -124,6 +163,11 @@
       background-color: #d2e3fc;
     }
 
+    #mapInput {
+      margin-left: 10px;
+    }
+
+
     #response-container {
       background-color: #fff;
       border: 0;
@@ -157,54 +201,53 @@
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
-<div align="center">
+<div id="main-container">
   <form id="myForm" enctype="multipart/form-data" method='post'>
 
-    <div id="basic-info">
-      <h2>숙소 기본 정보</h2>
+    <div class="info">
+      <h1>숙소 기본 정보</h1>
       <div>
-        <input style="width:500px" type="text" name="name" id="name" placeholder="숙소명" required>
+        <input class="basic-info" type="text" name="name" id="name" placeholder="숙소명">
       </div>
       <div>
-        <textarea style="width:500px" name="explanation" id="explanation"
-                  placeholder="숙소 설명" required></textarea>
+        <textarea class="basic-info" name="explanation" id="explanation"
+                  placeholder="숙소 설명"></textarea>
       </div>
       <div>
-        <textarea style="width:500px" name="rentalHomeRule" id="rentalHomeRule"
-                  placeholder="숙소 이용규칙" required></textarea>
+        <textarea class="basic-info" name="rentalHomeRule" id="rentalHomeRule"
+                  placeholder="숙소 이용규칙"></textarea>
       </div>
     </div>
 
-    <div id="location-info">
-      <h2>숙소 위치</h2>
+    <div class="info">
+      <h1>숙소 위치</h1>
       <section>
         <div id="map"></div>
       </section>
 
-      <input type="text" name="lat" id="lat">
-      <input type="text" name="lon" id="lon">
+      <input type="hidden" name="lat" id="lat">
+      <input type="hidden" name="lon" id="lon">
       <div>
-        <input type="text" style="width:500px" name="basicAddress" id="basicAddress"
-               placeholder="기본 주소" required>
+        <input class="location-info" type="text"  name="basicAddress" id="basicAddress"
+               placeholder="기본 주소">
       </div>
       <div>
-        <input type="text" style="width:500px" name="detailAddress" id="detailAddress"
-               placeholder="상세 주소" required>
+        <input class="location-info" type="text"  name="detailAddress" id="detailAddress"
+               placeholder="상세 주소">
       </div>
     </div>
 
-    <div id="photo-info"></div>
-    <h2>숙소 사진</h2>
-
-    <div>
+    <div class="photo-section">
+    <h1>숙소 사진</h1>
+      <h4>5장 이상의 사진을 선택해주세요.</h4>
       <label class="input-file-button" for="photoInput">사진 추가</label>
       <input type="file" multiple id="photoInput" name="photos" style="display:none;"
-             onchange="photoCountAndDisplay(this.files)" required/>
+             onchange="photoCountAndDisplay(this.files)"/>
       <div id="imageContainer"></div>
     </div>
 
-    <div class="price-info">
-      <h2>요금설정</h2>
+    <div class="info">
+      <h1>요금설정</h1>
       <script>
         function calc() {
           const price = Number(document.getElementById("price").value);
@@ -213,30 +256,32 @@
         }
       </script>
       <div>
-        <input style="width:500px" type="number" name="price" id="price" placeholder="이용요금(주 기준)"
-               onkeyup="calc(this.value)" required>
+        <input class="price-info" type="number" name="price" id="price" placeholder="이용요금(주 기준)"
+               onkeyup="calc(this.value)">
       </div>
       <div>
-        <input style="width:500px" type="number" name="cleanFee" id="cleanFee" placeholder="청소비"
-               onkeyup="calc(this.value)" required>
+        <input class="price-info" type="number" name="cleanFee" id="cleanFee" placeholder="청소비"
+               onkeyup="calc(this.value)">
       </div>
       <div>
-        <input style="width:500px" readonly type="text" id="income" placeholder="정산금액">
+        <input class="price-info" readonly type="text" id="income" placeholder="정산금액">
       </div>
     </div>
 
-    <div class="duration-info"></div>
-    <h2>호스팅 기간</h2>
-    <div>
-      호스팅 시작일: <input name='hostingStartDate' id="hostingStartDate" type='date' required>
+    <div class="info"></div>
+    <h1>호스팅 기간</h1>
+    <div class="duration-info">
+      <span>호스팅 시작일:</span>
+      <input name='hostingStartDate' id="hostingStartDate" type='date'>
     </div>
-    <div>
-      호스팅 종료일: <input name='hostingEndDate' id="hostingEndDate" type='date' required>
+    <div class="duration-info">
+      <span>호스팅 종료일:</span>
+      <input name='hostingEndDate' id="hostingEndDate" type='date'>
     </div>
   </form>
 
   <div>
-    <button type="submit" onclick="submitForm()">다음</button>
+    <button id="nextButton" type="submit" onclick="submitForm()">다음</button>
   </div>
 
   <br>
@@ -267,11 +312,13 @@
   let isEmpty = requiredFields.some(field => !field.value.trim());
   console.log(filesArray);
 
+  let isDescriptionEmpty = filesArray.some(file => !file.description.value.trim());
+
   // 다음 버튼 가져오기
-  const nextButton = document.querySelector('button[type="submit"]');
+  const nextButton = document.querySelector('#nextButton');
 
   // 필수 입력 필드가 비어 있으면 다음 버튼을 비활성화
-  if (isEmpty || filesArray.length <= 0) {
+  if (isEmpty || filesArray.length < 5 || isDescriptionEmpty) {
     nextButton.disabled = true;
     nextButton.style.backgroundColor = '#CCCCCC';
   } else {
@@ -385,6 +432,8 @@ window.onload = function() {
           file: file,
           description: descriptionInput
         });
+
+        descriptionInput.addEventListener('input', checkRequiredFields);
         checkRequiredFields();
       };
 
@@ -420,6 +469,13 @@ window.onload = function() {
 
     inputText.type = "text";
     inputText.placeholder = "Enter a location";
+    inputText.id = "mapInput";
+
+    inputText.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+          geocode({ address: this.value });
+        }
+    });
 
     const submitButton = document.createElement("input");
 
@@ -516,7 +572,8 @@ window.onload = function() {
 
   window.initMap = initMap;
 </script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 
