@@ -22,3 +22,16 @@ axiosInstance.interceptors.response.use(
     }
 );
 
+function formatDate(dateString) {
+    // Date 객체 생성
+    let date = new Date(dateString);
+
+    // 년, 월, 일 정보 추출
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1을 해주고, 두 자리로 만들기 위해 padStart 사용
+    let day = String(date.getDate()).padStart(2, '0'); // 날짜를 두 자리로 만들기 위해 padStart 사용
+
+    // YYYY-mm-DD 형식으로 조합
+    return `${year}-${month}-${day}`;
+}
+

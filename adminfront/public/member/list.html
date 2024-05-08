@@ -27,16 +27,11 @@
       <h3>메뉴 이름</h3>
       <form>
         <div class="searchBar">
-          <select name="filter">
+          <select id="filter">
             <option value="0">이름</option>
             <option value="1">이메일</option>
           </select>
-          <input
-            class="searchInput"
-            name="keyword"
-            type="search"
-            placeholder="검색"
-          />
+          <input class="searchInput" type="search" placeholder="검색" />
           <button class="searchBtn">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
@@ -61,8 +56,7 @@
       </table>
     </div>
     <div id="detailModal" class="modal">
-      <div class="modal-content" id="modalContent">
-      </div>
+      <div class="modal-content" id="modalContent"></div>
 
       <button type="button" id="closeBtn">✕</button>
     </div>
@@ -87,95 +81,101 @@
       <h3>회원 상세 보기</h3>
       <h4 id="subTitle"></h4>
       <div class="content">
-      <div class="infoBox">
-        <div class="info"><span>회원 번호</span><span>{{memberNo}}</span></div>
-        <div class="hr"></div>
-      </div>
-      <div class="infoBox">
-        <div class="info"><span>이름</span><span>{{name}}</span></div>
-        <div class="hr"></div>
-      </div>
-      <div class="infoBox">
-        <div class="info"><span>닉네임</span><span>{{nickname}}</span></div>
-        <div class="hr"></div>
-      </div>
-      <div class="infoBox">
-        <div class="info"><span>이메일</span><span>{{email}}</span></div>
-        <div class="hr"></div>
-      </div>
-      <div class="infoBox">
-        <div class="info"><span>가입일</span><span>{{joinDate}}</span></div>
-        <div class="hr"></div>
-      </div>
-      <div class="infoBox grade">
-        <div class="info"><span>등급</span><span>{{gradeName}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="infoBox">
-        <div class="info"><span>상태</span><span>{{stateStr}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="infoBox">
-        <div class="info"><span>누적 신고 횟수</span> <span>{{warningCount}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="grade">
-      <select class="dealSelect">
-          <option value="1">브론즈</option>
-          <option value="2">실버</option>
-          <option value="3">골드</option>
-          <option value="4">플래티넘</option>
-          <option value="5">다이아</option>
-      </select>
-      <button class="dealBtn">등급 변경</button>
-      </div>
-      <br>
-      {{#each rentals}}
-    <div id="rentals">
-    <div class="infoBox">
-        <div class="info"><span>숙소 번호: </span><span>{{rentalNo}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="infoBox">
-        <div class="info"><span>숙소 이름: </span><span>{{name}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="infoBox">
-        <div class="info"><span>숙소 주소: </span><span>{{address}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="infoBox">
-        <div class="info"><span>숙소 등록일: </span><span>{{regDate}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="infoBox">
-        <div class="info"><span>숙소 가격: </span><span>{{price}}</span></div>
-        <div class="hr"></div>
-    </div>
-    <div class="infoBox">
-        <div class="info"><span>숙소 상태: </span><span>{{stateStr}}</span></div>
-        <div class="hr"></div>
-    </div>
-    
-    <div class="info"><span>숙소 테마:</span>
-      {{#each themes}}
-        <div>
-            <span>{{themeName}}</span>
+        <div class="infoBox">
+          <div class="info"><span>회원 번호</span><span
+            >{{memberNo}}</span></div>
+          <div class="hr"></div>
         </div>
+        <div class="infoBox">
+          <div class="info"><span>이름</span><span>{{name}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>닉네임</span><span>{{nickname}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>이메일</span><span>{{email}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>가입일</span><span>{{joinDate}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox grade">
+          <div class="info"><span>등급</span><span>{{gradeName}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>상태</span><span>{{stateStr}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>누적 신고 횟수</span>
+            <span>{{warningCount}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="grade">
+          <select class="dealSelect">
+            <option value="1">브론즈</option>
+            <option value="2">실버</option>
+            <option value="3">골드</option>
+            <option value="4">플래티넘</option>
+            <option value="5">다이아</option>
+          </select>
+          <button class="dealBtn">등급 변경</button>
+        </div>
+        <br />
+        {{#each rentals}}
+          <div id="rentals">
+            <div class="infoBox">
+              <div class="info"><span>숙소 번호: </span><span
+                >{{rentalNo}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 이름: </span><span
+                >{{name}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 주소: </span><span
+                >{{address}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 등록일: </span><span
+                >{{regDate}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 가격: </span><span
+                >{{price}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 상태: </span><span
+                >{{stateStr}}</span></div>
+              <div class="hr"></div>
+            </div>
+
+            <div class="info"><span>숙소 테마:</span>
+              {{#each themes}}
+                <div>
+                  <span>{{themeName}}</span>
+                </div>
+              {{/each}}
+            </div>
+            <hr />
+            <br />
+          </div>
         {{/each}}
-    </div>
-        <hr>
-        <br>
-    </div>
-    {{/each}}
-    </div>
+      </div>
     </script>
 
     <script src="/js/list.js"></script>
     <script src="/js/common.js"></script>
     <script src="/js/page-init.js"></script>
     <script src="list.js"></script>
-
-
   </body>
 </html>

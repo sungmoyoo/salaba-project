@@ -1,13 +1,14 @@
 const tbody = $("tbody");
 let menu = pageContext.params.get("menu");
+
 (function () {
     axiosInstance.get(`${RESTAPI_HOST}/member/list/${menu}`).then((response) => {
         let result = response.data;
-        console.log(result);
         if (response.status == "failure") {
             alert(response.error);
             return;
         }
+        console.log(result);
         let trTemplate = Handlebars.compile($("#tr-template").html());
         tbody.html(trTemplate(result));
         if (menu == 1) {
@@ -85,3 +86,26 @@ let menu = pageContext.params.get("menu");
         });
     });
 })();
+
+$('.searchBtn').click((event) => {
+    event.preventDefault();
+    let keyword = $('.searchInput').val();
+    let filter = $('#filter').val()
+    console.log(keyword, filter)
+    axiosInstance.get(`${RESTAPI_HOST}/member/search/${keyword}/${filter}/${menu}`)
+    .then((response) => {
+        let result = response.data;
+        console.log(result);
+        let trTemplate = Handlebars.compile($("#tr-template").html());
+        tbody.html(trTemplate(result));
+        if (menu == 1) {
+            $("h3").text("일반 회원 목록");
+            $("#changing-th").text("상태");
+            $(".rentalCount").hide();
+        } else {
+            $("h3").text("호스트 목록");
+            $("#changing-th").text("등록 숙소 수");
+            $(".stateStr").hide();
+        }
+    })
+});

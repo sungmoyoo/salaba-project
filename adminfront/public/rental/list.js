@@ -3,6 +3,9 @@
     const tbody = $("tbody");
     console.log(RESTAPI_HOST);
     let menu = pageContext.params.get("menu");
+    if (menu != 1) {
+        $('.searchBar').hide();
+    }
     (function() {
         axiosInstance.get(`${RESTAPI_HOST}/rental/list/${menu}`)
         .then((response) => {
@@ -87,27 +90,14 @@
         .then((response) => {
             let result = response.data;
             console.log(result);
-            if(result.status == 'failure') {
-                alert(response.error);
-                console.log("failure")
-                return;
-            }
 
             var trTemplate = Handlebars.compile($("#tr-template").html());
-            $("#modalContent").html(trTemplate(result));
+            console.log($("#tr-template").html())
+            console.log($("tbody").html())
+            $("tbody").html(trTemplate(result));
+            console.log($("tbody").html())
             
            
         })
     });
-
-    function approveOrReject(value) {
-        let form = document.querySelector('form');
-        let rentalNo = document.querySelector('input[name="rentalNo"]').value;
-        let valueInput = document.createElement('input')
-        valueInput.type = 'hidden';
-        valueInput.name = 'value';
-        valueInput.value = value;
-        form.appendChild(valueInput);
-        form.submit();
-    }
 

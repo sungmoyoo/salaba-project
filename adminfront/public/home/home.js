@@ -2,6 +2,13 @@
 
 
   (function(){
+    axiosInstance.get(`${RESTAPI_HOST}/chart/unprocessed`)
+    .then((response) => {
+      const unprocessedData = response.data.data;
+      let unprcsTemplate = Handlebars.compile($("#unprcs-template").html());
+      $('#firstLine').html(unprcsTemplate(unprocessedData));
+      return axiosInstance.get(`${RESTAPI_HOST}/chart/boardCount`);
+    })
     axiosInstance.get(`${RESTAPI_HOST}/chart/boardCount`)
     .then((response) => {
         const boardsData = response.data.data;

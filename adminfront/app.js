@@ -49,6 +49,12 @@ router.get('/qna/list', (req, res) => {
   res.sendFile(filePath);
 });
 
+router.get('/member/search', (req, res) => {
+});
+
+router.get('/rental/search', (req, res) => {
+});
+
 router.get('/chart/boardCount', (req, res) => {
 });
 
@@ -60,6 +66,10 @@ router.get('/chart/gradeCount', (req, res) => {
 
 router.get('/chart/rentalCount', (req, res) => {
 });
+
+router.get('/chart/unprocessed', (req, res) => {
+});
+
 
 router.post("/qna/update", (req, res) => {
   // 클라이언트에서 전송한 데이터는 req.body에 있습니다.

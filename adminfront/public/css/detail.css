@@ -1,11 +1,12 @@
 
-    .rentalImgs {
+    .imgFiles {
+        padding-top: 10px;
         display: flex;
         overflow-x: auto;
 
     }
 
-    .rentalImgs  .rentalImg {
+    .imgFiles  .imgFile {
         width: 250px;
         height: 200px;
         border-radius: 10px;

@@ -107,6 +107,18 @@
 
           <br>
 
+          <h4 class="partTitle">신고 파일</h4>
+          <div class="imgFiles">
+            {{#each reportFiles}}
+            <div>
+                <div class="card">
+                    <img class="imgFile" src="https://kr.object.ncloudstorage.com/tp3-salaba/board/{{uuidName}}"">
+                </div>
+            </div>
+            {{/each}}
+            <div class="hr"></div>
+        </div>
+
           <br>
           <div class="dealBox">
               <select class="dealSelect" id="selection">
