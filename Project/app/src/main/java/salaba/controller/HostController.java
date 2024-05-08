@@ -38,7 +38,7 @@ import salaba.vo.rental_home.Theme;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/host")
-@SessionAttributes("rental_home")
+@SessionAttributes("rentalHome")
 
 public class HostController {
 
