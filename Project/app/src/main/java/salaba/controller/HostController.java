@@ -1,9 +1,12 @@
 package salaba.controller;
 
+import static salaba.vo.ConstVO.state_no;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.Host;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import salaba.service.HostService;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
+import salaba.util.Translator;
 import salaba.vo.Member;
 import salaba.vo.Region;
 import salaba.vo.host.HostReservation;
@@ -34,7 +38,7 @@ import salaba.vo.rental_home.Theme;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/host")
-@SessionAttributes("rentalHome")
+@SessionAttributes("rental_home")
 
 public class HostController {
 
@@ -42,7 +46,7 @@ public class HostController {
   private final HostService hostService;
   private final MemberService memberService;
   private final StorageService storageService;
-  private String uploadDir = "rentalHome/";
+  private final String uploadDir = "rentalHome/";
 
   @Value("${ncpbucketname}")
   private String bucketName;
@@ -168,7 +172,7 @@ public class HostController {
     // 숙소 등록 후 임시 정보 값 제거
     sessionStatus.setComplete();
 
-    return "rentalHomeList?hostNo=" + loginUser.getNo();
+    return "redirect:rentalHomeList?hostNo=" + loginUser.getNo();
   }
 
   // 숙소 관리 리스트
@@ -209,6 +213,7 @@ public class HostController {
       RentalHome rentalHome,
       @RequestParam(required = false) MultipartFile[] photos,
       @RequestParam(required = false) String[] photoExplanations,
+      @RequestParam(required = false) List<String> existPhotoName,
       @RequestParam List<Integer> themeNos,
       @RequestParam List<String> themeNames,
       @RequestParam String type,
@@ -232,14 +237,32 @@ public class HostController {
     }
 
     // 모든 숙소 정보 vo 형태에 맞게 변환 후 set
+    RentalHome old = hostService.getRentalHome(rentalHome.getRentalHomeNo());
     if (photos != null) { // 추가된 사진이 있을 때만
-      RentalHome old = hostService.getRentalHome(rentalHome.getRentalHomeNo());
       List<RentalHomePhoto> newFiles = photoTransform(
           photos,
           photoExplanations,
           old.getRentalHomePhotos().getLast().getPhotoOrder());
       rentalHome.setRentalHomePhotos(newFiles);
     }
+    if (existPhotoName != null) {
+      for (String photoName : existPhotoName) {
+        boolean isPhotoFound = false;
+
+        for (RentalHomePhoto oldPhoto : old.getRentalHomePhotos()) {
+          if (oldPhoto.getUuidPhotoName().equals(photoName)) {
+            isPhotoFound = true;
+            break;
+          }
+        }
+        if (!isPhotoFound) {
+          // 삭제 메서드 호출
+          hostService.deleteRentalHomePhotoByName(photoName);
+          storageService.delete(this.bucketName, uploadDir, photoName);
+        }
+      }
+    }
+
 
     rentalHome.setThemes(themeTransform(themeNos, themeNames, type));
     rentalHome.setRentalHomeFacilities(
@@ -254,11 +277,9 @@ public class HostController {
     return "rentalHomeView?rentalHomeNo=" + rentalHome.getRentalHomeNo();
   }
 
-  @GetMapping("photoDelete")
-  public String photoDelete(int photoNo, int rentalHomeNo) {
-    hostService.deleteRentalHomePhoto(photoNo);
-    return "redirect:rentalHomeView?rentalHomeNo=" + rentalHomeNo;
-  }
+
+
+
 
   @GetMapping("incomeList")
   public void incomeList(Model model, int hostNo) {
@@ -288,7 +309,7 @@ public class HostController {
     List<HostReservation> filteredList = new ArrayList<>();
 
     for (HostReservation reservation : reservationList) {
-      if (reservation.getState() != 0) {
+      if (reservation.getState() != state_no) {
         filteredList.add(reservation);
       }
     }
