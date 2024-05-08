@@ -68,7 +68,7 @@
              data-th-data-href="@{/chat(sender=2, reservationNo=*{reservationNo}, name=${session.loginUser.name}, memberNo=${session.loginUser.no})}">
           xxx님과의 대화
         </div>
-        <div class="room-info" data-th-text="'예약번호: ' + *{rentalHomeNo}"></div>
+        <div class="room-info" data-th-text="'예약번호: ' + *{reservationNo}"></div>
         <div class="room-info" data-th-text="'예약 숙소: ' + *{rentalHomeName}"></div>
       </div>
     </div>

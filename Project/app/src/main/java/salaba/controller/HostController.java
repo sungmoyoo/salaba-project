@@ -38,7 +38,7 @@ import salaba.vo.rental_home.Theme;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/host")
-@SessionAttributes("rental_home")
+@SessionAttributes("rentalHome")
 
 public class HostController {
 
@@ -117,6 +117,7 @@ public class HostController {
 
     RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
 
+
     rentalHome.setThemes(themeTransform(themeNos, themeNames, type));
 
     model.addAttribute("rentalHome", rentalHome);
@@ -167,7 +168,8 @@ public class HostController {
 
     RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
     Member loginUser = (Member) session.getAttribute("loginUser");
-    hostService.rentalHomeAdd(rentalHome);
+    int hostNo = loginUser.getNo();
+    hostService.rentalHomeAdd(rentalHome, hostNo);
 
     // 숙소 등록 후 임시 정보 값 제거
     sessionStatus.setComplete();
@@ -180,14 +182,14 @@ public class HostController {
   public void rentalHomeList(Model model, int hostNo) {
     List<RentalHome> list = hostService.rentalHomeList(hostNo);
     for (RentalHome rentalHome : list) {
-      System.out.println(rentalHome.getRentalHomeNo());
+      log.debug("테스트:" + rentalHome.getRentalHomeNo());
     }
     model.addAttribute("list", list);
   }
 
   // 숙소 상태 변경
   @PostMapping("rentalHomeStateUpdate")
-  public String rentalHomeStateUpdate(int rentalHomeNo, String state) {
+  public String rentalHomeStateUpdate(int rentalHomeNo, char state) {
 
     hostService.rentalHomeStateUpdate(state, rentalHomeNo);
 
@@ -223,6 +225,10 @@ public class HostController {
       @RequestParam List<String> facilityNames,
       SessionStatus sessionStatus
   ) throws Exception {
+
+    for (String str : facilityNames) {
+      log.debug("테스트:" + str);
+    }
 
     List<Region> regionList = hostService.regionList();
 
@@ -310,6 +316,7 @@ public class HostController {
 
     for (HostReservation reservation : reservationList) {
       if (reservation.getState() != state_no) {
+
         filteredList.add(reservation);
       }
     }

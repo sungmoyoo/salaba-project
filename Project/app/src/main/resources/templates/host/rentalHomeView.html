@@ -14,7 +14,14 @@
 
     #main-container {
       text-align: center;
-      font-size: 20px;
+      font-family: "Noto Sans KR";
+      font-weight: 400;
+    }
+
+    textarea,
+    input {
+      font-family: "Noto Sans KR";
+      font-weight: 400;
     }
 
     .state-form {
@@ -617,7 +624,7 @@
            data-th-each="facility : ${facilityList}" data-th-object="${facility}">
         <div>
           <img class="icon"
-               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/facility/' + *{facilityName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/facility/' + *{facilityName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="시설 이미지">
 
         </div>
         <a data-th-text="*{facilityName}"></a>
@@ -703,7 +710,7 @@
 
     checkedFacility.forEach(function(e, index) {
       // 값이 1 이상일 때(선택 또는 입력되었을 때, 기본 시설은 최소 1개 이상임)
-      if (e.check) {
+      if (e.checked) {
         formData.append('facilityCount', e.value);
         formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
         formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
