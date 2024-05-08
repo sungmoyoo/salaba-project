@@ -5,16 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>비트캠프 데브옵스 5기</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/css/board/view.css">  
-  <link rel="stylesheet" type="text/css" href="/css/common.css">  
+  <link rel="stylesheet" type="text/css" href="/css/common.css"> 
 </head>
 
 <body>
@@ -59,51 +58,76 @@
 
   <!-- 추천 컨테이너 -->
   <div id="heart-container">
+    <div id="loginUser" style="display: none;" data-th-if="${loginUser != null}"></div>
     <!-- 추천 버튼 -->
     <button id="likeButton" class="heart-btn">
       <i data-th-if="${isLiked == 0}" class="fa-regular fa-heart"></i>
       <i data-th-if="${isLiked == 1}" class="fa-solid fa-heart"></i>
       <span id="likeCount" data-th-text="${board.likeCount}"></span>
-      <span id="myLikeCount" data-th-text="${board.myLikeCount}" hidden>0</span>
+      <span id="myLikeCount" data-th-text="${isLiked}"></span>
     </button>
   </div>
 
 
-<!--댓글, 답글 리스트-->
-<div id="box">
-  <div data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
-    <div data-th-if="*{#strings.equals(state,'1')}" class="comment">
-      <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
-      <span>삭제된 댓글입니다.</span>
-    </div>
-    <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
-      <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
-      <span data-th-text="*{writer.nickname}">댓글 작성자</span>
-      <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
-      <span data-th-text="*{createdDate}">댓글 작성시간</span>
-      <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
-      <button class="modi">수정</button>
-      <button class="repo report-btn">신고</button>
-    </div>
-    <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
-      <div class="reply">
-        <span class="replyNo" data-th-text="*{replyNo}" hidden></span>
-        <span data-th-text="*{writer.nickname}">댓글 작성자</span>
-        <span class="replContent" data-th-text="*{content}">댓글 내용</span>
-        <span data-th-text="*{createdDate}">댓글 작성시간</span>
-        <button class="del2"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
-        <button class="modi2">수정</button>
-        <button class="repo2 report-btn">신고</button>
+  <!--댓글, 답글 리스트-->
+  <div id="comment-box">
+    <div class="comment-container" data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
+      <div data-th-if="*{#strings.equals(state,'1')}" class="textContent">
+        <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
+        <span>삭제된 댓글입니다.</span>
+      </div>
+      <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
+        <div class="textContent comment-text">
+          <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
+            <!--프로필사진-->
+              <img class="profile-img1" height='40px' src='/img/default-photo.jpeg'></a>
+          <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
+          <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
+          <span class="commentContent" data-th-text="*{content}">댓글 내용</span><br>
+        </div>
+        <div class="button-container1">
+          <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
+          <button class="modi">수정</button>
+          <button type="button" class="report-btn comment-report-btn">신고</button><br>
+        </div>
+      </div>
+      <!--답글-->
+      <div class="reply-box"> 
+        <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
+          <div class="reply">
+          <div class="textContent reply-text">
+              <span class="targetNo replyNo" data-th-text="*{replyNo}" hidden></span>
+              <!--프로필사진-->
+              <img class="profile-img2"  height='40px' src='/img/default-photo.jpeg'></a>
+              <i class="fa-solid fa-reply"></i>
+              <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
+              <span class="reply-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
+              <span class="replContent" data-th-text="*{content}">답글 내용</span><br>
+            </div>
+            <div class="button-container2">
+              <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
+              <button class="modi2">수정</button>
+              <button type="button" class="report-btn reply-report-btn">신고</button><br>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  
+  <!--댓글 달기 폼-->
+  <form id="comment-form" method="post">
+    <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
+    <input id="comment-content" name="content" type="textarea">
+    <button id="addCommentBtn">댓글 작성</button>
+  </form>
 
-<form id="commentForm" method="post">
-  <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
-  <input id="commentContent" name="content" type="textarea">
-  <button id="addCommentBtn">댓글 작성</button>
-</form>
+  <!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
+  <form id="replyForm" class="form-hidden">
+    <input hidden name="commentNo">
+    <textarea id="reply-content" name="content"></textarea>
+    <button type="button" id="addReplyBtn">답글 달기</button>
+  </form>
 
   <!-- 신고: 모달 컨테이너 -->
   <div id="reportModal" class="modal fade" tabindex="-1" role="dialog">
@@ -148,13 +172,13 @@
     <button onclick="scrollToTop()">🔝</button>
   </div>
 
-  
-  </style>
 
   <div data-th-replace="footer :: footer">꼬리말</div>
+
   <script data-th-src="@{/js/board/view.js}"></script>
-  <script data-th-src="@{/js/common/alarm.js}"></script>
+  <!-- <script data-th-src="@{/js/common/alarm.js}"></script> -->
   <script data-th-src="@{/js/header.js}"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </script>
 </body>

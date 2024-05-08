@@ -6,7 +6,7 @@ body {
   margin: 0; /* body 요소의 기본 마진 제거 */
 }
 
-/*게시판 종류*/
+*게시판 종류*/
 h1 {
   text-align: left; /* 제목을 왼쪽 정렬 */
   margin-left: 20px; /* 왼쪽 여백 추가 */
@@ -168,6 +168,7 @@ h1 {
   text-align: right;
   align-items: center; /* 중앙 정렬 */
   transform: translate(-50%, -50%); /* 숫자를 수직 및 수평으로 가운데 정렬 */
+  flex-direction: column-reverse; /* 요소의 순서를 반전시킵니다 */
 }
 
 /*내 좋아요 여부(0,1); 숨김 */
@@ -180,7 +181,7 @@ h1 {
 /**************************************************************************************************************/
 
 /*댓글 작성하기*/
-#commentForm {
+#comment-form {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* 왼쪽 정렬로 변경 */
@@ -191,14 +192,15 @@ h1 {
   margin-left: 20px;
 }
 
-#commentContent {
+#comment-content {
   border: 1px solid rgb(155, 155, 155);
   height: 5em; /* 고정 높이 사용 */
   width: 80%;
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
   text-align: left;
   box-sizing: border-box; 
-  line-height: normal; 
+  line-height: normal; /* line-height를 normal로 설정 */
+
 }
 
 #reply-content {
@@ -215,9 +217,9 @@ h1 {
 
 
 /*댓글,답글 리스트*/
-#box {
+#comment-box {
   background-color: rgb(223, 223, 207);
-  padding: 20px;
+  /* padding: 20px; */
   margin-bottom: 20px;
   margin-left: 20px;
   width: 80%;
@@ -226,10 +228,15 @@ h1 {
   
 }
 
+.button-container1, .button-container2 {
+  display: none;
+}
+
+
 .comment, .reply {
-  margin-top: 20px;
-  padding: 10px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  padding: 5px;
+  margin-bottom: 5px;
   border-radius: 2px; /* 테두리 모서리 둥글게 */
 }
 
@@ -245,19 +252,25 @@ h1 {
 }
 
 /*답글 */
-.reply {
+.reply-text {
   gap: 10px; /* 요소 간의 간격 */
-  margin-left: 30px;
+  margin-left: 40px;
 }
 
+/*수정, 삭제, 신고를 묶어둔 컨테이너*/
+.button-container1, .button-container2 {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
+}
 
 /* 댓글, 답글 내용 크기 조정 */
 .commentContent, .replContent {  
   flex: 1; /* 부모 요소에서 남은 공간을 차지  */
-  height: 80%; 
+  height: 60%; 
   width: 500px;
-  font-size: 16px; /* 댓글과 답글 내용의 글꼴 크기를 키움 */
-  margin-left: 7.5%; 
+  font-size: 15px; /* 댓글과 답글 내용의 글꼴 크기를 키움 */
+  margin-left: 7%; 
 }
 
 /*댓글, 답글 작성일*/
@@ -273,7 +286,7 @@ h1 {
 
 /*컨텐츠*/
 .textContent {
-  padding: 5px;
+  padding: 0px;
   border: 1px solid #fdfdfd; /*댓글, 답글 경계선 묶기 */
   margin-bottom: 5px;
   border-radius: 2px; /* 테두리 모서리 둥글게 */
@@ -293,16 +306,17 @@ h1 {
 
 /* 답글 폼 */
 /*평소에 폼 숨기기 -> 이벤트 발생 시 나타나는 폼*/
-.form-hidden {
+/* .form-hidden {
   display: none;
   overflow: hidden;
-}
+} */
 
 #replyForm {
   display: flex;
   justify-content: flex-end; /* 오른쪽 정렬 */
   margin-right: 30px;
-  margin-right: 10px; /* 폼의 오른쪽 여백 설정 */
+  margin-bottom: 5px;
+  margin-top: 5px;
   text-align: left; /* 폼 내용을 왼쪽으로 정렬 */
 }
 
@@ -319,10 +333,10 @@ h1 {
 
 
 /* 삭제, 수정, 신고 버튼 */
-.del, .del2, .modi, .modi2, .repo, .repo2, .comtModiConfirm, .comtModiCancel, .replModiConfirm {
+.del, .del2, .modi, .modi2, .comment-report-btn, .reply-report-btn, .comtModiConfirm, .comtModiCancel, .replModiConfirm, .replModiCancel {
   border: 1px solid #fff;
-  padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
-  font-size: 14px; /* 글꼴 크기를 조절 */
+  padding:5px 10px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
+  font-size: 13px; /* 글꼴 크기를 조절 */
 }
 
 /*수정 폼*/
@@ -353,11 +367,11 @@ h1 {
   font-size: 14px; /* 글꼴 크기를 조절 */
   margin-top: 10px;
   align-self: flex-end; /* 자신을 오른쪽으로 정렬 */
-  margin-right:240px;
+  margin-right:220px;
 }
 
 /* 답글 달기 버튼 */
-#addReplyBtn {
+#addReplyBtn, #cancelReplyBtn {
   border: 1px solid #fff;
   padding: 3px 6px; /* 패딩을 줄여서 버튼 크기를 작게 조정 */
   font-size: 14px; /* 글꼴 크기를 조절 */

@@ -229,8 +229,7 @@
       bs.scope_no,
       m.member_no,
       m.nickname,
-      (select count(*) from board_like where board_no=b.board_no) as like_count,
-      (select count(*) from board_like where board_no=b.board_no and member_no=m.member_no) as my_like_count
+      (select count(*) from board_like where board_no=#{boardNo}) as like_count
     from
       board b
       left join head h on b.head_no=h.head_no

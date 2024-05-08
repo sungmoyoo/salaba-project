@@ -442,7 +442,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 //      alarm.setContent(alarmContent);
 //      // 알람 추가
 //      memberService.insertNotifyHistory(alarm);
-//   }
+//    }
     comment.setCreatedDate(new Date());
     return ResponseEntity.ok(comment);
   }
@@ -601,23 +601,20 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     }
   }
 
-  @PostMapping("/board/unlike")      // 추천 취소 로직
-  public Object removeLike(
+  @PostMapping("/board/unlike") // 추천 취소
+  public ResponseEntity<?> removeLike(
       @RequestParam("boardNo") int boardNo,
       HttpSession session) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-
-    Map<String,Object> result = new HashMap<>();
     try {
-      boardService.decreaseLikeCount(boardNo, loginUser.getNo()); // 추천수 감소: board_like 테이블에서 삭제
+      int result = boardService.decreaseLikeCount(boardNo, loginUser.getNo()); // 추천수 감소: board_like 테이블에서 삭제
 
-      result.put("status", "success");
+      return ResponseEntity.ok(result);
     } catch (Exception e) {
       log.error("추천 처리 중 오류 발생", e);
-      result.put("status", "fail");
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    return result;
   }
 
 // 검색
