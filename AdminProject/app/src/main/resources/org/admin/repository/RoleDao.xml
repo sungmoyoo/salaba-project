@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.admin.repository.RoleDao">
+    <resultMap id="RoleMap" type="Role">
+        <result column="member_no" property="memberNo"/>
+        <result column="role_no" property="roleNo"/>
+        <result column="role_name" property="roleName"/>
+    </resultMap>
+
+    <select id="findRoleName" resultMap="RoleMap">
+        select role_no, role_name from role where role_name = #{roleName}
+    </select>
+
+    <insert id="addRole">
+        INSERT INTO member_role(member_no, role_no)
+        VALUES(#{memberNo}, #{roleNo})
+    </insert>
+
+    <select id="findRoles" resultMap="RoleMap">
+        SELECT mr.member_no, r.role_no, r.role_name
+        from role r
+        INNER JOIN member_role mr ON r.role_no = mr.role_no
+        WHERE mr.member_no = #{memberNo}
+    </select>
+</mapper>

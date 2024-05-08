@@ -8,49 +8,39 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/qna")
 public class QnaController {
     private final QnaService qnaService;
     private static final Log log = LogFactory.getLog(QnaController.class);
 
-    @GetMapping("qna/list")
-    public String qnaList(HttpSession session,
-                          Model model) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
-        log.debug(qnaService.getAllQ());
-        model.addAttribute("qnaList", qnaService.getAllQ());
-        model.addAttribute("menuName", "1:1 문의 답변");
-    return "qna/list";
+    @GetMapping("/list")
+    public RestResult qnaList() {
+        return RestResult.builder()
+                .status(RestResult.SUCCESS)
+                .data(qnaService.getAllQ())
+                .build();
     }
 
-    @GetMapping("qna/detail")
-    public String qnaDetail(HttpSession session,
-                            @RequestParam("qno") int qnaNo,
-                            Model model) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
-        model.addAttribute("qna", qnaService.getBy(qnaNo));
-        return "qna/detail";
+    @GetMapping("/view/{qno}")
+    public RestResult qnaView(@PathVariable int qnaNo) {
+        return RestResult.builder()
+                .status(RestResult.SUCCESS)
+                .data(qnaService.getBy(qnaNo))
+                .build();
     }
 
     @PostMapping("qna/update")
-    @Transactional
-    public String addAnswer(HttpSession session,
+    public RestResult addAnswer(HttpSession session,
                             Qna qna) {
-        if (session.getAttribute("loginUser") == null) {
-            return "redirect:/";
-        }
         qnaService.addAnswer(qna);
-        return "redirect:list";
+        return RestResult.builder()
+                .status(RestResult.SUCCESS)
+                .build();
     }
 }

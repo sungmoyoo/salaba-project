@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.QuestionFileDao">
+
+  <resultMap id="QuestionFileMap" type="QuestionFile">
+    <id column="uuid_file_name" property="uuidFileName"/>
+    <result column="question_file_no" property="fileNo"/>
+    <result column="question_no" property="questionNo"/>
+    <result column="ori_file_name" property="oriFileName"/>
+  </resultMap>
+
+  <insert id="add" parameterType="QuestionFile">
+    insert into question_file (question_no, ori_file_name, uuid_file_name)
+    values (#{questionNo},#{oriFileName},#{uuidFileName})
+  </insert>
+
+  <insert id="addAll" parameterType="list">
+    insert into question_file (question_no, ori_file_name, uuid_file_name) values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.questionNo},#{item.oriFileName},#{item.uuidFileName})
+    </foreach>
+  </insert>
+
+  <select id="findAllByQuestionNo" resultMap="QuestionFileMap" parameterType="int">
+    select
+      question_file_no,
+      question_no,
+      ori_file_name,
+      uuid_file_name
+    from
+      question_file
+    where
+      question_no=#{questionNo}
+    order by
+      question_file_no asc
+  </select>
+
+  <select id="findByNo" resultMap="QuestionFileMap" parameterType="int">
+    select
+      question_file_no,
+      question_no,
+      ori_file_name,
+      uuid_file_name
+    from
+      question_file
+    where
+      question_file_no=#{questionNo}
+  </select>
+
+</mapper>

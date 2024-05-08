@@ -3,12 +3,6 @@
 <head>
   <meta charset='UTF-8'>
   <title>사라바</title>
-  <style>
-    *{padding:0;margin:0}
-    li{list-style:none}
-    a{text-decoration:none;font-size:14px}
-
-  </style>
 </head>
 <body>
 <header data-th-fragment="header">
@@ -46,7 +40,7 @@
       </div>
       <div class="userInfo-menu">
         <span class="userInfo-menu-item">
-          <a class="userInfo-menu-item" data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="/member/chkPw">마이페이지</a>
+          <a class="userInfo-menu-item" data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="/member/myinfoCheckPassword">마이페이지</a>
         </span>
         <span class="userInfo-menu-item">
           <a class="userInfo-menu-item" data-th-href="@{/host/hostCheck}" data-th-if="${session.loginUser != null}">호스트 전환</a>
@@ -81,4 +75,5 @@
   const se = sessionInfo;
   console.log(se);
 </script>
+
 </html>

@@ -24,8 +24,30 @@
 <table style="width:100%;height:540px;">
   <tr>
     <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
+      <table style="width:200px;background-color: #f5f1f1;">
+        <tr>
+          <td colspan="2" style="text-align:center;padding-top: 10px;">
+            <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
+               data-th-if="*{session.loginUser.photo}">
+              <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{session.loginUser.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
+            <a data-th-unless="*{session.loginUser.photo}" href='/img/default-photo.jpeg'>
+              <img height='80px' src='/img/default-photo.jpeg'></a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center;">[[${session.loginUser.nickname}]]</td>
+        </tr>
+        <tr>
+          <td style="text-align:right;width: 35%;">등급:</td>
+          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberGradeName}'></td>
+        </tr>
+        <tr>
+          <td style="text-align:right;width: 35%;">포인트:</td>
+          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberPoint}'></td>
+        </tr>
+      </table>
       <ul>
-        <li class="left-li"><a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="member/chkPw">내정보 관리</a></li>
+        <li class="left-li"><a data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="member/myinfoCheckPassword">내정보 관리</a></li>
         <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
         <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
         <li class="left-li"><a data-th-href="@{/board/boardHistory}" data-th-if="${session.loginUser != null}" href="board/boardHistory">작성글 내역</a></li>
@@ -36,34 +58,27 @@
     <td style="vertical-align:top;">
       <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
         <h1>문의 내용 보기</h1>
-        <form action="questionUpdate" data-th-action="@{questionUpdate}" data-th-object="${question}" method='post'>
+        <form data-th-object="${question}" enctype='multipart/form-data' method='post'>
+          <input type="hidden" data-th-value='*{questionNo}' name='questionNo'>
           <div>
-            <input data-th-value="*{title}" name='title'>
+            <input data-th-value="*{title}" name='title' readonly>
           </div>
           <div>
-            <textarea data-th-text="*{content}" name='content' style="width: 200px; height: 200px;"></textarea>
+            <textarea data-th-text="*{content}" name='content' style="width: 200px; height: 200px;" readonly></textarea>
           </div>
           <div>
             작성일: <a data-th-text="${#dates.format(question.registerDate,'yyyy.MM.dd')}"></a>
           </div>
-          <!--  <div>-->
-          <!--    첨부파일: <input multiple name='attachedFiles' type='file'>-->
-          <!--    <ul data-th-if="*{fileList[0].filePath}">-->
-          <!--      <li data-th-each="file : *{fileList}" data-th-object="${file}">-->
-          <!--        <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/question/' + *{filePath}}"-->
-          <!--           data-th-text="*{filePath}"-->
-          <!--           href="file.html"></a>-->
-          <!--        [<a data-th-href="@{file/delete no=*{no})}"-->
-          <!--            href="file-delete.html">삭제</a>]-->
-          <!--      </li>-->
-          <!--    </ul>-->
-          <!--  </div>-->
-          <div>
-            <button>변경</button>
-          </div>
+            <div>
+              첨부파일:
+                <li data-th-each="questionFile : *{questionFileList}" data-th-object="${questionFile}">
+                  <a style="color:#000;" data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/question/' + *{uuidFileName}}"
+                     data-th-text="*{oriFileName}" href="QuestionFile.html" target="_blank"></a>
+                </li>
+            </div>
 
           <div data-th-if="*{state == '1'}" data-th-object="${qna}">
-            <textarea data-th-text="*{answer}" name='answer' style="width: 200px; height: 200px;"></textarea>
+            <textarea data-th-text="*{answer}" name='answer' style="width: 200px; height: 200px;" readonly></textarea>
           </div>
           <div data-th-if="*{state == '1'}" data-th-object="${qna}">
             답변일: <a data-th-text="${#dates.format(qna.answerDate,'yyyy.MM.dd')}"></a>

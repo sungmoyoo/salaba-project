@@ -17,6 +17,18 @@
 
   function fn_save(){ // submit하기 전에 확인하는 옵션
 
+    var email = "";
+    var email1 = $("#email1").val();
+    var email2 = $("#email2").val();
+    var email3 = $("#email3").val();
+
+    if(email3 == ""){
+      email = email1 + "@" + email2;
+    }else{
+      email = email1 + "@" + email3;
+    }
+    $("#email").val(email);
+
     var name = frm.name.value;
     var nickname = frm.nickname.value;
     var birthday = frm.birthday.value;
@@ -41,7 +53,7 @@
     }
     if(email == ""){
       alert("이메일을 입력하세요.");
-      frm.eamil.focus();
+      frm.email.focus();
       return;
     }
     if(password == ""){
@@ -58,22 +70,31 @@
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
+
+
     frm.submit();
   }
 
+  function fn_emailChange(obj){
+    var selVal = $(obj).val();
+
+    if(selVal == ""){
+      $("#email2").show();
+    }else{
+      $("#email2").hide();
+    }
+  }
 </script>
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
 
-<h1>테스트</h1>
-
 <h2>회원가입</h2>
 
 <form name="frm" action="add" data-th-action="@{add}" method='post' onsubmit="return false;">
-  <table width="300">
+  <table width="430">
     <tr>
-      <td>이름</td>
+      <td style="width:28%">이름</td>
       <td><input name='name' type='text'></td>
     </tr>
     <tr>
@@ -86,7 +107,17 @@
     </tr>
     <tr>
       <td>이메일</td>
-      <td><input name='email' type='text'></td>
+      <td>
+        <input name='email' id='email' type='hidden' />
+        <input id='email1' type='text' style="width:80px;">@<input id='email2' type='text' style="width:80px;">
+        <select id='email3' onchange="fn_emailChange(this);" style="width:100px;">
+          <option value="">직접입력</option>
+          <option value="naver.com">naver.com</option>
+          <option value="google.com">google.com</option>
+          <option value="daum.net">daum.net</option>
+          <option value="yahoo.com">yahoo.com</option>
+        </select>
+      </td>
     </tr>
     <tr>
       <td>비밀번호</td>

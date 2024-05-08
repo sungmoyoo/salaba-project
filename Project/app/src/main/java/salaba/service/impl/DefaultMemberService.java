@@ -64,18 +64,18 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public Member findPw(Member member) {
-    return memberDao.findPw(member);
+  public Member findPassword(Member member) {
+    return memberDao.findPassword(member);
   }
 
   @Override
-  public void chgPwSave(Member member) {
-    memberDao.chgPwSave(member);
+  public void changePasswordSave(Member member) {
+    memberDao.changePasswordSave(member);
   }
 
   @Override
-  public Member chkPw(Member member) {
-    return memberDao.chkPw(member);
+  public Member myinfoCheckPassword(Member member) {
+    return memberDao.myinfoCheckPassword(member);
   }
 
   @Override
@@ -94,17 +94,33 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public void insertNotifyHistory(Alarm alarm) { // 알람 추가
+  public String getMemberPoint(Member member) {
+    return memberDao.getMemberPoint(member);
+  }
+
+  @Override
+  public Member getGrade(Member member) {
+    return memberDao.getGrade(member);
+  }
+
+  @Override
+  public List<Member> mythemeList(Member sessionInfo) {
+    return memberDao.findAllmyTheme(sessionInfo);
+  }
+
+  @Override
+  public void insertNotifyHistory (Alarm alarm){ // 알람 추가
     memberDao.addNotifyHistory(alarm);
   }
 
   @Override
-  public List<Alarm> selectNotifyHistory(int memberNo) { // 알람 가져오기
+  public List<Alarm> selectNotifyHistory ( int memberNo){ // 알람 가져오기
     return memberDao.selectNotifyHistory(memberNo);
   }
 
   @Override
-  public void updateNotifyHistory(int notifyNo) { // 알람 업데이트(알람을 읽었을 경우 업데이트)
+  public void updateNotifyHistory ( int notifyNo){ // 알람 업데이트(알람을 읽었을 경우 업데이트)
     memberDao.updateNotifyHistory(ConstVO.state_ok, notifyNo);
   }
 }
+

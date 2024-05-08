@@ -6,7 +6,9 @@ package org.admin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -21,4 +23,5 @@ public class App {
         System.out.println("한달살기 관리자 시스템 실행");
         SpringApplication.run(App.class, args);
     }
+
 }

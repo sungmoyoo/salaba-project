@@ -12,14 +12,14 @@
     <result column="end_date" property="endDate"/>
     <result column="number_of_people" property="numberOfPeople"/>
     <result column="state" property="state"/>
-    <result column="state_nm" property="stateNm"/>
+    <result column="statenm" property="statenm"/>
     <result column="payment_date" property="paymentDate"/>
     <result column="nickname" property="nickname"/>
     <result column="tel_no" property="telNo"/>
     <result column="rental_home_rule" property="rentalHomeRule"/>
     <result column="address" property="address"/>
     <result column="amount" property="amount"/>
-    <result column="rtn_date" property="rtnDate"/>
+    <result column="refund_date" property="refundDate"/>
     <result column="photo" property="photo"/>
     <result column="lat" property="lat"/>
     <result column="lon" property="lon"/>
@@ -42,14 +42,15 @@
       case when r.state = '0' then '예약됨'
            when r.state = '1' then '완료됨'
       else ''
-      end as state_nm,
+      end as statenm,
       rhp.uuid_photo_name,
       rhp.photo_order,
       rhp.photo_no
-    from reservation r
-    JOIN rental_home rh ON r.rental_home_no = rh.rental_home_no
-    left outer join rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
-    WHERE
+    from
+      reservation r
+      join rental_home rh on r.rental_home_no = rh.rental_home_no
+      left outer join rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
+    where
       r.member_no=#{no}
     order by
       r.reservation_no
@@ -68,7 +69,7 @@
       rh.rental_home_rule,
       rh.address,
       concat('￦', FORMAT(pay.amount , 0)) as amount,
-      DATE_FORMAT(DATE_ADD(r.start_date, INTERVAL -2 DAY), '%m월%d일') as rtn_date,
+      DATE_FORMAT(DATE_ADD(r.start_date, INTERVAL -2 DAY), '%m월%d일') as refund_date,
       r.state,
       rhp.uuid_photo_name,
       rhp.photo_order,
@@ -76,12 +77,13 @@
       mb.photo,
       rh.lat,
       rh.lon
-    from reservation r
-         inner join rental_home rh ON r.rental_home_no = rh.rental_home_no
-         inner join rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
-         inner join payment pay on r.reservation_no = pay.reservation_no
-         inner join member mb on r.member_no = mb.member_no
-    WHERE
+    from
+      reservation r
+      inner join rental_home rh ON r.rental_home_no = rh.rental_home_no
+      inner join rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
+      inner join payment pay on r.reservation_no = pay.reservation_no
+      inner join member mb on r.member_no = mb.member_no
+    where
       r.reservation_no=#{value}
   </select>
 </mapper>
