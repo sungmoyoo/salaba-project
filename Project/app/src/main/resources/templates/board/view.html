@@ -5,176 +5,181 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>비트캠프 데브옵스 5기</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/css/board/view.css">
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
 </head>
 
 <body>
-  <div data-th-replace="header :: header">머리말</div>
-  <!-- 게시글 조회 -->
-  <h1 data-th-text="${boardName}">게시판</h1>
-  <form action="modify" data-th-action="@{modify}" data-th-object="${board}">
-    <!--제목~작성자 묶기-->
-      <div class="info-box">
-        <!--후기게시판이면 지역 표기-->
-        <div data-th-if="*{categoryNo == 0}">
-          <input class="region-input" data-th-value="${board.region.regionName}" type="text" readonly>
-        </div>
-        <!--정보공유, 자유게시판이면 분류(말머리) 표기-->
-        <div data-th-if="*{categoryNo != 0}">
-          <input class="head-input" data-th-value="*{headContent}" readonly name='headContent' type="text">
-        </div>
-        <div>
-          <input class="title-input" data-th-value="*{title}" name='title' type='text' readonly value="제목입니다.">
-        </div>
-        <div class="others-container">
-          <input class="writer-input" data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
-          <input class="date-input" data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly type='text' value="2024-03-27">
-          <button type="button" class="report-btn board-report-btn">신고</button>
-        </div>
-            <!--내용-->
+<div data-th-replace="header :: header">머리말</div>
+<!-- 게시글 조회 -->
+<h1 data-th-text="${boardName}">게시판</h1>
+<form action="modify" data-th-action="@{modify}" data-th-object="${board}">
+  <!--제목~작성자 묶기-->
+  <div class="info-box">
+    <!--후기게시판이면 지역 표기-->
+    <div data-th-if="*{categoryNo == 0}">
+      <input class="region-input" data-th-value="${board.region.regionName}" type="text" readonly>
+    </div>
+    <!--정보공유, 자유게시판이면 분류(말머리) 표기-->
+    <div data-th-if="*{categoryNo != 0}">
+      <input class="head-input" data-th-value="*{headContent}" readonly name='headContent' type="text">
+    </div>
+    <div>
+      <input class="title-input" data-th-value="*{title}" name='title' type='text' readonly value="제목입니다.">
+    </div>
+    <div class="others-container">
+      <input class="writer-input" data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
+      <input class="date-input" data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly type='text' value="2024-03-27">
+      <button type="button" class="report-btn board-report-btn">신고</button>
+    </div>
+    <!--내용-->
     <div class="content-box">
       <div>
         <div id="summernote" data-th-utext="*{content}" name='content'></div>
       </div>
     </div>
-      </div>
-    <input data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
-    <div>
-      <input id="boardNo" data-th-value="*{boardNo}" name='boardNo' type='hidden' value="100">
-    </div>
-    <div data-th-if="${loginUser != null && board.writer.no == loginUser.no}">
-      <button data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html">수정하기</button>
-      <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
-    </div>
-  </form>
-
-  <!-- 추천 컨테이너 -->
-  <div id="heart-container">
-    <!-- 추천 버튼 -->
-    <button id="likeButton" class="heart-btn">
-      <i data-th-if="${isLiked == 0}" class="fa-regular fa-heart"></i>
-      <i data-th-if="${isLiked == 1}" class="fa-solid fa-heart"></i>
-      <span id="likeCount" data-th-text="${board.likeCount}"></span>
-    </button>
   </div>
+  <input data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
+  <div>
+    <input id="boardNo" data-th-value="*{boardNo}" name='boardNo' type='hidden' value="100">
+  </div>
+  <div data-th-if="${loginUser != null && board.writer.no == loginUser.no}">
+    <button data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html" class="board-modify">수정하기</button>
+    <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}"><i class="fa-regular fa-trash-can"></i></a>
+  </div>
+</form>
 
-  <!--댓글 달기 폼-->
-  <form id="comment-form" method="post">
-    <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
-    <input id="commentContent" name="content" type="textarea">
-    <button id="addCommentBtn">댓글 작성</button>
-  </form>
-
-<!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
-  <form id="reply-form" class="form-hidden">
-    <input hidden name="commentNo">
-    <textarea id="content" name="content"></textarea>
-    <button type="button" id="addReplyBtn">답글 달기</button>
-  </form>
+<!-- 추천 컨테이너 -->
+<div id="heart-container">
+  <div id="loginUser" style="display: none;" data-th-if="${loginUser != null}"></div>
+  <!-- 추천 버튼 -->
+  <button id="likeButton" class="heart-btn">
+    <i data-th-if="${isLiked == 0}" class="fa-regular fa-heart"></i>
+    <i data-th-if="${isLiked == 1}" class="fa-solid fa-heart"></i>
+    <span id="likeCount" data-th-text="${board.likeCount}"></span>
+    <span id="myLikeCount" data-th-text="${isLiked}"></span>
+  </button>
+</div>
 
 
-  <!--댓글, 답글 리스트-->
-  <div id="comment-box">
-    <div data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
-      <div data-th-if="*{#strings.equals(state,'1')}" class="comment">
-        <span class="commentNo" data-th-text="*{commentNo}"></span>
-        <span>삭제된 댓글입니다.</span>
+<!--댓글, 답글 리스트-->
+<div id="comment-box">
+  <div class="comment-container" data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
+    <div data-th-if="*{#strings.equals(state,'1')}" class="textContent">
+      <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
+      <span>삭제된 댓글입니다.</span>
+    </div>
+    <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
+      <div class="textContent comment-text">
+        <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
+        <!--프로필사진-->
+        <img class="profile-img1" height='40px' src='/img/default-photo.jpeg'></a>
+        <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
+        <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
+        <span class="commentContent" data-th-text="*{content}">댓글 내용</span><br>
       </div>
-      <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
-        <div class="textContent comment-text">
-          <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
-            <!--프로필사진-->
-            <!-- <div>
-              <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + ${member.photo}}" data-th-if="${member.photo}">
-                <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + ${member.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-              <a data-th-unless="${member.photo}" href='/img/default-photo.jpeg'>
-                <img height='80px' src='/img/default-photo.jpeg'></a><br>
-              <input name='file' type='file'>
-            </div>  -->
-          <span data-th-text="*{writer.nickname}">댓글 작성자</span>
-          <span class="commentContent" data-th-text="*{content}">댓글 내용</span>
-          <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span>
-        </div>
-        <button class="del">삭제</button>
+      <div class="button-container1">
+        <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
         <button class="modi">수정</button>
-        <button type="button" class="report-btn comment-report-btn">신고</button>
+        <button type="button" class="report-btn comment-report-btn">신고</button><br>
       </div>
-      <!--답글-->
-      <div class="reply-box"> 
-        <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
-          <div class="reply">
-            └ <div class="textContent comment-text">
-              <span class="targetNo replyNo" data-th-text="*{replyNo}" hidden></span>
-              <!--프로필사진-->
-              <!-- <div>
-                <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + ${member.photo}}" data-th-if="${member.photo}">
-                  <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + ${member.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-                <a data-th-unless="${member.photo}" href='/img/default-photo.jpeg'>
-                  <img height='80px' src='/img/default-photo.jpeg'></a><br>
-                <input name='file' type='file'>
-              </div>  -->
-              <span data-th-text="*{writer.nickname}">댓글 작성자</span>
-              <span class="replContent" data-th-text="*{content}">댓글 내용</span>
-              <span data-th-text="*{createdDate}">댓글 작성시간</span>
-            </div>
-              <button class="del2">삭제</button>
-              <button class="modi2">수정</button>
-              <button type="button" class="report-btn reply-report-btn">신고</button>
+    </div>
+    <!--답글-->
+    <div class="reply-box">
+      <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
+        <div class="reply">
+          <div class="textContent reply-text">
+            <span class="targetNo replyNo" data-th-text="*{replyNo}" hidden></span>
+            <!--프로필사진-->
+            <img class="profile-img2"  height='40px' src='/img/default-photo.jpeg'></a>
+            <i class="fa-solid fa-reply"></i>
+            <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
+            <span class="reply-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
+            <span class="replContent" data-th-text="*{content}">답글 내용</span><br>
+          </div>
+          <div class="button-container2">
+            <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
+            <button class="modi2">수정</button>
+            <button type="button" class="report-btn reply-report-btn">신고</button><br>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>
 
-  <!-- 신고: 모달 컨테이너 -->
-  <div id="reportModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-              aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">신고하기</h4>
-        </div>
-        <div class="modal-body">
-          <!--신고 폼 화면-->
-          <form id="reportForm" action="add" enctype='multipart/form-data' method='post'>
-            <input id="targetTypeInput" name='targetType' type='hidden'>
-            <input id="targetNoInput" name='targetNo' type='hidden'>
-            <div>
-              신고 유형: <select name="categoryNo">
-                <option value="1">스팸홍보/도배</option>
-                <option value="2">음란물입니다.</option>
-                <option value="3">불법정보를 포함하고 있습니다.</option>
-                <option value="4">욕설/혐오적 표현입니다.</option>
-              </select>
-            </div>
-            <div class="report-content">
-              <textarea name='content' placeholder="내용을 입력하세요."></textarea>
-            </div>
-            <div class="report-file">
-              첨부 파일: <input type="file" multiple name="reportFiles">
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-              <button id="submitBtn" class="btn btn-primary">신고 제출</button>
-            </div>
-          </form>
-        </div>
+<!--댓글 달기 폼-->
+<form id="comment-form" method="post">
+  <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
+  <input id="comment-content" name="content" type="textarea">
+  <button id="addCommentBtn">댓글 작성</button>
+</form>
+
+<!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
+<form id="replyForm" class="form-hidden">
+  <input hidden name="commentNo">
+  <textarea id="reply-content" name="content"></textarea>
+  <button type="button" id="addReplyBtn">답글 달기</button>
+</form>
+
+<!-- 신고: 모달 컨테이너 -->
+<div id="reportModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">신고하기</h4>
+      </div>
+      <div class="modal-body">
+        <!--신고 폼 화면-->
+        <form id="reportForm" action="/board/report/add" method="post" enctype="multipart/form-data">
+          <input id="targetTypeInput" name='targetType' type='hidden'>
+          <input id="targetNoInput" name='targetNo' type='hidden'>
+          <div>
+            신고 유형: <select name="categoryNo">
+            <option value="1">스팸홍보/도배</option>
+            <option value="2">음란물입니다.</option>
+            <option value="3">불법정보를 포함하고 있습니다.</option>
+            <option value="4">욕설/혐오적 표현입니다.</option>
+          </select>
+          </div>
+          <div class="report-content">
+            <textarea name='content' placeholder="내용을 입력하세요."></textarea>
+          </div>
+          <div class="report-file">
+            첨부 파일: <input type="file" multiple name="reportFiles">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button id="submitBtn" class="btn btn-primary">신고 제출</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-  <!-- 페이지 맨 위로 올라가기-->
-  <button id="scrollToTopBtn" onclick="scrollToTop()">🔝</button>
+</div>
 
-  <div data-th-replace="footer :: footer">꼬리말</div>
-  <script data-th-src="@{/js/board/view.js}"></script>
-  console.log(se);
+<!-- 페이지 맨 위로 올라가기-->
+<div id="scrollToTopBtn2">
+  <button onclick="scrollToTop()">🔝</button>
+</div>
+
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+<script data-th-src="@{/js/board/view.js}"></script>
+<!-- <script data-th-src="@{/js/common/alarm.js}"></script> -->
+<script data-th-src="@{/js/header.js}"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </script>
 </body>
 </html>

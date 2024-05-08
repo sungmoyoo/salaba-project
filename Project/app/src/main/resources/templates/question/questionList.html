@@ -1,79 +1,51 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <style>
-    .left-li{
-      list-style-type:none;
-      width: 110px;
-      background-color: #b9b9b9;
-      text-align: center;
-      margin-top: 10px;
-      padding: 10px 5px 10px 5px;
-    }
-    li a {
-      text-decoration-line: none;
-      color: #fff;
-    }
-  </style>
-  <script>
-    function fn_save(){ // submit하기 전에 확인하는 옵션
-
-    var title = frm.title.value;
-    var content = frm.content.value;
-
-    if(title == ""){
-      alert("제목을 입력하세요.");
-      frm.title.focus();
-      return;
-    }
-    if(content == ""){
-      alert("메세지를 입력하세요.");
-      frm.content.focus();
-      return;
-    }
-    frm.submit();
-  }
-  </script>
   <meta charset='UTF-8'>
   <title>사라바</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoTable.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfo.css">
 
 </head>
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
-<table style="width:100%;height:540px;">
-  <tr>
-    <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
-      <ul>
-        <li class="left-li"><a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="member/chkPw">내정보 관리</a></li>
-        <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
-        <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/board/boardHistory}" data-th-if="${session.loginUser != null}" href="board/boardHistory">작성글 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList" style="color:#000;"><b>고객센터</b></a></li>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">
-      <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
+<div class="rootDiv">
+  <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
+
+  <div class="rightDiv">
         <h1 data-th-text="고객센터"></h1>
 
+    <table>
+      <tr>
+        <td>
+          <img src="/img/telephone-operator.png" style="width: 40px;"/>
+        </td>
+        <td style="vertical-align: bottom;font-size: 27px;font-weight: bold;">도움이 필요하신가요?</td>
+      </tr>
+    </table>
         <form name="frm" action="questionAdd" data-th-action="@{questionAdd}" enctype='multipart/form-data' method='post' onsubmit="return false;">
-          <div>
-            <input name='title' type='text' placeholder="제목:">
-          </div>
-          <div>
-            <textarea name='content' style="width: 200px; height: 200px;" placeholder="메세지 작성"></textarea>
-          </div>
-          <!--  <div>-->
-          <!--    첨부파일: <input multiple name='attachedFiles' type='file'>-->
-          <!--  </div>-->
-
-          <div>
-            <button onclick="fn_save()">전송</button>
-          </div>
+          <table class="table_view_clear" style="width: 99%;">
+            <tr>
+              <td><input name='title' class="formInput" type='text' placeholder="제목:" style="width:50%;"></td>
+            </tr>
+            <tr>
+              <td><textarea name='content' class="formInput" style="height: 200px;width:60%;" placeholder="메세지 작성" ></textarea></td>
+            </tr>
+            <tr>
+              <td>
+                <input multiple name='questionFiles' type='file' class="formInput" style="width:30%;">
+              </td>
+            </tr>
+            <tr>
+              <td><button onclick="fn_save()">전송</button></td>
+            </tr>
+          </table>
         </form>
         <br/>
-        <table border='1' style="width:500px;">
+        <table border='1' class="list_table">
           <thead>
           <tr>
             <th>제목</th>
@@ -90,12 +62,12 @@
           </tbody>
         </table>
       </div>
-    </td>
-  </tr>
-</table>
+</div>
 
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/questionList.js}"></script>
 </html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사라바</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoTable.css">
+  <script>
+    function fn_boardView(obj){
+    var boardNo = $(obj).parent().find("#boardNo").val();
+    var categoryNo = $(obj).parent().find("#categoryNo").val();
+
+      $.ajax({
+        url: "/member/boardStateCheck",
+        type: "post",
+        data: {
+          boardNo:boardNo
+          ,categoryNo:categoryNo
+        },
+        success: function(data) {
+          if(data == "1"){
+            alert("삭제된 게시글입니다.");
+          }else{
+            location.href = "/board/view?boardNo="+boardNo+"&categoryNo="+categoryNo;
+          }
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+<div data-th-replace="header :: header">머리말</div>
+    <td style="vertical-align:top;">
+        <div class="rootDiv">
+          <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
+
+          <div class="rightDiv">
+        <h1>작성댓글 내역</h1>
+
+<form name="frm" method="post"></form><!--페이지 이동용 Form 태그-->
+<div id="header">
+  <button onclick="fn_goPage('1')">작성글</button>
+  <button onclick="fn_goPage('2')">작성댓글</button>
+
+<!--  &lt;!&ndash; 검색 폼 추가 &ndash;&gt;-->
+<!--  <form id="search-form" action="/member/commentHistory" method="GET">-->
+<!--    <input type="text" id="search-input" name="q" placeholder="검색어를 입력하세요">-->
+<!--    <button type="submit" id="search-button">검색</button>-->
+<!--  </form>-->
+<!--</div>-->
+
+            <table border='1' class="list_table">
+  <thead>
+  <tr>
+    <th></th>
+    <th>작성된 글제목</th>
+    <th>내용</th>
+    <th>작성일/시간</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr data-th-each="board : ${list}" data-th-object="${board}">
+    <td data-th-text="*{cnr}"></td>
+    <td>
+      <input type="hidden" data-th-value="*{boardNo}" id="boardNo" />
+      <input type="hidden" data-th-value="*{categoryNo}" id="categoryNo" />
+      <a data-th-text="*{title}"
+         href="javascript:void(0);" onclick="fn_boardView(this);"></a></td>
+    <td data-th-text="*{content}"></td>
+    <td data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd/hh:mm:ss')}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<!--페이징 시작-->
+<table style="width:100%;">
+  <tr>
+    <td style="text-align:center;">
+      <ul style="list-style-type: none;display: inline-flex;">
+        <!-- 가장 앞 페이지로 돌아가기 버튼 -->
+        <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+          <a data-th-if="${pageNo > 1}" data-th-href="@{commentHistory(pageNo=1, pageSize=${pageSize})}" href="#" aria-label="Previous">
+            <span aria-hidden="true">&#10094;&#10094;</span>
+          </a>
+          <span data-th-unless="${pageNo > 1}" aria-hidden="true">&#10094;&#10094;</span>
+        </li>
+        <!-- '이전' 페이지 버튼 -->
+        <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+          <a data-th-if="${pageNo > 1}" data-th-href="@{commentHistory(pageNo=${pageNo - 1}, pageSize=${pageSize})}" href="#" aria-label="Previous">
+            <span aria-hidden="true">&#10094;</span>
+          </a>
+          <span data-th-unless="${pageNo > 1}" aria-hidden="true">&#10094;</span>
+        </li>
+
+        <!-- 동적 페이지 번호 링크 -->
+        <li data-th-each="i : ${#numbers.sequence(1, numOfPage)}" data-th-classappend="${pageNo == i} ? 'active' : ''" style="padding: 0px 9px 5px 9px;">
+          <a data-th-href="@{commentHistory(pageNo=${i}, pageSize=${pageSize})}" data-th-text="${i}" href="#">1</a>
+        </li>
+
+        <!-- '다음' 페이지 버튼 -->
+        <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+          <a data-th-if="${pageNo < numOfPage}" data-th-href="@{commentHistory(pageNo=${pageNo + 1}, pageSize=${pageSize})}" href="#" aria-label="Next">
+            <span aria-hidden="true">&#10095;</span>
+          </a>
+          <span data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&#10095;</span>
+        </li>
+        <!-- 가장 마지막 페이지로 돌아가기 버튼 -->
+        <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+          <a data-th-if="${pageNo < numOfPage}" data-th-href="@{commentHistory(pageNo=${numOfPage}, pageSize=${pageSize})}" href="#" aria-label="Next">
+            <span aria-hidden="true">&#10095;&#10095;</span>
+          </a>
+          <span data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&#10095;&#10095;</span>
+        </li>
+
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/boardHistory.js}"></script>
+</html>

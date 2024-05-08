@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import salaba.vo.Alarm;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.board.Board;
 
 
 @Mapper
@@ -29,11 +30,11 @@ public interface MemberDao {
 
   Member findEmail(Member member);
 
-  Member findPw(Member member);
+  public Member findPassword(Member member);
 
-  void chgPwSave(Member member);
+  public void changePasswordSave(Member member);
 
-  Member chkPw(Member member);
+  public Member myinfoCheckPassword(Member member);
 
   void insertPreference(Member member);
 
@@ -41,9 +42,17 @@ public interface MemberDao {
 
   List<Member> findAllTheme(Member sessionInfo);
 
+  String getMemberPoint(Member member);
+
+  Member getGrade(Member member);
+
+  List<Member> findAllmyTheme(Member sessionInfo);
+
   void addNotifyHistory(Alarm alarm);
 
   List<Alarm> selectNotifyHistory(int memberNo);
 
   void updateNotifyHistory(char state, int notifyNo);
+
+  String boardStateCheck(Board board);
 }

@@ -35,7 +35,7 @@
   <delete id="deletePhoto" parameterType="int">
     delete from
       rental_home_photo
-    where photo_no=#{value}
+    where uuid_photo_name=#{value}
   </delete>
 
 </mapper>

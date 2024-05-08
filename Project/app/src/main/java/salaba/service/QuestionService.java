@@ -3,6 +3,7 @@ package salaba.service;
 import java.util.List;
 import salaba.vo.Qna;
 import salaba.vo.Question;
+import salaba.vo.QuestionFile;
 
 public interface QuestionService {
 
@@ -16,4 +17,7 @@ public interface QuestionService {
 
   int questionUpdate(Question question);
 
+  List<QuestionFile> getQuestionFiles(int no);
+
+  QuestionFile getQuestionFile(int fileNo);
 }

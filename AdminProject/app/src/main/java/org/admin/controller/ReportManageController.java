@@ -92,7 +92,7 @@ public class ReportManageController {
     public RestResult updateReport(@PathVariable String selection1, // 0-무시, 1-영구정지, 2-경고조치
                                    @PathVariable String selection2,
                                    @PathVariable int writerNo,
-                                   Report report) {
+                                   @RequestBody Report report) {
         if (selection2.equals("0")) {
             textReportService.updateState(report.getReportNo());
             memberService.updateWarningCountBy(report.getReportNo());

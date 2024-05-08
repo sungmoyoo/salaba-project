@@ -26,7 +26,9 @@ public class Member implements Serializable { // 회원
   private String photo; // 사진
   private char state; // 상태
   private Date exitDate; // 회원탈퇴 날짜
-//  private Grade grade;
+  private Grade grade;
+  private String myInfoMenuId;//좌측 메뉴 클릭 상태 표시를 위한 변수
+
 
   private List<Theme> themes; // 테마
 

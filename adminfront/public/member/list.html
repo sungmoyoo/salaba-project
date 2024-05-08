@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/css/list.css" />
+    <link rel="stylesheet" type="text/css" href="/css/detail.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"
+      integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <header class="x-page-header"></header>
+    <sidebar class="x-page-sidebar"></sidebar>
+    <div class="container">
+      <h3>메뉴 이름</h3>
+      <form>
+        <div class="searchBar">
+          <select id="filter">
+            <option value="0">이름</option>
+            <option value="1">이메일</option>
+          </select>
+          <input class="searchInput" type="search" placeholder="검색" />
+          <button class="searchBtn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </form>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>이름</th>
+            <th>닉네임</th>
+            <th>이메일</th>
+            <th>연락처</th>
+            <th>가입일</th>
+            <th id="changing-th"></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <td colspan="10" class="tablefoot"></td>
+        </tfoot>
+      </table>
+    </div>
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent"></div>
+
+      <button type="button" id="closeBtn">✕</button>
+    </div>
+
+    <script id="tr-template" type="text/x-handlebars-template">
+      {{#each data}}
+        <tr class="rowItem">
+          <td class="memberNo">{{memberNo}}</td>
+          <td>{{name}}</td>
+          <td>{{nickname}}</td>
+          <td>{{email}}</td>
+          <td>{{tel}}</td>
+          <td>{{joinDate}}</td>
+          <td class="stateStr">{{stateStr}}</td>
+          <td class="rentalCount">{{rentalCount}}</td>
+        </tr>
+      {{/each}}
+    </script>
+
+    //모달창 상세
+    <script id="detail-template" type="text/x-handlebars-template">
+      <h3>회원 상세 보기</h3>
+      <h4 id="subTitle"></h4>
+      <div class="content">
+        <div class="infoBox">
+          <div class="info"><span>회원 번호</span><span
+            >{{memberNo}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>이름</span><span>{{name}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>닉네임</span><span>{{nickname}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>이메일</span><span>{{email}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>가입일</span><span>{{joinDate}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox grade">
+          <div class="info"><span>등급</span><span>{{gradeName}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>상태</span><span>{{stateStr}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="infoBox">
+          <div class="info"><span>누적 신고 횟수</span>
+            <span>{{warningCount}}</span></div>
+          <div class="hr"></div>
+        </div>
+        <div class="grade">
+          <select class="dealSelect">
+            <option value="1">브론즈</option>
+            <option value="2">실버</option>
+            <option value="3">골드</option>
+            <option value="4">플래티넘</option>
+            <option value="5">다이아</option>
+          </select>
+          <button class="dealBtn">등급 변경</button>
+        </div>
+        <br />
+        {{#each rentals}}
+          <div id="rentals">
+            <div class="infoBox">
+              <div class="info"><span>숙소 번호: </span><span
+                >{{rentalNo}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 이름: </span><span
+                >{{name}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 주소: </span><span
+                >{{address}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 등록일: </span><span
+                >{{regDate}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 가격: </span><span
+                >{{price}}</span></div>
+              <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+              <div class="info"><span>숙소 상태: </span><span
+                >{{stateStr}}</span></div>
+              <div class="hr"></div>
+            </div>
+
+            <div class="info"><span>숙소 테마:</span>
+              {{#each themes}}
+                <div>
+                  <span>{{themeName}}</span>
+                </div>
+              {{/each}}
+            </div>
+            <hr />
+            <br />
+          </div>
+        {{/each}}
+      </div>
+    </script>
+
+    <script src="/js/list.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/page-init.js"></script>
+    <script src="list.js"></script>
+  </body>
+</html>

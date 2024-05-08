@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/rental_home/reservation.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <script th:inline="javascript">
+    const loginUser = /*[[${session.loginUser}]]*/ null;
+    const reservationInform = /*[[${reservationInfo}]]*/ null;
+    const checkIn = /*[[${checkInDate}]]*/ null;
+    const checkOut = /*[[${checkOutDate}]]*/ null;
+    const guest = /*[[${guests}]]*/ null;
+    console.log(loginUser);
+    console.log(reservationInform);
+    console.log(checkIn);
+    console.log(checkOut);
+    console.log(guest);
+  </script>
+</head>
+<body>
+  <section class="header-section">
+    <div data-th-replace="header :: header">header</div>
+  </section>
+<main>
+  <section class="userInfo-section-r">
+    <div class="userInfo-container-r">
+      <div class="userInfo-box">
+        
+      </div>
+      <div class="userInfo-reservation">
+        <div id="reservation-info">
+          <span>에약 정보</span>
+        </div>
+        <div>
+          <div id="reservation-date">
+            <span>날짜</span>
+          </div>
+          <div id="reservation-duration">
+            <span data-th-text="${checkInDate+' ~ '+checkOutDate}"></span>
+          </div>
+        </div>
+        <div>
+          <div id="reservation-guest">
+            <span>게스트</span>
+          </div>
+          <div>
+            <span data-th-text="${guests+'명'}"></span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button id="reservationButton">
+          <span>예약 하기</span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <section class="rentalHomeInfo-section">
+    <div class="rentalHomeInfo-container">
+      <div class="rentalHomeInfo-box">
+        <div id="rentalHome-info">
+          <span>숙소 정보</span>
+        </div>
+        <div id="rentalHome-name">
+          <span data-th-text="${reservationInfo.name}"></span>
+        </div>
+        <div id="rentalHome-address">
+          <span data-th-text="${reservationInfo.address}"></span>
+        </div>
+      </div>
+      <div id="map">
+
+      </div>
+    </div>
+  </section>
+</main>
+<section class="footer-section">
+  <div data-th-replace="footer :: footer" class="footer-div">footer</div>
+</section>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script data-th-src="@{/js/rental_home/reservation.js}"></script>
+</html>

@@ -1,19 +1,7 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='en' xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <style>
-    .left-li{
-      list-style-type:none;
-      width: 110px;
-      background-color: #b9b9b9;
-      text-align: center;
-      margin-top: 10px;
-      padding: 10px 5px 10px 5px;
-    }
-    li a {
-      text-decoration-line: none;
-      color: #fff;
-    }
     .listing-container {
       margin: 20px auto; /* 중앙 정렬 */
       display: flex;
@@ -94,30 +82,32 @@
       right: 50%;
       transform: translate(50%, -50%);
     }
+
+  #map{
+    height: 350px;
+    width: 60%;
+  }
+
   </style>
   <meta charset='UTF-8'>
   <title>사라바</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
+  <script th:inline="javascript">
+    const reservation = /*[[${reservation}]]*/ null;
+  </script>
 </head>
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
-<table style="width:100%;height:540px;">
-  <tr>
-    <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
-      <ul>
-        <li class="left-li"><a data-th-href="@{/member/chkPw}" data-th-if="${session.loginUser != null}" href="member/chkPw">내정보 관리</a></li>
-        <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
-        <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList" style="color:#000;"><b>예약 내역</b></a></li>
-        <li class="left-li"><a data-th-href="@{/board/boardHistory}" data-th-if="${session.loginUser != null}" href="board/boardHistory">작성글 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList" >고객센터</a></li>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">
-      <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
+<div class="rootDiv">
+  <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
+
+  <div class="rightDiv">
+
         <h1>예약 상세 내역</h1>
 
-        <table style="width:800px;border-bottom:1px solid #ccc;">
+        <table style="width:100%;min-width:800px;border-bottom:1px solid #ccc;">
           <tr>
             <td colspan="4" style="text-align:center;">
               <section class="slider-container">
@@ -157,7 +147,7 @@
             <td data-th-text="'체크아웃 '+${reservation.endDate}" style="font-weight: bold;text-align:right;"></td>
           </tr>
         </table>
-        <table style="width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
+        <table style="width:100%;min-width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
           <tr>
             <td style="font-size: 20px;font-weight: bold;padding-bottom: 10px;">숙소 이용 규칙</td>
           </tr>
@@ -165,7 +155,7 @@
             <td data-th-text="${reservation.rentalHomeRule}" style="font-size: 14px;"></td>
           </tr>
         </table>
-        <table style="width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
+        <table style="width:100%;min-width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
           <tr>
             <td style="font-size: 20px;font-weight: bold;padding-bottom: 10px;">숙소 주소</td>
           </tr>
@@ -177,7 +167,7 @@
             </div>
           </section>
         </table>
-        <table style="width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
+        <table style="width:100%;min-width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
           <tr>
             <td style="font-size: 20px;font-weight: bold;width: 88px;">예약번호:</td>
             <td data-th-text="${reservation.reservationNo}" style="font-size: 20px;font-weight: bold;"></td>
@@ -189,84 +179,22 @@
             <td style="text-align:right;"><button>결제 상세</button></td>
           </tr>
         </table>
-        <table style="width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
+        <table style="width:100%;min-width:800px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
           <tr>
             <td style="font-size: 20px;font-weight: bold;width: 88px;padding-bottom: 10px;">환불정책</td>
           </tr>
           <tr>
-            <td data-th-text="${reservation.rtnDate}+' 오후 12:00 전에 취소하면 부분 환불을 받으실 수 있습니다.'"></td>
+            <td data-th-text="${reservation.refundDate}+' 오후 12:00 전에 취소하면 부분 환불을 받으실 수 있습니다.'"></td>
           </tr>
         </table>
-
       </div>
-    </td>
-  </tr>
-</table>
+</div>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/reservationView.js}"></script>
+
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  // 각 숙소의 이미지 슬라이더 처리
-  $('.listing-item').each(function () {
-    const $slideImages = $(this).find('.slide-image');
-    let currentIndex = 0;
-
-    function showSlide(index) {
-      $slideImages.hide().eq(index).show();
-    }
-
-    function showNextSlide() {
-      currentIndex = (currentIndex + 1) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    function showPreviousSlide() {
-      currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    $(this).find('.next-button').click(showNextSlide);
-    $(this).find('.prev-button').click(showPreviousSlide);
-
-    showSlide(currentIndex);
-  });
-
- // 구글 지도
-    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-      key: "AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk",
-      // Add other bootstrap parameters as needed, using camel case.
-      // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
-    });
-
-  async function initMap(){
-  const position = { lat:Number([[${reservation.lat}]]) , lng:Number([[${reservation.lon}]]) };
-
-  console.log( typeof [[${reservation.lat}]] );
-  console.log( typeof [[${reservation.lat}]] );
-
-  const{ Map } = await google.maps.importLibrary("maps");
-  const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
-
-  let map = new Map(document.getElementById("map"), {
-    zoom : 16,
-    center: position,
-    mapId: '470e45162ba863f'
-  });
-
-  const marker = new google.maps.marker.AdvancedMarkerElement({
-    map: map,
-    position: position,
-  });
-}
-
-initMap();
-</script>
-<style>
-  #map{
-    height: 350px;
-    width: 60%;
-  }
-</style>

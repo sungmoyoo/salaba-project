@@ -15,4 +15,6 @@ public class PointHistory implements Serializable {
   private Date saveDate; // 적립 날짜
   private int totalPoint; // 누적 포인트
 
+  private String myInfoMenuId;//좌측 메뉴 클릭 상태 표시를 위한 변수
+
 }

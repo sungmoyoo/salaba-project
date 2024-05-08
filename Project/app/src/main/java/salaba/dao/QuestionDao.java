@@ -18,4 +18,7 @@ public interface QuestionDao {
 
   int questionUpdate(Question question);
 
+  int getQuestionNo();
+
+
 }

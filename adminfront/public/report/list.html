@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/css/list.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/detail.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+
+  <>
+    <header class="x-page-header"></header>
+    <sidebar class="x-page-sidebar"></sidebar>
+
+    <div class="container">
+      <h3>메뉴 이름</h3>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>신고유형</th>
+            <th>처리여부</th>
+            <th>접수일</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <td colspan="10" class="tablefoot"></td>
+        </tfoot>
+      </table>
+    </div>
+
+    <div id="detailModal" class="modal">
+      <div class="modal-content" id="modalContent">
+        <!-- 모달 내용은 JavaScript에서 로드됩니다 -->
+      </div>
+      <button type="button" id="closeBtn">✕</button>
+    </div>
+
+    <script id="tr-template" type="text/x-handlebars-template">
+      {{#each data}}
+      <tr class="rowItem">
+            <td>{{reportNo}}</td>
+            <td>{{categoryName}}</td>
+            <td>{{stateStr}}</td>
+            <td>{{reportDate}}</td>
+            <td class='reporterNo' hidden>{{reporter.memberNo}}</td>
+            <td class='rentalNo' hidden>{{targetRental.rentalNo}}</td>
+            <td class='targetType' hidden>{{targetType}}</td>
+            <td class='targetNo' hidden>{{targetNo}}</td>
+
+          </tr>
+      {{/each}}
+    </script>
+
+    <script id="text-detail-template" type="text/x-handlebars-template">
+      <h2>신고 보기</h2>
+      <!--게시글, 댓글, 답글 신고-->
+      <div class="content">
+          <h4 class="partTitle">신고 대상</h4>
+
+          <div class="infoBox">
+              <div class="info"><span>해당 글</span><span>{{reportTarget.content}}</span></div>
+              <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+              <div class="info"><span>작성자</span><span>{{writer.name}}</span></div>
+              <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+              <div class="info"><span>작성일</span><span>{{reportTarget.createdDate}}</span></div>
+              <div class="hr"></div>
+          </div>
+
+          <br>
+
+          <h4 class="partTitle">신고 내용</h4>
+          <input type="hidden" value="{{targetNo}}">
+          <input type="hidden" value="{{targetType}}">
+          <div class="infoBox">
+              <div class="info"><span>신고 번호</span><span>{{reportNo}}</span></div>
+              <div class="hr"></div>
+          </div>
+
+          <div class="infoBox">
+              <div class="info"><span>신고자</span><span>{{reporter.name}}</span></div>
+              <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+              <div class="info"><span>신고일</span><span>{{{reportDate}}}</span></div>
+              <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+              <div class="info"><span>신고 유형</span><span>{{categoryName}}</span></div>
+              <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+              <div class="info"><span>신고 내용</span><span>{{content}}</span></div>
+              <div class="hr"></div>
+          </div>
+          <div class="infoBox">
+              <div class="info"><span>처리 상태</span><span>{{stateStr}}</span></div>
+              <div class="hr"></div>
+          </div>
+
+          <br>
+
+          <h4 class="partTitle">신고 파일</h4>
+          <div class="imgFiles">
+            {{#each reportFiles}}
+            <div>
+                <div class="card">
+                    <img class="imgFile" src="https://kr.object.ncloudstorage.com/tp3-salaba/board/{{uuidName}}"">
+                </div>
+            </div>
+            {{/each}}
+            <div class="hr"></div>
+        </div>
+
+          <br>
+          <div class="dealBox">
+              <select class="dealSelect" id="selection">
+                  <option value="2">경고 조치</option>
+                  <option value="1">영구 정지</option>
+                  <option value="0">무시</option>
+              </select>
+              <button id="textDealBtn" class="dealBtn">신고 처리</button>
+          </div>
+      </div>
+      </script>
+      <!-- 숙소 신고 -->
+      <script id="rental-detail-template" type="text/x-handlebars-template">
+        <div class="content">
+            <h4>숙소 신고</h4>
+            <input name="targetNo" type="hidden" value="{{targetNo}}">
+            <div class="infoBox">
+                <div class="info">
+                <span>숙소명</span>
+                <span>{{targetRental.name}}</span>
+                </div>
+                <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+                <div class="info">
+                    <span>주소</span>
+                    <span>{{targetRental.address}}</span>
+                </div>
+                <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+                <div class="info">
+                <span name="writerNo" hidden>{{writer.memberNo}}</span>
+                <span>호스트명</span>
+                <span>{{writer.name}}</span>
+                </div>
+                <div class="hr"></div>
+            </div>
+            <div class="hr"></div>
+            <div class="infoBox">
+                <div class="info"><span>숙소 등록일</span><span>{{targetRental.regDate}}</span></div>
+                <div class="hr"></div>
+            </div>
+        
+            <br>
+        
+            <h4 class="partTitle">신고 내용</h4>
+            <div class="infoBox">
+                <div class="info"><span>신고자</span><span>{{reporter.name}}</span></div>
+                <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+                <div class="info"><span>신고일</span><span>{{reportDate}}</span></div>
+                <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+                <div class="info"><span>신고 유형</span><span>{{categoryName}}</span></div>
+                <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+                <div class="info"><span>신고 내용</span><span>{{content}}</span></div>
+                <div class="hr"></div>
+            </div>
+            <div class="infoBox">
+                <div class="info"><span>처리 상태</span><span>{{stateStr}}</span></div>
+                <div class="hr"></div>
+            </div>
+        
+            <br>
+        
+            <br>
+            <div class="dealBox">
+                <select class="dealSelect" id="selection2">
+                    <option value="5">경고 조치</option>
+                    <option value="2">영구 정지</option>
+                    <option value="1">무시</option>
+                </select>
+                <button id="rentalDealBtn" class="dealBtn">신고 처리</button>
+            </div>
+        </div>
+        </script>
+
+     
+
+    <script src="/js/list.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/page-init.js"></script>
+    <script src="list.js"></script>
+
+  </body>
+</html>
+
+

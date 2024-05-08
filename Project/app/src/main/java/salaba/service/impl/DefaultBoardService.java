@@ -133,22 +133,27 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
-  public List<Board> search(String keyword, String type) { // 검색 기능
-    return boardDao.searchByKeyword(keyword, type);
+  public List<Board> search(String keyword, String type, int categoryNo) { // 검색 기능
+    return boardDao.searchByKeyword(keyword, type, categoryNo);
   }
 
   @Override
-  public List<Board> searchByTitle(String title) {  // 제목으로 검색
-    return boardDao.searchByKeyword(title, "title");
+  public List<Board> searchByTitle(String title, int categoryNo) {  // 제목으로 검색
+    return boardDao.searchByKeyword(title, "title", categoryNo);
   }
 
   @Override
-  public List<Board> searchByContent(String content) { // 내용으로 검색
-    return boardDao.searchByKeyword(content, "content");
+  public List<Board> searchByContent(String content, int categoryNo) { // 내용으로 검색
+    return boardDao.searchByKeyword(content, "content", categoryNo);
   }
   @Override
   public int countFiltered(int categoryNo, String type, String keyword) { // 검색 결과 페이징 처리
     return boardDao.countFiltered(categoryNo, type, keyword);
+  }
+
+  @Override
+  public List<Board> boardHistory(int pageNo, int pageSize, int no) {  // 작성글 내역
+    return boardDao.findHistory(pageSize * (pageNo - 1), pageSize, no);
   }
 
   @Override
@@ -157,17 +162,12 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   } // count
 
   @Override
-  public List<Board> boardHistory(int pageNo, int pageSize, int no) {  // 목록 조회
-    return boardDao.findHistory(pageSize * (pageNo - 1), pageSize, no);
+  public List<Board> commentHistory(int pageNo, int pageSize, int no) {  // 작성댓글 내역
+    return boardDao.findCommentHistory(pageSize * (pageNo - 1), pageSize, no);
   }
 
   @Override
   public int countAllCommentHistory(int no) {
     return boardDao.countAllCommentHistory(no);
   } // count
-
-  @Override
-  public List<Board> commentHistory(int pageNo, int pageSize, int no) {  // 목록 조회
-    return boardDao.findCommentHistory(pageSize * (pageNo - 1), pageSize, no);
-  }
 }

@@ -4,30 +4,94 @@
   <meta charset='UTF-8'>
   <title>비트캠프 데브옵스 5기</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <style>
+
+    #main-container {
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .state-form {
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .state-form h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .state-select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .status-button {
+      background-color: #35C5B3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-file-button:hover,
+    .status-button:hover {
+      background-color: #1C9189;
+    }
+
+
+
     .image-container {
       display: inline-block;
-      text-align: center;
-      margin-right: 20px;
-      margin-top: 30px;
+      margin: 20px;
       position: relative;
     }
+
     .image-item {
-      width: 265px;
-      height: 252px;
+      width: 220px;
+      height: 200px;
       object-fit: cover;
       margin-bottom: 10px;
-      position: relative; /* 이미지 상대 위치 설정 */
+      position: relative;
+      border-radius: 5px;
     }
 
     .image-description {
         width: 100%;
-        box-sizing: border-box;
         position: absolute;
-        bottom: 0;
+        bottom: -20px;
         left: 0;
-        margin: 0;
-        padding: 5px;
+        border-radius: 5px;
+        margin: 0 !important;
+    }
+
+    .photo-section {
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 50px auto;
+      max-width: 800px;
+    }
+
+    .photo-section > * {
+      margin: 10px 15px 60px 15px;
     }
 
     .delete-button {
@@ -37,23 +101,152 @@
         padding: 5px 10px;
         cursor: pointer;
         position: absolute;
-        top: 0; /* 이미지의 위쪽 여백 */
-        right: 0; /* 이미지의 오른쪽 여백 */
-        transform: translate(50%, -50%); /* 삭제 버튼을 이미지의 오른쪽 상단에 정확히 위치시키기 위해 */
+        top: 0;
+        right: 0;
+        border-radius: 5px;
     }
+
+    .info {
+      margin: 50px 0 150px 0;
+    }
+
+    .basic-info {
+      width: 500px;
+    }
+
+    .location-info {
+      width: 50%;
+    }
+
+    .price-info {
+      margin: 25px 0;
+    }
+
+    .duration-info {
+      margin: 25px 0;
+    }
+
+
     .input-file-button{
       padding: 6px 25px;
       background-color:#35C5B3;
       border-radius: 4px;
       color: white;
       cursor: pointer;
+      margin: 20px;
     }
+
+
+    .room-theme,
+    .room-type {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 600px;
+      margin: 25px auto;
+    }
+
+    .type-option {
+      flex: 1 1 calc(25% - 20px);
+      width: 100px;
+      height: 90px;
+      border: 2px solid #CCCCCC;
+      border-radius: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      padding-top: 10px;
+      justify-content: center;
+    }
+
+    .theme-option {
+      flex: 1 1 calc(20% - 10px);
+      width: 100px;
+      height: 90px;
+      border: 2px solid black;
+      border-radius: 10px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      padding-top: 10px;
+      justify-content: center;
+    }
+
+    .icon {
+      border-radius: 5px;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      -webkit-appearance: none; /* Chrome, Safari, Edge 등의 웹킷 기반 브라우저 */
+      -moz-appearance: none; /* Firefox 브라우저 */
+      appearance: none; /* 일반적인 브라우저 */
+    }
+
+    .theme-option.selected,
+    .type-option.selected {
+      border-color: #35C5B3;
+    }
+
+    #basic-facility {
+        display: flex;
+        justify-content: center;
+        flex-direction: column; /* 요소를 세로로 나열합니다. */
+        text-align: center;
+        margin: 25px auto;
+      }
+
+      .convenience-facility {
+        display: flex;
+        justify-content: center; /* 가로 방향으로 가운데 정렬합니다. */
+        align-items: center; /* 세로 방향으로 가운데 정렬합니다. */
+        flex-wrap: wrap; /* 내용이 넘칠 경우 다음 줄에 배치합니다. */
+        max-width: 600px;
+        margin: 25px auto; /* 좌우 여백을 자동으로 조절하여 가운데 정렬합니다. */
+
+      }
+
+      .facility-option {
+        flex: 1 1 calc(20% - 10px);
+        width: 100px;
+        height: 90px;
+        border: 2px solid #CCCCCC;
+        border-radius: 10px;
+        margin: 10px; /* 요소 간 간격을 조정합니다. */
+        cursor: pointer;
+        padding-top: 10px;
+      }
+
+      .quantity {
+        margin: 20px auto; /* 가운데 정렬 */
+        font-size: 20px;
+        border-bottom: 2px solid #CCCCCC;
+        padding-bottom: 30px;
+        max-width: 550px;
+        text-align: center; /* 가운데 정렬을 위해 추가 */
+      }
+
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;/* input type:number 마우스오버시 보이는 화살표 제거 */
+      }
+
+      .fa-solid {
+        font-size: 25px;
+        margin: 15px;
+      }
+
+      .facility-option.selected {
+        border-color: #35C5B3;
+      }
 
     /* 지도 */
     #map {
     height: 513px;
     width: 912px;
     border-radius: 4px;
+    margin: 0px auto;
     }
 
     html,
@@ -62,8 +255,6 @@
       margin: 0;
       padding: 0;
     }
-
-
 
     textarea,
     input[type=text],
@@ -94,20 +285,25 @@
       cursor: pointer;
       margin-left: 5px;
     }
+
     input[type=button]:hover {
       background: rgb(235, 235, 235);
     }
+
     input[type=button].button-primary {
       background-color: #35C5B3;
       color: white;
     }
+
     input[type=button].button-primary:hover {
       background-color: #1765cc;
     }
+
     input[type=button].button-secondary {
       background-color: white;
       color: #35C5B3;
     }
+
     input[type=button].button-secondary:hover {
       background-color: #d2e3fc;
     }
@@ -140,6 +336,95 @@
       padding: 1rem;
       font-size: medium;
     }
+
+    button[type="button"] {
+    color: white;
+    background-color: #FF99B3;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 30px;
+    }
+
+    button[type="button"]:hover {
+      transition: background-color 0.3s ease;
+      background-color: #FF66A3;
+    }
+
+    #modalButton {
+      background-color: #35C5B3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-left: 30px;
+    }
+
+    #modalButton:hover {
+      background-color: #1C9189;
+    }
+
+    #modalWrap {
+      position: fixed;
+      z-index: 1;
+      padding-top: 250px;;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none;
+    }
+
+    #modalBody {
+      text-align: center;
+      font-size: 23px;
+      width: 700px;
+      height: auto;
+      padding: 20px;
+      margin: 0 auto;
+      border: 1px solid #777;
+      background-color: #fff;
+      border-radius: 8px;
+   }
+
+    #saveButton {
+      font-weight: bold;
+      color: #fff;
+      background-color: #35C5B3;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 30px;
+      margin-right: 15px;
+    }
+
+
+    #closeButton {
+      font-weight: bold;
+      color: #fff;
+      background-color: #FA5858;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 30px;
+      margin-left: 15px;
+    }
+
+
+    #submitButton:hover,
+    #closeButton:hover {
+    background-color: #1C9189;
   </style>
 </head>
 
@@ -147,23 +432,23 @@
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
-<h1>숙소 상세</h1>
 
-<div align="center">
+<div id="main-container">
   <form action="update" data-th-action="@{rentalHomeStateUpdate}" enctype='multipart/form-data'
-        method='post' data-th-object="${rentalHome}">
-    <input type="hidden" data-th-value="*{rentalHomeNo}" id="rentalHomeNo" name="rentalHomeNo"
-           value="1"/>
+        method='post' data-th-object="${rentalHome}" class="state-form">
 
-    <h2>숙소 상태 관리</h2>
-    <label>
-      <input type="hidden" id="state" value="0" data-th-value="${rentalHome.state}"/>
-      <select id="stateSelect" name="state">
-        <option value="1">운영중</option>
-        <option value="2">중지</option>
-      </select>
-      <button>상태 변경</button>
-    </label>
+    <input type="hidden" data-th-value="*{rentalHomeNo}" id="rentalHomeNo" name="rentalHomeNo" value="1"/>
+
+    <h1>숙소 상태 관리</h1>
+
+    <input type="hidden" id="state" value="0" data-th-value="${rentalHome.state}"/>
+
+    <select id="stateSelect" name="state" class="state-select">
+      <option value="1">운영중</option>
+      <option value="2">중지</option>
+    </select>
+
+    <button class="status-button">상태 변경</button>
 
     <script>
       // JavaScript로 DB에서 가져온 값을 사용하여 기본값 설정
@@ -188,215 +473,193 @@
 
   <br>
   <br>
-  <br>
 
 
-  <form action="update" data-th-action="@{rentalHomeUpdate}" enctype='multipart/form-data'
+  <form enctype='multipart/form-data'
         method='post'
         data-th-object="${rentalHome}">
 
-
-    <h2>숙소 사진</h2>
-    <div>
-      <label class="input-file-button" for="photoInput">사진 추가</label>
+    <h1>숙소 사진</h1>
+    <label class="input-file-button" for="photoInput">사진 추가</label>
+    <div id="photoSection" class="photo-section">
       <input type="file" multiple id="photoInput" name="photos" style="display:none;"
              onchange="photoCountAndDisplay(this.files)"/>
-      <div id="imageContainer"></div>
-
-      <div class="image-container"
-           data-th-each="photo : ${rentalHome.rentalHomePhotos}" data-th-object="${photo}">
-        <img
-            data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}"
-            src="/home1.jpg"/>
-        <a class="delete-button"
-           data-th-href="@{photoDelete(photoNo=*{photoNo}, rentalHomeNo=${rentalHome.rentalHomeNo})}"
-           href="file-delete.html">X</a>
-        <input class="image-description" type="text" placeholder="이미지 설명"
-               data-th-value="${photo.photoExplanation}"/>
+      <div class="image-container uploaded-image"
+           data-th-each="photo : ${rentalHome.rentalHomePhotos}" data-th-object="${photo}"
+            data-th-data-uuidPhotoName="${photo.uuidPhotoName}" data-uuidPhotoName="a.gif">
+          <img class="image-item"
+              data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}"
+              src="/home1.jpg"/>
+          <button class="delete-button">X</button>
+          <input class="image-description" type="text" placeholder="이미지 설명"
+                 data-th-value="${photo.photoExplanation}"/>
       </div>
     </div>
 
 
-    <br>
-    <br>
-    <br>
-
-
-    <h2>숙소 기본 정보</h2>
-    <div>
-      숙소명: <input readonly data-th-value="*{name}" name="name" id="name" type='text' value="호텔">
-    </div>
-    <div>
-      숙소 설명: <textarea data-th-text="*{explanation}" name="explanation"
-                       data-th-value="*{explanation}" id="explanation"></textarea>
-    </div>
-    <div>
-      숙소 이용규칙: <textarea data-th-text="*{rentalHomeRule}" name="rentalHomeRule"
-                         data-th-value="*{rentalHomeRule}" id="rentalHomeRule"></textarea>
-    </div>
-
-    <h2>숙소 위치</h2>
-    <section>
-      <div id="map"></div>
-    </section>
-    <input type="text" name="lat" id="lat">
-    <input type="text" name="lon" id="lon">
-    <div>
-      <input type="text" style="width:500px" name="basicAddress" id="basicAddress"
-             placeholder="기본 주소">
-    </div>
-    <div>
-      <input type="text" style="width:500px" name="detailAddress" id="detailAddress"
-             placeholder="상세 주소">
-    </div>
-    <br>
-    <br>
-    <br>
-
-    <h2>요금 설정</h2>
-    <script>
-      function calc() {
-        const price = Number(document.getElementById("price").value);
-        const cleanFee = Number(document.getElementById("cleanFee").value);
-        document.getElementById("income").value = Math.round((price + cleanFee) * 0.97);
-
-      }
-      window.onload = calc;
-
-
-    </script>
-    <div>
-      이용요금(주 기준) <input type="number" data-th-value="*{price}" value="10000" name="price"
-                        id="price" onkeyup="calc(this.value)"/>
-    </div>
-    <div>
-      청소비 <input type="number" data-th-value="*{cleanFee}" value="100" name="cleanFee"
-                 id="cleanFee" onkeyup="calc(this.value)"/>
-    </div>
-    <div>
-      정산금액 <input readonly type="text" id="income"/>
-    </div>
-
-    <br>
-    <br>
-    <br>
-
-    <h2>호스팅 기간</h2>
-    <div>
-      호스팅 시작일: <input readonly data-th-value='*{hostingStartDate}' id="hostingStartDate"
-                      value="2024-03-24" name="hostingStartDate" type='date'>
-    </div>
-    <div>
-      호스팅 종료일: <input data-th-value='*{hostingEndDate}' id="hostingEndDate"
-                      value="2024-03-24" name="hostingEndDate" type='date'>
-    </div>
-
-    <br>
-    <br>
-    <br>
-
-    <h2>숙소 타입</h2>
-    <div id="rentalHomeType">
-      <div style="display: flex; flex-wrap: wrap;">
-        <div data-th-if="${theme.themeNo < 10}"
-             data-th-each="theme : ${themeList}" style="width: 25%;">
-            <span style="display: inline-block;">
-              <label data-th-text="${theme.themeName}"></label>
-              <input type="radio" data-th-name="type" id="type"
-                     data-th-checked="${rentalHome.themes.indexOf(theme) != -1}"
-                     data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
-        </span>
-        </div>
-      </div>
-    </div>
-
-    <br>
-    <br>
-    <br>
-
-
-    <h2>숙소 테마</h2>
-    <div id="rentalHomeTheme">
-      <div style="display: flex; flex-wrap: wrap;">
-        <!-- themeList 반복 -->
-        <div data-th-if="${theme.themeNo >= 10}" data-th-each="theme : ${themeList}"
-             data-th-object="${theme}" style="width: 25%;">
-      <span style="display: inline-block;">
-        <label data-th-text="*{themeName}"></label>
-        <input type="checkbox" data-th-value="${theme.themeNo}" class="themeNos"
-               data-th-checked="${rentalHome.themes.indexOf(theme) != -1}"/><br>
-        <input type="hidden" class="themeNames" data-th-value="*{themeName}"/>
-      </span>
-        </div>
-      </div>
-    </div>
-
-    <br>
-    <br>
-    <br>
-
-    <h2>숙소 시설</h2>
-    <div id="rentalHomeFacility">
+    <div class="info">
+      <h1>숙소 기본 정보</h1>
       <div>
-        <div style="display: inline-block;">
-          <label>수용인원</label><br>
-          <input type="number" name="capacity" id="capacity" data-th-value="${rentalHome.capacity}"
-                 value="0">
-        </div>
+        <input class="basic-info" data-th-value="*{name}" type="text" name="name" id="name" placeholder="숙소명">
       </div>
-      <div data-th-if="${rentalHomeFacility.facilityNo < 4}" style="width: 20%;"
-           data-th-each="rentalHomeFacility : ${rentalHome.rentalHomeFacilities}">
-        <div style="display: inline-block;">
-          <label data-th-text="${rentalHomeFacility.facilityName}"></label><br>
-          <input type="number" value="2" class="facilityCount"
-                 data-th-value="${rentalHomeFacility.facilityCount}"/>
-          <input type="hidden" class="facilityNos"
-                 data-th-value="${rentalHomeFacility.facilityNo}"/>
-          <input type="hidden" class="facilityNames"
-                 data-th-value="${rentalHomeFacility.facilityName}"/>
-        </div>
+      <div>
+        <textarea class="basic-info" data-th-text="*{explanation}" name="explanation" id="explanation"
+                  placeholder="숙소 설명"></textarea>
+      </div>
+      <div>
+        <textarea class="basic-info" data-th-text="*{rentalHomeRule}" name="rentalHomeRule" id="rentalHomeRule"
+                  placeholder="숙소 이용규칙"></textarea>
       </div>
     </div>
 
-    <br>
-    <br>
-    <br>
-
-    <h2>숙소 편의시설</h2>
-    <div id="rentalHomeConvenience">
-      <div style="display: flex; flex-wrap: wrap;">
-        <div data-th-if="${facility.facilityNo >= 4}"
-             data-th-each="facility : ${facilityList}" style="width: 20%;">
-            <span style="display: inline-block;">
-              <label data-th-text="${facility.facilityName}"></label>
-              <input type="checkbox" class="facilityCount" value="1"
-                     data-th-checked="${rentalHome.rentalHomeFacilities.indexOf(facility)} != -1"/>
-              <input type="hidden" class="facilityNos" data-th-value="${facility.facilityNo}"/>
-              <input type="hidden" class="facilityNames" data-th-value="${facility.facilityName}"/>
-            </span>
-        </div>
+    <div class="info">
+      <h1>숙소 위치</h1>
+      <section>
+        <div id="map"></div>
+      </section>
+      <input type="hidden" name="lat" id="lat">
+      <input type="hidden" name="lon" id="lon">
+      <div>
+        <input type="text" class="location-info" name="basicAddress" id="basicAddress"
+               placeholder="기본 주소">
+      </div>
+      <div>
+        <input type="text" class="location-info" name="detailAddress" id="detailAddress"
+               placeholder="상세 주소">
       </div>
     </div>
 
+    <div class="info">
+      <h1>요금 설정</h1>
+      <div class="price-info">
+        <h4>이용요금(주 기준)</h4>
+        <input type="number" data-th-value="*{price}" value="10000" name="price"
+                          id="price" onkeyup="calc(this.value)"/>
+      </div>
+      <div class="price-info">
+        <h4>청소비</h4>
+        <input type="number" data-th-value="*{cleanFee}" value="100" name="cleanFee"
+                   id="cleanFee" onkeyup="calc(this.value)"/>
+      </div>
+      <div class="price-info">
+        <h4>정산금액</h4>
+        <input readonly type="text" id="income"/>
+      </div>
+    </div>
 
-    <br>
-    <br>
-    <br>
+    <div class="info">
+      <div class="duration-info">
+      <h1>호스팅 기간</h1>
+        호스팅 시작일: <input readonly data-th-value='*{hostingStartDate}' id="hostingStartDate"
+                        value="2024-03-24" name="hostingStartDate" type='date'>
+      </div>
+      <div class="duration-info">
+        호스팅 종료일: <input data-th-value='*{hostingEndDate}' id="hostingEndDate"
+                        value="2024-03-24" name="hostingEndDate" type='date'>
+      </div>
+    </div>
 
+    <h1>숙소 타입</h1>
+    <div class="room-type">
+      <div class="type-option" data-th-if="${theme.themeNo < 10}" data-th-each="theme : ${themeList}" data-th-object="${theme}">
+        <div >
+          <img class="icon" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+        </div>
+        <div class="type-name" data-th-text="*{themeName}">모텔</div>
+        <input type="radio" name="type" id="type"
+               data-th-checked="${rentalHome.themes.indexOf(theme) != -1}"
+               data-th-value="${theme.themeNo} + ',' + ${theme.themeName}">
+
+      </div>
+    </div>
+
+    <h1>숙소 테마</h1>
+    <br>
+    <div class="room-theme">
+      <!-- 반복되는 항목 -->
+      <div class="theme-option" data-th-if="${theme.themeNo >= 10}" data-th-each="theme : ${themeList}" data-th-object="${theme}">
+        <div>
+          <img class="icon" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+        </div>
+        <div class="theme-name" data-th-text="*{themeName}">테마 이름</div>
+        <input type="checkbox" class="theme-checkbox" id="theme${theme.themeNo}" name="themeNos" data-th-value="*{themeNo}"
+               data-th-checked="${rentalHome.themes.indexOf(theme) != -1}">
+        <input type="hidden" class="themeNames" name="themeNames" data-th-value="*{themeName}"/>
+      </div>
+    </div>
+
+    <h1>숙소 시설</h1>
+    <h4>숙소의 기본 시설 개수를 입력해주세요</h4>
+    <div id="basic-facility">
+      <div class="quantity">
+        <a>인원</a>
+        <i class="fa-solid fa-circle-minus"></i>
+        <input type="number" name="capacity" id="capacity" value="0" data-th-value="${rentalHome.capacity}">
+        <i class="fa-solid fa-circle-plus"></i>
+      </div>
+
+
+      <div class="quantity" data-th-if="${rentalHomeFacility.facilityNo < 4} " data-th-each="rentalHomeFacility : ${rentalHome.rentalHomeFacilities}"
+           data-th-object="${rentalHomeFacility}">
+        <a data-th-text="*{facilityName}">시설</a>
+        <i class="fa-solid fa-circle-minus"></i>
+        <input class="facilityCount input" type="number" name="facilityCount" data-th-value="*{facilityCount}"/>
+        <i class="fa-solid fa-circle-plus"></i>
+        <input class="facilityNames" type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+        <input class="facilityNos" type="hidden" name="facilityNos"
+               data-th-value="*{facilityNo}"/>
+      </div>
+    </div>
+    <h1>숙소 편의시설</h1>
+    <h4>편의시설을 최소 1개 이상 선택해주세요.</h4>
+    <div class="convenience-facility">
+      <div class="facility-option" data-th-if="${facility.facilityNo >= 10}"
+           data-th-each="facility : ${facilityList}" data-th-object="${facility}">
+        <div>
+          <img class="icon"
+               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/facility/' + *{facilityName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+
+        </div>
+        <a data-th-text="*{facilityName}"></a>
+        <input class="facilityCount checkbox" type="checkbox" name="facilityCount" value="1" data-th-checked="${rentalHome.rentalHomeFacilities.indexOf(facility)} != -1"/>
+        <input class="facilityNames" type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+        <input class="facilityNos" type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
+      </div>
+    </div>
+    <div>
+      <button id="modalButton" type="button">저  장</button>
+      <button type="button"
+              data-th-onclick="|location.href='@{rentalHomeList(hostNo=${session.loginUser.no})}'|">돌아가기
+      </button>
+    </div>
+
+    <div id="modalWrap"> <!-- 모달 창을 감싸는 div -->
+      <div id="modalBody">
+        <p>저장하시겠습니까?</p>
+        <button type="button" id="saveButton">등록</button>
+        <button type="button" id="closeButton">취소</button>
+      </div>
+    </div>
 
   </form>
-  <div>
-    <button type="submit" onclick="submitForm()">저장</button>
-    <button type="button"
-            data-th-onclick="|location.href='@{rentalHomeList(hostNo=${session.loginUser.no})}'|">취소
-    </button>
-  </div>
+
+
+
+  <br>
 </div>
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script>
   var filesArray = []; // 이미지 배열
   var formData = new FormData(); // 폼데이터
+
+  function calc() {
+    const price = Number(document.getElementById("price").value);
+    const cleanFee = Number(document.getElementById("cleanFee").value);
+    document.getElementById("income").value = Math.round((price + cleanFee) * 0.97);
+  }
+
+  window.onload = calc();
 
   function submitForm() {
     formData.append('rentalHomeNo', document.getElementById('rentalHomeNo').value);
@@ -407,8 +670,7 @@
 
     let basicAddress = document.querySelector('#basicAddress').value;
     let detailAddress = document.querySelector('#detailAddress').value;
-
-    formData.append('address', basicAddress + ". " + detailAddress);
+    formData.append('address', basicAddress + "." + detailAddress);
     formData.append('lat', document.querySelector('#lat').value);
     formData.append('lon', document.querySelector('#lon').value);
 
@@ -422,7 +684,7 @@
     formData.append('type', document.getElementById('type').value);
 
     // 모든 테마 요소들
-    let checkedTheme = document.querySelectorAll('.themeNos');
+    let checkedTheme = document.querySelectorAll('.theme-checkbox');
 
     // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
     checkedTheme.forEach(function(e, index) {
@@ -437,30 +699,27 @@
 
     // 선택된 시설 요소들
     let checkedFacility = document.querySelectorAll('.facilityCount');
+    let inputFacility = document.querySelectorAll('.facilityCount.input');
 
-    // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
     checkedFacility.forEach(function(e, index) {
-
-        // 값이 1 이상일 때(선택 또는 입력되었을 때, 기본 시설은 최소 1개 이상임)
-        if (e.checked) {
-            // 각 체크박스 요소를 확인하여 선택된 값과 동일한 인덱스의 숨겨진 입력 필드들의 값을 form 데이터에 추가합니다.
-            formData.append('facilityCount', e.value);
-            formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
-            formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
-        }
-        // 시설 개수는 checked 요소가 없기에 가장 첫 인덱스 3개를 폼데이터에 추가
-        if (index < 3) {
-          formData.append('facilityCount', e.value);
-          formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
-          formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
-        }
+      // 값이 1 이상일 때(선택 또는 입력되었을 때, 기본 시설은 최소 1개 이상임)
+      if (e.check) {
+        formData.append('facilityCount', e.value);
+        formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
+        formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
+      }
     });
 
+    inputFacility.forEach(function(e, index) {
+      formData.append('facilityCount', e.value);
+      formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
+      formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
 
+      console.log(document.querySelectorAll('.facilityNames')[index].value);
+      console.log(document.querySelectorAll('.facilityNos')[index].value);
+    });
 
     updateFormData(); // FormData 업데이트
-
-    console.log(formData.getAll('photos'));
 
     fetch('rentalHomeUpdate', {
       method: 'POST',
@@ -490,55 +749,219 @@
         formData.append('photoExplanations', obj.description.value);
       });
     }
+    uploadedImage = document.querySelectorAll('.uploaded-image');
+
+    uploadedImage.forEach(image => {
+      formData.append('existFileNames', image.getAttribute('data-uuidPhotoName'));
+    });
   }
 
   function photoCountAndDisplay(files) {
-      var imageContainer = document.getElementById('imageContainer');
+    var photoSection = document.getElementById('photoSection');
 
-      for (var i = 0; i < files.length; i++) {
-        let file = files[i];
-        var reader = new FileReader();
+    for (var i = 0; i < files.length; i++) {
+      let file = files[i];
+      var reader = new FileReader();
 
-        reader.onload = function (e) {
-          var container = document.createElement('div');
-          container.classList.add('image-container');
+      reader.onload = function (e) {
+        var container = document.createElement('div');
 
-          var imgElement = document.createElement('img');
-          imgElement.classList.add('image-item');
-          imgElement.src = e.target.result;
-          container.appendChild(imgElement);
+        container.classList.add('image-container');
 
-          var descriptionInput = document.createElement('input');
-          descriptionInput.type = 'text';
-          descriptionInput.placeholder = '이미지 설명';
-          descriptionInput.classList.add('image-description');
-          descriptionInput.name = 'photoExplanations'; // 이미지 설명의 이름 설정
-          container.appendChild(descriptionInput);
+        var imgElement = document.createElement('img');
+        imgElement.classList.add('image-item');
+        imgElement.src = e.target.result;
+        container.appendChild(imgElement);
 
-          var deleteButton = document.createElement('button');
-          deleteButton.textContent = 'X';
-          deleteButton.classList.add('delete-button');
-          deleteButton.onclick = function () {
-            var index = filesArray.findIndex(obj => obj.file === file);
-            if (index > -1) {
-              filesArray.splice(index, 1);
-              container.remove();
-            }
-          };
-          container.appendChild(deleteButton);
+        var descriptionInput = document.createElement('input');
+        descriptionInput.type = 'text';
+        descriptionInput.placeholder = '이미지 설명';
+        descriptionInput.classList.add('image-description');
+        descriptionInput.name = 'photoExplanations'; // 이미지 설명의 이름 설정
+        container.appendChild(descriptionInput);
 
-          imageContainer.appendChild(container);
-
-          // 파일과 설명을 하나의 객체로 연결하여 배열에 추가
-          filesArray.push({
-            file: file,
-            description: descriptionInput
-          });
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = 'X';
+        deleteButton.classList.add('delete-button');
+        deleteButton.onclick = function () {
+          var index = filesArray.findIndex(obj => obj.file === file);
+          if (index > -1) {
+            filesArray.splice(index, 1);
+            container.remove();
+          }
         };
+        container.appendChild(deleteButton);
 
-        reader.readAsDataURL(file);
-      }
+        photoSection.appendChild(container);
+
+        // 파일과 설명을 하나의 객체로 연결하여 배열에 추가
+        filesArray.push({
+          file: file,
+          description: descriptionInput
+        });
+        descriptionInput.addEventListener('input', checkRequiredFields);
+      checkRequiredFields();
+      };
+
+      reader.readAsDataURL(file);
     }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const container = button.closest('.image-container');
+            if (container) {
+                container.remove();
+            }
+            checkRequiredFields();
+        });
+    });
+
+    const typeOptions = document.querySelectorAll('.type-option');
+    const themeOptions = document.querySelectorAll('.theme-option');
+    const facilityOptions = document.querySelectorAll('.facility-option');
+
+    typeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // 선택된 항목 해제
+            typeOptions.forEach(otherOption => {
+                otherOption.classList.remove('selected');
+                otherOption.querySelector('input[type="radio"]').checked = false;
+            });
+            // 현재 항목 선택
+            this.classList.add('selected');
+            this.querySelector('input[type="radio"]').checked = true;
+            checkRequiredFields();
+        });
+    });
+
+    themeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked; // 클릭할 때마다 체크 여부를 반전시킴
+            // 선택 클래스를 토글
+            if (checkbox.checked) {
+                this.classList.add('selected');
+            } else {
+                this.classList.remove('selected');
+            }
+            checkRequiredFields();
+        });
+    });
+
+    facilityOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked; // 클릭할 때마다 체크 여부를 반전시킴
+            // 선택 클래스를 토글
+            if (checkbox.checked) {
+                this.classList.add('selected');
+            } else {
+                this.classList.remove('selected');
+            }
+            checkRequiredFields();
+        });
+    });
+
+    const plusButtons = document.querySelectorAll('.fa-circle-plus');
+    const minusButtons = document.querySelectorAll('.fa-circle-minus');
+
+    plusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('input[type="number"]');
+            input.value = parseInt(input.value) + 1;
+        });
+    });
+
+    minusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('input[type="number"]');
+            if (parseInt(input.value) > 0) {
+                input.value = parseInt(input.value) - 1;
+            }
+        });
+    });
+
+    // 초기화 시 선택된 라디오 및 체크박스에 selected 클래스 추가
+    document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+        radio.parentNode.classList.add('selected');
+    });
+
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+        checkbox.parentNode.classList.add('selected');
+    });
+
+    // 등록 최종 확인 및 안내메시지 모달
+    const modal = document.getElementById("modalWrap");
+
+    document.querySelector("#modalButton").onclick= () => {
+      modal.style.display = "block";
+    }
+
+    document.querySelector("#saveButton").onclick = () => {
+      alert("성공적으로 저장되었습니다.");
+      submitForm();
+    }
+
+    document.querySelector("#closeButton").onclick = () => {
+      modal.style.display = "none";
+    }
+  });
+
+  function checkRequiredFields() {
+    // 기본 정보 검사
+    let requiredFields = [
+      document.getElementById('name'),
+      document.getElementById('explanation'),
+      document.getElementById('rentalHomeRule'),
+      document.getElementById('basicAddress'),
+      document.getElementById('detailAddress'),
+      document.getElementById('price'),
+      document.getElementById('cleanFee'),
+      document.getElementById('hostingStartDate'),
+      document.getElementById('hostingEndDate')
+    ];
+    let roomFacility = document.querySelectorAll(".roomFacility");
+
+    let isEmpty = requiredFields.some(field => field && !field.value.trim());
+    let isRoomEmpty = Array.prototype.slice.call(roomFacility).some(facility => Number(facility.value) <= 0);
+    let imageCount = document.querySelectorAll('.image-container');
+    let radioChecked = document.querySelector('input[type="radio"]:checked');
+    let roomCheckboxes = document.querySelectorAll('.facilityCount.checkbox:checked');
+    let themeCheckboxes = document.querySelectorAll('.theme-checkbox:checked');
+
+    let modalButton = document.querySelector('#modalButton');
+
+    if (isEmpty || imageCount.length < 5 || isRoomEmpty || !radioChecked || roomCheckboxes.length == 0 || themeCheckboxes.length == 0) {
+      modalButton.disabled = true;
+      modalButton.style.backgroundColor = '#CCCCCC';
+    } else {
+      modalButton.disabled = false;
+      modalButton.style.backgroundColor = '#35C5B3';
+    }
+  }
+
+
+  // 변경 확인
+  window.onload = function() {
+    document.querySelectorAll('input').forEach(element => {
+      element.addEventListener('change', checkRequiredFields);
+    });
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(element => {
+      element.addEventListener('change', checkRequiredFields);
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach(element => {
+      element.addEventListener('change', checkRequiredFields);
+    });
+
+    checkRequiredFields();
+  };
+
 </script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk&callback=initMap&v=weekly"
@@ -684,5 +1107,8 @@
 
   window.initMap = initMap;
 </script>
+
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </html>

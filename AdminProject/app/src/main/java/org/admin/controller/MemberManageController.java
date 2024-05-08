@@ -20,7 +20,7 @@ public class MemberManageController {
     private static final Log log = LogFactory.getLog(ReportManageController.class);
     private final MemberService memberService;
     @GetMapping("/list/{menu}")
-    public RestResult userList(@PathVariable int menu) {
+    public RestResult memberList(@PathVariable int menu) {
         switch (menu) {
             case 1:
 
@@ -43,8 +43,8 @@ public class MemberManageController {
 
 
     @GetMapping("/view/{memberNo}/{menu}")
-    public RestResult userView(@RequestParam("mno") int memberNo,
-                             @RequestParam("menu") int menu) {
+    public RestResult memberView(@PathVariable int memberNo,
+                             @PathVariable int menu) {
 
         switch (menu) {
             case 1:
@@ -66,7 +66,7 @@ public class MemberManageController {
     }
 
     @GetMapping("/search/{keyword}/{filter}/{menu}")
-    public RestResult searchUser(@PathVariable String keyword,
+    public RestResult searchMember(@PathVariable String keyword,
                              @PathVariable String filter,
                              @PathVariable int menu) {
 
@@ -102,13 +102,12 @@ public class MemberManageController {
         }
     }
 
-    @PutMapping("/update/{grade}/{memberNo}")
-    public RestResult updateGrade(@PathVariable String grade,
-                              @PathVariable int memberNo) {
+    @PutMapping("/update")
+    public RestResult updateGrade(@RequestBody Member member) {
 
         return RestResult.builder()
                 .status(RestResult.SUCCESS)
-                .data(memberService.updateGrade(grade, memberNo))
+                .data(memberService.updateGrade(member.getGradeNo(), member.getMemberNo()))
                 .build();
     }
 }

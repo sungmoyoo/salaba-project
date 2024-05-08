@@ -1,6 +1,7 @@
 package salaba.controller;
 
 
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import salaba.service.MemberService;
 import salaba.service.QuestionService;
 import salaba.service.RentalHomeService;
 import salaba.service.ReservationService;
@@ -28,6 +30,7 @@ public class ReservationController {
   private final ReservationService reservationService;
   private final RentalHomeService rentalHomeService;
   private final StorageService storageService;
+  private final MemberService memberService;
 
   @GetMapping("reservationList")
   public void reservationList(
@@ -39,6 +42,7 @@ public class ReservationController {
     reservation.setNo(sessionInfo.getNo());
 
     model.addAttribute("reservationList", reservationService.reservationList(reservation));
+    session.setAttribute("myInfoMenuId", reservation.getMyInfoMenuId());
   }
 
   @GetMapping("reservationView")

@@ -8,17 +8,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import salaba.service.BoardService;
 import salaba.service.HostService;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.board.Board;
 
 @RequiredArgsConstructor
 @Controller
@@ -29,6 +33,7 @@ public class MemberController implements InitializingBean {
 
   private final MemberService memberService;
   private final StorageService storageService;
+  private final BoardService boardService;
 
   private String uploadDir;
 
@@ -78,31 +83,23 @@ public class MemberController implements InitializingBean {
     //국가 리스트를 받아옴
     List<Nation> nationList = memberService.getNation();
 
-    //닉네임 중복체크
-    String nickcheck = request.getParameter("nickcheck");
-
-    session.setAttribute("loginUser", member);
-
     //조회한 결과 model 에 add
     model.addAttribute("member", member);
     model.addAttribute("nationList", nationList);
+
+    //닉네임 중복체크
+    String nickcheck = request.getParameter("nickcheck");
+    String newNickName = request.getParameter("newNickName");
+    if("N".equals(nickcheck)){
+      member.setNickname(newNickName);
+    }
     model.addAttribute("nickcheck", nickcheck);
+
   }
 
   @PostMapping("myinfoUpdate")
-  public String myinfoUpdate(Member member, MultipartFile file) throws Exception { // 내정보 수정
+  public String myinfoUpdate(Member member, MultipartFile file, HttpSession session) throws Exception { // 내정보 수정
 
-    String oldNickname = member.getOldNickname();//수정전 닉네임
-    String nickname = member.getNickname();//수정후 닉네임
-    //닉네임이 수정되었을 경우에만 중복체크를 한다.
-    if (!oldNickname.equals(nickname)) { //문자열 비교 시에는 .equals()
-      //닉네임 중복체크
-      Member check = memberService.checkNickname(member.getNickname());
-      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
-        String nickcheck = "Y";
-        return "redirect:myinfo?nickcheck=" + nickcheck;
-      }
-    }
     Member old = memberService.get(member.getNo());
 
     if (file.getSize() > 0) {
@@ -114,7 +111,23 @@ public class MemberController implements InitializingBean {
       member.setPhoto(old.getPhoto());
     }
     memberService.myinfoUpdate(member);
+
+    Member memberSave = memberService.get(member.getNo());
+    //회원정보
+    session.setAttribute("loginUser", memberSave);
+
     return "redirect:myinfo";
+  }
+
+  @PostMapping("myinfoNickNameCheck")
+  public String myinfoNickNameCheck(Member member) throws Exception { // 내정보 수정
+      //닉네임 중복체크
+      Member check = memberService.checkNickname(member.getNickname());
+      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
+        return "redirect:myinfo?nickcheck=Y";
+      }else{
+        return "redirect:myinfo?nickcheck=N&newNickName="+member.getNickname();
+      }
   }
 
   @GetMapping("delete")
@@ -127,62 +140,73 @@ public class MemberController implements InitializingBean {
   public void findEmail(Member member) throws Exception { // 이메일 찾기
   }
 
-  @GetMapping("findPw")
-  public void findPw(Member member) throws Exception { // 비밀번호 찾기
+  @GetMapping("findPassword")
+  public void findPassword(Member member) throws Exception { // 비밀번호 찾기
   }
 
-  @PostMapping("schEmail")
-  public String schEmail(Member member, Model model) throws Exception { // 이메일 조회
+  @PostMapping("searchEmail")
+  public String searchEmail(Member member, Model model) throws Exception { // 이메일 조회
     Member info = memberService.findEmail(member);
     if (info == null) {
-      return "/member/findEmailFail";
+      model.addAttribute("findYn", "N");
     } else {
       model.addAttribute("member", info);
-      return "/member/findEmailSuc";
+      model.addAttribute("findYn", "Y");
     }
+    return "/member/findEmailResult";
   }
 
-  @PostMapping("schPw")
-  public String schPw(Member member, Model model) throws Exception { // 비밀번호 조회
-    Member info = memberService.findPw(member);
+  @PostMapping("searchPassword")
+  public String searchPassword(Member member, Model model) throws Exception { // 비밀번호 조회
+    Member info = memberService.findPassword(member);
     if (info == null) {
-      return "/member/findPwFail";
+      model.addAttribute("findYn", "N");
     } else {
       model.addAttribute("member", info);
-      return "/member/findPwSuc";
+      model.addAttribute("findYn", "Y");
     }
+      return "/member/findPasswordResult.js";
   }
 
-  @PostMapping("chgPwSave")
-  public String chgPwSave(Member member, Model model) throws Exception { // 비밀번호 변경
-    memberService.chgPwSave(member);
+  @PostMapping("changePasswordSave")
+  public String changePasswordSave(Member member, Model model) throws Exception { // 비밀번호 변경
+    memberService.changePasswordSave(member);
     return "redirect:/auth/form";
   }
 
-  @GetMapping("chkPw")
-  public void chkPw(Member member, Model model, HttpServletRequest request) throws Exception {
-    String pwcheck = request.getParameter("pwcheck");
-    model.addAttribute("pwcheck", pwcheck);
+  @PostMapping("myInfoChangePasswordSave")
+  public String myInfoChangePasswordSave(Member member, Model model) throws Exception { // 비밀번호 변경
+    memberService.changePasswordSave(member);
+    return "redirect:/member/myinfo";
   }
 
-  @PostMapping("checkPw")
-  public String checkPw(Member member, Model model, HttpSession session)
+  @GetMapping("myinfoCheckPassword")
+  public void myinfoCheckPassword(Member member, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+    String pwcheck = request.getParameter("pwcheck");
+    model.addAttribute("pwcheck", pwcheck);
+    session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
+
+  }
+
+  @PostMapping("checkPassword")
+  public String checkPassword(Member member, Model model, HttpSession session)
       throws Exception { // 비밀번호 확인
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     member.setNo(sessionInfo.getNo());
 
-    Member info = memberService.chkPw(member);
+    Member info = memberService.myinfoCheckPassword(member);
     if (info == null) {
       String pwcheck = "Y";
-      return "redirect:chkPw?pwcheck=" + pwcheck;
+      return "redirect:myinfoCheckPassword?pwcheck=" + pwcheck;
     } else {
       return "redirect:myinfo";
     }
+
   }
 
   @PostMapping("themeSave")
   public String themeSave(Member member, Model model, HttpSession session)
-      throws Exception { // 비밀번호 확인
+      throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     member.setNo(sessionInfo.getNo());
@@ -198,10 +222,97 @@ public class MemberController implements InitializingBean {
 
   // 선호사항 폼
   @GetMapping("mytheme")
-  public void mytheme(Model model, HttpSession session){
+  public void mytheme(Member member, Model model, HttpSession session){
     Member sessionInfo = (Member) session.getAttribute("loginUser");
 
     model.addAttribute("themeList", memberService.themeList(sessionInfo));
+  }
+
+  @GetMapping("boardHistory")  // 작성글 내역
+  public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize,
+      Member member,
+      Model model,
+      HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+
+    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
+      pageSize = 10;
+    }
+
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfRecord = boardService.countAllHistory(loginUser.getNo());
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    List<Board> boardList = boardService.boardHistory(pageNo, pageSize, loginUser.getNo());
+    model.addAttribute("list", boardList);
+
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+
+    if(member.getMyInfoMenuId() == null || "".equals(member.getMyInfoMenuId())){
+      session.setAttribute("myInfoMenuId", "boardHistory");
+    }else {
+      session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
+    }
+
+
+
+  }
+
+
+  @GetMapping("commentHistory")  // 작성댓글 내역
+  public void commentHistory(@RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize,
+      Model model,
+      HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+
+    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
+      pageSize = 10;
+    }
+
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfRecord = boardService.countAllCommentHistory(loginUser.getNo());
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
+
+
+    //commentList = sort(commentList); // 정렬 함수 호출
+    model.addAttribute("list", commentList);
+
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+
+  }
+
+  @PostMapping("boardStateCheck")  // 작성댓글 내역
+  public ResponseEntity<?> boardStateCheck(
+      Board board,
+      Model model) throws Exception {
+
+    String state = memberService.boardStateCheck(board);
+    return ResponseEntity.ok(state);
+
   }
 
 }

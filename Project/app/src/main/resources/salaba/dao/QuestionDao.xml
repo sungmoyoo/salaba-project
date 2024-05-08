@@ -11,8 +11,14 @@
     <result column="title" property="title"/>
     <result column="content" property="content"/>
     <result column="state" property="state"/>
-    <result column="state_nm" property="stateNm"/>
     <result column="register_date" property="registerDate"/>
+
+    <collection property="questionFileList" ofType="QuestionFile">
+      <id column="question_file_no" property="questionFileNo"/>
+      <result column="question_no" property="questionNo"/>
+      <result column="ori_file_name" property="oriFileName"/>
+      <result column="uuid_file_name" property="uuidFileName"/>
+    </collection>
   </resultMap>
 
   <resultMap id="QnaMap" type="Qna">
@@ -21,9 +27,13 @@
     <result column="answer_date" property="answerDate"/>
   </resultMap>
 
+  <select id="getQuestionNo" resultType="int">
+    SELECT max(question_no)+1 FROM team.question
+  </select>
+
   <insert id="questionAdd" parameterType="Question">
-    insert into question(member_no,title,content)
-    values(#{no},#{title}, #{content})
+    insert into question(question_no, member_no,title,content)
+    values(#{questionNo}, #{no},#{title}, #{content})
   </insert>
 
   <select id="findAll" resultMap="QuestionMap">
@@ -46,26 +56,20 @@
 
   <select id="findBy" resultMap="QuestionMap" parameterType="int">
     select
-      question_no,
-      title,
-      content,
-      state,
-      register_date
+      q.question_no,
+      q.title,
+      q.content,
+      q.state,
+      q.register_date,
+      qf.question_file_no,
+      qf.ori_file_name,
+      qf.uuid_file_name
     from
-      question
+      question q
+      inner join question_file qf on q.question_no = qf.question_no
     where
-      question_no=#{value}
+      q.question_no=#{value}
   </select>
-
-  <update id="questionUpdate" parameterType="Question">
-  update
-    question
-  set
-    title=#{title},
-    content=#{content}
-  where
-    question_no=#{no}
-</update>
 
   <select id="getAnswer" resultMap="QnaMap" parameterType="int">
     select

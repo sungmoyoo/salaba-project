@@ -19,4 +19,6 @@ public class Bookmark implements Serializable {
   private String address; // 주소
   private String price; // 숙소가격
 
+  private String myInfoMenuId;//좌측 메뉴 클릭 상태 표시를 위한 변수
+
 }
