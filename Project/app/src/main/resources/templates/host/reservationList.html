@@ -12,9 +12,14 @@
   <style>
     h1 {
       margin: 50px 10px 20px 10px;
+      font-family: "Noto Sans KR";
+      font-size: 30px;
+      font-weight: 500;
     }
 
     .reservation-container {
+      font-family: "Noto Sans KR";
+      font-weight: 400;
       border: 1px solid #CCCCCC;
       margin: 0px 10px 100px 10px;
       border-radius: 10px;
@@ -38,7 +43,8 @@
     .table-header {
       display: flex;
       align-items: center;
-      font-weight: bold;
+      font-weight: 700;
+      font-size: 16px;
       background-color: #f2f2f2;
     }
 
@@ -93,7 +99,7 @@
   2. 예약 승인/거절을 위해 테이블 안에 form 버튼을 추가하고 업데이트에 필요한 값을 hidden으로 보냄.
   3. 화면에 보여지는 값은 반복문으로 출력되며 페이지 컨트롤러로부터 받은 hostReservation의 값이 들어감.
    -->
-  <div data-th-if="${hostReservation.state == 0}" data-th-each="hostReservation : ${list}"
+  <div data-th-if="${hostReservation.state} == '0'" data-th-each="hostReservation : ${list}"
        data-th-object="${hostReservation}" class="table-row">
     <div class="table-cell" data-th-text="*{rentalHomeName}">그레이트 호텔</div>
     <div class="table-cell" data-th-text="*{memberName}">홍길동</div>
@@ -176,7 +182,7 @@
     <div class="table-cell header">이용 인원</div>
     <div class="table-cell header">남은 기간</div>
   </div>
-  <div data-th-if="${hostReservation.state == 1}" data-th-each="hostReservation : ${list}"
+  <div data-th-if="${hostReservation.state} == '1'" data-th-each="hostReservation : ${list}"
        data-th-object="${hostReservation}" class="table-row">
     <div class="table-cell" data-th-text="*{rentalHomeName}">그레이트 호텔</div>
     <div class="table-cell" data-th-text="*{memberName}">홍길동</div>
@@ -197,7 +203,7 @@
     <div class="table-cell header date">이용 기간</div>
     <div class="table-cell header">이용 인원</div>
   </div>
-  <div data-th-if="${hostReservation.state == 2}"
+  <div data-th-if="${hostReservation.state}  == '2'"
        data-th-each="hostReservation : ${list}" data-th-object="${hostReservation}" class="table-row">
     <div class="table-cell" data-th-text="*{rentalHomeName}">그레이트 호텔</div>
     <div class="table-cell" data-th-text="*{memberName}">홍길동</div>
@@ -209,8 +215,6 @@
 </div>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
-
-
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {

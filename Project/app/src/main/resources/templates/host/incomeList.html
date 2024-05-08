@@ -11,11 +11,15 @@
   <style>
 
     #main-container {
+      font-family: "Noto Sans KR";
+      font-weight: 400;
       width: 90%;
       margin-left: 60px;
     }
 
     #bar-container {
+      font-family: "Noto Sans KR";
+      font-weight: 700;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -28,7 +32,6 @@
 
     #income-container {
       font-size: 23px;
-      font-weight: bold;
       color: #555555;
       margin-left: 20px;
     }
@@ -43,9 +46,10 @@
     }
 
     #search-container {
+      color: #555555;
       text-align: right;
       margin: 20px 60px 20px 0px;;
-      font-size: 12px;
+      font-size: 16px;
       justify-content: center;
       align-items: center;
     }
@@ -60,7 +64,6 @@
     #searchButton {
       display: inline-block;
       padding: 6px 9px;
-      font-size: 12px;
       cursor: pointer;
       text-align: center;
       margin-left: 10px;
@@ -120,7 +123,7 @@
 
     .modal-title {
       color: #343a40;
-      font-weight: bold;
+<!--      font-weight: bold;-->
     }
 
 
@@ -191,8 +194,8 @@
          data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=80,h=80,ttype=jpg)}"
          src="/photo1.jpg">
     <span class="span-content" data-th-text="*{name}">xxx</span>
-    <span class="span-content" data-th-text="'등록일:' + *{registeDate}">2024-01-01</span>
-    <span class="span-content address" data-th-text="'주소:' + *{address}">서울시 강남구...</span>
+    <span class="span-content" data-th-text="*{registeDate}">2024-01-01</span>
+    <span class="span-content address" data-th-text="*{address}">서울시 강남구...</span>
     <span class="span-content" data-th-id="'usageCount_' + *{rentalHomeNo}">0</span>
   </div>
 </div>
@@ -301,8 +304,8 @@
               <div class="value-div">
                 <span>${formatter.format(reservationEl.amount)}원</span>
                 <span>${formatter.format(cleanFee)}원</span>
-                <span>${formatter.format(reservationEl.amount * 0.03)}원</span>
-                <span>${formatter.format(reservationEl.amount - cleanFee - (reservationEl.amount * 0.03))}원</span>
+                <span>${formatter.format(Math.round(reservationEl.amount * 0.03))}원</span>
+                <span>${formatter.format(reservationEl.amount - cleanFee - (Math.round(reservationEl.amount * 0.03)))}원</span>
               </div>
             </div>
           </div>

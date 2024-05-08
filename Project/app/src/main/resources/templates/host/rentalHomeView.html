@@ -603,11 +603,11 @@
            data-th-object="${rentalHomeFacility}">
         <a data-th-text="*{facilityName}">시설</a>
         <i class="fa-solid fa-circle-minus"></i>
-        <input class="facilityCount" type="number" name="facilityCount" data-th-value="*{facilityCount}"/>
+        <input class="facilityCount input" type="number" name="facilityCount" data-th-value="*{facilityCount}"/>
         <i class="fa-solid fa-circle-plus"></i>
-        <input class="facilityNames" type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
-        <input class="facilityNos" type="hidden" name="facilityNames"
-               data-th-value="*{facilityName}"/>
+        <input class="facilityNames" type="hidden" name="facilityNames" data-th-value="*{facilityName}"/>
+        <input class="facilityNos" type="hidden" name="facilityNos"
+               data-th-value="*{facilityNo}"/>
       </div>
     </div>
     <h1>숙소 편의시설</h1>
@@ -669,9 +669,7 @@
     formData.append('rentalHomeRule', document.getElementById('rentalHomeRule').value);
 
     let basicAddress = document.querySelector('#basicAddress').value;
-    console.log(basicAddress);
     let detailAddress = document.querySelector('#detailAddress').value;
-    console.log(detailAddress);
     formData.append('address', basicAddress + "." + detailAddress);
     formData.append('lat', document.querySelector('#lat').value);
     formData.append('lon', document.querySelector('#lon').value);
@@ -701,25 +699,27 @@
 
     // 선택된 시설 요소들
     let checkedFacility = document.querySelectorAll('.facilityCount');
+    let inputFacility = document.querySelectorAll('.facilityCount.input');
 
     checkedFacility.forEach(function(e, index) {
-
       // 값이 1 이상일 때(선택 또는 입력되었을 때, 기본 시설은 최소 1개 이상임)
       if (e.check) {
         formData.append('facilityCount', e.value);
         formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
         formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
       }
-      if (e.value > 0) {
-        formData.append('facilityCount', e.value);
-        formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
-        formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
-      }
+    });
+
+    inputFacility.forEach(function(e, index) {
+      formData.append('facilityCount', e.value);
+      formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
+      formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
+
+      console.log(document.querySelectorAll('.facilityNames')[index].value);
+      console.log(document.querySelectorAll('.facilityNos')[index].value);
     });
 
     updateFormData(); // FormData 업데이트
-
-    console.log(formData.getAll('photos'));
 
     fetch('rentalHomeUpdate', {
       method: 'POST',
@@ -935,14 +935,6 @@
 
     let modalButton = document.querySelector('#modalButton');
 
-    console.log(isEmpty);
-    console.log(imageCount.length);
-    console.log(imageCount.length < 5);
-    console.log(isRoomEmpty);
-    console.log(!radioChecked);
-    console.log(themeCheckboxes.length == 0);
-    console.log(roomCheckboxes.length == 0);
-
     if (isEmpty || imageCount.length < 5 || isRoomEmpty || !radioChecked || roomCheckboxes.length == 0 || themeCheckboxes.length == 0) {
       modalButton.disabled = true;
       modalButton.style.backgroundColor = '#CCCCCC';
@@ -967,7 +959,6 @@
       element.addEventListener('change', checkRequiredFields);
     });
 
-    console.log(filesArray);
     checkRequiredFields();
   };
 

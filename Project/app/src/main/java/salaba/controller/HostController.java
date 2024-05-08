@@ -38,7 +38,7 @@ import salaba.vo.rental_home.Theme;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/host")
-@SessionAttributes("rentalHome")
+@SessionAttributes("rental_home")
 
 public class HostController {
 
@@ -213,6 +213,7 @@ public class HostController {
       RentalHome rentalHome,
       @RequestParam(required = false) MultipartFile[] photos,
       @RequestParam(required = false) String[] photoExplanations,
+      @RequestParam(required = false) List<String> existPhotoName,
       @RequestParam List<Integer> themeNos,
       @RequestParam List<String> themeNames,
       @RequestParam String type,
@@ -220,7 +221,6 @@ public class HostController {
       @RequestParam List<Integer> facilityCount,
       @RequestParam List<Integer> facilityNos,
       @RequestParam List<String> facilityNames,
-      @RequestParam List<String> existPhotoName,
       SessionStatus sessionStatus
   ) throws Exception {
 
@@ -245,22 +245,24 @@ public class HostController {
           old.getRentalHomePhotos().getLast().getPhotoOrder());
       rentalHome.setRentalHomePhotos(newFiles);
     }
+    if (existPhotoName != null) {
+      for (String photoName : existPhotoName) {
+        boolean isPhotoFound = false;
 
-    for (String photoName : existPhotoName) {
-      boolean isPhotoFound = false;
-
-      for (RentalHomePhoto oldPhoto : old.getRentalHomePhotos()) {
-        if (oldPhoto.getUuidPhotoName().equals(photoName)) {
-          isPhotoFound = true;
-          break;
+        for (RentalHomePhoto oldPhoto : old.getRentalHomePhotos()) {
+          if (oldPhoto.getUuidPhotoName().equals(photoName)) {
+            isPhotoFound = true;
+            break;
+          }
+        }
+        if (!isPhotoFound) {
+          // 삭제 메서드 호출
+          hostService.deleteRentalHomePhotoByName(photoName);
+          storageService.delete(this.bucketName, uploadDir, photoName);
         }
       }
-      if (!isPhotoFound) {
-        // 삭제 메서드 호출
-        hostService.deleteRentalHomePhotoByName(photoName);
-        storageService.delete(this.bucketName, uploadDir, photoName);
-      }
     }
+
 
     rentalHome.setThemes(themeTransform(themeNos, themeNames, type));
     rentalHome.setRentalHomeFacilities(
