@@ -3,12 +3,6 @@
 <head>
   <meta charset='UTF-8'>
   <title>사라바</title>
-  <style>
-    *{padding:0;margin:0}
-    li{list-style:none}
-    a{text-decoration:none;font-size:14px}
-
-  </style>
 </head>
 <body>
 <header data-th-fragment="header">
@@ -60,22 +54,22 @@
       </div>
     </button>
   </div>
-<!--  <section>-->
-<!--    <div class="search-container">-->
-<!--      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">-->
-<!--        <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">-->
-<!--        <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">-->
-<!--        <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">-->
-<!--        <input class="search-input" type="number" name="capacity" id="guests" placeholder="인원">-->
-<!--        <button class="search-button" type="submit">검색</button>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </section>-->
+  <section>
+    <div class="search-container">
+      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
+        <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
+        <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
+        <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
+        <input class="search-input" type="number" name="capacity" id="guests" placeholder="인원">
+        <button class="search-button" type="submit">검색</button>
+      </form>
+    </div>
+  </section>
 </body>
 <script data-th-inline="javascript">
   let sessionInfo = /*[[${session.loginUser}]]*/ '';
 </script>
-<script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script>
+<!-- <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script> -->
 <script data-th-src="@{/js/header.js}"></script>
 <script>
   const se = sessionInfo;

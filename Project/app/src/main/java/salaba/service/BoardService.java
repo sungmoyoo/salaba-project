@@ -37,12 +37,12 @@ public interface BoardService {
   int increaseLikeCount(int boardNo, int memberNo); // 게시글 추천수 증가
   int decreaseLikeCount(int boardNo, int memberNo); // 추천 취소
 
-  List<Board> search(String keyword, String type); // 검색 기능 업데이트
+  List<Board> search(String keyword, String type, int categoryNo); // 검색 기능 업데이트
 
   int countFiltered(int categoryNo, String type, String keyword); // 검색 결과 페이징 처리
 
-  List<Board> searchByTitle(String title); // 제목으로 검색
-  List<Board> searchByContent(String content); // 내용으로 검색
+  List<Board> searchByTitle(String title, int categoryNo); // 제목으로 검색
+  List<Board> searchByContent(String content, int categoryNo); // 내용으로 검색
 
   List<Board> boardHistory(int pageNo, int pageSize, int no); // 작성글 내역
   int countAllHistory(int memberNo); // count

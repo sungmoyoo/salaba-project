@@ -116,8 +116,8 @@ public class DefaultHostService implements HostService {
   }
 
   @Override
-  public int deleteRentalHomePhoto(int photoNo) {
-    return photoDao.deletePhoto(photoNo);
+  public int deleteRentalHomePhotoByName(String uuidPhotoName) {
+    return photoDao.deletePhoto(uuidPhotoName);
   }
 
   @Override

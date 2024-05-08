@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>숙소 관리 내역</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <style>
 
-
     #mainContainer {
+      font-family: "Noto Sans KR";
+      font-weight: 400;
       margin-top: 50px;
       border: 1px solid #CCCCCC;
+      border-radius: 10px;
+      overflow: hidden;
     }
 
-    #titleContainer {
-      border: 1px solid #CCCCCC;
-      padding: 10px;
-    }
 
     .contentContainer {
-      border: 1px solid #CCCCCC;
       position: relative;
       max-height: 150px;
     }
@@ -29,9 +32,10 @@
     }
 
     .table-row {
-      display: table-row;
+      border: 1px solid #CCCCCC;
+      display: flex;
+      align-items: center;
     }
-
 
     .table-cell {
       display: table-cell;
@@ -39,16 +43,72 @@
       text-align: center;
     }
 
+    .rentalHomePhoto img,
+    #empty {
+      width: 150px;
+      padding: 5px;
+      border-radius: 10px;
+    }
+
+    .name,
+    #name,
+    .capacity,
+    #capacity,
+    .address,
+    #address,
+    .price,
+    #price,
+    .state,
+    #state,
+    .startDate,
+    #startDate {
+      flex: 1;
+      padding: 5px;
+      max-width: 200px;
+      word-wrap: break-word;
+    }
+
+    .table-row:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      background-color: #35C5B3;
+      color: #FFFFFF;
+      transition: box-shadow 0.3s, transform 0.3s, background-color 0.3s, color 0.3s;
+    }
+
+    #addContainer:hover #plus {
+      color: #FFFFFF; /* 상위 태그가 호버될 때 plus 아이콘 색상 변경 */
+    }
+
     .table-header {
-      font-weight: bold;
+      padding: 10px 0px 10px 0px;
+      display: flex;
+      align-items: center;
+      font-weight: 700;
       text-align: right;
+      font-size: 16px;
       background-color: #f2f2f2;
     }
 
-    .rentalHomePhoto {
-      width: 150px;
+    #addContainer {
+      height: 166px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    #plus {
+      font-size: 80px;
+      color: #696969;
+    }
+
+    #plus:hover {
+      color: #8ADFD7; /* 호버 시 아이콘 색상 변경 */
+    }
+
   </style>
+</head>
+
 
 
   </style>
@@ -61,20 +121,21 @@
 <div align="center">
 
   <div id="mainContainer">
-    <div id="titleContainer" class="table">
-      <div class="table-row table-header">
-        <div class="table-cell">숙소명</div>
-        <div class="table-cell">수용 인원</div>
-        <div class="table-cell">주소</div>
-        <div class="table-cell">가격</div>
-        <div class="table-cell">상태</div>
-        <div class="table-cell">호스팅 시작일</div>
-      </div>
-    </div>
 
-    <div data-th-each="rentalHome : ${list}" data-th-object="${rentalHome}" class="rows" data-th-data-no="${rentalHome.rentalHomeNo}">
-      <div class="contentContainer table">
-        <div class="table-row">
+      <div class="table-header">
+        <div class="table-cell" id="empty"></div>
+        <div class="table-cell" id="name">숙소명</div>
+        <div class="table-cell" id="capacity">수용 인원</div>
+        <div class="table-cell" id="address">주소</div>
+        <div class="table-cell" id="price">가격</div>
+        <div class="table-cell" id="state">상태</div>
+        <div class="table-cell" id="startDate">호스팅 시작일</div>
+      </div>
+
+
+    <div data-th-each="rentalHome : ${list}" data-th-object="${rentalHome}" class="rows" >
+
+        <div class="table-row content" data-th-data-no="${rentalHome.rentalHomeNo}">
           <div class="table-cell rentalHomePhoto">
             <img class="content img" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=150,h=150,ttype=jpg)}" src="/photo1.jpg">
           </div>
@@ -82,10 +143,13 @@
           <div class="table-cell capacity" data-th-text="*{capacity}">2</div>
           <div class="table-cell address" data-th-text="*{address}">제주 서귀포시 ...</div>
           <div class="table-cell price" data-th-text="*{price} + '/주'">100000/주</div>
-          <div class="table-cell status" data-th-data-state="*{state}"></div>
-          <div class="table-cell hostingStartDate" data-th-text="${#dates.format(rentalHome.hostingStartDate,'yyyy-MM-dd')}">2024-04-06</div>
+          <div class="table-cell state" data-th-data-state="*{state}"></div>
+          <div class="table-cell startDate" data-th-text="${#dates.format(rentalHome.hostingStartDate,'yyyy-MM-dd')}">2024-04-06</div>
         </div>
-      </div>
+
+    </div>
+    <div class="table-row table" id="addContainer">
+      <i id="plus" class="fa-regular fa-square-plus"></i>
     </div>
   </div>
 
@@ -95,42 +159,58 @@
   <br>
   <br>
 
-  <div align="center">
-    <a data-th-href="@{hostStart}">새 숙소</a>
-  </div>
+
 
   <div class="footer" data-th-replace="footer :: footer">꼬리말</div>
   <script data-th-inline="javascript">
 
 
-    statusList = document.querySelectorAll('.status');
+    stateList = document.querySelectorAll('.state');
 
-    statusList.forEach((statusTd) => {
-      let state = statusTd.getAttribute('data-state');
+    stateList.forEach((stateDiv) => {
+      let state = stateDiv.getAttribute('data-state');
       switch (state) {
         case '0':
-          statusTd.textContent = "등록 심사중";
+          stateDiv.textContent = "등록 심사중";
           break;
         case '1':
-          statusTd.textContent = "운영중";
+          stateDiv.textContent = "운영중";
           break;
         case '2':
-          statusTd.textContent = "운영 중지";
+          stateDiv.textContent = "운영 중지";
           break;
         default:
-          statusTd.textContent = "등록 심사중";
+          stateDiv.textContent = "등록 심사중";
           break;
       }
     });
 
-    var el = document.querySelectorAll('.content');
+    var el = document.querySelectorAll('.table-row.content');
 
-    for (var e of el) {
-      e.addEventListener("click", function(e) {
-        window.location.href = "rentalHomeView?rentalHomeNo=" + e.currentTarget.getAttribute("data-no");
-      });
-    }
+    el.forEach(function(e) {
+      var stateDiv = e.querySelector('.state');
+      var state = stateDiv.textContent;
+
+      if (state !== "등록 심사중") {
+        e.onclick = () => {
+          window.location.href = "rentalHomeView?rentalHomeNo=" + e.getAttribute("data-no");
+        };
+      } else {
+        e.onclick = () => {
+          alert("등록 심사중인 숙소입니다.")
+        };
+      }
+    });
+
+    document.getElementById('addContainer').onclick = () => {
+      location.href='hostStart';
+    };
   </script>
 </div>
 </body>
+<script data-th-src="@{/js/header.js}"></script>
+<script>
+
+
+</script>
 </html>

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id=":app:test" external.linked.project.path="$MODULE_DIR$/../../../app" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="salaba" external.system.module.type="sourceSet" external.system.module.version="0.0.1-SNAPSHOT" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_21">
     <output-test url="file://$MODULE_DIR$/../../../app/build/classes/java/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../app/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/test/java" isTestSource="true" />
     </content>
-<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="21" jdkType="JavaSDK" />
-=======
-    <orderEntry type="inheritedJdk" />
->>>>>>> 96f4b1e1309cc84c52f1d5b27a324504f55b8285
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="salaba.app.main" />
+    <orderEntry type="module" module-name="Project.salaba.app.main~1" />
     <orderEntry type="library" name="Gradle: org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:2.7.18" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-thymeleaf:2.7.18" level="project" />

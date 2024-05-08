@@ -1,6 +1,5 @@
 package salaba.service.impl;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +31,10 @@ public class DefaultBoardReportService implements BoardReportService { // 게시
       boardReportFileDao.addAllFiles(boardReport.getReportFileList());
     }
   }
-
+  @Override
+  public int checkReported(int memberNo, int targetNo, String targetType) { // 사용자가 이미 신고했는지 확인
+    return boardReportDao.checkReported(memberNo, targetNo, targetType);
+  }
 
 }
 

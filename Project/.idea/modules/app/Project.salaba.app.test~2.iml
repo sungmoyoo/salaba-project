@@ -6,13 +6,9 @@
     <content url="file://$MODULE_DIR$/../../../app/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/test/java" isTestSource="true" />
     </content>
-<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="21" jdkType="JavaSDK" />
-=======
-    <orderEntry type="inheritedJdk" />
->>>>>>> 96f4b1e1309cc84c52f1d5b27a324504f55b8285
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="salaba.app.main" />
+    <orderEntry type="module" module-name="Project.salaba.app.main" />
     <orderEntry type="library" name="Gradle: org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:2.7.18" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-thymeleaf:2.7.18" level="project" />

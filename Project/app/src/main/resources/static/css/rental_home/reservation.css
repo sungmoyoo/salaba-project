@@ -1,0 +1,9 @@
+main{
+  display: flex;
+}
+
+#map{
+  display: block;
+  width: 400px;
+  height: 400px;
+}

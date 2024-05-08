@@ -40,7 +40,7 @@ public interface BoardDao {  // 게시판 인터페이스
 
   int decreaseLikeCount(@Param("boardNo") int boardNo, @Param("memberNo") int memberNo); // 추천 취소(board_like delete)
 
-  List<Board> searchByKeyword(@Param("keyword") String keyword, @Param("type") String type); // 검색
+  List<Board> searchByKeyword(@Param("keyword") String keyword, @Param("type") String type, @Param("categoryNo") int categoryNo); // 검색
 
   int countFiltered(int categoryNo, String type, String keyword); // 검색으로 필터링해 페이징 처리
 
