@@ -139,3 +139,7 @@ table th {
     font-weight: bolder;
     font-size: 30px;
 }
+
+#answer {
+    width: 80%;
+}
