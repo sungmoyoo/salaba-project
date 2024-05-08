@@ -26,7 +26,7 @@ public interface MemberDao {
     List<Member> findHostByName(@Param("keyword") String keyword);
     List<Member> findHostByEmail(@Param("keyword") String keyword);
 
-    int updateGrade(@Param("grade") String grade,
+    int updateGrade(@Param("gradeNo") int gradeNo,
                     @Param("memberNo") long memberNo);
 
     public Member findByEmailAndPassword(@Param("email") String email,

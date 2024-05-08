@@ -56,11 +56,10 @@ public class RentalManageController {
                 .build();
     }
 
-    @PutMapping("/update/{value}/{rentalNo}")
-    public RestResult rentalUpdate(@PathVariable String value,
-                               @PathVariable int rentalNo) {
+    @PutMapping("/update")
+    public RestResult rentalUpdate(@RequestBody Rental rental) {
         
-        rentalService.updateState(rentalNo, value);
+        rentalService.updateState(rental.getRentalNo(), rental.getState());
         return RestResult.builder()
                 .status(RestResult.SUCCESS)
                 .build();

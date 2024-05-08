@@ -223,7 +223,7 @@
     </select>
 
     <update id="updateGrade">
-        UPDATE member set grade_no = #{grade}
+        UPDATE member set grade_no = #{gradeNo}
         WHERE member_no = #{memberNo}
     </update>
 

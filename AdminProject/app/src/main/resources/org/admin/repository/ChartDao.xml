@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.admin.repository.ChartDao">
+    <resultMap id="BoardStatisticMap" type="BoardStatistic">
+        <result column="created_date" property="createdDate"/>
+        <result column="board_count" property="boardCount"/>
+    </resultMap>
+
+    <resultMap id="MemberGradeStatisticMap" type="MemberGradeStatistic">
+        <result column="grade_name" property="gradeName"/>
+        <result column="member_count" property="memberCount"/>
+    </resultMap>
+
+    <resultMap id="MemberStatisticMap" type="MemberStatistic">
+        <result column="join_year" property="joinYear"/>
+        <result column="join_month" property="joinMonth"/>
+        <result column="member_count" property="memberCount"/>
+    </resultMap>
+
+    <resultMap id="RentalStatisticMap" type="RentalStatistic">
+        <result column="region_name" property="regionName"/>
+        <result column="rental_count" property="rentalCount"/>
+    </resultMap>
+
+    <resultMap id="UnProcessedWorksMap" type="UnProcessedWorks">
+        <result column="rental_reg_count" property="rentalReg"/>
+        <result column="rental_report_count" property="rentalReport"/>
+        <result column="board_report_count" property="boardReport"/>
+        <result column="comment_report_count" property="commentReport"/>
+        <result column="qna_count" property="qnaCount"/>
+    </resultMap>
+    
+    <select id="findBoardCountInMonth" resultMap="BoardStatisticMap">
+        SELECT DATE(created_date) AS created_date, COUNT(*) AS board_count
+        FROM board
+        WHERE created_date >= CURDATE() - INTERVAL 1 MONTH
+        GROUP BY DATE(created_date)
+        ORDER BY DATE(created_date) DESC;
+    </select>
+
+    <select id="findJoinCountInMonth" resultMap="MemberStatisticMap">
+        SELECT
+        YEAR(join_date) AS join_year,
+        MONTH(join_date) AS join_month,
+        COUNT(*) AS member_count
+        FROM
+        member
+        WHERE
+        join_date BETWEEN DATE_SUB(NOW(), INTERVAL 6 MONTH) AND NOW()
+        GROUP BY
+        YEAR(join_date),
+        MONTH(join_date)
+        ORDER BY
+        join_year ASC, join_month ASC;
+    </select>
+
+    <select id="findUserCountByGrade" resultMap="MemberGradeStatisticMap">
+        SELECT g.grade_name, COUNT(m.member_no) AS member_count
+        FROM member m
+        INNER JOIN grade g ON m.grade_no = g.grade_no
+        GROUP BY m.grade_no
+        ORDER BY m.grade_no asc;
+    </select>
+
+    <select id="findRentalCountByRegion" resultMap="RentalStatisticMap">
+        SELECT r.region_name, COUNT(rh.rental_home_no) AS rental_count
+        FROM rental_home rh
+        INNER JOIN region r ON rh.region_no = r.region_no
+        GROUP BY rh.region_no
+        ORDER BY rental_count desc;
+    </select>
+
+    <select id="findUnprocessedWorks" resultMap="UnProcessedWorksMap">
+        SELECT
+        (SELECT COUNT(*) FROM rental_home WHERE state='0') AS rental_reg_count,
+        (SELECT COUNT(*) FROM rental_home_report WHERE state='0') AS rental_report_count,
+        (SELECT COUNT(*) FROM board_report_detail WHERE report_target_type = '0' AND state = '0') AS board_report_count,
+        (SELECT COUNT(*) FROM board_report_detail WHERE (report_target_type = '1' OR report_target_type = '2') AND state = '0') AS comment_report_count,
+        (SELECT COUNT(*) FROM question WHERE state = '0') AS qna_count;
+    </select>
+
+
+</mapper>

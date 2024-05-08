@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8889") //front-end를 도입하게 되면 해당 포트에대한 CORS를 허용해야한다.
+                .allowedOrigins("http://localhost:3000") //front-end를 도입하게 되면 해당 포트에대한 CORS를 허용해야한다.
                 .allowedMethods("GET", "POST", "PATCH", "PUT", "OPTIONS", "DELETE")
                 .allowCredentials(true);
     }

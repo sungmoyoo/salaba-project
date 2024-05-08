@@ -22,7 +22,7 @@ public interface MemberService {
     List<Member> getHostByName(String keyword);
     List<Member> getHostByEmail(String keyword);
 
-    int updateGrade(String grade, long memberNo);
+    int updateGrade(int gradeNo, long memberNo);
 
     void add(Member member);
 
