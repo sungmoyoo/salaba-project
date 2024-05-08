@@ -39,39 +39,53 @@
 
   <select id="findAll" resultMap="BoardReportMap">
     select
-    report_no,
-    content,
-    state,
-    report_date,
-    report_target_no,
-    report_target_type
+      report_no,
+      content,
+      state,
+      report_date,
+      report_target_no,
+      report_target_type
     from
-    board_report_detail
+      board_report_detail
     where
-    report_target_type = #{reportTargetType}
+      report_target_type = #{reportTargetType}
     order by
-    report_date desc
+      report_date desc
   </select>
 
   <select id="findBy" resultMap="BoardReportMap" parameterType="int">
     select
-    t1.report_no,
-    t1.member_no,
-    t1.content,
-    t1.report_date,
-    t1.report_target_no,
-    t1.state,
-    t2.uuid_file_name,
-    t2.ori_file_name,
-    t3.report_type
+      t1.report_no,
+      t1.member_no,
+      t1.content,
+      t1.report_date,
+      t1.report_target_no,
+      t1.state,
+      t2.uuid_file_name,
+      t2.ori_file_name,
+      t3.report_type
     from
-    board_report_detail t1,
-    board_report_file t2,
-    board_report_category t3
+      board_report_detail t1,
+      board_report_file t2,
+      board_report_category t3
     where
-    t1.report_no = #{reportNo} and
-    t1.report_no = t2.report_no and
-    t1.report_category_no = t3.report_category_no
+      t1.report_no = #{reportNo} and
+      t1.report_no = t2.report_no and
+      t1.report_category_no = t3.report_category_no
+  </select>
+
+<!--  이미 신고했는지 여부 처리-->
+  <select id="checkReported" resultType="int" parameterType="int">
+    select
+      count(*)
+    from
+      board_report_detail
+    where
+      report_target_type = #{targetType}
+    and
+      report_target_no = #{targetNo}
+    and
+      member_no = #{memberNo}
   </select>
 
   <select id="countAll" resultType="int" parameterType="int">

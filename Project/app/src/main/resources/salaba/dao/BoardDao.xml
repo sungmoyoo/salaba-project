@@ -222,27 +222,26 @@
   <!-- 상세 조회 -->
   <select id="findBy" resultMap="BoardMap">
     select
-    b.board_no,
-    b.board_category_no,
-    b.title,
-    b.content,
-    b.view_count,
-    b.created_date,
-    b.state,
-    <if test="categoryNo != 0">
-      h.head_no,
-      h.head_content,
-    </if>
-    <if test="categoryNo == 0">
-      r.region_no,
-      r.region_name,
-    </if>
-    bs.scope_name,
-    bs.scope_no,
-    m.member_no,
-    m.nickname,
-    (select count(*) from board_like where board_no=b.board_no) as like_count,
-    (select count(*) from board_like where board_no=b.board_no and member_no=m.member_no) as my_like_count
+      b.board_no,
+      b.board_category_no,
+      b.title,
+      b.content,
+      b.view_count,
+      b.created_date,
+      b.state,
+      <if test="categoryNo != 0">
+        h.head_no,
+        h.head_content,
+      </if>
+      <if test="categoryNo == 0">
+        r.region_no,
+        r.region_name,
+      </if>
+      bs.scope_name,
+      bs.scope_no,
+      m.member_no,
+      m.nickname,
+      (select count(*) from board_like where board_no=#{boardNo}) as like_count
     from
     board b
     left join head h on b.head_no=h.head_no
@@ -347,54 +346,64 @@
     <choose>
       <when test='type.equals("title")'>
         SELECT
-        b.board_no,
-        b.board_category_no,
-        b.title,
-        b.view_count,
-        b.created_date,
-        (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
-        m.member_no,
-        m.nickname,
-        h.head_no,
-        h.head_content,
-        (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
-        r.region_no,
-        r.region_name
+          b.board_no,
+          b.board_category_no,
+          b.title,
+          b.view_count,
+          b.created_date,
+          (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
+          m.member_no,
+          m.nickname,
+          h.head_no,
+          h.head_content,
+          (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
+          r.region_no,
+          r.region_name,
+          bf.file_no,
+          bf.uuid_file_name
         FROM
         board b
         inner join head h on b.head_no=h.head_no
         inner join member m on b.member_no=m.member_no
         left join region r on b.region_no=r.region_no
+        LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
         WHERE
-        title LIKE CONCAT('%', #{keyword}, '%')
+          b.board_category_no = #{categoryNo}
+        AND
+          title LIKE CONCAT('%', #{keyword}, '%')
         AND
         b.state != '1'
       </when>
       <when test='type.equals("content")'>
         SELECT
-        b.board_no,
-        b.board_category_no,
-        b.title,
-        b.view_count,
-        b.content,
-        b.created_date,
-        b.state,
-        (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
-        m.member_no,
-        m.nickname,
-        h.head_no,
-        h.head_content,
-        (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
-        r.region_no,
-        r.region_name
+          b.board_no,
+          b.board_category_no,
+          b.title,
+          b.view_count,
+          b.content,
+          b.created_date,
+          b.state,
+          (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
+          m.member_no,
+          m.nickname,
+          h.head_no,
+          h.head_content,
+          (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
+          r.region_no,
+          r.region_name,
+          bf.file_no,
+          bf.uuid_file_name
         FROM
-        board b
-        inner join head h on b.head_no=h.head_no
-        inner join member m on b.member_no=m.member_no
-        left join board_file bf on b.board_no=bf.board_no
-        left join region r on b.region_no=r.region_no
+          board b
+          inner join head h on b.head_no=h.head_no
+          inner join member m on b.member_no=m.member_no
+          left join board_file bf on b.board_no=bf.board_no
+          left join region r on b.region_no=r.region_no
+          LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
         WHERE
-        content LIKE CONCAT('%', #{keyword}, '%')
+          b.board_category_no = #{categoryNo}
+        AND
+          content LIKE CONCAT('%', #{keyword}, '%')
         AND
         b.state != '1'
       </when>

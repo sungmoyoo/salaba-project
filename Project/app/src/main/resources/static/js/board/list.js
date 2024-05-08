@@ -38,6 +38,37 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+/*게시판 버튼 색상 넣기*/
+function setActiveAndNavigate(selectedId, url) {
+  console.log("Function called with ID:", selectedId, "and URL:", url);
+
+  // 선택된 버튼 ID 저장
+  localStorage.setItem('selectedButtonId', selectedId);
+
+  const buttons = document.querySelectorAll('#board-header button');
+  buttons.forEach(button => {
+      button.style.backgroundColor = 'transparent'; // 모든 버튼의 배경색을 투명으로 설정
+      button.style.color = 'black'; // 모든 버튼의 텍스트 색상을 검정색으로 설정
+  });
+
+  const selectedButton = document.getElementById(selectedId);
+  selectedButton.style.backgroundColor = '#35C5B3'; // 선택된 버튼의 배경색 변경
+  selectedButton.style.color = 'white'; // 선택된 버튼의 텍스트 색상 변경
+
+  location.href = url; // 페이지 이동
+}
+
+/* 페이지 로드 시 선택된 버튼의 색상 적용 */
+document.addEventListener('DOMContentLoaded', function() {
+  const selectedButtonId = localStorage.getItem('selectedButtonId');
+  if (selectedButtonId) {
+      const selectedButton = document.getElementById(selectedButtonId);
+      if (selectedButton) {
+          selectedButton.style.backgroundColor = '#35C5B3'; // 선택된 버튼의 배경색 변경
+          selectedButton.style.color = 'white'; // 선택된 버튼의 텍스트 색상 변경
+      }
+  }
+});
 
 
 // 후기 게시판 목록
@@ -78,27 +109,47 @@ document.querySelectorAll(".card-deck .card").forEach(card => {
     });
 
 
-// 검색
+    // 검색
     // 페이지가 로드될 때 저장된 검색어가 있는지 확인 -> 있으면 검색창에 남겨두기
   window.addEventListener('DOMContentLoaded', (event) => {
     initSlider();
-    console.log("검색1")
     var savedKeyword = localStorage.getItem('searchKeyword');
     if (savedKeyword) {
-      document.getElementById('search-input').value = savedKeyword;
+      document.getElementById('bsearch-input').value = savedKeyword;
       // 검색어를 가져왔으면 -> 다시 로컬 스토리지에서 삭제
-      console.log("검색2")
       localStorage.removeItem('searchKeyword');
     }
   });
 
-
   // 검색 버튼 클릭 시 검색어를 로컬 스토리지에 저장
-  document.getElementById('search-button').addEventListener('click', function(event) {
+  document.getElementById('bsearch-button').addEventListener('click', function(event) {
     event.preventDefault();
-    var keyword = document.getElementById('search-input').value;
+    var keyword = document.getElementById('bsearch-input').value;
     localStorage.setItem('searchKeyword', keyword);
-    document.getElementById('search-form').submit();
-        console.log("검색3")
+    document.getElementById('bsearch-form').submit();
   });
+
+
+// 상단으로 올라가기
+let scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+// 20px 내려가면 버튼이 보이도록 하기
+window.onscroll = function() {
+  var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+  if (scrollToTopBtn) {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  }
+};
+
+// 상단으로 올리기
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
 
