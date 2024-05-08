@@ -1,140 +1,61 @@
 <!DOCTYPE html>
 <html lang='en' xmlns:th="http://www.thymeleaf.org">
 <head>
-  <style>
-    .left-li{
-      list-style-type:none;
-      width: 110px;
-      background-color: #b9b9b9;
-      text-align: center;
-      margin-top: 10px;
-      padding: 10px 5px 10px 5px;
-    }
-    li a {
-      text-decoration-line: none;
-      color: #fff;
-    }
-  </style>
   <meta charset='UTF-8'>
   <title>사라바</title>
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script><!--중복체크 메시지를 위해 필요함>-->
-  <script>
-    $(document).ready(function() { //화면이 전부 로딩 된 후 자동으로 실행되는 함수
-      var nickcheck = "[[${nickcheck}]]";
-      if(nickcheck == "Y"){
-        alert("이미 사용중인 닉네임 입니다.");
-      }
-    });
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfo.css">
 
-    const Tel = (target) => {
-     target.value = target.value
-       .replace(/[^0-9]/g, '')
-       .replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
-    }
-
-    function fn_showChangePassword(){
-      $("#passwordChangeTable").show();
-    }
-
-    function fn_passwordSave(){
-      var password = frm.password.value;
-      var repassword = frm.repassword.value;
-      if(password == ""){
-        alert("비밀번호를 입력하세요.");
-        frm.password.focus();
-        return;
-      }
-      if(repassword == ""){
-        alert("비밀번호 확인을 입력하세요.");
-        frm.repassword.focus();
-        return;
-      }
-      if(password != repassword){
-        alert("비밀번호가 일치하지 않습니다.");
-        return;
-      }
-      frm.action = "/member/myInfoChangePasswordSave";
-      frm.submit();
-    }
-
-    function fn_save(){
-      frm.action = "/member/myinfoUpdate";
-      frm.submit();
-    }
-  </script>
 </head>
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
+<div class="rootDiv">
+  <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
 
-<table style="width:100%;height:540px;">
-  <tr>
-    <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
-      <table style="width:200px;background-color: #f5f1f1;">
-        <tr>
-          <td colspan="2" style="text-align:center;padding-top: 10px;">
-            <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
-               data-th-if="*{session.loginUser.photo}">
-              <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{session.loginUser.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-            <a data-th-unless="*{session.loginUser.photo}" href='/img/default-photo.jpeg'>
-              <img height='80px' src='/img/default-photo.jpeg'></a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align:center;">[[${session.loginUser.nickname}]]</td>
-        </tr>
-        <tr>
-          <td style="text-align:right;width: 35%;">등급:</td>
-          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberGradeName}'></td>
-        </tr>
-        <tr>
-          <td style="text-align:right;width: 35%;">포인트:</td>
-          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberPoint}'></td>
-        </tr>
-      </table>
-      <ul>
-        <li class="left-li"><a data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="member/myinfoCheckPassword" style="color:#000;"><b>내정보 관리</b></a></li>
-        <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark">즐겨찾기</a></li>
-        <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/member/boardHistory}" data-th-if="${session.loginUser != null}" href="member/boardHistory">작성글 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList">고객센터</a></li>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">
-      <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
+        <div class="rightDiv">
         <h2>내 정보</h2>
         <form name="frm" data-th-object="${member}"
               enctype='multipart/form-data'
               method='post' onsubmit="return false;">
           <input type="hidden" data-th-value='*{no}' name="no"/>
           <input type="hidden" data-th-value='*{nickname}' name="oldNickname" />
-          <table border='1'>
+
+          <table class="table_view">
+              <colgroup>
+                <col width="100px"/>
+                <col width="*"/>
+              </colgroup>
             <tbody>
             <tr>
-              <th>이름</th>
-              <td><input type="text" data-th-value='*{name}' name="name"/></td>
+              <th class="required">이름</th>
+              <td><input type="text" class="formInput" data-th-value='*{name}' name="name"/></td>
             </tr>
             <tr>
-              <th>닉네임</th>
-              <td><input type="text" maxlength="20" data-th-value='*{nickname}' name="nickname" /></td>
+              <th class="required">닉네임</th>
+              <td>
+                <input type="hidden" data-th-value='${nickcheck}' name="nickcheck" />
+                <input type="text" class="formInput" maxlength="20" data-th-value='*{nickname}' name="nickname" />
+                <button onclick="fn_nickCheck();">중복체크</button>
+              </td>
             </tr>
             <tr>
-              <th>이메일</th>
-              <td><input type="text" data-th-value='*{email}' name="email" readonly/></td>
+              <th class="required">이메일</th>
+              <td><input type="text" class="formInput" data-th-value='*{email}' name="email" readonly/></td>
             </tr>
             <tr>
-              <th>전화번호</th>
-              <td><input type="text" oninput="Tel(this)" maxlength="13" data-th-value='*{telNo}' name="telNo"/></td>
+              <th class="required">전화번호</th>
+              <td><input type="text" class="formInput" oninput="Tel(this)" maxlength="13" data-th-value='*{telNo}' name="telNo"/></td>
             </tr>
             <tr>
-              <th>생년월일</th>
-              <td ><input type="date" data-th-value="*{birthday}" name="birthday"/></td>
+              <th class="required">생년월일</th>
+              <td ><input type="date" class="formInput" data-th-value="*{birthday}" name="birthday"/></td>
             </tr>
             <tr>
               <th>국적</th>
               <td>
-                <select name="nationNo">
+                <select name="nationNo" class="formInput">
                   <option data-th-each="nation : ${nationList}" data-th-value="${nation.nationNo}"
                           th:selected="${nation.nationNo == member.nationNo}"><label data-th-text="${nation.nationName}"></label></option>
                 </select>
@@ -152,12 +73,14 @@
               </select>
             </tr>
             <tr>
-              <th>주소</th>
-              <td><input type="text" data-th-value='*{address}' name="address" /></td>
+              <th class="required">주소</th>
+              <td><input type="text" class="formInput" data-th-value='*{address}' name="address" /></td>
             </tr>
             <tr>
-              <th></th>
-              <td><a href="mytheme">선호사항 편집</a></td>
+              <th>선호사항</th>
+              <td>
+                <button onclick="fn_mytheme();">편집</button>
+              </td>
             </tr>
             <tr>
               <th>사진</th>
@@ -172,17 +95,17 @@
               </td>
             </tr>
             <tr>
-              <th></th>
+              <th>비밀번호</th>
               <td>
-                <a href="javascript:fn_showChangePassword();">[비밀번호 변경]</a>
+                <button onclick="fn_showChangePassword();">변경</button>
                 <table style="width:100%;display:none;" id="passwordChangeTable">
                   <tr>
                     <td>비밀번호</td>
-                    <td><input name='password' type='password'></td>
+                    <td><input name='password' class="formInput" type='password'></td>
                   </tr>
                   <tr>
                     <td>비밀번호 확인</td>
-                    <td><input name='repassword' type='password'></td>
+                    <td><input name='repassword' class="formInput" type='password'></td>
                   </tr>
                   <tr>
                     <td colspan="2">
@@ -192,18 +115,31 @@
                 </table>
               </td>
             </tr>
-            <tr>
-              <th></th>
-              <td><a data-th-href="@{delete(no=*{no})}" href="delete.html">[회원탈퇴]</a></td>
-            </tr>
             </tbody>
           </table>
-          <button onclick="fn_save();">정보 저장</button>
+          <table style="width:354px;">
+            <tr>
+              <td align="left"><button onclick="fn_save();">정보 저장</button></td>
+              <td align="right"><button onclick="fn_memberDelete();" style="background-color: #fb4d4d;color:#fff;border:0px solid">회원탈퇴</button></td>
+            </tr>
+          </table>
         </form>
       </div>
-    </td>
-  </tr>
-</table>
+</div>
 <div data-th-replace="footer :: footer">꼬리말</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script><!--중복체크 메시지를 위해 필요함>-->
+<script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/myinfo.js}"></script>
+<script>
+  $(document).ready(function() {
+   var nickcheck = "[[${nickcheck}]]";
+   if(nickcheck == "Y"){
+     alert("이미 사용중인 닉네임 입니다.");
+   }
+   if(nickcheck == "N"){
+     alert("사용가능한 닉네임 입니다.");
+   }
+ });
+</script>
 </html>

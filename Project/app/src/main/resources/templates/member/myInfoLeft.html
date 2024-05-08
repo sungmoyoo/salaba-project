@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>테스트</title>
+
+</head>
+<body>
+
+<div style="min-width:200px;background-color: #f8f8f8;color: #fff;margin:0px;width:13%" data-th-fragment="myInfoLeft">
+  <table style="width:100%;background-color: #91e1d5;">
+    <tr>
+      <td colspan="2" style="text-align:center;padding-top: 10px;">
+        <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
+           data-th-if="*{session.loginUser.photo}">
+          <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{session.loginUser.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
+        <a data-th-unless="*{session.loginUser.photo}" href='/img/default-photo.jpeg'>
+          <img height='80px' src='/img/default-photo.jpeg'></a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align:center;">[[${session.loginUser.nickname}]]</td>
+    </tr>
+    <tr>
+      <td style="text-align:right;width: 35%;">등급:</td>
+      <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberGradeName}'></td>
+    </tr>
+    <tr>
+      <td style="text-align:right;width: 35%;">포인트:</td>
+      <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberPoint}'></td>
+    </tr>
+  </table>
+  <ul style="padding-left: 39px;">
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'myinfoCheckPassword'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/member/myinfoCheckPassword?myInfoMenuId=myinfoCheckPassword}" data-th-if="${session.loginUser != null}">내정보 관리</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'bookmark'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/bookmark/bookmark?myInfoMenuId=bookmark}" data-th-if="${session.loginUser != null}">즐겨찾기</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'reservationList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/reservation/reservationList?myInfoMenuId=reservationList}" data-th-if="${session.loginUser != null}">예약 내역</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'boardHistory'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/member/boardHistory?myInfoMenuId=boardHistory}" data-th-if="${session.loginUser != null}">작성글 내역</a></li>
+    <li class="left-li" data-th-class="${session.myInfoMenuId == 'pointList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/pointHistory/pointList?myInfoMenuId=pointList}" data-th-if="${session.loginUser != null}">포인트 내역</a></li>
+    <li class="left-li" style="border-bottom: 0px;" data-th-class="${session.myInfoMenuId == 'questionList'} ? 'left-li active' : 'left-li'"><a data-th-href="@{/question/questionList?myInfoMenuId=questionList}" data-th-if="${session.loginUser != null}">고객센터</a></li>
+  </ul>
+</div>
+</body>
+</html>

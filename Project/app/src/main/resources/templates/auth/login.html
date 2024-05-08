@@ -5,9 +5,17 @@
   <meta content="1;url=/index.html" data-th-if="${session.loginUser != null}" http-equiv="Refresh">
   <meta content="3;url=/auth/form" data-th-if="${session.loginUser == null} and (${memberState} == '1' or ${memberState} == '3' or ${memberState} == '99')"
         http-equiv="Refresh">
-  <title>테스트</title>
+  <title>사라바</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
 </head>
 <body>
+<script>
+  function fn_schPw(){
+    frm.method = "post";
+    frm.action = "/member/schPw";
+    frm.submit();
+  }
+</script>
 
 <div data-th-replace="header :: header">머리말</div>
 
@@ -29,12 +37,6 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script data-th-src="@{/js/header.js}"></script>
 </html>
 
-<script>
-  function fn_schPw(){
-    frm.method = "post";
-    frm.action = "/member/schPw";
-    frm.submit();
-  }
-</script>

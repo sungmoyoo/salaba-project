@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,33 +83,23 @@ public class MemberController implements InitializingBean {
     //국가 리스트를 받아옴
     List<Nation> nationList = memberService.getNation();
 
-    //닉네임 중복체크
-    String nickcheck = request.getParameter("nickcheck");
-    model.addAttribute("nickcheck", nickcheck);
-
     //조회한 결과 model 에 add
     model.addAttribute("member", member);
     model.addAttribute("nationList", nationList);
 
-    //회원정보
-    session.setAttribute("loginUser", member);
+    //닉네임 중복체크
+    String nickcheck = request.getParameter("nickcheck");
+    String newNickName = request.getParameter("newNickName");
+    if("N".equals(nickcheck)){
+      member.setNickname(newNickName);
+    }
+    model.addAttribute("nickcheck", nickcheck);
 
   }
 
   @PostMapping("myinfoUpdate")
-  public String myinfoUpdate(Member member, MultipartFile file) throws Exception { // 내정보 수정
+  public String myinfoUpdate(Member member, MultipartFile file, HttpSession session) throws Exception { // 내정보 수정
 
-    String oldNickname = member.getOldNickname();//수정전 닉네임
-    String nickname = member.getNickname();//수정후 닉네임
-    //닉네임이 수정되었을 경우에만 중복체크를 한다.
-    if (!oldNickname.equals(nickname)) { //문자열 비교 시에는 .equals()
-      //닉네임 중복체크
-      Member check = memberService.checkNickname(member.getNickname());
-      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
-        String nickcheck = "Y";
-        return "redirect:myinfo?nickcheck=" + nickcheck;
-      }
-    }
     Member old = memberService.get(member.getNo());
 
     if (file.getSize() > 0) {
@@ -120,7 +111,23 @@ public class MemberController implements InitializingBean {
       member.setPhoto(old.getPhoto());
     }
     memberService.myinfoUpdate(member);
+
+    Member memberSave = memberService.get(member.getNo());
+    //회원정보
+    session.setAttribute("loginUser", memberSave);
+
     return "redirect:myinfo";
+  }
+
+  @PostMapping("myinfoNickNameCheck")
+  public String myinfoNickNameCheck(Member member) throws Exception { // 내정보 수정
+      //닉네임 중복체크
+      Member check = memberService.checkNickname(member.getNickname());
+      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
+        return "redirect:myinfo?nickcheck=Y";
+      }else{
+        return "redirect:myinfo?nickcheck=N&newNickName="+member.getNickname();
+      }
   }
 
   @GetMapping("delete")
@@ -158,7 +165,7 @@ public class MemberController implements InitializingBean {
       model.addAttribute("member", info);
       model.addAttribute("findYn", "Y");
     }
-      return "/member/findPasswordResult";
+      return "/member/findPasswordResult.js";
   }
 
   @PostMapping("changePasswordSave")
@@ -174,9 +181,10 @@ public class MemberController implements InitializingBean {
   }
 
   @GetMapping("myinfoCheckPassword")
-  public void myinfoCheckPassword(Member member, Model model, HttpServletRequest request) throws Exception {
+  public void myinfoCheckPassword(Member member, Model model, HttpServletRequest request, HttpSession session) throws Exception {
     String pwcheck = request.getParameter("pwcheck");
     model.addAttribute("pwcheck", pwcheck);
+    session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
 
   }
 
@@ -198,7 +206,7 @@ public class MemberController implements InitializingBean {
 
   @PostMapping("themeSave")
   public String themeSave(Member member, Model model, HttpSession session)
-      throws Exception { // 비밀번호 확인
+      throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
     member.setNo(sessionInfo.getNo());
@@ -214,7 +222,7 @@ public class MemberController implements InitializingBean {
 
   // 선호사항 폼
   @GetMapping("mytheme")
-  public void mytheme(Model model, HttpSession session){
+  public void mytheme(Member member, Model model, HttpSession session){
     Member sessionInfo = (Member) session.getAttribute("loginUser");
 
     model.addAttribute("themeList", memberService.themeList(sessionInfo));
@@ -223,11 +231,11 @@ public class MemberController implements InitializingBean {
   @GetMapping("boardHistory")  // 작성글 내역
   public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "10") int pageSize,
+      Member member,
       Model model,
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(loginUser.getNo());
 
     if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
       pageSize = 10;
@@ -250,15 +258,14 @@ public class MemberController implements InitializingBean {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
-    model.addAttribute("member", member);
 
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+    if(member.getMyInfoMenuId() == null || "".equals(member.getMyInfoMenuId())){
+      session.setAttribute("myInfoMenuId", "boardHistory");
+    }else {
+      session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
+    }
+
+
 
   }
 
@@ -270,7 +277,6 @@ public class MemberController implements InitializingBean {
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(loginUser.getNo());
 
     if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
       pageSize = 10;
@@ -296,15 +302,16 @@ public class MemberController implements InitializingBean {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
-    model.addAttribute("member", member);
 
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+  }
+
+  @PostMapping("boardStateCheck")  // 작성댓글 내역
+  public ResponseEntity<?> boardStateCheck(
+      Board board,
+      Model model) throws Exception {
+
+    String state = memberService.boardStateCheck(board);
+    return ResponseEntity.ok(state);
 
   }
 

@@ -34,19 +34,13 @@ public class BookmarkController {
       Model model,
       HttpSession session) throws Exception {
 
-    Member sessionInfo = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(sessionInfo.getNo());
-    bookmark.setNo(sessionInfo.getNo());
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    Member member = memberService.get(loginUser.getNo());
+    bookmark.setNo(loginUser.getNo());
 
     model.addAttribute("bookmark", bookmarkService.bookmark(bookmark));
     model.addAttribute("member", member);
 
-    //포인트
-    String memberPoint = memberService.getMemberPoint(member);
-    session.setAttribute("memberPoint", memberPoint);
-    //등급
-    Member memberGrade = memberService.getGrade(member);
-    session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());
-    session.setAttribute("memberGradeName", memberGrade.getGrade().getGradeName());
+    session.setAttribute("myInfoMenuId", bookmark.getMyInfoMenuId());
   }
 }

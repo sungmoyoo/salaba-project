@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
+
+
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
   <style>
-    .left-li{
-      list-style-type:none;
-      width: 110px;
-      background-color: #b9b9b9;
-      text-align: center;
-      margin-top: 10px;
-      padding: 10px 5px 10px 5px;
-    }
-    li a {
+    a{
       text-decoration-line: none;
-      color: #fff;
+      color: inherit;
     }
     .listing-container {
       margin: 20px auto; /* 중앙 정렬 */
@@ -102,113 +98,54 @@
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
-<table style="width:100%;height:540px;">
-  <tr>
-    <td style="width:200px;border: 1px solid #000;background-color: #f5f1f1;vertical-align:top;">
-      <table style="width:200px;background-color: #f5f1f1;">
-        <tr>
-          <td colspan="2" style="text-align:center;padding-top: 10px;">
-            <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
-               data-th-if="*{session.loginUser.photo}">
-              <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{session.loginUser.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-            <a data-th-unless="*{session.loginUser.photo}" href='/img/default-photo.jpeg'>
-              <img height='80px' src='/img/default-photo.jpeg'></a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align:center;">[[${session.loginUser.nickname}]]</td>
-        </tr>
-        <tr>
-          <td style="text-align:right;width: 35%;">등급:</td>
-          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberGradeName}'></td>
-        </tr>
-        <tr>
-          <td style="text-align:right;width: 35%;">포인트:</td>
-          <td style="text-align:right;padding-right:15px;" data-th-text='*{session.memberPoint}'></td>
-        </tr>
-      </table>
-      <ul>
-        <li class="left-li"><a data-th-href="@{/member/myinfoCheckPassword}" data-th-if="${session.loginUser != null}" href="member/myinfoCheckPassword">내정보 관리</a></li>
-        <li class="left-li"><a data-th-href="@{/bookmark/bookmark}" data-th-if="${session.loginUser != null}" href="bookmark/bookmark" style="color:#000;"><b>즐겨찾기</b></a></li>
-        <li class="left-li"><a data-th-href="@{/reservation/reservationList}" data-th-if="${session.loginUser != null}" href="reservation/reservationList">예약 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/member/boardHistory}" data-th-if="${session.loginUser != null}" href="member/boardHistory">작성글 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/pointHistory/pointList}" data-th-if="${session.loginUser != null}" href="pointHistory/pointList">포인트 내역</a></li>
-        <li class="left-li"><a data-th-href="@{/question/questionList}" data-th-if="${session.loginUser != null}" href="question/questionList" >고객센터</a></li>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">
-      <div style="padding-left: 15px;overflow: auto;width: 98%;height: 533px;">
-        <h1 data-th-text="즐겨찾기"></h1>
-        <table style="width:800px;">
-          <tr data-th-each="bookmark : ${bookmark}" data-th-object="${bookmark}">
-            <td style="width:285px;">
-              <section class="slider-container">
-                <div class="listing-container">
-                  <div class="listing-item">
-                    <div class="listing-slider">
-                      <img class="slide-image" data-th-each="photo : ${bookmark.photoList}"
-                           data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
-                      <button class="slide-button prev-button slick-prev"></button>
-                      <button class="slide-button next-button slick-next"></button>
-                    </div>
+<div class="rootDiv">
+  <div data-th-replace="/member/myInfoLeft :: myInfoLeft"></div>
+
+  <div class="rightDiv">
+      <h1 data-th-text="즐겨찾기"></h1>
+      <table style="width:800px;height:540px;">
+        <tr data-th-each="bookmark : ${bookmark}" data-th-object="${bookmark}">
+          <td style="width:285px;">
+            <section class="slider-container">
+              <div class="listing-container">
+                <div class="listing-item">
+                  <div class="listing-slider">
+                    <img class="slide-image" data-th-each="photo : ${bookmark.photoList}"
+                         data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rental_home/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+                    <button class="slide-button prev-button slick-prev"></button>
+                    <button class="slide-button next-button slick-next"></button>
                   </div>
                 </div>
-              </section>
-            </td>
-            <td>
-                <table style="width: 100%;height:252px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
-                  <tr>
-                    <td style="text-align: right;font-size: 16px;font-weight: bold;padding-right: 15px;">
-                      <a data-th-href="@{/rentalHome/view(rentalHomeNo=*{rentalHomeNo})}" href="rentalHome/view">보러가기 →</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="3" data-th-text="${bookmark.name}" style="font-size: 28px;font-weight: bold;padding-left: 15px;"></td>
-                  </tr>
-                  <tr>
-                    <td colspan="3" data-th-text="${bookmark.address}" style="font-size: 20px;font-weight: center; padding-left: 15px;"></td>
-                  </tr>
-                  <tr>
-                    <td style="font-size: 15px;font-weight: bold;text-align: center;padding-left: 15px;">가격:</td>
-                    <td data-th-text="${bookmark.price}+'원'" style="font-size: 15px;font-weight: bold;"></td>
-                  </tr>
-                </table>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </td>
-  </tr>
-</table>
-
+              </div>
+            </section>
+          </td>
+          <td>
+              <table style="width: 100%;height:252px;padding: 10px 0 10px 0;border-bottom:1px solid #ccc;">
+                <tr>
+                  <td style="text-align: right;font-size: 16px;font-weight: bold;padding-right: 15px;">
+                    <a data-th-href="@{/rentalHome/view(rentalHomeNo=*{rentalHomeNo})}" href="rentalHome/view">보러가기 →</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3" data-th-text="${bookmark.name}" style="font-size: 28px;font-weight: bold;padding-left: 15px;"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" data-th-text="${bookmark.address}" style="font-size: 20px;font-weight: center; padding-left: 15px;"></td>
+                </tr>
+                <tr>
+                  <td style="font-size: 15px;font-weight: bold;text-align: center;padding-left: 15px;">가격:</td>
+                  <td data-th-text="${bookmark.price}+'원'" style="font-size: 15px;font-weight: bold;"></td>
+                </tr>
+              </table>
+          </td>
+        </tr>
+      </table>
+  </div>
+</div>
 <div data-th-replace="footer :: footer">꼬리말</div>
-
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/bookmark.js}"></script>
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  // 각 숙소의 이미지 슬라이더 처리
-  $('.listing-item').each(function () {
-    const $slideImages = $(this).find('.slide-image');
-    let currentIndex = 0;
 
-    function showSlide(index) {
-      $slideImages.hide().eq(index).show();
-    }
-
-    function showNextSlide() {
-      currentIndex = (currentIndex + 1) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    function showPreviousSlide() {
-      currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    $(this).find('.next-button').click(showNextSlide);
-    $(this).find('.prev-button').click(showPreviousSlide);
-
-    showSlide(currentIndex);
-  });
-</script>

@@ -19,4 +19,6 @@ public class Question implements Serializable {
   private Date registerDate; // 작성 날짜
   private List<QuestionFile> questionFileList; // 고객센터 첨부파일
 
+  private String myInfoMenuId;//좌측 메뉴 클릭 상태 표시를 위한 변수
+
 }

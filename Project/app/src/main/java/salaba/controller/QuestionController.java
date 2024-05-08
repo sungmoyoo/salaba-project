@@ -78,6 +78,7 @@ public class QuestionController {
     question.setNo(sessionInfo.getNo());
 
     model.addAttribute("questionList", questionService.questionList(question));
+    session.setAttribute("myInfoMenuId", question.getMyInfoMenuId());
   }
 
   @GetMapping("questionView")

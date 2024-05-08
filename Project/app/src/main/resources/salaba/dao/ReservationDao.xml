@@ -53,36 +53,36 @@
     where
       r.member_no=#{no}
     order by
-      r.reservation_no
+      r.reservation_no desc
   </select>
 
   <select id="findBy" resultMap="ReservationMap" parameterType="int">
     select
       rh.name,
-      pay.payment_date,
+      p.payment_date,
       r.reservation_no,
       r.number_of_people,
-      mb.nickname,
-      mb.tel_no,
+      m.nickname,
+      m.tel_no,
       r.start_date,
       r.end_date,
       rh.rental_home_rule,
       rh.address,
-      concat('￦', FORMAT(pay.amount , 0)) as amount,
+      concat('￦', FORMAT(p.amount , 0)) as amount,
       DATE_FORMAT(DATE_ADD(r.start_date, INTERVAL -2 DAY), '%m월%d일') as refund_date,
       r.state,
       rhp.uuid_photo_name,
       rhp.photo_order,
       rhp.photo_no,
-      mb.photo,
+      m.photo,
       rh.lat,
       rh.lon
     from
       reservation r
-      inner join rental_home rh ON r.rental_home_no = rh.rental_home_no
+      inner join rental_home rh on r.rental_home_no = rh.rental_home_no
       inner join rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
-      inner join payment pay on r.reservation_no = pay.reservation_no
-      inner join member mb on r.member_no = mb.member_no
+      inner join payment p on r.reservation_no = p.reservation_no
+      inner join member m on rh.member_no = m.member_no
     where
       r.reservation_no=#{value}
   </select>

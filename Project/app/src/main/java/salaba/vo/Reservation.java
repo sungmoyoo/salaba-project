@@ -32,4 +32,6 @@ public class Reservation implements Serializable {
 
   private String refundDate; // 환불정책 일자
 
+  private String myInfoMenuId;//좌측 메뉴 클릭 상태 표시를 위한 변수
+
 }
