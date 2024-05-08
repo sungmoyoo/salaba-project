@@ -1,0 +1,482 @@
+/* font */
+html{
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+/* header */
+header{
+    position: relative;
+    border-bottom: 1px solid #cccccc;
+    top:0;
+    width: 100%;
+    z-index: 900;
+  }
+
+/* footer */
+footer{
+    position: fixed;
+    border-top: 1px solid #cccccc;
+    bottom: 0;
+    width: 100%;
+    z-index: 900;
+ }
+
+body{
+    height: 100vh;
+    margin: 0;
+}
+
+/* main */
+main{
+    position: absolute;
+    top: 250px;
+    width: 100%;
+    bottom: 100px;
+    height: calc(100vh - 240px - 100px);
+    overflow-y: auto;
+}
+
+/* google map */
+#map{
+    height: 500px;
+    width: 80%;
+}
+.map-section{
+    padding-top: 20px;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: block;
+}
+
+#map-title{
+    padding-top: 10px;
+    margin-bottom: 20px;
+    border-top: 1px solid #cccccc;
+}
+
+#map-title span{
+    font-family: "Noto Sans KR";
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* 숙소 사진 */
+.photo-gallery{
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+}
+
+.photo-container{
+    display: flex;
+    padding-top: 2%;
+    overflow-x: hidden;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.photo-container-item{
+    display: flex;
+    margin-right: 10px;
+}
+
+.photo-container-item img{
+    border-radius: 10px;
+}
+
+/* 신고하기 버튼 */
+#reportModal{
+    border: 2px solid #cccccc;
+    border-radius: 6px;
+    padding-left: 4px;
+    width: 60%;
+}
+#reportButton,
+#reportModal button{
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    border-radius: 10px;
+    font-family: "Noto Sans KR";
+    font-size: 14px;
+    
+}
+
+#reportForm div{
+    display: flex;
+    margin: 4px auto;
+}
+
+.report-modal-button{
+    padding-right: 4px;
+    justify-content: right;
+}
+.report-modal-button button{
+    margin-right: 4px;
+}
+
+#category{
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    border-radius: 10px;
+}
+
+#rentalHome-report-content{
+    width: 300px;
+    border-radius: 6px;
+    border:2px solid #cccccc;
+}
+#reportModal span{
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* 숙소 내용 */
+.rentalHome-content-section{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+
+#rentalHome-content-left,
+#rentalHome-content-right{
+    width: 50%;
+    padding-bottom: 20px;
+}
+
+#rentalHome-content-left{
+    padding-left: 5%;
+    margin-left: 10%;
+}
+
+#rentalHome-content-right{
+    padding-left: 20px;
+}
+.rentalHome-name{
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.rentalHome-address{
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    text-align: left;
+}
+
+/* 숙소 소개 */
+.rentalHome-explanation{
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.showMoreExplanation-btn{
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.showMoreExplanation{ /* 더 보기 버튼 */
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+}
+
+.showMoreExplanation span{
+    font-family: "Noto Sans KR";
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.explanationModal{
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.explanation-modal-content{
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.explanation-modal-close{
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.explanation-modal-close:hover,
+.explanation-modal-close:focus{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 숙소 편의 시설 */
+.facility-container{
+    border-top: 0.5px solid #cccccc;
+}
+
+.facility-container div{
+    text-align: left;
+}
+
+#facility-container-img img{
+    padding-right: 10px;
+}
+
+.facility-container-title{
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.facility-container-title span{
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.facility-container-content{
+    display: grid; /* grid 컨테이너 설정 */
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* 2개씩 여러줄 표시 */
+    grid-gap: 10px; /* 요소들 간에 간격(위 아래) 10px */
+}
+
+/* 더 보기 버튼 */
+.facility-modal-button-div{
+    padding-top: 10px;
+}
+
+/* 숙소 편의시설 모달 */
+.facility-modal{
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.facility-modal-container{
+    background-color: #ffffff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 15px;
+    width: 30%;
+}
+
+.facility-modal-close{
+    height: 40px;
+    justify-self: right;
+}
+
+.facility-modal-close span{
+    color: #aaaaaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.facility-modal-close span:hover,
+.facility-modal-close span:focus{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.facility-modal-content{
+    display: block;
+}
+
+.facility-modal-content-div{
+    border-bottom: 1px solid #cccccc;
+    margin: 5px;
+    padding-bottom: 5px;
+}
+
+.facility-modal-content-div span{
+    margin: 7px auto;
+}
+
+.facility-modal-content-title{
+    border: 0px;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.facility-modal-button{
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    border-radius: 10px;
+    font-family: "Noto Sans KR";
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* 숙소 리뷰 */
+.review-section{
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 20px;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#reviewsContainer{
+    border-top: 0.5px solid #cccccc;
+    padding-top: 10px;
+    font-family: "Noto Sans KR";
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* 숙소 예약 */
+.reservation-container{
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    font-family: "Noto Sans KR";
+    width: 60%;
+    text-align: center;
+    align-items: center;
+}
+
+.reservation-container-title{
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.reservation-container-content label,
+.reservation-container-content input{
+    display: block;
+    margin-bottom: 10px;
+}
+
+.reservation-container-content input{
+    width: calc(100% - 220px);
+    padding: 6px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+.reservation-button{
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.reservation-button:hover{
+    background-color: #0056b3;
+}
+
+/* 숙소 규칙 */
+.rentalHomeRule-section{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.rule-container-title{
+    border-top: 0.5px solid #cccccc;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}
+
+.rule-container-title span{
+    font-family: "Noto Sans KR";
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.rule-container-content{
+    font-family: "Noto Sans KR";
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* 달력 */
+.calendar-container {
+    position: relative;
+  }
+  
+#dateInput {
+    width: 200px;
+    padding: 10px;
+}
+  
+.calendar {
+    position: absolute;
+    top: 40px; /* 입력란 아래에 위치하도록 조절 */
+    left: 0;
+    width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none; /* 초기에는 숨겨진 상태 */
+}
+  
+.calendar.open {
+    display: block; /* 열렸을 때 표시되도록 */
+}
+  
+.calendar table {
+    width: 100%;
+    border-collapse: collapse;
+}
+  
+.calendar th,
+.calendar td {
+    padding: 8px;
+    text-align: center;
+}
+  
+.calendar th {
+    background: #f5f5f5;
+}
+  
+.calendar td:hover {
+    background: #f0f0f0;
+}
+  
+.calendar .today {
+    background: #f0f8ff;
+}
+  
+.selected-date {
+    background: #007bff;
+    color: white;
+}
+  
