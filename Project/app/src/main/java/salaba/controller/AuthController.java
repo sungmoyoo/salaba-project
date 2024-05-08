@@ -67,6 +67,7 @@ public class AuthController {
         //포인트
         String memberPoint = memberService.getMemberPoint(member);
         session.setAttribute("memberPoint", memberPoint);
+        log.debug(String.format("로그 member : %s", member));
         //등급
         Member memberGrade = memberService.getGrade(member);
         session.setAttribute("memberGradeNo", memberGrade.getGrade().getGradeNo());

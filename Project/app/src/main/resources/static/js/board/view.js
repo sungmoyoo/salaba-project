@@ -75,7 +75,7 @@ replyForm.find('#addReplyBtn').click(addReply)
 
 
 
-// 답글 달기 버튼 
+// 답글 달기 버튼  --- 오류**
 
 function addReply(event) {
   event.stopPropagation();
@@ -84,7 +84,7 @@ function addReply(event) {
 
   // console.log("commentNo:", commentNo);
   // console.log("replyContent:", replyContent);
-  
+
   // AJAX 요청
   // 빈답글 작성 금지
   if (replyContent != "") {
@@ -147,10 +147,10 @@ function addReplyForm(e) {
   console.log(replyBox);
   // 클릭된 댓글 아래로 답글 폼을 이동
   replyBox.append(replyForm);
-  
+
   replyForm.toggle();
-  
-  
+
+
   // 클릭된 댓글의 번호 가져오기
   var commentNo = $(this).find('.commentNo').text();
   replyForm.find("input[name='commentNo']").val(commentNo);
@@ -322,7 +322,7 @@ function modifyReply(e) {
 // $(document).ready(function() {
   // 로그인 여부 확인
   let isLoggedIn = $("#loginUser").length > 0;
-  
+
   // 로그인 필요 알림 함수
   function requireLogin() {
       alert('로그인이 필요합니다.');
@@ -376,17 +376,17 @@ const processChanges = debounce(function() {
           requireLogin();
           return;
       }
-      
+
       if (myLikeCount === 1) { // 0 또는 1
         myLikeCount = 0;
         likeCount -= 1;
-        likeButton.html(`<span id="likeCount">${likeCount}</span><i class="fa-regular fa-heart"></i>`); // 추천 버튼을 클릭했을 때 버튼을 빈 하트 아이콘으로 바꿔준다. 
+        likeButton.html(`<span id="likeCount">${likeCount}</span><i class="fa-regular fa-heart"></i>`); // 추천 버튼을 클릭했을 때 버튼을 빈 하트 아이콘으로 바꿔준다.
       } else if (myLikeCount === 0) {
         myLikeCount = 1;
-        likeCount += 1; 
-        
-        likeButton.html(`<span id="likeCount">${likeCount}</span><i class="fa-solid fa-heart"></i>`); 
-        
+        likeCount += 1;
+
+        likeButton.html(`<span id="likeCount">${likeCount}</span><i class="fa-solid fa-heart"></i>`);
+
       }
   });
 
@@ -394,7 +394,7 @@ const processChanges = debounce(function() {
 
 
   $(window).on("beforeunload", function () {
-    
+
   });
 // });
 
@@ -402,7 +402,6 @@ const processChanges = debounce(function() {
 
 // 신고창: 모달 사용
 $(document.body).on("click", ".report-btn", function (event) {
-  event.stopPropagation();
   console.log(event.target);
   let div = $(this).closest(".comment, .reply"); // 가장 가까운 comment 또는 reply 요소 찾기
   let targetNo = div.find(".targetNo").text();
@@ -446,27 +445,6 @@ $("#submitBtn").click(function(e) {
       }
   });
 });
-
-//document.addEventListener("DOMContentLoaded", function() {
-//    // 게시글, 댓글, 답글 중 신고 버튼 클릭 시
-//    var reportBtns = document.querySelectorAll(".report-btn");
-//    reportBtns.forEach(function(reportBtn) {
-//        reportBtn.addEventListener("click", function() {
-
-
-
-
-//            var alreadyReported = true; // 이미 신고된 항목인지 여부를 서버로부터 받은 값으로 설정합니다.
-//            if (alreadyReported) {
-//                // 이미 신고된 항목인 경우
-//                alert("이미 신고된 항목입니다.");
-//                // 신고 버튼 비활성화
-//                reportBtn.disabled = true;
-//            }
-//        });
-//    });
-//});
-
 
 
 /************************************************************************************/
