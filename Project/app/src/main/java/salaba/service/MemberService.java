@@ -24,11 +24,11 @@ public interface MemberService {
 
   Member findEmail(Member member);
 
-  Member findPw(Member member);
+  Member findPassword(Member member);
 
-  void chgPwSave(Member member);
+  void changePasswordSave(Member member);
 
-  Member chkPw(Member member);
+  Member myinfoCheckPassword(Member member);
 
   void insertPreference(Member member);
 
@@ -36,9 +36,16 @@ public interface MemberService {
 
   List<Member> themeList(Member sessionInfo);
 
+  String getMemberPoint(Member member);
+
+  Member getGrade(Member member);
+
+  List<Member> mythemeList(Member sessionInfo);
+
   void insertNotifyHistory(Alarm alarm);
 
   List<Alarm> selectNotifyHistory(int memberNo);
 
   void updateNotifyHistory(int notifyNo);
+
 }

@@ -5,16 +5,8 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../app/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../app/src/test/resources" type="java-test-resource" />
-    </content>
-<<<<<<< HEAD:Project/.idea/modules/app/salaba.app.test.iml
-    <orderEntry type="jdk" jdkName="21" jdkType="JavaSDK" />
-=======
-    <content url="file://$MODULE_DIR$/../../../app/src/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../app/src/test/java" isTestSource="true" />
     </content>
     <orderEntry type="jdk" jdkName="temurin-21" jdkType="JavaSDK" />
->>>>>>> origin/dev:Project/.idea/modules/app/Project.salaba.app.test.iml
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Project.salaba.app.main" />
     <orderEntry type="library" name="Gradle: org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2" level="project" />

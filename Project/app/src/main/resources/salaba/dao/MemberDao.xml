@@ -38,7 +38,6 @@
     <result column="notify_date" property="notifyDate"/>
   </resultMap>
 
-
   <insert id="add" parameterType="Member"><!--회원가입>-->
     insert into member(
     name,
@@ -118,17 +117,17 @@
 
   <select id="findByEmailAndPassword" resultMap="MemberMap"><!--로그인>-->
     select
-    member_no,
-    email,
-    name,
-    nickname,
-    birthday,
-    tel_no,
-    nation_no,
-    address,
-    sex,
-    photo,
-    state
+      member_no,
+      email,
+      name,
+      nickname,
+      birthday,
+      tel_no,
+      nation_no,
+      address,
+      sex,
+      photo,
+      state
     from
     member
     where
@@ -169,7 +168,7 @@
 
   <select id="myinfoCheckPassword" resultMap="MemberMap"><!--비밀번호 확인>-->
     select
-    member_no
+      member_no
     from
     member
     where
@@ -191,37 +190,38 @@
     else 'Y'
     end as my_theme_yn
     from
-    theme t
-    left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
+      theme t
+      left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
   </select>
 
   <select id="findAllmyTheme" resultMap="MemberMap">
     select
-    theme_no
+      theme_no
     from
-    member_preference
-    where member_no = #{no}
+      member_preference
+    where
+      member_no = #{no}
   </select>
 
   <select id="getMemberPoint" resultType="String">
     select
-    SUM(save_point)
+      SUM(save_point)
     from
-    point_history
+      point_history
     where
-    member_no = #{no}
+      member_no = #{no}
   </select>
 
   <select id="getGrade" resultMap="MemberMap">
     select
-    m.member_no,
-    m.grade_no,
-    g.grade_name
+      m.member_no,
+      m.grade_no,
+      g.grade_name
     from
-    member m
-    inner join grade g on m.grade_no = g.grade_no
+      member m
+      inner join grade g on m.grade_no = g.grade_no
     where
-    m.member_no= #{no}
+      m.member_no= #{no}
   </select>
 
   <delete id="deletePreference" parameterType="Member">

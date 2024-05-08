@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-  <link rel="stylesheet" type="text/css" href="/css/mainStyle.css">
   <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/mainStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
@@ -52,7 +52,7 @@
     <div class="listing-container">
       <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
         <div class="listing-slider">
-          <a data-th-href="@{view(rentalHomeNo=${rentalHome.rentalHomeNo})}" name="rentalHomeNo">
+          <a data-th-href="@{rentalHome/view(rentalHomeNo=${rentalHome.rentalHomeNo})}" name="rentalHomeNo">
             <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
                  data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
           </a>
@@ -132,7 +132,7 @@
     <div>
       <h3>편의 시설</h3>
       <div class="filter-options-facility" data-th-each="facility : ${session.facilityList}">
-        <label for="rentalHomeFacilities">
+        <label class="facility-checkbox-label">
           
         </label>
       </div>
@@ -142,12 +142,12 @@
 </div>
 <div data-th-replace="footer :: footer" class="footer-div">footer</div>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script th:inline="javascript">
   const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
   const sessionInfo = /*[[${session}]]*/ null;
   const loginUser = /*[[${session.loginUser}]]*/ null;
 </script>
-<script data-th-src="@{/js/header.js}"></script>
 <script data-th-src="@{/js/main.js}"></script>
+<script data-th-src="@{/js/header.js}"></script>
 </html>

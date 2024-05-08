@@ -64,9 +64,9 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     List<BoardFile> fileList = new ArrayList<>(); // 게시글의 이미지 파일을 저장할 (썸네일용) 리스트 생성
     log.debug("1234" + fileList);
 
-      for (Board board : reviewBoardList) {
-        List<BoardFile> boardFiles = boardService.getBoardThumbnail(board.getBoardNo()); // 각 게시글의 첨부파일 리스트를 가져오기
-        fileList.addAll(boardFiles); // fileList에 모든 이미지 파일을 추가
+    for (Board board : reviewBoardList) {
+      List<BoardFile> boardFiles = boardService.getBoardThumbnail(board.getBoardNo()); // 각 게시글의 첨부파일 리스트를 가져오기
+      fileList.addAll(boardFiles); // fileList에 모든 이미지 파일을 추가
     }
 
     model.addAttribute("review", reviewBoardList);
@@ -127,7 +127,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     } else {
       board.setHeadNo(headNo); // 말머리 설정
     }
-  log.debug(String.format("addBoard 진입44"));
+    log.debug(String.format("addBoard 진입44"));
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
     List<BoardFile> boardFiles = (List<BoardFile>) session.getAttribute("boardFiles");
     log.debug("1234" + boardFiles);
@@ -434,7 +434,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     comment.setWriter(loginUser);
     commentService.addComment(comment);
-    
+
     // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
 //    if( memberNoForAlarm != loginUser.getNo() ){
 //      Alarm alarm = new Alarm();
@@ -617,17 +617,17 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     }
   }
 
-// 검색
-@GetMapping("/board/search")
-public String searchBoard(
-    @RequestParam("categoryNo") int categoryNo, // 카테고리 번호를 요청 파라미터로 받음
-    @RequestParam("type") String type,
-    @RequestParam("keyword") String keyword,
-    @RequestParam(defaultValue = "1") int pageNo,
-    @RequestParam(defaultValue = "8") int pageSize,
-    Model model) {
+  // 검색
+  @GetMapping("/board/search")
+  public String searchBoard(
+      @RequestParam("categoryNo") int categoryNo, // 카테고리 번호를 요청 파라미터로 받음
+      @RequestParam("type") String type,
+      @RequestParam("keyword") String keyword,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "8") int pageSize,
+      Model model) {
 
-  List<Board> filteredBoardList;
+    List<Board> filteredBoardList;
 
   // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
   if ("title".equals(type)) {
@@ -655,77 +655,5 @@ public String searchBoard(
   model.addAttribute("numOfPage", numOfPage);
 
   return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
-  }
-
-  @GetMapping("board/boardHistory")  // 작성글 내역
-  public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "1") int headNo,
-      Model model,
-      HttpSession session) throws Exception {
-
-    Member loginUser = (Member) session.getAttribute("loginUser");
-
-    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
-      pageSize = 10;
-    }
-
-    if (pageNo < 1) {
-      pageNo = 1;
-    }
-
-    int numOfRecord = boardService.countAllHistory(loginUser.getNo());
-    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
-
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
-    }
-
-    model.addAttribute("headNo", headNo);
-
-    List<Board> boardList = boardService.boardHistory(pageNo, pageSize, loginUser.getNo());
-    model.addAttribute("list", boardList);
-
-    model.addAttribute("pageNo", pageNo);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("numOfPage", numOfPage);
-
-  }
-
-
-  @GetMapping("board/commentHistory")  // 작성댓글 내역
-  public void boardReplyHistory(@RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "1") int headNo,
-      Model model,
-      HttpSession session) throws Exception {
-
-    Member loginUser = (Member) session.getAttribute("loginUser");
-
-    if (pageSize < 10 || pageSize > 20) {  // 페이지 설정
-      pageSize = 10;
-    }
-
-    if (pageNo < 1) {
-      pageNo = 1;
-    }
-
-    int numOfRecord = boardService.countAllCommentHistory(loginUser.getNo());
-    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
-
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
-    }
-
-    model.addAttribute("headNo", headNo);
-
-    List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
-
-
-    //commentList = sort(commentList); // 정렬 함수 호출
-    model.addAttribute("list", commentList);
-
-    model.addAttribute("pageNo", pageNo);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("numOfPage", numOfPage);
-
   }
 }

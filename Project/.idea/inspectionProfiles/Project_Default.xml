@@ -2,6 +2,13 @@
   <profile version="1.0">
     <option name="myName" value="Project Default" />
 <<<<<<< HEAD
+    <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
+      <option name="processCode" value="true" />
+      <option name="processLiterals" value="true" />
+      <option name="processComments" value="true" />
+    </inspection_tool>
+=======
+<<<<<<< HEAD
     <inspection_tool class="UNCHECKED_WARNING" enabled="false" level="WARNING" enabled_by_default="false" />
 =======
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
@@ -33,5 +40,6 @@
       <option name="myCustomValuesEnabled" value="true" />
     </inspection_tool>
 >>>>>>> origin/dev
+>>>>>>> 3667633f51a6773f80c4a3d1d3509f275563aeae
   </profile>
 </component>

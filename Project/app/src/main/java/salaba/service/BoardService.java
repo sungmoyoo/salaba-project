@@ -43,11 +43,11 @@ public interface BoardService {
 
   List<Board> searchByTitle(String title, int categoryNo); // 제목으로 검색
   List<Board> searchByContent(String content, int categoryNo); // 내용으로 검색
-  int countAllHistory(int memberNo); // count
 
   List<Board> boardHistory(int pageNo, int pageSize, int no); // 작성글 내역
+  int countAllHistory(int memberNo); // count
 
+  List<Board> commentHistory(int pageNo, int pageSize, int no); // 작성댓글 내역
   int countAllCommentHistory(int memberNo); // count
 
-  List<Board> commentHistory(int pageNo, int pageSize, int no); // 작성글 내역
 }

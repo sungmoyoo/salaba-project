@@ -10,217 +10,201 @@
     const sessionMemberNo = /*[[${session.memberNo}]]*/ null;
     const rentalHomeNoModel = /*[[${rentalHome.rentalHomeNo}]]*/ null;
     const rentalHomeReviewModel = /*[[${rentalHomeReview}]]*/ null;
+    const rentalHomePhoto = /*[[${rentalHomePhoto}]]*/ null;
+    const sessionInfo = /*[[${session.loginUser}]]*/ null;
+
+    console.log(rentalHomeModel);
+    console.log(rentalHomePhoto);
+    console.log(sessionInfo);
   </script>
-  <script>
-    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-      key: "AIzaSyCn7sXQ-7jFww0vK_pndKEMLEsJfMxAsmk",
-      // Add other bootstrap parameters as needed, using camel case.
-      // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
-    });
-  </script>
-  <style>
-    #map{
-      height: 500px;
-      width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="/css/rental_home/view.css">
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+<section>
+  <div data-th-replace="header :: header">header</div>
+</section>
 <main>
-  <section>
-    <div class="search-container">
-      <h1>어디로 여행 가시나요?</h1>
-      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
-        <input type="text" name="regionName" id="location" placeholder="장소 입력">
-        <input type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
-        <input type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
-        <input type="number" name="capacity" id="guests" placeholder="인원">
-        <button type="submit">검색</button>
-      </form>
+  <!-- 숙소 사진 -->
+  <section class="photo-gallery">
+    <div class="photo-container">
+      <div class="photo-container-item" data-th-each="photo : ${rentalHomePhoto}" data-th-object="${rentalHomePhoto}">
+        <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
+      </div>
     </div>
   </section>
-  <section>
-    <h1 data-th-text="${rentalHome.name}">숙소 이름</h1>
-    <button id="reportButton">신고하기</button>
-
-    <div id="reportModal" style="display: none;">
-      <h2>숙소 신고</h2>
-      <form id="reportForm">
-        <select id="category">
-          <option value="1">부정확하거나 틀린 정보가 있어요</option>
-          <option value="2">실제 숙소가 아닙니다</option>
-          <option value="3">사기입니다</option>
-          <option value="4">불쾌합니다</option>
-          <option value="5">기타</option>
-        </select>
-        <br>
-        <input type="text" id="content" placeholder="신고 사유를 입력하세요">
-        <br>
-        <button type="submit">신고하기</button>
-        <button type="button" id="cancelButton">취소</button>
-      </form>
+  <!-- 숙소 상세 내용 -->
+  <section class="rentalHome-content-section">
+    <div id="rentalHome-content-left">
+      <div class="rentalHome-name">
+        <span data-th-text="${rentalHome.name}">숙소 이름</span>
+      </div>
+      <div>
+        <div class="rentalHome-address">
+          <span data-th-text="${rentalHome.address}">숙소 주소</span>
+        </div>
+        <div class="rentalHome-explanation">
+          <span class="rentalHome-explanation-h" data-th-text="${rentalHome.explanation}">숙소 소개</span>
+        </div>
+        <div class="showMoreExplanation-btn">
+          <button class="showMoreExplanation">
+            <span>더 보기</span>
+          </button>
+        </div>
+        <div class="explanationModal">
+          <div class="explanation-modal-content">
+            <span class="explanation-modal-close">&times;</span>
+            <div class="explanation-content">
+              <span data-th-text="${rentalHome.explanation}"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="facility-container">
+        <div class="facility-container-title">
+          <span>숙소 편의시설</span>
+        </div>
+        <div class="facility-container-content">
+          <div data-th-each="facility, iterStat : ${rentalHomeFacility}" data-th-object="${rentalHomeFacility}">
+            <div data-th-if="${iterStat.index < 10}" id="facility-container-img">
+              <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/facility/'+${facility.facilityName}+.png(type=f,w=24,h=24,faceopt=false,ttype=png)}">
+              <span data-th-text="${facility.facilityName}">시설 이름</span>
+            </div>
+          </div>
+        </div>
+        <div class="facility-modal-button-div" data-th-if="${rentalHomeFacility.size > 10}">
+          <button class="facility-modal-button">
+            <span data-th-text="${rentalHomeFacility.size +'개의 편의시설 모두 보기'}"></span>
+          </button>
+        </div>
+      </div>
+      <div class="facility-modal">
+        <div class="facility-modal-container">
+          <div class="facility-modal-close">
+            <span>&times;</span>
+          </div>
+          <div class="facility-modal-content">
+            <div class="facility-modal-content-title">
+              <span>숙소 편의시설</span>
+            </div>
+            <div class="facility-modal-content-div" data-th-each="facility : ${rentalHomeFacility}" data-th-object="${rentalHomeFacility}">
+              <span data-th-text="${facility.facilityName}"></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <h2 data-th-text="${rentalHome.explanation}">숙소 소개</h2>
-    <div data-th-each="photo : ${rentalHomePhoto}" data-th-object="${rentalHomePhoto}">
-      <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
+    <div id="rentalHome-content-right">
+      <div class="rentalHome-report">
+        <button id="reportButton">신고하기</button>
+      </div>
+      <div id="reportModal" style="display: none;">
+        <span>숙소 신고</span>
+        <form id="reportForm">
+          <div>
+            <select id="category">
+              <option value="1">부정확하거나 틀린 정보가 있어요</option>
+              <option value="2">실제 숙소가 아닙니다</option>
+              <option value="3">사기입니다</option>
+              <option value="4">불쾌합니다</option>
+              <option value="5">기타</option>
+            </select>
+          </div>
+          <div>
+            <input type="text" id="rentalHome-report-content" placeholder="신고 사유를 입력하세요">
+          </div>
+          <div class="report-modal-button">
+            <button type="submit">신고하기</button>
+            <button type="button" id="cancelButton">취소</button>
+          </div>
+        </form>
+      </div>
+      <div class="reservation-container">
+        <div class="reservation-container-title">
+          <span>숙소 예약</span>
+        </div>
+        <div class="reservation-container-content">
+          <div class="calendar-container">
+            <input type="text" id="checkInDateInput" name="checkInDate" readonly placeholder="체크인">
+            <input type="text" id="checkOutDateInput" name="checkOutDate" readonly placeholder="체크아웃">
+            <div class="calendar">
+              <button class="calendar-prev-button">
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+                    <path fill="none" d="M20 28 8.7 16.7a1 1 0 0 1 0-1.4L20 4"></path>
+                   </svg>
+                </span>
+              </button>
+              <button class="calendar-next-button">
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+                    <path fill="none" d="m12 4 11.3 11.3a1 1 0 0 1 0 1.4L12 28"></path>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div>
+            <input type="number" id="reservationGuests" name="guests" placeholder="인원수">
+          </div>
+        </div>
+        <div class="reservation-price-info">
+          <div>
+            <span class="reservation-duration"></span>
+          </div>
+          <div>
+            <span class="reservation-price"></span>
+          </div>
+          <div>
+            <span class="reservateion-cleanFee"></span>
+          </div>
+          <div>
+            <span class="reservation-price-total"></span>
+          </div>
+        </div>
+        <div>
+          <button class="reservation-button">
+              <span>예약하기</span>
+          </button>
+        </div>
+      </div>
     </div>
-    <h3 data-th-text="${rentalHome.address}">숙소 주소</h3>
-    <h3 data-th-text="${rentalHome.price}">가격</h3>
-    <div data-th-each="facility : ${rentalHomeFacility}" data-th-object="${rentalHomeFacility}">
-      <h6 data-th-text="${facility.facilityName}">시설 이름</h6>
-      <h6 data-th-text="${facility.facilityCount}">시설 갯수</h6>
-    </div>
+
   </section>
-  <section>
+  <section class="map-section">
+    <div id="map-title">
+      <span>숙소 위치</span>
+    </div>
     <div id="map">
 
     </div>
   </section>
-  <section>
+  <section class="review-section">
     <div id="reviewsContainer">
-      <h3>숙소 리뷰</h3>
+      <span>숙소 리뷰</span>
     </div>
-    <button id="showMoreReview">리뷰 더 보기</button>
-  </section>
-  <section>
     <div>
-      <h3 data-th-text="${rentalHome.cleanFee}">청소비</h3>
-      <h3 data-th-text="${rentalHome.rentalHomeRule}">숙소 규칙</h3>
+      <button id="showMoreReview">리뷰 더 보기</button>
+    </div>
+  </section>
+  <section class="rentalHomeRule-section">
+    <div class="rule-container">
+      <div class="rule-container-title">
+        <span>숙소 규칙</span>
+      </div>
+      <div class="rule-container-content">
+        <span data-th-text="${rentalHome.rentalHomeRule}">숙소 규칙</span>
+      </div>
     </div>
   </section>
 </main>
-<link rel="stylesheet" th:href="@{/mainStyle.css}" />
-
-<script>
-  const reportModal = document.getElementById("reportModal");
-  const reportButton = document.getElementById("reportButton");
-  const cancelButton = document.getElementById("cancelButton");
-
-  // 신고 버튼 클릭 시
-  reportButton.addEventListener("click",()=>{
-    reportModal.style.display = "block";
-  });
-
-  // 취소 버튼 클릭 시
-  cancelButton.addEventListener("click", ()=>{
-    reportModal.style.display = "none";
-  });
-
-  // 외부 클릭시 닫기
-  window.addEventListener("click",(event)=>{
-    if( event.target == reportModal ){
-      reportModal.style.display = "none";
-    }
-  });
-
-  // form 제출 시 데이터 전송 AJAX 사용
-  document.getElementById("reportForm").addEventListener("submit",(event)=>{
-    event.preventDefault(); // 기본 동작 취소
-
-    const category = document.getElementById("category").value;
-    const content = document.getElementById("content").value;
-    const memberNo = sessionMemberNo;
-    const rentalHomeNo = rentalHomeNoModel;
-
-    // RentalHomeReport 객체 생성
-    const rentalHomeReport = {
-      rentalHomeNo: rentalHomeNo,
-      memberNo: memberNo,
-      content: content,
-      reportCategoryNo: category
-    }
-
-    // Ajax 요청 보내기
-    const xhr = new XMLHttpRequest();
-    xhr.open( "POST", "/rentalHome/report", true );
-    xhr.setRequestHeader( "Content-type", "application/json" );
-    xhr.onreadystatechange = () => {
-      if( xhr.readyState === XMLHttpRequest.DONE ){
-        if( xhr.status === 200 ){
-          alert("신고가 접수되었습니다.");
-          // 신고 닫기
-          reportModal.style.display = "none";
-        }else{
-          alert("오류가 발생했습니다. 다시 시도해주세요.");
-        }
-      }
-    };
-    xhr.send(JSON.stringify(rentalHomeReport));
-  });
-
-  let startIndex = 0;
-const batchSize = 5;
-let rentalHomeReviews = rentalHomeReviewModel;
-
-function showNextBatchOfReview() {
-  const reviewsContainer = document.getElementById('reviewsContainer');
-  const endIndex = Math.min(startIndex + batchSize, rentalHomeReviews.length);
-  for (let i = startIndex; i < endIndex; i++) {
-    const review = rentalHomeReviews[i];
-    const reviewElement = document.createElement('div');
-    reviewElement.innerHTML = '<div>' +
-      '<h4>평점</h4>' +
-      '<p>' + review.review + '</p>' + // 리뷰 내용
-      '<p>' + review.createdDate + '</p>' + // 작성일시
-      '</div>';
-    reviewsContainer.appendChild(reviewElement);
-  }
-  startIndex = endIndex;
-  if (startIndex >= rentalHomeReviews.length) {
-    document.getElementById('showMoreReview').style.display = 'none';
-  }
-}
-
-// 리뷰 더 보기 버튼 클릭 시
-document.getElementById('showMoreReview').addEventListener('click', function() {
-  showNextBatchOfReview();
-});
-
-// 초기에 최초의 2개 리뷰 표시
-window.addEventListener('DOMContentLoaded', function() {
-  const reviewsContainer = document.getElementById('reviewsContainer');
-  for (let i = 0; i < Math.min(2, rentalHomeReviews.length); i++) {
-    const review = rentalHomeReviews[i];
-    const reviewElement = document.createElement('div');
-    reviewElement.innerHTML = '<div>' +
-      '<h4>평점</h4>' +
-      '<p>' + review.review + '</p>' + // 리뷰 내용
-      '<p>' + review.createdDate + '</p>' + // 작성일시
-      '</div>';
-    reviewsContainer.appendChild(reviewElement);
-  }
-  startIndex = 2;
-  if (rentalHomeReviews.length <= 2) {
-    document.getElementById('showMoreReview').style.display = 'none'; // 버튼 숨기기
-  }
-});
-
-async function initMap(){
-  const rentalHome = rentalHomeModel;
-  const position = { lat:Number(rentalHome.lat) , lng:Number(rentalHome.lon) };
-  
-  console.log( typeof rentalHome.lat );
-  console.log( typeof rentalHome.lon );
-  
-  const{ Map } = await google.maps.importLibrary("maps");
-  const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
-  
-  let map = new Map(document.getElementById("map"), {
-    zoom : 16,
-    center: position,
-    mapId: '470e45162ba863f'
-  });
-  
-  const marker = new google.maps.marker.AdvancedMarkerElement({
-    map: map,
-    position: position,
-  });
-}
-
-initMap();
-
-</script>
-
+  <div data-th-replace="footer :: footer" class="footer-div">footer</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/rental_home/view.js}"></script>
 </html>

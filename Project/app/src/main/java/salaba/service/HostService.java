@@ -20,7 +20,7 @@ public interface HostService {
 
   int delete(int rentalHomeNo); // 숙소 삭제
 
-  int deleteRentalHomePhoto(int photoNo); // 숙소 사진 삭제
+  int deleteRentalHomePhotoByName(String uuidPhotoName); // 숙소 사진 삭제
 
   List<Theme> themeList(); // 전체 테마 리스트
 

@@ -8,7 +8,5 @@ public interface StorageService {
       String path,
       MultipartFile multipartFile) throws Exception;
 
-//  String uploadMessage(String bucketName, String path) throws Exception;
-
   void delete(String bucketName, String path, String objectName) throws Exception;
 }

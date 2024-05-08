@@ -152,22 +152,22 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   }
 
   @Override
+  public List<Board> boardHistory(int pageNo, int pageSize, int no) {  // 작성글 내역
+    return boardDao.findHistory(pageSize * (pageNo - 1), pageSize, no);
+  }
+
+  @Override
   public int countAllHistory(int no) {
     return boardDao.countAllHistory(no);
   } // count
 
   @Override
-  public List<Board> boardHistory(int pageNo, int pageSize, int no) {  // 목록 조회
-    return boardDao.findHistory(pageSize * (pageNo - 1), pageSize, no);
+  public List<Board> commentHistory(int pageNo, int pageSize, int no) {  // 작성댓글 내역
+    return boardDao.findCommentHistory(pageSize * (pageNo - 1), pageSize, no);
   }
 
   @Override
   public int countAllCommentHistory(int no) {
     return boardDao.countAllCommentHistory(no);
   } // count
-
-  @Override
-  public List<Board> commentHistory(int pageNo, int pageSize, int no) {  // 목록 조회
-    return boardDao.findCommentHistory(pageSize * (pageNo - 1), pageSize, no);
-  }
 }

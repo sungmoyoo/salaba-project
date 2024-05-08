@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import salaba.dao.RentalHomeDao;
 import salaba.service.RentalHomeService;
+import salaba.vo.Reservation2;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;
@@ -87,5 +88,20 @@ public class DefaultRentalHomeService implements RentalHomeService {
   @Override
   public List<RentalHomeFacility> getAllFacilities() { // 편의 시설 전체 조회
     return rentalHomeDao.getAllFacilities();
+  }
+
+  @Override
+  public RentalHome getReservationInfo(int rentalHomeNo) {
+    return rentalHomeDao.getReservationInfo(rentalHomeNo);
+  }
+
+  @Override
+  public void addReservation(Reservation2 reservation) {
+    rentalHomeDao.addReservation(reservation);
+  }
+
+  @Override
+  public int getReservationKey() {
+    return rentalHomeDao.getReservationKey();
   }
 }

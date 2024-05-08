@@ -90,5 +90,4 @@ public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트�
       throw new RuntimeException(e);
     }
   }
-
 }

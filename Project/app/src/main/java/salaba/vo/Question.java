@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
+import salaba.vo.board.BoardReportFile;
 
 @Data
 public class Question implements Serializable {
@@ -16,5 +17,6 @@ public class Question implements Serializable {
   private String content; // 질문 내용
   private String state; // 질문 상태
   private Date registerDate; // 작성 날짜
+  private List<QuestionFile> questionFileList; // 고객센터 첨부파일
 
 }

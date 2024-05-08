@@ -6,7 +6,10 @@
       <excludeFolder url="file://$MODULE_DIR$/../../../app/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../app/build" />
     </content>
+<<<<<<< HEAD
     <content url="file://$MODULE_DIR$/../../../app" />
+=======
+>>>>>>> origin/dev
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

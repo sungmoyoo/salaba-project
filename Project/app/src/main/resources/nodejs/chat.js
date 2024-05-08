@@ -146,13 +146,24 @@ function deleteChatUser(ws){
 function sendPreviousMessages(ws) {
   console.log("이전 채팅 기록 전송");
   console.log(chatFile);
-  fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    ws.send(data);
-  });
+
+  // 디렉토리 존재 여부 확인
+  if (!fs.existsSync(chatFile.chatFilePath)) {
+    // 디렉토리가 없으면 생성
+    fs.mkdirSync(chatFile.chatFilePath);
+  }
+
+  if (fs.existsSync(chatFile.chatFileFullPath)) {
+    fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      ws.send(data);
+    });
+  } else {
+    console.log("채팅 기록 파일이 없습니다.");
+  }
 }
 
 // 채팅 파일에 저장
@@ -193,6 +204,4 @@ async function uploadFile(){
 server.listen(8889, () => {
   console.log("채팅 서버 시작 port : 8889");
 });
-
-
 

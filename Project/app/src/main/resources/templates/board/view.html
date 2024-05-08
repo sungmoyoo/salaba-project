@@ -17,29 +17,29 @@
 </head>
 
 <body>
-  <div data-th-replace="header :: header">머리말</div>
-  <!-- 게시글 조회 -->
-  <h1 data-th-text="${boardName}">게시판</h1>
-  <form action="modify" data-th-action="@{modify}" data-th-object="${board}">
-    <!--제목~작성자 묶기-->
-      <div class="info-box">
-        <!--후기게시판이면 지역 표기-->
-        <div data-th-if="*{categoryNo == 0}">
-          <input class="region-input" data-th-value="${board.region.regionName}" type="text" readonly>
-        </div>
-        <!--정보공유, 자유게시판이면 분류(말머리) 표기-->
-        <div data-th-if="*{categoryNo != 0}">
-          <input class="head-input" data-th-value="*{headContent}" readonly name='headContent' type="text">
-        </div>
-        <div>
-          <input class="title-input" data-th-value="*{title}" name='title' type='text' readonly value="제목입니다.">
-        </div>
-        <div class="others-container">
-          <input class="writer-input" data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
-          <input class="date-input" data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly type='text' value="2024-03-27">
-          <button type="button" class="report-btn board-report-btn">신고</button>
-        </div>
-            <!--내용-->
+<div data-th-replace="header :: header">머리말</div>
+<!-- 게시글 조회 -->
+<h1 data-th-text="${boardName}">게시판</h1>
+<form action="modify" data-th-action="@{modify}" data-th-object="${board}">
+  <!--제목~작성자 묶기-->
+  <div class="info-box">
+    <!--후기게시판이면 지역 표기-->
+    <div data-th-if="*{categoryNo == 0}">
+      <input class="region-input" data-th-value="${board.region.regionName}" type="text" readonly>
+    </div>
+    <!--정보공유, 자유게시판이면 분류(말머리) 표기-->
+    <div data-th-if="*{categoryNo != 0}">
+      <input class="head-input" data-th-value="*{headContent}" readonly name='headContent' type="text">
+    </div>
+    <div>
+      <input class="title-input" data-th-value="*{title}" name='title' type='text' readonly value="제목입니다.">
+    </div>
+    <div class="others-container">
+      <input class="writer-input" data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
+      <input class="date-input" data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly type='text' value="2024-03-27">
+      <button type="button" class="report-btn board-report-btn">신고</button>
+    </div>
+    <!--내용-->
     <div class="content-box">
       <div>
         <div id="summernote" data-th-utext="*{content}" name='content'></div>
@@ -67,7 +67,15 @@
       <span id="myLikeCount" data-th-text="${isLiked}"></span>
     </button>
   </div>
-
+  <input data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
+  <div>
+    <input id="boardNo" data-th-value="*{boardNo}" name='boardNo' type='hidden' value="100">
+  </div>
+  <div data-th-if="${loginUser != null && board.writer.no == loginUser.no}">
+    <button data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html">수정하기</button>
+    <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
+  </div>
+</form>
 
   <!--댓글, 답글 리스트-->
   <div id="comment-box">
@@ -110,11 +118,21 @@
               <button type="button" class="report-btn reply-report-btn">신고</button><br>
             </div>
           </div>
-        </div>
+          <div class="report-content">
+            <textarea name='content' placeholder="내용을 입력하세요."></textarea>
+          </div>
+          <div class="report-file">
+            첨부 파일: <input type="file" multiple name="reportFiles">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button id="submitBtn" class="btn btn-primary">신고 제출</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-  
+
   <!--댓글 달기 폼-->
   <form id="comment-form" method="post">
     <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
