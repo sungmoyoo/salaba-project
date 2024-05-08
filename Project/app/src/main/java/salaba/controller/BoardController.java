@@ -186,7 +186,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     List<Board> combinedList = new ArrayList<>();
     if (categoryNo != 0) {
       // 후기게시판이 아닐 때만 공지사항을 가져오기
-      List<Board> announcements = boardService.findAnnouncements(categoryNo, 10);
+      List<Board> announcements = boardService.findAnnouncements(categoryNo, 10); // 공지는 최대 10개까지 작성 가능
       combinedList.addAll(announcements);
 
     }

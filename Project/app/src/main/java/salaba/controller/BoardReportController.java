@@ -56,6 +56,13 @@ public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트�
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인하시기 바랍니다!");
     }
 
+//    // 이미 신고한 경우를 판별하기 위한 변수
+//    int alreadyReported = boardReportService.checkReported(loginUser.getNo(), targetNo, targetType);
+//
+//    if (alreadyReported > 0) {
+//      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 신고한 내역입니다!");
+//    }
+
     List<BoardReportFile> reportFileList = new ArrayList<>();
     try {
       for (MultipartFile file : reportFiles) {

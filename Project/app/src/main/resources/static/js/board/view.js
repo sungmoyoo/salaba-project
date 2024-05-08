@@ -75,7 +75,7 @@ replyForm.find('#addReplyBtn').click(addReply)
 
 
 
-// 답글 달기 버튼  --- 오류**
+// 답글 달기 버튼 
 
 function addReply(event) {
   event.stopPropagation();
@@ -402,6 +402,7 @@ const processChanges = debounce(function() {
 
 // 신고창: 모달 사용
 $(document.body).on("click", ".report-btn", function (event) {
+  event.stopPropagation();
   console.log(event.target);
   let div = $(this).closest(".comment, .reply"); // 가장 가까운 comment 또는 reply 요소 찾기
   let targetNo = div.find(".targetNo").text();
@@ -445,6 +446,27 @@ $("#submitBtn").click(function(e) {
       }
   });
 });
+
+//document.addEventListener("DOMContentLoaded", function() {
+//    // 게시글, 댓글, 답글 중 신고 버튼 클릭 시
+//    var reportBtns = document.querySelectorAll(".report-btn");
+//    reportBtns.forEach(function(reportBtn) {
+//        reportBtn.addEventListener("click", function() {
+
+
+
+
+//            var alreadyReported = true; // 이미 신고된 항목인지 여부를 서버로부터 받은 값으로 설정합니다.
+//            if (alreadyReported) {
+//                // 이미 신고된 항목인 경우
+//                alert("이미 신고된 항목입니다.");
+//                // 신고 버튼 비활성화
+//                reportBtn.disabled = true;
+//            }
+//        });
+//    });
+//});
+
 
 
 /************************************************************************************/
