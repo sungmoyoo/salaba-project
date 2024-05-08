@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/chart")
-public class CharController {
+public class ChartController {
 
     private final ChartService chartService;
     @GetMapping("/boardCount")
@@ -42,6 +42,14 @@ public class CharController {
         return RestResult.builder()
                 .status(RestResult.SUCCESS)
                 .data(chartService.getRentalCountByRegion())
+                .build();
+    }
+
+    @GetMapping("/unprocessed")
+    public RestResult unprocessedWorks() {
+        return RestResult.builder()
+                .status(RestResult.SUCCESS)
+                .data(chartService.getUnprocessedWorks())
                 .build();
     }
 }

@@ -1,10 +1,7 @@
 package org.admin.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.admin.domain.chart.BoardStatistic;
-import org.admin.domain.chart.MemberGradeStatistic;
-import org.admin.domain.chart.MemberStatistic;
-import org.admin.domain.chart.RentalStatistic;
+import org.admin.domain.chart.*;
 import org.admin.repository.ChartDao;
 import org.admin.service.ChartService;
 import org.springframework.stereotype.Service;
@@ -33,5 +30,10 @@ public class DefaulChartService implements ChartService {
     @Override
     public List<RentalStatistic> getRentalCountByRegion() {
         return chartDao.findRentalCountByRegion();
+    }
+
+    @Override
+    public UnProcessedWorks getUnprocessedWorks() {
+        return chartDao.findUnprocessedWorks();
     }
 }

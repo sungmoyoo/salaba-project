@@ -3,10 +3,10 @@ package org.admin.domain.chart;
 import lombok.Data;
 
 @Data
-public class UnporcessedWork {
-    private int rentalHomeCount;
-    private int rentalHomeReportCount;
-    private int boardReportDetailCount;
-    private int boardReportDetailCount12;
-    private int questionCount;
+public class UnProcessedWorks {
+    private int rentalReg;
+    private int rentalReport;
+    private int boardReport;
+    private int commentReport;
+    private int qnaCount;
 }

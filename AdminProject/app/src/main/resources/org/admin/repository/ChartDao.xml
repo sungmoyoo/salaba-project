@@ -23,6 +23,14 @@
         <result column="region_name" property="regionName"/>
         <result column="rental_count" property="rentalCount"/>
     </resultMap>
+
+    <resultMap id="UnProcessedWorksMap" type="UnProcessedWorks">
+        <result column="rental_reg_count" property="rentalReg"/>
+        <result column="rental_report_count" property="rentalReport"/>
+        <result column="board_report_count" property="boardReport"/>
+        <result column="comment_report_count" property="commentReport"/>
+        <result column="qna_count" property="qnaCount"/>
+    </resultMap>
     
     <select id="findBoardCountInMonth" resultMap="BoardStatisticMap">
         SELECT DATE(created_date) AS created_date, COUNT(*) AS board_count
@@ -63,4 +71,15 @@
         GROUP BY rh.region_no
         ORDER BY rental_count desc;
     </select>
+
+    <select id="findUnprocessedWorks" resultMap="UnProcessedWorksMap">
+        SELECT
+        (SELECT COUNT(*) FROM rental_home WHERE state='0') AS rental_reg_count,
+        (SELECT COUNT(*) FROM rental_home_report WHERE state='0') AS rental_report_count,
+        (SELECT COUNT(*) FROM board_report_detail WHERE report_target_type = '0' AND state = '0') AS board_report_count,
+        (SELECT COUNT(*) FROM board_report_detail WHERE (report_target_type = '1' OR report_target_type = '2') AND state = '0') AS comment_report_count,
+        (SELECT COUNT(*) FROM question WHERE state = '0') AS qna_count;
+    </select>
+
+
 </mapper>
