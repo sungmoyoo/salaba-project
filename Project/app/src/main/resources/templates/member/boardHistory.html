@@ -8,19 +8,6 @@
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoTable.css">
 
-  <script>
-    function fn_goPage(gbn){
-      if(gbn == '1'){
-        frm.method = "get";
-        frm.action = "/member/boardHistory";
-        frm.submit();
-      }else{
-        frm.method = "get";
-        frm.action = "/member/commentHistory";
-        frm.submit();
-      }
-    }
-  </script>
 </head>
 <body>
 <div data-th-replace="header :: header">머리말</div>
@@ -34,12 +21,13 @@
   <button onclick="fn_goPage('1')">작성글</button>
   <button onclick="fn_goPage('2')">작성댓글</button>
 
-  <!-- 검색 폼 추가 -->
-  <form id="search-form" action="/search" method="GET">
-    <input type="text" id="search-input" name="q" placeholder="검색어를 입력하세요">
-    <button type="submit" id="search-button">검색</button>
-  </form>
-</div>
+<!--  &lt;!&ndash; 검색 폼 추가 &ndash;&gt;-->
+<!--  <form id="search-form" action="/search" method="GET">-->
+<!--    <input type="text" id="search-input" name="q" placeholder="검색어를 입력하세요">-->
+<!--    <button type="submit" id="search-button">검색</button>-->
+<!--  </form>-->
+<!--</div>-->
+
 <!-- 게시판 -->
 <table border='1' class="list_table">
   <thead>
@@ -73,12 +61,19 @@
   <tr>
     <td style="text-align:center;">
       <ul style="list-style-type: none;display: inline-flex;">
+        <!-- 가장 앞 페이지로 돌아가기 버튼 -->
+        <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+          <a data-th-if="${pageNo > 1}" data-th-href="@{boardHistory(pageNo=1, pageSize=${pageSize})}" href="#" aria-label="Previous">
+            <span aria-hidden="true">&#10094;&#10094;</span>
+          </a>
+          <span data-th-unless="${pageNo > 1}" aria-hidden="true">&#10094;&#10094;</span>
+        </li>
         <!-- '이전' 페이지 버튼 -->
         <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
           <a data-th-if="${pageNo > 1}" data-th-href="@{boardHistory(pageNo=${pageNo - 1}, pageSize=${pageSize})}" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
+            <span aria-hidden="true">&#10094;</span>
           </a>
-          <span data-th-unless="${pageNo > 1}" aria-hidden="true">&laquo;</span>
+          <span data-th-unless="${pageNo > 1}" aria-hidden="true">&#10094;</span>
         </li>
 
         <!-- 동적 페이지 번호 링크 -->
@@ -89,9 +84,16 @@
         <!-- '다음' 페이지 버튼 -->
         <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
           <a data-th-if="${pageNo < numOfPage}" data-th-href="@{boardHistory(pageNo=${pageNo + 1}, pageSize=${pageSize})}" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
+            <span aria-hidden="true">&#10095;</span>
           </a>
-          <span data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&raquo;</span>
+          <span data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&#10095;</span>
+        </li>
+        <!-- 가장 마지막 페이지로 돌아가기 버튼 -->
+        <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+          <a data-th-if="${pageNo < numOfPage}" data-th-href="@{boardHistory(pageNo=${numOfPage}, pageSize=${pageSize})}" href="#" aria-label="Next">
+            <span aria-hidden="true">&#10095;&#10095;</span>
+          </a>
+          <span data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&#10095;&#10095;</span>
         </li>
       </ul>
     </td>
@@ -102,4 +104,5 @@
 </div>
 </body>
 <script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/boardHistory.js}"></script>
 </html>

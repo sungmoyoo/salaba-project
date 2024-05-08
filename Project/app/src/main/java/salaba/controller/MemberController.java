@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -164,7 +165,7 @@ public class MemberController implements InitializingBean {
       model.addAttribute("member", info);
       model.addAttribute("findYn", "Y");
     }
-      return "/member/findPasswordResult";
+      return "/member/findPasswordResult.js";
   }
 
   @PostMapping("changePasswordSave")
@@ -301,6 +302,16 @@ public class MemberController implements InitializingBean {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
+
+  }
+
+  @PostMapping("boardStateCheck")  // 작성댓글 내역
+  public ResponseEntity<?> boardStateCheck(
+      Board board,
+      Model model) throws Exception {
+
+    String state = memberService.boardStateCheck(board);
+    return ResponseEntity.ok(state);
 
   }
 

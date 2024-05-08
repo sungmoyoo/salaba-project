@@ -4,6 +4,7 @@ import java.util.List;
 import salaba.vo.Alarm;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.board.Board;
 import salaba.vo.rental_home.Theme;
 
 public interface MemberService {
@@ -47,5 +48,7 @@ public interface MemberService {
   List<Alarm> selectNotifyHistory(int memberNo);
 
   void updateNotifyHistory(int notifyNo);
+
+  String boardStateCheck(Board board);
 
 }

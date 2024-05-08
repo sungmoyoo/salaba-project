@@ -3,7 +3,8 @@
 <head>
   <meta charset='UTF-8'>
   <meta content="1;url=/auth/form" data-th-if="${session.loginUser == null}">
-  <title>테스트</title>
+  <title>사라바</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
 </head>
 <body>
 
@@ -15,11 +16,12 @@
     <td>로그아웃 되었습니다.</td>
   </tr>
   <tr>
-    <td><a data-th-href="@{/home}" href="home"><button>홈으로</button></a></td>
+    <td><a data-th-href="@{/main}" href="main"><button>홈으로</button></a></td>
   </tr>
 </table>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script data-th-src="@{/js/header.js}"></script>
 </html>

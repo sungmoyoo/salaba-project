@@ -13,6 +13,21 @@
 .table_view td{
   border-bottom: 1px solid #000;
 }
+
+.table_view_clear{
+  width:!00%;
+  border-collapse: collapse;
+}
+.table_view_clear th{
+  text-align:left;
+  padding-right:10px;
+}
+.table_view_clear tr{
+  height: 50px;
+}
+.table_view_clear td{
+}
+
 .formInput{
   padding: 5px;
   border-radius: 5px;

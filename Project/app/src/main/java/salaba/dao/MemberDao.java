@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import salaba.vo.Alarm;
 import salaba.vo.Member;
 import salaba.vo.Nation;
+import salaba.vo.board.Board;
 
 
 @Mapper
@@ -52,4 +53,6 @@ public interface MemberDao {
   List<Alarm> selectNotifyHistory(int memberNo);
 
   void updateNotifyHistory(char state, int notifyNo);
+
+  String boardStateCheck(Board board);
 }

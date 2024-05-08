@@ -245,6 +245,15 @@
       state = '0'
   </select>
 
+  <select id="boardStateCheck" resultType="String">
+    select
+      state
+    from
+      board
+    where board_no = #{boardNo}
+      and board_category_no = #{categoryNo}
+  </select>
+
   <insert id="addNotifyHistory" parameterType="salaba.vo.Alarm">
     insert into notify_history
       (member_no,content)

@@ -3,11 +3,14 @@
 <head>
   <meta charset='UTF-8'>
   <title>사라바</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
 </head>
 
 <body>
 
 <div data-th-replace="header :: header">머리말</div>
+
+<h1>이메일 찾기</h1>
 
 <form data-th-if="${findYn == 'Y'}" data-th-object="${member}" method='post'>
   <table width="300">
@@ -33,4 +36,5 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script data-th-src="@{/js/header.js}"></script>
 </html>

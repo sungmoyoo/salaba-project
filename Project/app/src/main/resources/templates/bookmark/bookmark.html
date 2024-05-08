@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
+
+
   <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
   <style>
@@ -141,34 +143,9 @@
   </div>
 </div>
 <div data-th-replace="footer :: footer">꼬리말</div>
-
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/bookmark.js}"></script>
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  // 각 숙소의 이미지 슬라이더 처리
-  $('.listing-item').each(function () {
-    const $slideImages = $(this).find('.slide-image');
-    let currentIndex = 0;
 
-    function showSlide(index) {
-      $slideImages.hide().eq(index).show();
-    }
-
-    function showNextSlide() {
-      currentIndex = (currentIndex + 1) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    function showPreviousSlide() {
-      currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
-      showSlide(currentIndex);
-    }
-
-    $(this).find('.next-button').click(showNextSlide);
-    $(this).find('.prev-button').click(showPreviousSlide);
-
-    showSlide(currentIndex);
-  });
-</script>

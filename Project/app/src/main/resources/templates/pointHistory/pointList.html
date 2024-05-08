@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoTable.css">
+
 </head>
 <body>
 
@@ -35,7 +36,7 @@
           <tr data-th-each="pointHistory : ${pointList}" data-th-object="${pointHistory}">
             <td data-th-text="*{saveContent}"></td>
             <td data-th-text="*{savePoint}" style="text-align:center;"></td>
-            <td data-th-text="${#dates.format(pointHistory.saveDate,'yyyy.MM.dd')}" style="text-align:center;"></td>
+            <td data-th-text="${#dates.format(pointHistory.saveDate,'yyyy-MM-dd')}" style="text-align:center;"></td>
             <td data-th-text="*{totalPoint}" style="text-align:center;"></td>
           </tr>
           </tbody>
@@ -46,5 +47,6 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script data-th-src="@{/js/header.js}"></script>
 </html>
