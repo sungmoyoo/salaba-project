@@ -199,10 +199,14 @@ document.addEventListener("DOMContentLoaded", function() {
   const checkInDateInput = document.getElementById("checkInDateInput");
   const checkOutDateInput = document.getElementById("checkOutDateInput");
   const calendar = document.querySelector(".calendar");
-  
   const priceElement = document.querySelector('.reservation-price');
   const durationElement = document.querySelector('.reservation-duration');
   const priceTotalElement = document.querySelector('.reservation-price-total');
+  let calendarPrevButton = null;
+  let calendarNextButton = null;
+
+  let currentYear = null;
+  let currentMonth = null;
 
   let checkInDate = null;
   let checkOutDate = null;
@@ -232,18 +236,30 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // 달력 생성 함수
-  function generateCalendar() {
-    const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  function generateCalendar(year, month) {
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
     
     let html = "<table>";
-    html += "<tr><th colspan='7'>" + currentYear + "년 " + (currentMonth + 1) + "월</th></tr>";
+    html += "<tr>";
+    html += `<button class="calendar-prev-button">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+                  <path fill="none" d="M20 28 8.7 16.7a1 1 0 0 1 0-1.4L20 4"></path>
+                </svg>
+              </span>
+             </button>`;
+    html += "<th colspan='7' class='calendar-month-year'>" + year + "년 " + (month + 1) + "월</th>";
+    html += `<button class="calendar-next-button">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
+                  <path fill="none" d="m12 4 11.3 11.3a1 1 0 0 1 0 1.4L12 28"></path>
+                </svg>
+              </span>
+             </button></tr>`;
     html += "<tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>";
     html += "<tr>";
-    
+    console.log(html);
     // 공백 채우기
     for (let i = 0; i < firstDayOfMonth; i++) {
       html += "<td></td>";
@@ -263,11 +279,18 @@ document.addEventListener("DOMContentLoaded", function() {
     html += "</table>";
     
     calendar.innerHTML = html;
+    const monthYearElement = document.querySelector('.calendar-month-year');
+    monthYearElement.textContent = year + "년 " + (month+1) + "월";
+
+    calendarPrevButton = document.querySelector('.calendar-prev-button');
+    calendarNextButton = document.querySelector('.calendar-next-button');
+    addPrevButtonEvent();
+    addNextButtonEvent();
 
     // 날짜 클릭 이벤트 처리
     calendar.querySelectorAll("td").forEach(function(td) {
       td.addEventListener("click", function() {
-        const selectedDate = new Date(currentYear, currentMonth, parseInt(td.textContent));
+        const selectedDate = new Date(year, month, parseInt(td.textContent));
 
         // 체크인 날짜 선택
         if (!checkInDate || calendar.classList.contains("select-check-out")) {
@@ -300,7 +323,37 @@ document.addEventListener("DOMContentLoaded", function() {
     return `${year}년 ${month}월 ${day}일`;
   }
 
-  generateCalendar();
+  // 달력 이전 달 이동
+  function addPrevButtonEvent(){
+    calendarPrevButton.addEventListener("click", function() {
+      if (currentMonth === 0) {
+        currentYear--;
+        currentMonth = 11;
+      } else {
+        currentMonth--;
+      }
+      generateCalendar(currentYear, currentMonth);
+    });
+  }
+
+  // 달력 다음 달 이동
+  function addNextButtonEvent(){
+    calendarNextButton.addEventListener("click", function() {
+      if (currentMonth === 11) {
+        currentYear++;
+        currentMonth = 0;
+      } else {
+        currentMonth++;
+      }
+      generateCalendar(currentYear, currentMonth);
+    });
+  }
+
+  // 초기 달력 생성 (현재 년월 기준)
+  const today = new Date();
+  currentYear = today.getFullYear();
+  currentMonth = today.getMonth();
+  generateCalendar(currentYear, currentMonth);
 
   // 예약 정보 업데이트
   function updateReservationInfo(){
@@ -309,11 +362,12 @@ document.addEventListener("DOMContentLoaded", function() {
       const duration = caculateDuration(checkInDate, checkOutDate);
       const price = calculatePrice(duration, rentalHome);
       const total = price + rentalHome.cleanFee;
-
+      const cleanFee = document.querySelector('.reservateion-cleanFee');
+      
       durationElement.textContent = "이용 기간 : " + duration + "박 " + (duration + 1) + "일";
       priceElement.textContent = "가격 : " + price;
       priceTotalElement.textContent = "총액 : " + total;
-      
+      cleanFee.textContent = "청소비 : " + rentalHome.cleanFee;
     }
   }
 

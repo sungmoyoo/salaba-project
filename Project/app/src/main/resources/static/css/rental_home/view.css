@@ -168,6 +168,13 @@ main{
     text-align: left;
 }
 
+.rentalHome-address{
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    text-align: left;
+}
+
 /* 숙소 소개 */
 .rentalHome-explanation{
     text-align: left;
@@ -232,6 +239,10 @@ main{
 
 .facility-container div{
     text-align: left;
+}
+
+#facility-container-img img{
+    padding-right: 10px;
 }
 
 .facility-container-title{
