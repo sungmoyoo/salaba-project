@@ -200,6 +200,8 @@ public class HostController {
   @GetMapping("rentalHomeView")
   public void rentalHomeView(int rentalHomeNo, Model model, SessionStatus sessionStatus)
       throws Exception {
+    RentalHome rentalHome = hostService.getRentalHome(rentalHomeNo);
+    log.debug(rentalHome.getRentalHomeNo());
 
     model.addAttribute("themeList", hostService.themeList());
     model.addAttribute("facilityList", hostService.facilityList());

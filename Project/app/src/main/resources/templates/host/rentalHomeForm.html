@@ -13,6 +13,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
   <style>
+    * {
+      font-family: "Noto Sans KR";
+      font-weight: 400;
+    }
+
     #main-container {
       text-align: center;
       align-items: center;
@@ -74,6 +79,7 @@
     }
 
 
+
     .input-file-button,
     button[type="submit"] {
       background-color: #35C5B3;
@@ -114,6 +120,7 @@
 
     textarea,
     input[type=text],
+    input[type=date],
     input[type=number] {
       background-color: #fff;
       border: 0;
@@ -121,14 +128,17 @@
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px 0 10px 0;
       padding: 0 0.5em;
-      font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
       line-height: 40px;
       margin-right: 0;
       min-width: 25%;
+      font-size: 16px;
     }
 
-
+    #hostingStartDate,
+    #hostingEndDate, {
+      max-width: 10%;
+    }
 
     input[type=button] {
       background-color: #fff;
@@ -137,11 +147,11 @@
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
       padding: 0 0.5em;
-      font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
       height: 40px;
       cursor: pointer;
       margin-left: 5px;
+      font-size: 16px;
     }
     input[type=button]:hover {
       background: rgb(235, 235, 235);
@@ -165,8 +175,36 @@
 
     #mapInput {
       margin-left: 10px;
+
     }
 
+    .duration-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .duration-item {
+      flex-basis: 48%;
+      max-width: 16%;
+    }
+
+    .duration-item label {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .hostingDate {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
 
     #response-container {
       background-color: #fff;
@@ -175,7 +213,6 @@
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
       padding: 0 0.5em;
-      font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
       overflow: auto;
       max-height: 50%;
@@ -191,10 +228,16 @@
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
       padding: 0 0.5em;
-      font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
       padding: 1rem;
       font-size: medium;
+    }
+
+    h4 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 10px;
     }
   </style>
 <body>
@@ -268,15 +311,18 @@
       </div>
     </div>
 
-    <div class="info"></div>
-    <h1>호스팅 기간</h1>
-    <div class="duration-info">
-      <span>호스팅 시작일:</span>
-      <input name='hostingStartDate' id="hostingStartDate" type='date'>
-    </div>
-    <div class="duration-info">
-      <span>호스팅 종료일:</span>
-      <input name='hostingEndDate' id="hostingEndDate" type='date'>
+    <div class="info">
+      <h1>호스팅 기간</h1>
+      <div class="duration-container">
+        <div class="duration-item">
+          <label for="hostingStartDate">호스팅 시작일:</label>
+          <input class="hostingDate" name='hostingStartDate' id="hostingStartDate" type='date'>
+        </div>
+        <div class="duration-item">
+          <label for="hostingEndDate">호스팅 종료일:</label>
+          <input class="hostingDate" name='hostingEndDate' id="hostingEndDate" type='date'>
+        </div>
+      </div>
     </div>
   </form>
 
@@ -468,7 +514,7 @@ window.onload = function() {
     const inputText = document.createElement("input");
 
     inputText.type = "text";
-    inputText.placeholder = "Enter a location";
+    inputText.placeholder = "주소";
     inputText.id = "mapInput";
 
     inputText.addEventListener('keypress', function (e) {
@@ -572,9 +618,9 @@ window.onload = function() {
 
   window.initMap = initMap;
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </html>
