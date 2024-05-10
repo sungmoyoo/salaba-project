@@ -111,6 +111,18 @@
             </div>
             <div class="hr"></div>
           </div>
+
+          <h4 class="partTitle">문의 파일</h4>
+          <div class="imgFiles">
+            {{#each photos}}
+            <div>
+                <div class="card">
+                    <img class="imgFile" src="https://kr.object.ncloudstorage.com/tp3-salaba/question/{{uuidName}}"">
+                </div>
+            </div>
+            {{/each}}
+            <div class="hr"></div>
+        </div>
           <button class="dealBtn">답변</button>
         </form>
       </div>
