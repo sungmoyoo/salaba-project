@@ -18,7 +18,7 @@ public class Reservation implements Serializable {
   private String endDate; // 체크아웃
   private String numberOfPeople; // 인원수
   private String state; // 예약상태
-  private String statenm; // 예약상태명
+  private String stateNm; // 예약상태명
   private String photo; // 회원사진파일 명
   private String lat;
   private String lon;

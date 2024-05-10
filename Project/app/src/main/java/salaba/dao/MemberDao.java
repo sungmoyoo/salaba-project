@@ -55,4 +55,8 @@ public interface MemberDao {
   void updateNotifyHistory(char state, int notifyNo);
 
   String boardStateCheck(Board board);
+
+  List<Board> searchByKeyword(@Param("keyword") String keyword, @Param("type") String type); // 검색
+
+  int countFiltered(String type, String keyword); // 검색으로 필터링해 페이징 처리
 }

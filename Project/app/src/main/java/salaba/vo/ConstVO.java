@@ -2,10 +2,19 @@ package salaba.vo;
 
 public final class ConstVO {
 
-  // 상태 ( 결제, 예약 내역, 문의 내역, 알림 내역, 게시판 신고 )
+  // 상태 ( 결제, 문의 내역, 알림 내역, 게시판 신고 )
   public static final char state_no = '0'; // 미완료
 
   public static final char state_ok = '1'; // 완료
+
+  // 예약 내역
+  public static final char reservation_state_await = '0'; // 승인 대기
+
+  public static final char reservation_state_ok = '1';  // 예약 완료
+
+  public static final char reservation_state_no = '2';// 예약 거절
+
+  public static final char reservation_state_end = '3';// 이용 완료
 
   // 게시판 신고 대상 타입
   public static final char report_type_b = '0'; // 게시판

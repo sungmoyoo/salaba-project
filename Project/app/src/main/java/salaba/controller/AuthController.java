@@ -49,6 +49,8 @@ public class AuthController {
     }
 
     Member member = memberService.get(email, password);
+    System.out.println("login 호출!");
+    log.debug("상태: " + member.getState());
     //이메일주소 또는 암호가 맞을 경우
     if (member != null) {
       if('1' == member.getState()){//회원탈퇴
