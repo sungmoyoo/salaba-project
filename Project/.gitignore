@@ -231,6 +231,7 @@ fabric.properties
 
 # *.iml
 modules.xml
+.idea/misc.xmlgit
 .idea/misc.xml
 *.ipr
 

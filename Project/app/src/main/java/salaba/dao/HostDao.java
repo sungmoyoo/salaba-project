@@ -10,7 +10,7 @@ import salaba.vo.rental_home.RentalHome;
 @Mapper
 public interface HostDao {
 
-  void addHome(RentalHome rentalHome); // 숙소 기본정보 추가
+  void addHome(RentalHome rentalHome, @Param("hostNo") int hostNo); // 숙소 기본정보 추가
 
   List<HostReservation> findAllReservation(int hostNo); // 숙소 예약내역 리스트
 
@@ -21,12 +21,12 @@ public interface HostDao {
   int updateRentalHome(RentalHome rentalHome); // 숙소 정보 업데이트
 
   int rentalHomeStateUpdate( // 숙소 상태 업데이트
-      @Param("state") String state,
+      @Param("state") char state,
       @Param("rentalHomeNo") int rentalHomeNo
   );
 
   int reservationStateUpdate( // 예약 상태 업데이트
-      @Param("state") int state,
+      @Param("state") char state,
       @Param("reservationNo") int reservationNo);
 
   int deleteRentalHome(int rentalHomeNo); // 숙소 삭제

@@ -32,8 +32,8 @@ public class DefaultHostService implements HostService {
 
   // 호스트 숙소등록
   @Override
-  public void rentalHomeAdd(RentalHome rentalHome) {
-    hostDao.addHome(rentalHome);
+  public void rentalHomeAdd(RentalHome rentalHome, int hostNo) {
+    hostDao.addHome(rentalHome, hostNo);
 
     // ParameterType을 사용해서 rentalHome 객체 자체를 파라미터로 넘겨 처리
     // Null 검사는 안함 -> 모두 N.N이기 때문
@@ -98,14 +98,14 @@ public class DefaultHostService implements HostService {
   // 예약내역을 업데이트하는 DAO 호출하는 메서드
   @Transactional
   @Override
-  public int reservationStateUpdate(int state, int reservationNo) {
+  public int reservationStateUpdate(char state, int reservationNo) {
     return hostDao.reservationStateUpdate(state, reservationNo);
   }
 
   // 예약내역을 업데이트하는 DAO 호출하는 메서드
   @Transactional
   @Override
-  public int rentalHomeStateUpdate(String state, int reservationNo) {
+  public int rentalHomeStateUpdate(char state, int reservationNo) {
     return hostDao.rentalHomeStateUpdate(state, reservationNo);
   }
 
