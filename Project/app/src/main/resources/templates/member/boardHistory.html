@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoLeft.css">
   <link rel="stylesheet" type="text/css" href="/css/member/myInfoTable.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/boardHistory.css">
 
 </head>
 <body>
@@ -18,15 +19,21 @@
         <h1>작성글 내역</h1>
 <form name="frm" method="post"></form><!--페이지 이동용 Form 태그-->
 <div id="header">
-  <button onclick="fn_goPage('1')">작성글</button>
-  <button onclick="fn_goPage('2')">작성댓글</button>
+  <button onclick="movePage('1')">작성글</button>
+  <button onclick="movePage('2')">작성댓글</button>
 
-<!--  &lt;!&ndash; 검색 폼 추가 &ndash;&gt;-->
-<!--  <form id="search-form" action="/search" method="GET">-->
-<!--    <input type="text" id="search-input" name="q" placeholder="검색어를 입력하세요">-->
-<!--    <button type="submit" id="search-button">검색</button>-->
-<!--  </form>-->
-<!--</div>-->
+<!--  &lt;!&ndash; 검색 폼 &ndash;&gt;-->
+<!--  <div id="bsearch-container">-->
+<!--    <form id="bsearch-form" action="/board/search" data-th-action="@{search}" method="GET">-->
+<!--      <input type="hidden" data-th-name="categoryNo" data-th-value="*{categoryNo}">-->
+<!--      <select name="type">-->
+<!--        <option value="title">제목</option>-->
+<!--        <option value="content">내용</option>-->
+<!--      </select>-->
+<!--      <input type="text" id="bsearch-input" name="keyword" placeholder="검색어를 입력하세요" value="">-->
+<!--      <button id="bsearch-button">검색</button>-->
+<!--    </form>-->
+<!--  </div>-->
 
 <!-- 게시판 -->
 <table border='1' class="list_table">
@@ -57,19 +64,19 @@
 </table>
 
 <!--페이징 시작-->
-<table style="width:100%;">
+<table class="paging-bar">
   <tr>
-    <td style="text-align:center;">
-      <ul style="list-style-type: none;display: inline-flex;">
+    <td>
+      <ul>
         <!-- 가장 앞 페이지로 돌아가기 버튼 -->
-        <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+        <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''">
           <a data-th-if="${pageNo > 1}" data-th-href="@{boardHistory(pageNo=1, pageSize=${pageSize})}" href="#" aria-label="Previous">
             <span aria-hidden="true">&#10094;&#10094;</span>
           </a>
           <span data-th-unless="${pageNo > 1}" aria-hidden="true">&#10094;&#10094;</span>
         </li>
         <!-- '이전' 페이지 버튼 -->
-        <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+        <li data-th-classappend="${pageNo == 1} ? 'disabled' : ''">
           <a data-th-if="${pageNo > 1}" data-th-href="@{boardHistory(pageNo=${pageNo - 1}, pageSize=${pageSize})}" href="#" aria-label="Previous">
             <span aria-hidden="true">&#10094;</span>
           </a>
@@ -77,19 +84,19 @@
         </li>
 
         <!-- 동적 페이지 번호 링크 -->
-        <li data-th-each="i : ${#numbers.sequence(1, numOfPage)}" data-th-classappend="${pageNo == i} ? 'active' : ''" style="padding: 0px 9px 5px 9px;">
+        <li data-th-each="i : ${#numbers.sequence(1, numOfPage)}" data-th-classappend="${pageNo == i} ? 'active' : ''">
           <a data-th-href="@{boardHistory(pageNo=${i}, pageSize=${pageSize})}" data-th-text="${i}" href="#">1</a>
         </li>
 
         <!-- '다음' 페이지 버튼 -->
-        <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+        <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''">
           <a data-th-if="${pageNo < numOfPage}" data-th-href="@{boardHistory(pageNo=${pageNo + 1}, pageSize=${pageSize})}" href="#" aria-label="Next">
             <span aria-hidden="true">&#10095;</span>
           </a>
           <span data-th-unless="${pageNo < numOfPage}" aria-hidden="true">&#10095;</span>
         </li>
         <!-- 가장 마지막 페이지로 돌아가기 버튼 -->
-        <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''" style="padding: 0px 9px 5px 9px;">
+        <li data-th-classappend="${pageNo == numOfPage} ? 'disabled' : ''">
           <a data-th-if="${pageNo < numOfPage}" data-th-href="@{boardHistory(pageNo=${numOfPage}, pageSize=${pageSize})}" href="#" aria-label="Next">
             <span aria-hidden="true">&#10095;&#10095;</span>
           </a>
@@ -100,6 +107,7 @@
   </tr>
 </table>
 <div data-th-replace="footer :: footer">꼬리말</div>
+</div>
 </div>
 </div>
 </body>

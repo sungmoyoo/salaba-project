@@ -15,21 +15,23 @@
 
     <div class="container">
       <h3>메뉴 이름</h3>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>신고유형</th>
-            <th>처리여부</th>
-            <th>접수일</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-          <td colspan="10" class="tablefoot"></td>
-        </tfoot>
-      </table>
+      <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <thead>
+            <tr>
+                <th>No</th>
+                <th>신고유형</th>
+                <th>처리여부</th>
+                <th>접수일</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
 
     <div id="detailModal" class="modal">
@@ -106,18 +108,7 @@
           </div>
 
           <br>
-
-          <h4 class="partTitle">신고 파일</h4>
-          <div class="imgFiles">
-            {{#each reportFiles}}
-            <div>
-                <div class="card">
-                    <img class="imgFile" src="https://kr.object.ncloudstorage.com/tp3-salaba/board/{{uuidName}}"">
-                </div>
-            </div>
-            {{/each}}
-            <div class="hr"></div>
-        </div>
+          
 
           <br>
           <div class="dealBox">

@@ -128,5 +128,24 @@ public class DefaultMemberService implements MemberService {
   public String boardStateCheck(Board board){ // 알람 업데이트(알람을 읽었을 경우 업데이트)
     return memberDao.boardStateCheck(board);
   }
+
+  @Override
+  public List<Board> search(String keyword, String type) { // 검색 기능
+    return memberDao.searchByKeyword(keyword, type);
+  }
+
+  @Override
+  public List<Board> searchByTitle(String title) {  // 제목으로 검색
+    return memberDao.searchByKeyword(title, "title");
+  }
+
+  @Override
+  public List<Board> searchByContent(String content) { // 내용으로 검색
+    return memberDao.searchByKeyword(content, "content");
+  }
+  @Override
+  public int countFiltered(String type, String keyword) { // 검색 결과 페이징 처리
+    return memberDao.countFiltered(type, keyword);
+  }
 }
 

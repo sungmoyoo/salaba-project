@@ -62,8 +62,8 @@
   </resultMap>
 
 
-  <insert id="addHome" parameterType="RentalHome"
-    useGeneratedKeys="true" keyColumn="rental_home_no" keyProperty="rentalHomeNo">
+  <insert id="addHome"
+    useGeneratedKeys="true" keyColumn="rental_home_no" keyProperty="rentalHome.rentalHomeNo">
     insert into rental_home(
       member_no,
       region_no,
@@ -82,20 +82,20 @@
     )
     values
     (
-    2,
-    #{region.regionNo},
-    #{name},
-    #{explanation},
-    #{address},
-    #{price},
-    #{capacity},
-    #{lat},
-    #{lon},
+    #{hostNo},
+    #{rentalHome.region.regionNo},
+    #{rentalHome.name},
+    #{rentalHome.explanation},
+    #{rentalHome.address},
+    #{rentalHome.price},
+    #{rentalHome.capacity},
+    #{rentalHome.lat},
+    #{rentalHome.lon},
     '0',
-    #{hostingStartDate},
-    #{hostingEndDate},
-    #{rentalHomeRule},
-    #{cleanFee}
+    #{rentalHome.hostingStartDate},
+    #{rentalHome.hostingEndDate},
+    #{rentalHome.rentalHomeRule},
+    #{rentalHome.cleanFee}
     );
   </insert>
 
@@ -191,7 +191,7 @@
       r.rental_home_no=#{value}
   </select>
 
-  <update id="reservationStateUpdate" parameterType="int">
+  <update id="reservationStateUpdate">
     update
       reservation
     set

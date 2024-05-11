@@ -10,6 +10,6 @@ import salaba.vo.board.BoardReportFile;
 public interface BoardReportDao { // 게시판 신고 인터페이스
   void addReport(BoardReport boardReport); // 신고 내역 작성
 
-  int checkReported(@Param("memberNo") int memberNo, @Param("targetNo") int targetNo,
+  BoardReport checkReported(@Param("memberNo") int memberNo, @Param("targetNo") int targetNo,
       @Param("targetType")String targetType); // 이미 신고한 사용자 처리
 }

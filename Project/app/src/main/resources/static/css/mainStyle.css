@@ -26,6 +26,12 @@
     height: 100vh;
   }
 
+  html,body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
   main{
     position: absolute;
     top: 332px;
@@ -35,16 +41,19 @@
     overflow-y: auto;
   }
 
+  .map-section{
+    align-items: center;
+    justify-content: center;
+  }
   #map{
     height: 1028px;
-    width: 1920px;
+    width: 100%;
+  }
+  #map div{
+    align-items: center;
+    justify-content: center;
   }
 
-  html,body{
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
   
   /* 테마 */
   .theme-section{

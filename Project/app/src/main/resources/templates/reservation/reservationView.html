@@ -139,7 +139,11 @@
                 <img height='80px' src='/img/default-photo.jpeg'></a>
             </td>
             <td rowspan="2" data-th-text="'호스트: '+${reservation.nickname}+'님'" style="width: 260px;font-size: 20px;font-weight: bold;"></td>
-            <td style="font-weight: bold;vertical-align: bottom;text-align:right;">호스트와 대화하기</td>
+            <td style="font-weight: bold;vertical-align: bottom;text-align:right;">
+            <a data-th-href="@{/chat(sender=1, reservationNo=*{reservationNo}, name=${session.loginUser.name}, memberNo=${session.loginUser.no})}"
+               style="text-decoration-line:none;color:green;">
+              호스트와 대화하기</a>
+            </td>
             <td data-th-text="'체크인 '+${reservation.startDate}" style="font-weight: bold;vertical-align: bottom;text-align:right;"></td>
           </tr>
           <tr style="height: 25px;">

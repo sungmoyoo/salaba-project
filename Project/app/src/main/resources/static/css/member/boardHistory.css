@@ -1,0 +1,44 @@
+/* 검색 기능 */
+  #bsearch-form {
+      float: right;
+      margin-right: 20px;
+  }
+  #bsearch-input {
+      padding: 5px;
+      width: 200px;
+  }
+  #bsearch-button {
+      padding: 5px 10px;
+      background-color: #35C5B3; /*로고 색상*/
+      border: 2px solid rgb(206, 243, 222);
+      border-radius: 5px; /* 둥근 모서리 */
+      color: white;
+      cursor: pointer;
+      margin-right: 20px; /* 각 카드 사이의 간격을 설정 */
+
+  }
+
+  #bsearch-container {
+    position: absolute;
+    right: 20px;
+    top: 130px;
+  }
+
+/* 페이징 처리 bar */
+.paging-bar{
+  width: 100%;
+}
+
+.paging-bar td{
+  text-align: center;
+}
+
+.paging-bar ul{
+  list-style-type: none;
+  display: inline-flex;
+}
+
+.paging-bar li{
+  padding: 0px 9px 5px 9px;
+}
+

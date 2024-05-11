@@ -12,10 +12,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <style>
 
+    * {
+      font-family: "Noto Sans KR";
+      font-weight: 400;
+    }
+
     #main-container {
       text-align: center;
       font-size: 20px;
+      text-align: center;
+      max-width: 90%;
+      margin: 0 auto;
+      padding: 40px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
+
 
     .state-form {
       max-width: 400px;
@@ -57,42 +69,47 @@
 
 
     .image-container {
-      display: inline-block;
-      margin: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+      border: 0.5px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+      min-height: 282px;
+
+    }
+
+    .image-wrapper {
+      display: flex;
+      flex-direction: column;
+      margin: auto 0;
       position: relative;
+      width: calc(20% - 16px);
     }
 
     .image-item {
-      width: 220px;
-      height: 200px;
+      width: 100%;
+      max-height: 220px;
+      min-height: 220px;
       object-fit: cover;
-      margin-bottom: 10px;
-      position: relative;
-      border-radius: 5px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .image-description {
-        width: 100%;
-        position: absolute;
-        bottom: -20px;
-        left: 0;
-        border-radius: 5px;
-        margin: 0 !important;
-    }
-
-    .photo-section {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #555;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
       text-align: center;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 50px auto;
-      max-width: 800px;
+      margin-top: 10px;
     }
 
-    .photo-section > * {
-      margin: 10px 15px 60px 15px;
-    }
 
     .delete-button {
         background-color: red;
@@ -106,9 +123,6 @@
         border-radius: 5px;
     }
 
-    .info {
-      margin: 50px 0 150px 0;
-    }
 
     .basic-info {
       width: 500px;
@@ -118,14 +132,6 @@
       width: 50%;
     }
 
-    .price-info {
-      margin: 25px 0;
-    }
-
-    .duration-info {
-      margin: 25px 0;
-    }
-
 
     .input-file-button{
       padding: 6px 25px;
@@ -133,7 +139,6 @@
       border-radius: 4px;
       color: white;
       cursor: pointer;
-      margin: 20px;
     }
 
 
@@ -143,7 +148,7 @@
       flex-wrap: wrap;
       justify-content: center;
       max-width: 600px;
-      margin: 25px auto;
+      margin: 30px auto;
     }
 
     .type-option {
@@ -163,7 +168,7 @@
       flex: 1 1 calc(20% - 10px);
       width: 100px;
       height: 90px;
-      border: 2px solid black;
+      border: 2px solid #CCCCCC;
       border-radius: 10px;
       margin-right: 20px;
       margin-bottom: 20px;
@@ -191,18 +196,18 @@
     #basic-facility {
         display: flex;
         justify-content: center;
-        flex-direction: column; /* 요소를 세로로 나열합니다. */
+        flex-direction: column;
         text-align: center;
         margin: 25px auto;
       }
 
       .convenience-facility {
         display: flex;
-        justify-content: center; /* 가로 방향으로 가운데 정렬합니다. */
-        align-items: center; /* 세로 방향으로 가운데 정렬합니다. */
-        flex-wrap: wrap; /* 내용이 넘칠 경우 다음 줄에 배치합니다. */
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
         max-width: 600px;
-        margin: 25px auto; /* 좌우 여백을 자동으로 조절하여 가운데 정렬합니다. */
+        margin: 25px auto;
 
       }
 
@@ -212,18 +217,18 @@
         height: 90px;
         border: 2px solid #CCCCCC;
         border-radius: 10px;
-        margin: 10px; /* 요소 간 간격을 조정합니다. */
+        margin: 10px;
         cursor: pointer;
         padding-top: 10px;
       }
 
       .quantity {
-        margin: 20px auto; /* 가운데 정렬 */
+        margin: 20px auto;
         font-size: 20px;
         border-bottom: 2px solid #CCCCCC;
         padding-bottom: 30px;
         max-width: 550px;
-        text-align: center; /* 가운데 정렬을 위해 추가 */
+        text-align: center;
       }
 
       input[type=number]::-webkit-inner-spin-button,
@@ -241,12 +246,14 @@
         border-color: #35C5B3;
       }
 
+      #default-image {
+        display: none;
+      }
+
     /* 지도 */
     #map {
-    height: 513px;
-    width: 912px;
-    border-radius: 4px;
-    margin: 0px auto;
+      height: 600px;
+      border-radius: 5px;
     }
 
     html,
@@ -263,12 +270,10 @@
       border: 0;
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-      margin: 10px;
+      margin: 10px 0;
       padding: 0 0.5em;
-      font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
       line-height: 40px;
-      margin-right: 0;
       min-width: 25%;
     }
 
@@ -279,7 +284,8 @@
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
       padding: 0 0.5em;
-      font: 400 18px Roboto, Arial, sans-serif;
+
+      font-weight: 100;
       overflow: hidden;
       height: 40px;
       cursor: pointer;
@@ -431,7 +437,7 @@
 <body>
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
-
+<br>
 
 <div id="main-container">
   <form action="update" data-th-action="@{rentalHomeStateUpdate}" enctype='multipart/form-data'
@@ -480,11 +486,16 @@
         data-th-object="${rentalHome}">
 
     <h1>숙소 사진</h1>
+    <br>
     <label class="input-file-button" for="photoInput">사진 추가</label>
-    <div id="photoSection" class="photo-section">
+    <br><br>
+    <div id="image-container" class="image-container">
       <input type="file" multiple id="photoInput" name="photos" style="display:none;"
              onchange="photoCountAndDisplay(this.files)"/>
-      <div class="image-container uploaded-image"
+      <div class="image-wrapper" id="default-image">
+        <img src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/icon/camera.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png">
+      </div>
+      <div class="image-wrapper uploaded-image"
            data-th-each="photo : ${rentalHome.rentalHomePhotos}" data-th-object="${photo}"
             data-th-data-uuidPhotoName="${photo.uuidPhotoName}" data-uuidPhotoName="a.gif">
           <img class="image-item"
@@ -495,10 +506,11 @@
                  data-th-value="${photo.photoExplanation}"/>
       </div>
     </div>
-
+    <br><br><br>
 
     <div class="info">
       <h1>숙소 기본 정보</h1>
+      <br>
       <div>
         <input class="basic-info" data-th-value="*{name}" type="text" name="name" id="name" placeholder="숙소명">
       </div>
@@ -511,9 +523,12 @@
                   placeholder="숙소 이용규칙"></textarea>
       </div>
     </div>
+    <br><br><br>
+
 
     <div class="info">
       <h1>숙소 위치</h1>
+      <br>
       <section>
         <div id="map"></div>
       </section>
@@ -528,6 +543,7 @@
                placeholder="상세 주소">
       </div>
     </div>
+    <br><br><br>
 
     <div class="info">
       <h1>요금 설정</h1>
@@ -546,10 +562,12 @@
         <input readonly type="text" id="income"/>
       </div>
     </div>
+    <br><br><br>
 
     <div class="info">
       <div class="duration-info">
       <h1>호스팅 기간</h1>
+        <br>
         호스팅 시작일: <input readonly data-th-value='*{hostingStartDate}' id="hostingStartDate"
                         value="2024-03-24" name="hostingStartDate" type='date'>
       </div>
@@ -558,6 +576,7 @@
                         value="2024-03-24" name="hostingEndDate" type='date'>
       </div>
     </div>
+    <br><br><br>
 
     <h1>숙소 타입</h1>
     <div class="room-type">
@@ -572,9 +591,9 @@
 
       </div>
     </div>
+    <br><br>
 
     <h1>숙소 테마</h1>
-    <br>
     <div class="room-theme">
       <!-- 반복되는 항목 -->
       <div class="theme-option" data-th-if="${theme.themeNo >= 10}" data-th-each="theme : ${themeList}" data-th-object="${theme}">
@@ -587,6 +606,7 @@
         <input type="hidden" class="themeNames" name="themeNames" data-th-value="*{themeName}"/>
       </div>
     </div>
+    <br><br>
 
     <h1>숙소 시설</h1>
     <h4>숙소의 기본 시설 개수를 입력해주세요</h4>
@@ -610,6 +630,8 @@
                data-th-value="*{facilityNo}"/>
       </div>
     </div>
+
+    <br><br>
     <h1>숙소 편의시설</h1>
     <h4>편의시설을 최소 1개 이상 선택해주세요.</h4>
     <div class="convenience-facility">
@@ -617,7 +639,7 @@
            data-th-each="facility : ${facilityList}" data-th-object="${facility}">
         <div>
           <img class="icon"
-               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/facility/' + *{facilityName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="테마 이미지">
+               data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/facility/' + *{facilityName} + .png(type=f,w=50,h=50,faceopt=false)}" alt="시설 이미지">
 
         </div>
         <a data-th-text="*{facilityName}"></a>
@@ -626,12 +648,15 @@
         <input class="facilityNos" type="hidden" name="facilityNos" data-th-value="*{facilityNo}"/>
       </div>
     </div>
+    <br>
+
     <div>
       <button id="modalButton" type="button">저  장</button>
       <button type="button"
               data-th-onclick="|location.href='@{rentalHomeList(hostNo=${session.loginUser.no})}'|">돌아가기
       </button>
     </div>
+
 
     <div id="modalWrap"> <!-- 모달 창을 감싸는 div -->
       <div id="modalBody">
@@ -647,6 +672,7 @@
 
   <br>
 </div>
+<br>
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script>
@@ -703,7 +729,7 @@
 
     checkedFacility.forEach(function(e, index) {
       // 값이 1 이상일 때(선택 또는 입력되었을 때, 기본 시설은 최소 1개 이상임)
-      if (e.check) {
+      if (e.checked) {
         formData.append('facilityCount', e.value);
         formData.append('facilityNos', document.querySelectorAll('.facilityNos')[index].value);
         formData.append('facilityNames', document.querySelectorAll('.facilityNames')[index].value);
@@ -757,42 +783,43 @@
   }
 
   function photoCountAndDisplay(files) {
-    var photoSection = document.getElementById('photoSection');
+    let imageContainer = document.getElementById('image-container');
+    let defaultImage = document.querySelector('#default-image');
+
+    defaultImage.style.display = 'none';
+    imageContainer.style.justifyContent = 'flex-start';
 
     for (var i = 0; i < files.length; i++) {
       let file = files[i];
       var reader = new FileReader();
 
       reader.onload = function (e) {
-        var container = document.createElement('div');
+        var wrapper = document.createElement('div');
 
-        container.classList.add('image-container');
+        wrapper.classList.add('image-wrapper');
 
         var imgElement = document.createElement('img');
         imgElement.classList.add('image-item');
         imgElement.src = e.target.result;
-        container.appendChild(imgElement);
+        wrapper.appendChild(imgElement);
 
         var descriptionInput = document.createElement('input');
         descriptionInput.type = 'text';
         descriptionInput.placeholder = '이미지 설명';
         descriptionInput.classList.add('image-description');
         descriptionInput.name = 'photoExplanations'; // 이미지 설명의 이름 설정
-        container.appendChild(descriptionInput);
+        wrapper.appendChild(descriptionInput);
 
         var deleteButton = document.createElement('button');
         deleteButton.textContent = 'X';
         deleteButton.classList.add('delete-button');
         deleteButton.onclick = function () {
-          var index = filesArray.findIndex(obj => obj.file === file);
-          if (index > -1) {
-            filesArray.splice(index, 1);
-            container.remove();
-          }
+          checkPhotoCount();
         };
-        container.appendChild(deleteButton);
+        console.log("dd");
+        wrapper.appendChild(deleteButton);
 
-        photoSection.appendChild(container);
+        imageContainer.appendChild(wrapper);
 
         // 파일과 설명을 하나의 객체로 연결하여 배열에 추가
         filesArray.push({
@@ -812,11 +839,12 @@
 
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const container = button.closest('.image-container');
-            if (container) {
-                container.remove();
+            const wrapper = button.closest('.image-wrapper');
+            if (wrapper) {
+                wrapper.remove();
             }
             checkRequiredFields();
+            checkPhotoCount();
         });
     });
 
@@ -928,7 +956,7 @@
 
     let isEmpty = requiredFields.some(field => field && !field.value.trim());
     let isRoomEmpty = Array.prototype.slice.call(roomFacility).some(facility => Number(facility.value) <= 0);
-    let imageCount = document.querySelectorAll('.image-container');
+    let imageCount = document.querySelectorAll('.image-wrapper');
     let radioChecked = document.querySelector('input[type="radio"]:checked');
     let roomCheckboxes = document.querySelectorAll('.facilityCount.checkbox:checked');
     let themeCheckboxes = document.querySelectorAll('.theme-checkbox:checked');
@@ -1104,7 +1132,23 @@
         alert("주소 변환 실패: " + e);
       });
   }
+  function checkPhotoCount() {
+    var index = filesArray.findIndex(obj => obj.file === file);
+    if (index > -1) {
+      filesArray.splice(index, 1);
+      wrapper.remove();
+    }
 
+    let imageContainer = document.querySelector('.image-container');
+    let wrapperCount = document.querySelectorAll('.image-wrapper').length;
+    let defaultImage = document.querySelector('#default-image');
+
+    if (wrapperCount === 1) {
+      defaultImage.style.display = 'block';
+      imageContainer.style.justifyContent = 'center';
+      console.log(":hhj");
+    }
+  }
   window.initMap = initMap;
 </script>
 
