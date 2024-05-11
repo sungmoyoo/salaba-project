@@ -12,9 +12,9 @@
     <tr>
       <td colspan="2" style="text-align:center;padding-top: 10px;">
         <a data-th-href="@{'https://kr.object.ncloudstorage.com/tp3-salaba/member/' + *{photo}}"
-           data-th-if="*{session.loginUser.photo}">
-          <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + *{session.loginUser.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
-        <a data-th-unless="*{session.loginUser.photo}" href='/img/default-photo.jpeg'>
+           data-th-if="${session.loginUser.photo}">
+          <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' + ${session.loginUser.photo}(type=f,w=80,h=80,ttype=jpg)}"></a><br>
+        <a data-th-unless="${session.loginUser.photo}" href='/img/default-photo.jpeg'>
           <img height='80px' src='/img/default-photo.jpeg'></a>
       </td>
     </tr>
