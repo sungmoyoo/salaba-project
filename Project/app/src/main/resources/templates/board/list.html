@@ -41,10 +41,10 @@
     </div>
 
   <!-- 게시판 -->
-  <table border='1'>
+  <table border='1' data-th-if="*{categoryNo == 0}" data-no="1">
   <thead>
   <!-- 후기 게시판 카드형식 목록 -->
-  <tr data-th-if="*{categoryNo == 0}" data-no="1">
+  <tr>
     <div class="container">
       <div class="card-deck">
         <div data-th-each="board : ${list}" data-th-object="${board}" class="card">
@@ -77,9 +77,9 @@
   </table>
 
   <!-- 정보공유 게시판-->
-  <table border='1'>
+  <table border='1' data-th-if="*{categoryNo == 1}" data-no="2">
     <thead>
-    <tr data-th-if="*{categoryNo == 1}" data-no="2">
+    <tr>
       <th>분류</th>
       <th>제목</th>
       <th>작성자</th>
@@ -112,16 +112,16 @@
 
 
   <!-- 자유게시판 -->
-  <table border='1'>
+  <table border='1' data-th-if="*{categoryNo == 2}" data-no="3">
     <thead>
-    <tr data-th-if="*{categoryNo == 2}" data-no="3">
+    <tZ>
       <th>분류</th> <!-- headName -->
       <th>제목</th>
       <th>작성자</th>
       <th>작성일</th>
       <th>추천수</th>
       <th>조회수</th> <!-- 목록에서는 정보공유 게시판과 자유 게시판에서만 표시됨 -->
-    </tr>
+    </tZ>
     </thead>
     <tbody>
     <tr data-th-if="*{categoryNo == 2}"

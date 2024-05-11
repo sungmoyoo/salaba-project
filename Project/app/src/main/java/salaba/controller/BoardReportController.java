@@ -45,10 +45,7 @@ public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트�
   @PostMapping("/board/report/add")
   public ResponseEntity<?> addReport(
       BoardReport boardReport,
-      @RequestParam("targetNo") int targetNo,
-      @RequestParam("targetType") String targetType,
-      @RequestParam("categoryNo") int categoryNo,
-      MultipartFile[] reportFiles,
+      @RequestParam("reportFiles") MultipartFile[] reportFiles,
       HttpSession session) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -56,12 +53,12 @@ public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트�
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인하시기 바랍니다!");
     }
 
-//    // 이미 신고한 경우를 판별하기 위한 변수
-//    int alreadyReported = boardReportService.checkReported(loginUser.getNo(), targetNo, targetType);
-//
-//    if (alreadyReported > 0) {
-//      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 신고한 내역입니다!");
-//    }
+    // 이미 신고한 경우를 판별하기 위한 변수
+    BoardReport reportedBoard = boardReportService.checkReported(loginUser.getNo(), boardReport.getTargetNo(), boardReport.getTargetType());
+
+    if (reportedBoard != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 신고되었습니다.");
+    }
 
     List<BoardReportFile> reportFileList = new ArrayList<>();
     try {
@@ -78,9 +75,6 @@ public class BoardReportController { // 게시글, 댓글, 답글 신고 컨트�
       }
 
       boardReport.setWriter(loginUser);
-      boardReport.setCategoryNo(categoryNo);
-      boardReport.setTargetNo(targetNo);
-      boardReport.setTargetType(targetType);
 
       boardReportService.addReport(boardReport);
       return ResponseEntity.ok("신고가 성공적으로 제출되었습니다.");
