@@ -20,12 +20,13 @@
 
     #main-container {
       text-align: center;
-      align-items: center;
       font-size: 20px;
-    }
-
-    .info {
-      margin: 50px 0 220px 0;
+      text-align: center;
+      max-width: 90%;
+      margin: 0 auto;
+      padding: 40px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
 
     .basic-info {
@@ -37,48 +38,59 @@
       margin: 0 auto;
     }
 
-    .duration-info {
-      margin: 25px 0;
+    .image-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+      border: 0.5px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+      min-height: 282px;
+
     }
 
-    .image-container {
-      display: inline-block;
-      text-align: center;
-      margin: 20px;
+    .image-wrapper {
+      display: flex;
+      flex-direction: column;
+      margin: auto 0;
       position: relative;
-      max-width: 690px;
+      width: calc(20% - 16px);
     }
 
     .image-item {
-      width: 256px;
-      height: 230px;
+      width: 100%;
+      max-height: 220px;
+      min-height: 220px;
       object-fit: cover;
-      margin-bottom: 10px;
-      position: relative;
-      border-radius: 5px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .image-description {
-        width: 100%;
-        position: absolute;
-        bottom: -20px;
-        left: 0;
-        margin: 0;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #555;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-align: center;
+      margin-top: 10px;
     }
 
     .delete-button {
-        background-color: red;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        position: absolute;
-        top: 0;
-        right: 0;
-        border-radius: 5px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-radius: 5px;
     }
-
-
 
     .input-file-button,
     button[type="submit"] {
@@ -90,7 +102,7 @@
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin: 50px 0 100px 0;
+      margin: 20px 0 40px 0;
     }
 
     .input-file-button:hover,
@@ -98,17 +110,10 @@
       background-color: #1C9189;
     }
 
-    #nextButton {
-      margin: 250px 0 50px 0;
-    }
-
-
     /* 지도 */
     #map {
       height: 600px;
       border-radius: 5px;
-      width: 65%;
-      margin: 0 auto;
     }
 
     html,
@@ -135,10 +140,6 @@
       font-size: 16px;
     }
 
-    #hostingStartDate,
-    #hostingEndDate, {
-      max-width: 10%;
-    }
 
     input[type=button] {
       background-color: #fff;
@@ -243,12 +244,14 @@
 <body>
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+<br>
 
 <div id="main-container">
   <form id="myForm" enctype="multipart/form-data" method='post'>
 
     <div class="info">
       <h1>숙소 기본 정보</h1>
+      <br>
       <div>
         <input class="basic-info" type="text" name="name" id="name" placeholder="숙소명">
       </div>
@@ -261,9 +264,11 @@
                   placeholder="숙소 이용규칙"></textarea>
       </div>
     </div>
+    <br><br>
 
     <div class="info">
       <h1>숙소 위치</h1>
+      <br>
       <section>
         <div id="map"></div>
       </section>
@@ -279,6 +284,8 @@
                placeholder="상세 주소">
       </div>
     </div>
+    <br><br>
+
 
     <div class="photo-section">
     <h1>숙소 사진</h1>
@@ -286,11 +293,17 @@
       <label class="input-file-button" for="photoInput">사진 추가</label>
       <input type="file" multiple id="photoInput" name="photos" style="display:none;"
              onchange="photoCountAndDisplay(this.files)"/>
-      <div id="imageContainer"></div>
+      <div class="image-container">
+        <div class="image-wrapper" id="default-image">
+          <img src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/icon/camera.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png">
+        </div>
+      </div>
     </div>
+    <br><br>
 
     <div class="info">
       <h1>요금설정</h1>
+      <br>
       <script>
         function calc() {
           const price = Number(document.getElementById("price").value);
@@ -310,9 +323,11 @@
         <input class="price-info" readonly type="text" id="income" placeholder="정산금액">
       </div>
     </div>
+    <br><br>
 
     <div class="info">
       <h1>호스팅 기간</h1>
+      <br>
       <div class="duration-container">
         <div class="duration-item">
           <label for="hostingStartDate">호스팅 시작일:</label>
@@ -325,15 +340,14 @@
       </div>
     </div>
   </form>
+  <br><br>
 
   <div>
     <button id="nextButton" type="submit" onclick="submitForm()">다음</button>
   </div>
 
-  <br>
-  <br>
 </div>
-
+<br><br>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 <script>
@@ -356,7 +370,6 @@
 
   // 필수 입력 필드가 비어 있는지 확인
   let isEmpty = requiredFields.some(field => !field.value.trim());
-  console.log(filesArray);
 
   let isDescriptionEmpty = filesArray.some(file => !file.description.value.trim());
 
@@ -373,17 +386,17 @@
   }
 }
 
-// 페이지 로드 시, 입력 필드가 변경될 때마다 확인
-window.onload = function() {
-  // 입력 필드가 변경될 때마다 확인
-  document.querySelectorAll('input, textarea').forEach(element => {
-    element.addEventListener('input', checkRequiredFields);
-  });
+  // 페이지 로드 시, 입력 필드가 변경될 때마다 확인
+  window.onload = function() {
+    // 입력 필드가 변경될 때마다 확인
+    document.querySelectorAll('input, textarea').forEach(element => {
+      element.addEventListener('input', checkRequiredFields);
+    });
 
 
-  // 초기에도 확인
-  checkRequiredFields();
-};
+    // 초기에도 확인
+    checkRequiredFields();
+  };
 
   function submitForm() {
     formData.append('name', document.querySelector('#name').value);
@@ -393,7 +406,7 @@ window.onload = function() {
     let basicAddress = document.querySelector('#basicAddress').value;
     let detailAddress = document.querySelector('#detailAddress').value;
 
-    formData.append('address', basicAddress + ". " + detailAddress);
+    formData.append('address', basicAddress + "." + detailAddress);
     formData.append('lat', document.querySelector('#lat').value);
     formData.append('lon', document.querySelector('#lon').value);
 
@@ -404,8 +417,6 @@ window.onload = function() {
 
     updateFormData(); // FormData 업데이트
 
-    console.log(formData.getAll('photoExplanations'));
-    console.log(formData.getAll('photos'));
 
     fetch('rentalHomeSave', {
       method: 'POST',
@@ -418,7 +429,6 @@ window.onload = function() {
       return response.text();
 
     }).then(data => {
-      console.log('Response data:', data);
       window.location.href = "themeForm"; // 자동으로 리디렉션
 
     }).catch(error => {
@@ -435,27 +445,31 @@ window.onload = function() {
   }
 
   function photoCountAndDisplay(files) {
-    var imageContainer = document.getElementById('imageContainer');
+    let imageContainer = document.querySelector('.image-container');
+    let defaultImage = document.querySelector('#default-image');
+
+    defaultImage.style.display = 'none';
+    imageContainer.style.justifyContent = 'flex-start';
 
     for (var i = 0; i < files.length; i++) {
       let file = files[i];
       var reader = new FileReader();
 
       reader.onload = function (e) {
-        var container = document.createElement('div');
-        container.classList.add('image-container');
+        var wrapper = document.createElement('div');
+        wrapper.classList.add('image-wrapper');
 
         var imgElement = document.createElement('img');
         imgElement.classList.add('image-item');
         imgElement.src = e.target.result;
-        container.appendChild(imgElement);
+        wrapper.appendChild(imgElement);
 
         var descriptionInput = document.createElement('input');
         descriptionInput.type = 'text';
         descriptionInput.placeholder = '이미지 설명';
         descriptionInput.classList.add('image-description');
         descriptionInput.name = 'photoExplanations'; // 이미지 설명의 이름 설정
-        container.appendChild(descriptionInput);
+        wrapper.appendChild(descriptionInput);
 
         var deleteButton = document.createElement('button');
         deleteButton.textContent = 'X';
@@ -465,13 +479,21 @@ window.onload = function() {
           if (index > -1) {
             filesArray.splice(index, 1);
             checkRequiredFields();
-            container.remove();
+            wrapper.remove();
+          }
 
+          let imageContainer = document.querySelector('.image-container');
+          let wrapperCount = document.querySelectorAll('.image-wrapper').length;
+          let defaultImage = document.querySelector('#default-image');
+
+          if (wrapperCount === 1) {
+            defaultImage.style.display = 'block';
+            imageContainer.style.justifyContent = 'center';
           }
         };
-        container.appendChild(deleteButton);
+        wrapper.appendChild(deleteButton);
 
-        imageContainer.appendChild(container);
+        imageContainer.appendChild(wrapper);
 
         // 파일과 설명을 하나의 객체로 연결하여 배열에 추가
         filesArray.push({

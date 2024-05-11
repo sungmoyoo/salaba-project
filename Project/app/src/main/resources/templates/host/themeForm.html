@@ -176,6 +176,7 @@
         // 현재 항목 선택
         this.classList.add('selected');
         this.querySelector('input[type="radio"]').checked = true;
+        checkRequiredFields(); // 필수 입력 필드 확인
       });
     });
 
