@@ -230,8 +230,8 @@ public class MemberController implements InitializingBean {
   }
 
   @GetMapping("boardHistory")  // 작성글 내역
-  public void BoardHistory(@RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "10") int pageSize,
+  public void BoardHistory(@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+      @RequestParam( value = "pageSize" ,defaultValue = "10") int pageSize,
       Member member,
       Model model,
       HttpSession session) throws Exception {
@@ -268,8 +268,8 @@ public class MemberController implements InitializingBean {
   }
 
   @GetMapping("commentHistory")  // 작성댓글 내역
-  public void commentHistory(@RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "10") int pageSize,
+  public void commentHistory(@RequestParam( value = "pageNo",defaultValue = "1") int pageNo,
+      @RequestParam( value = "pageSize",defaultValue = "10") int pageSize,
       Model model,
       HttpSession session) throws Exception {
 
@@ -348,3 +348,4 @@ public class MemberController implements InitializingBean {
     return "member/boardHistory"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
   }
 }
+

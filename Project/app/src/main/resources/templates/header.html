@@ -54,6 +54,27 @@
       </div>
     </button>
   </div>
+  <div class="userLogin-modal">
+    <div id="userEmail-box">
+      <input id="userEmail" data-th-value="${email}" type="text" placeholder="이메일">
+    </div>
+    <div id="userPassword-box">
+      <input id="userPassword" type="password" placeholder="비밀번호">
+    </div>
+    <div id="userLogin-box">
+      <div>
+        <span>
+          <input id="saveEmail" type="checkbox">
+          이메일 저장
+        </span>
+      </div>
+      <div id="userLogin-box-btn">
+        <button id="login-button">
+          <span>로그인</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <section>
     <div class="search-container">
       <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">

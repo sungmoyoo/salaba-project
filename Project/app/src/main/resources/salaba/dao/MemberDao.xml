@@ -98,9 +98,9 @@
       member_no=#{no}
   </update>
 
-  <select id="checkNickname" resultMap="MemberMap" parameterType="String"><!--닉넴 중복체크>-->
+  <select id="checkNickname" parameterType="String"><!--닉넴 중복체크>-->
     select
-      nickname
+      count(*)
     from
       member
     where
