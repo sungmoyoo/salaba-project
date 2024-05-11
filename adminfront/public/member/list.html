@@ -37,24 +37,28 @@
           </button>
         </div>
       </form>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>이름</th>
-            <th>닉네임</th>
-            <th>이메일</th>
-            <th>연락처</th>
-            <th>가입일</th>
-            <th id="changing-th"></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-          <td colspan="10" class="tablefoot"></td>
-        </tfoot>
-      </table>
+      <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>이름</th>
+              <th>닉네임</th>
+              <th>이메일</th>
+              <th>연락처</th>
+              <th>가입일</th>
+              <th id="changing-th"></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
+
     <div id="detailModal" class="modal">
       <div class="modal-content" id="modalContent"></div>
 
