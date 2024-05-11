@@ -36,7 +36,7 @@
       <div class="userInfo-button-photo">
         <img data-th-if="${session.loginUser == null}" data-th-src="@{/img/default-photo.jpeg}" width="32px" height="32px">
         <img data-th-if="${session.loginUser != null}"
-        data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' +${session.loginUser.photo}+ .jpg(type=f,w=20,h=20,ttype=jpg)}">
+        data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/' +${session.loginUser.photo}+'?type=f&w=20&h=20&ttype=jpg'}">
       </div>
       <div class="userInfo-menu">
         <span class="userInfo-menu-item">
@@ -54,9 +54,30 @@
       </div>
     </button>
   </div>
+  <div class="userLogin-modal">
+    <div id="userEmail-box">
+      <input id="userEmail" data-th-value="${email}" type="text" placeholder="이메일">
+    </div>
+    <div id="userPassword-box">
+      <input id="userPassword" type="password" placeholder="비밀번호">
+    </div>
+    <div id="userLogin-box">
+      <div>
+        <span>
+          <input id="saveEmail" type="checkbox">
+          이메일 저장
+        </span>
+      </div>
+      <div id="userLogin-box-btn">
+        <button id="login-button">
+          <span>로그인</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <section>
     <div class="search-container">
-      <form action="/rentalHome/search" data-th-action="@{search}" id="condition-search" method="get">
+      <form action="/main" data-th-action="@{main}" id="condition-search" method="get">
         <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
         <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
         <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">

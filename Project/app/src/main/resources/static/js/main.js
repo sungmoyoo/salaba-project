@@ -159,6 +159,7 @@ function updateButtonLabel(count){
 }
 
 let filteredRentalHomeList = rentalHomeList;
+
 function getFilterData(){ // 필터 적용
   let themes = [];
   let checkboxes = document.querySelectorAll('input[name="theme"]:checked');
@@ -177,7 +178,10 @@ function getFilterData(){ // 필터 적용
       return rentalHome.price >= minPrice && rentalHome.price <= maxPrice; 
     }
   });
-  
+
+  console.log(filteredRentalHomeList.length);
+  console.log(filteredRentalHomeList);
+
   // 필터링된 숙소의 갯수 업데이트
   updateButtonLabel( filteredRentalHomeList.length );
 

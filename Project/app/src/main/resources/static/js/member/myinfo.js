@@ -84,6 +84,7 @@
     }
     //회원탈퇴 버튼 클릭 시 호출되는 함수
     function fn_memberDelete(){
+       frm.method = "get";
       frm.action = "/member/delete";
       frm.submit();
     }

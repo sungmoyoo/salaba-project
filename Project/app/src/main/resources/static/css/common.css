@@ -149,3 +149,18 @@
   .search-button:hover {
     background-color: #0056b3;
   }
+
+/* 로그인 modal */
+#userLogin-box{
+  display: flex;
+  padding-top: 3px;
+}
+
+#userLogin-box span{
+  font-size: 14px;
+  font-weight: 300;
+}
+
+#userLogin-box-btn{
+  padding-left: 10px;
+}
