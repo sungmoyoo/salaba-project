@@ -130,11 +130,11 @@
     }
   })
 
+  //기존글의 말머리 표시
   let headNo = $('#head').find('span').text();
   let headOptions = $('#head').find('option');
   console.log(headNo);
   headOptions.each(function() {
-    // console.log($(this).val());
     if ($(this).val() == headNo) {
       $(this).prop('selected', true);
       console.log("equal")

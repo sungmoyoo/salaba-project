@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/css/common.css">  
   <link rel="stylesheet" type="text/css" href="/css/board/list.css">
+  <link rel="stylesheet" type="text/css" href="/css/board/card.css">
 
 </head>
 <body>
@@ -39,6 +40,12 @@
         <button id="bsearch-button">검색</button>
       </form>
     </div>
+
+     <!-- 글쓰기 버튼 -->
+  <div id="write-button-container">
+    <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">
+      글쓰기 <i class="fa-solid fa-pen"></i></a>
+  </div>
 
   <!-- 게시판 -->
   <table border='1' data-th-if="*{categoryNo == 0}" data-no="1">
@@ -144,11 +151,6 @@
     </tbody>
   </table>
 
-  <!-- 글쓰기 버튼 -->
-  <div id="write-button-container">
-    <a id="write-button" data-th-href="@{form(categoryNo=*{categoryNo})}" href="form">
-      글쓰기 <i class="fa-solid fa-pen"></i></a>
-  </div>
 
   <!-- 페이지네이션: 게시판용 페이징처리 적용-->
   <nav aria-label="Page navigation example" data-th-if="${categoryNo != 0}">

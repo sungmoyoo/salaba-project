@@ -6,13 +6,22 @@
 </head>
 <body>
 <header data-th-fragment="header">
-  <div class="logo-div">
-    <a class="logo-link" data-th-href="@{/main}">
-      <img
-          src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
-    </a>
+  <div class="logo-container">
+    <div class="logo-div">
+      <a class="logo-link" data-th-href="@{/main}">
+        <img
+            src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
+      </a>
+    </div>
+    <nav>
+      <ul>
+        <li><a id="mainPage" data-th-href="@{/main}" href="/main" class="menu-link">한달살기</a></li>
+        <li><a id="boardPage" data-th-href="@{/board/main}" href="/board/main" class="menu-link">커뮤니티</a></li>
+      </ul>
+    </nav>
   </div>
-  <div class="main-menu">
+    <!-- <div
+  <!-- <div class="main-menu">
     <div class="main-menu-item">
       <span class="main-menu-item-s">
         <a data-th-href="@{/main}" href="/main">한달살기</a>
@@ -23,8 +32,9 @@
         <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
       </span>
     </div>
-  </div>
-  <div class="userInfo-container">
+  </div> -->
+  
+  <!-- <div class="userInfo-container">
     <button class="userInfo-button">
       <div class="userInfo-button-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
@@ -74,8 +84,8 @@
         </button>
       </div>
     </div>
-  </div>
-  <section>
+  </div> -->
+  <!-- <section>
     <div class="search-container">
       <form action="/main" data-th-action="@{main}" id="condition-search" method="get">
         <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
@@ -85,16 +95,18 @@
         <button class="search-button" type="submit">검색</button>
       </form>
     </div>
-  </section>
+  </section> -->
+  <script data-th-src="@{/js/header.js}"></script>
 </body>
 <script data-th-inline="javascript">
   let sessionInfo = /*[[${session.loginUser}]]*/ '';
 </script>
 <!-- <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script> -->
-<script data-th-src="@{/js/header.js}"></script>
+
 <script>
   const se = sessionInfo;
   console.log(se);
 </script>
+
 
 </html>
