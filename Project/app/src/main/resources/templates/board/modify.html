@@ -27,19 +27,20 @@
       method='post'>
   <input id="categoryNo" data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
 
-  <div>
+  <div hidden>
     번호: <input data-th-value="*{boardNo}" name='boardNo' readonly type='text' value="100">
   </div>
-  <div>
+  <div hidden>
     작성자: <input data-th-value="${board.writer.nickname}" readonly type='text' value="홍길동">
   </div>
-  <div>
+  <div hidden>
     작성일:<input data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly
                type='text' value="2024-03-27">
   </div>
 
   <!--말머리-->
-  <div data-th-if="*{categoryNo != 0}">
+  <div id="head" data-th-if="*{categoryNo != 0}">
+    <span data-th-text="${board.headNo}" hidden></span>
     <select name="headNo">
       분류:
       <option value="1" hidden>공지</option> <!-- 일반 회원은 공지 작성 권한 없음 -->
@@ -56,17 +57,19 @@
   </div>
 
   <!--공개범위 -->
-  <div>
+  <div id="scope">
+    <span data-th-text="${board.scopeNo}" hidden></span>
     공개범위:
-    <input data-th-value="0" type="radio" name="scopeNo" onchange="setScopeNo(this)">
+    <input value="0" type="radio" name="scopeNo">
     <label>전체공개</label><br>
-    <input data-th-value="1" type="radio" name="scopeNo" onchange="setScopeNo(this)">
+    <input value="1" type="radio" name="scopeNo">
     <label>회원공개</label><br>
-    <input data-th-value="2" type="radio" name="scopeNo" onchange="setScopeNo(this)">
+    <input value="2" type="radio" name="scopeNo">
     <label>비공개</label><br>
   </div>
   <!--위치 -->
-  <div data-th-if="*{categoryNo == 0}">
+  <div id="region" data-th-if="*{categoryNo == 0}">
+    <span data-th-text="${board.region.regionNo}" hidden></span>
     <select name="regionNo">
       지역:
       <optgroup label="[국내여행]">
@@ -108,3 +111,34 @@
 <script data-th-src="@{/js/board/form.js}"></script>
 </body>
 </html>
+
+<script>
+  //기존글의 공개범위 표시
+  let scopeNo = $('#scope').find('span').text();
+  $('#scope').find('input').each(function() {
+    if ($(this).val() == scopeNo) {
+      $(this).prop('checked', true);
+    }
+  });
+
+  // 기존글의 지역 표시
+  let regionNo = $('#region').find('span').text();
+  let regionOptions = $('#region').find('option');
+  regionOptions.each(function() {
+    if ($(this).val() == regionNo) {
+      $(this).prop('selected', true);
+    }
+  })
+
+  let headNo = $('#head').find('span').text();
+  let headOptions = $('#head').find('option');
+  console.log(headNo);
+  headOptions.each(function() {
+    // console.log($(this).val());
+    if ($(this).val() == headNo) {
+      $(this).prop('selected', true);
+      console.log("equal")
+    }
+  })
+  
+</script>

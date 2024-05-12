@@ -64,17 +64,17 @@
 
     <div>
       공개범위:
-      <input name="scopeNo" data-th-value="0" type="radio" >
+      <input name="scopeNo" value="0" type="radio" checked>
       <label>전체공개</label>
-      <input name="scopeNo" data-th-value="1" type="radio">
+      <input name="scopeNo" value="1" type="radio">
       <label>회원공개</label>
-      <input name="scopeNo" data-th-value="2" type="radio">
+      <input name="scopeNo" value="2" type="radio">
       <label>비공개</label><br>
     </div>
   </div>
 
   <div>
-    <input name='title' type='text' placeholder="제목을 입력하세요.">
+    <input id="titleInput" name='title' type='text' placeholder="제목을 입력하세요.">
   </div>
 
   <div>
@@ -95,3 +95,16 @@
 </script>
 </body>
 </html>
+
+<script>
+$('#write-button').click(function (e) {
+  e.preventDefault();
+  console.log($('#summernote').val().length);
+  if ($('#titleInput').val().trim().length <= 2 || $('#summernote').val().trim().length <= 2) {
+    alert('제목과 내용은 2자 이상이여야 합니다.')
+  } else {
+    $('form').submit();
+
+  }
+})
+</script>
