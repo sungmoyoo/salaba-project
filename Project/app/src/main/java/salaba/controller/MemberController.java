@@ -1,7 +1,9 @@
 package salaba.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -9,24 +11,28 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.BoardService;
 import salaba.service.HostService;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
+import salaba.vo.ConstVO;
 import salaba.vo.Member;
 import salaba.vo.Nation;
 import salaba.vo.board.Board;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/member")
 public class MemberController implements InitializingBean {
 
@@ -137,46 +143,41 @@ public class MemberController implements InitializingBean {
     return "redirect:/auth/logout";
   }
 
-  @GetMapping("findEmail")
-  public void findEmail(Member member) throws Exception { // 이메일 찾기
-  }
-
-  @GetMapping("findPassword")
-  public void findPassword(Member member) throws Exception { // 비밀번호 찾기
-  }
-
   @PostMapping("searchEmail")
-  public String searchEmail(Member member, Model model) throws Exception { // 이메일 조회
+  public ResponseEntity<Object> searchEmail(@RequestBody Member member) throws Exception { // 이메일 조회
     Member info = memberService.findEmail(member);
+    Map<String, Object> data = new HashMap<>();
     if (info == null) {
-      model.addAttribute("findYn", "N");
+      data.put("state", ConstVO.state_no); // 조회 결과 없는 경우 state - 0
     } else {
-      model.addAttribute("member", info);
-      model.addAttribute("findYn", "Y");
+      data.put("state", ConstVO.state_ok); // 조회 결과가 있는 경우 state - 1
+      data.put("email", info.getEmail());
+      data.put("name", info.getName());
     }
-    return "/member/findEmailResult";
+    return new ResponseEntity<>(data, HttpStatus.OK);
   }
 
   @PostMapping("searchPassword")
-  public String searchPassword(Member member, Model model) throws Exception { // 비밀번호 조회
+  public ResponseEntity<Object> searchPassword(@RequestBody Member member) throws Exception { // 비밀번호 조회
     Member info = memberService.findPassword(member);
+    Map<String, Object> data = new HashMap<>();
     if (info == null) {
-      model.addAttribute("findYn", "N");
+      data.put("state", ConstVO.state_no); // 조회 결과 없는 경우 state - 0
     } else {
-      model.addAttribute("member", info);
-      model.addAttribute("findYn", "Y");
+      data.put("state", ConstVO.state_ok); // 조회 결과가 있는 경우 state - 1
+      data.put("memberNo" ,info.getNo());
     }
-      return "/member/findPasswordResult";
+      return new ResponseEntity<>(data, HttpStatus.OK);
   }
 
-  @PostMapping("changePasswordSave")
-  public String changePasswordSave(Member member, Model model) throws Exception { // 비밀번호 변경
+  @PostMapping("changePassword")
+  public ResponseEntity<String> changePasswordSave(@RequestBody Member member) throws Exception { // 비밀번호 변경
     memberService.changePasswordSave(member);
-    return "redirect:/auth/form";
+    return ResponseEntity.ok("비밀번호 변경 완료");
   }
 
   @PostMapping("myInfoChangePasswordSave")
-  public String myInfoChangePasswordSave(Member member, Model model) throws Exception { // 비밀번호 변경
+  public String myInfoChangePasswordSave(Member member) throws Exception { // 비밀번호 변경
     memberService.changePasswordSave(member);
     return "redirect:/member/myinfo";
   }

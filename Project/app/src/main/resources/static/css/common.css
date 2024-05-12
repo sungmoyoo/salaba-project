@@ -115,7 +115,7 @@
   }
   
   .search-container {
-    width: 38%;
+    width: 40%;
     height: 4%;
     margin: 50px auto;
     padding: 20px;
@@ -133,8 +133,7 @@
   .search-input,
   .search-button {
     padding: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-left: 10px;
     border: 1px solid #cccccc;
     border-radius: 4px;
   }
@@ -151,16 +150,59 @@
   }
 
 /* 로그인 modal */
-#userLogin-box{
+.userlogin-box-div{
+  display: flex;
+}
+
+#userEmail-box,
+#userPassword-box{
+  margin-bottom: 5px;
+}
+
+#userLogin-box,
+#userjoin-box{
   display: flex;
   padding-top: 3px;
 }
 
-#userLogin-box span{
-  font-size: 14px;
-  font-weight: 300;
+#findInfo-box{
+  display: flex;
+  margin-top: 5px;
 }
 
-#userLogin-box-btn{
-  padding-left: 10px;
+#findEmail-box{
+  margin-right: 10px;
+}
+
+#findEmail-button{
+  padding-left: 0;
+}
+
+.form-check,
+#userLogin-box-btn,
+#userjoin-box{
+  margin-right: 5px;
+}
+
+#googleLogin-box{
+  margin-top: 5px;
+}
+
+/* 이메일 찾기 모달 */
+#user-name-box,
+#user-birth-box{
+  margin-bottom: 5px;
+}
+
+#findEmail-modal-button-box{
+  display: flex;
+}
+#backToLoginModal-button-box{
+  margin-right: 10px;
+}
+
+/* 비밀번호 찾기 모달 */
+#findPassword-modal-button-box{
+  display: flex;
+  margin-top: 5px;
 }

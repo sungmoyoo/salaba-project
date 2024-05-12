@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title></title>
+</head>
+<body>
+  <!-- userLogin-modal -->
+<div class="modal fade" id="userLoginModal" tabindex="-1" aria-labelledby="userLoginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userLoginModalLabel">로그인</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="input-box">
+          <div id="userEmail-box">
+            <input id="userEmail" data-th-value="${email}" type="text" class="form-control" placeholder="이메일">
+          </div>
+          <div id="userPassword-box">
+            <input id="userPassword" type="password" class="form-control" placeholder="비밀번호">
+          </div>
+          <div class="userlogin-box-div">
+            <div id="userLogin-box">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="saveEmail">
+                <label class="form-check-label" for="saveEmail">
+                  이메일 저장
+                </label>
+              </div>
+              <div id="userLogin-box-btn">
+                <button id="login-button" class="btn btn-primary" onclick="userLogin()">로그인</button>
+              </div>
+            </div>
+            <div id="userjoin-box">
+              <button id="userjoin-button" class="btn btn-secondary">회원가입</button>
+            </div>
+          </div>
+        </div>
+        <div id="findInfo-box">
+          <div id="findEmail-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#findEmailModal">이메일 찾기</button>
+          </div>
+          <div id="findPassword-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#passwordRecoveryModal">비밀번호 찾기</button>          </div>
+        </div>
+        <div id="socialLogin-box">
+          <div id="googleLogin-box">
+            <button id="googleLogin-button" class="btn btn-outline-primary">Google 로그인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 이메일 찾기 모달 -->
+<div class="modal fade" id="findEmailModal" tabindex="-1" aria-labelledby="findEmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="findEmailModalLabel">이메일 찾기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="input-box">
+          <div id="user-name-box">
+            <input id="find-email-username" type="text" class="form-control" placeholder="이름">
+          </div>
+          <div id="user-birth-box">
+            <input id="find-email-userbirth" type="date" class="form-control" placeholder="생년월일">
+          </div>
+        </div>
+        <div id="findEmail-modal-button-box">
+          <div id="backToLoginModal-button-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#userLoginModal">
+              <span>돌아가기</span>
+            </button>
+          </div>
+          <div id="findUserEmail-button-box">
+            <button id="findUserEmail-button" class="btn btn-primary">
+              <span>이메일 찾기</span>
+            </button>
+            <button id="find-email-success-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#findEmailSuccessModal" hidden></button>
+            <button id="find-email-fail-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#findEmailFailModal" hidden></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 이메일 찾기 완료 모달 -->
+<div class="modal fade" id="findEmailSuccessModal" tabindex="-1" aria-labelledby="findEmailSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="findEmailSuccessModalLabel">이메일 찾기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="findEmailSuccess-content">
+          <span id="findEmailSuccess-content-text"></span>
+        </div>
+        <div id="findEmail-modal-button-box">
+          <div id="backToLoginModal-button-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#userLoginModal">
+              <span>로그인하러 가기</span>
+            </button>
+          </div>
+          <div id="findUserEmail-button-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#passwordRecoveryModal">
+              <span>비밀번호 찾기</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>  
+</div>
+
+<!-- 이메일 찾기 실패 모달 -->
+<div class="modal fade" id="findEmailFailModal" tabindex="-1" aria-labelledby="findEmailFailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="findEmailFailModalLabel">이메일 찾기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <span id="findEmailFail-text">가입하신 이메일이 조회되지 않습니다.</span>
+        </div>
+        <div id="findEmail-modal-button-box">
+          <div id="backToLoginModal-button-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#userLoginModal">
+              <span>돌아가기</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>  
+</div>
+
+<!-- 비밀번호 찾기 모달 -->
+<div class="modal fade" id="passwordRecoveryModal" tabindex="-1" aria-labelledby="passwordRecoveryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="passwordRecoveryModalLabel">비밀번호 찾기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="input-box">
+          <div id="user-name-box">
+            <input id="find-password-username" type="text" class="form-control" placeholder="이름">
+          </div>
+          <div id="user-email-box">
+            <input id="find-password-useremail" type="text" class="form-control" placeholder="이메일">
+          </div>
+        </div>
+        <div id="findPassword-modal-button-box">
+          <div id="backToLoginModal-button-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#userLoginModal">
+              <span>돌아가기</span>
+            </button>
+          </div>
+          <div id="findUserEmail-button-box">
+            <button id="findUserPassword-button" class="btn btn-primary">
+              <span>비밀번호 찾기</span>
+            </button>
+            <button id="find-password-success-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#findPasswordSuccessModal" hidden></button>
+            <button id="find-password-fail-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#findPasswordFailModal" hidden></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 비밀번호 찾기 성공 모달 -->
+<div class="modal fade" id="findPasswordSuccessModal" tabindex="-1" aria-labelledby="findPasswordSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="findPasswordSuccessModalLabel">비밀번호 재설정</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="input-box">
+          <div id="user-password-box">
+            <input id="password-first" type="password" class="form-control" placeholder="비밀번호">
+          </div>
+          <div id="user-password-box">
+            <input id="password-second" type="password" class="form-control" placeholder="비밀번호 확인">
+          </div>
+          <input id="user-password-target" hidden>
+        </div>
+        <div id="findEmail-modal-button-box">
+          <div id="backToLoginModal-button-box">
+            <button id="change-password-back-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#userLoginModal">
+              <span>돌아가기</span>
+            </button>
+          </div>
+          <div id="change-password-box">
+            <button id="change-password-button" class="btn btn-primary" onclick="changePassword()">
+              <span>비밀번호 변경</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>  
+</div>
+
+<!-- 비밀번호 찾기 실패 모달 -->
+<div class="modal fade" id="findPasswordFailModal" tabindex="-1" aria-labelledby="findPasswordFailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="findPasswordFailModalLabel">비밀번호 찾기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <span id="findEmailFail-text">해당 회원정보가 조회되지 않습니다.</span>
+        </div>
+        <div id="findEmail-modal-button-box">
+          <div id="backToLoginModal-button-box">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#userLoginModal">
+              <span>돌아가기</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>  
+</div>
+
+</body>
+</html>
