@@ -12,7 +12,7 @@ tbody tr:hover {
     cursor: pointer;
     }
 
-table {
+ table {
     /* flex: 1; 각 테이블이 동일한 너비를 가지도록 설정 */
     border-collapse: collapse;
     border-radius: 20px;

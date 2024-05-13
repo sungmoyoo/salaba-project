@@ -1,12 +1,18 @@
-body {
+main {
   display: flex;
-  justify-content: center; /* 가로 방향 가운데 정렬 */
+  flex-direction: column; 
+  justify-content: center;
   align-items: center; /* 세로 방향 가운데 정렬 */
-  min-height: 100vh; /* 화면의 최소 높이를 화면 전체로 설정 */
-  margin: 0; /* body 요소의 기본 마진 제거 */
 }
 
-*게시판 종류*/
+#board-section {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*게시판 종류*/
 h1 {
   text-align: left; /* 제목을 왼쪽 정렬 */
   margin-left: 20px; /* 왼쪽 여백 추가 */
@@ -50,23 +56,28 @@ h1 {
   pointer-events: none;
   border: none;
   text-align: left;
-  width: 10%; 
+  width: 15%; 
   margin-bottom: 30px;
-  margin-right: 1000px;
-  font-size: 18px;
+  margin-right: 80%;
+  font-size: 13px;
   color: rgb(152, 152, 152);
 }
 
 /* 게시글 신고 버튼 */
 .board-report-btn {
-  padding: 10px 10px;
-  height: 3%;
-  width: 7%;
+  height: 2%;
+  width: 6%;
   background-color:white;/* 신고 버튼 배경색 */
   color: black; /* 글자색 */
   justify-content: flex-end; /* 신고 버튼을 우측 정렬 */
-  margin-right: 10px;
-  border: 1px solid gray;
+  border: 2px solid rgb(229, 102, 117);
+  border-radius: 10px;
+}
+
+.board-report-btn:hover {
+  background-color:rgb(229, 102, 117);
+  border: 2px solid white;
+  color: white;
 }
 
 /* 게시글 수정 버튼 */
@@ -83,7 +94,7 @@ h1 {
 .others-container {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 
@@ -110,6 +121,13 @@ h1 {
   box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
   border-top: 2px solid rgb(152, 152, 152); /* 상단에 구분선 추가 */
   border-bottom: 2px solid rgb(152, 152, 152); /* 하단에 구분선 추가 */
+}
+
+.content-box #summernote p{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /**************************************************************************************************************/
@@ -180,23 +198,41 @@ h1 {
 
 /**************************************************************************************************************/
 
+#comment-section {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/*댓글,답글 리스트*/
+#comment-box {
+  margin-bottom: 100px;
+  margin-left: 20px;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+
+  
+}
+
 /*댓글 작성하기*/
 #comment-form {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* 왼쪽 정렬로 변경 */
-  justify-content: left;
+  justify-content: center;
+  align-items: center;
   padding: 10px; /* 내부 여백 설정 */
-  height: 250px;
+  height: 100%;
   width: 100%; /* 폼의 너비 설정 */
   margin-left: 20px;
+  margin-bottom: 20px;
 }
 
 #comment-content {
-  border: 1px solid rgb(155, 155, 155);
-  height: 5em; /* 고정 높이 사용 */
+  border: 1px solid gray;
+  height: 50px; /* 고정 높이 사용 */
   width: 80%;
-  border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
+  border-radius: 10px; /* 모서리를 약간 둥글게 설정 */
   text-align: left;
   box-sizing: border-box; 
   line-height: normal; /* line-height를 normal로 설정 */
@@ -204,7 +240,7 @@ h1 {
 }
 
 #reply-content {
-  border: 1px solid rgb(155, 155, 155);
+  border: 1px solid gray;
   height: 60%;
   width: 80%;
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
@@ -216,32 +252,29 @@ h1 {
 }
 
 
-/*댓글,답글 리스트*/
-#comment-box {
-  background-color: rgb(223, 223, 207);
-  /* padding: 20px; */
-  margin-bottom: 20px;
-  margin-left: 20px;
-  width: 80%;
-  text-align: left;
-  overflow: hidden;
-  
-}
-
 .button-container1, .button-container2 {
   display: none;
+  margin-right: 100px;
+}
+
+.button-container1 button:hover, .button-container2 button:hover{
+  color: #ccc;
 }
 
 
-.comment, .reply {
+.commentContentDiv, .replyContentDiv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
   margin-top: 5px;
   padding: 5px;
-  margin-bottom: 5px;
-  border-radius: 2px; /* 테두리 모서리 둥글게 */
+  margin-bottom: 5px; 
+  border-bottom: 1px solid gainsboro;
+
 }
 
-.comment {
-  border-top: 2px groove #ffffff; /* 댓글 상단에 구분선 추가 */
+.replyContentDiv {
+  margin-left: 30px;
 }
 
 /* 댓글 내용 정렬 조정 */
@@ -260,23 +293,27 @@ h1 {
 /*수정, 삭제, 신고를 묶어둔 컨테이너*/
 .button-container1, .button-container2 {
   display: flex;
+  height: 40px;
   gap: 10px;
+  margin-top: 10px;
   justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
 }
 
 /* 댓글, 답글 내용 크기 조정 */
 .commentContent, .replContent {  
   flex: 1; /* 부모 요소에서 남은 공간을 차지  */
-  height: 60%; 
-  width: 500px;
+  height: 610%; 
+  width: 60%;
   font-size: 15px; /* 댓글과 답글 내용의 글꼴 크기를 키움 */
-  margin-left: 7%; 
+  margin-left: 30%; 
 }
+
 
 /*댓글, 답글 작성일*/
 .comment-date, .reply-date {
   color: gray;
   margin-left: 10px;
+  font-size: 10px;
 }
 
 /*댓글 수정 폼*/
@@ -300,7 +337,7 @@ h1 {
   margin-top: 5px;
   margin-left: 10px;
   font-weight: bold;
-  font-size: 13pt;
+  font-size: 11pt;
 }
 
 
@@ -322,8 +359,8 @@ h1 {
 
 /* 프로필 사진 원형 만들기 */
 .profile-img1, .profile-img2 {
-  width: 40px; /* 이미지의 가로 크기 */
-  height: 40px; /* 이미지의 세로 크기 */
+  width: 30px; /* 이미지의 가로 크기 */
+  height: 30px; /* 이미지의 세로 크기 */
   object-fit: cover; /* 이미지를 요소 크기에 맞게 조정 */
   border-radius: 50%; /* 둥근 모서리로 설정 */
   margin-top: 10px;
@@ -334,18 +371,17 @@ h1 {
 
 /* 삭제, 수정, 신고 버튼 */
 .del, .del2, .modi, .modi2, .comment-report-btn, .reply-report-btn, .comtModiConfirm, .comtModiCancel, .replModiConfirm, .replModiCancel {
-  border: 1px solid #fff;
+  border: none;
   padding:5px 10px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
   font-size: 13px; /* 글꼴 크기를 조절 */
+  background-color: #ffffff;
 }
 
 /*수정 폼*/
 .commentModifyForm, .replyModifyForm {
   gap: 10px; /* 요소들 사이의 간격 */
-  border: 1px solid #ccc; /* 테두리 설정 */
   padding: 10px; /* 내부 여백 */
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
-  background-color: #f9f9f9; /* 배경색 */
   margin-top: 10px;
   width: 100%;
 }
@@ -353,7 +389,7 @@ h1 {
 .newContent {
   width: 85%; /* 가로 크기를 부모 요소의 전체 크기로 설정 */
   height: 60px; /* 높이 설정 */
-  border: 1px solid #ccc; /* 상자 테두리 색상 및 스타일 */
+  border: 1px solid gray; /* 상자 테두리 색상 및 스타일 */
   border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
   padding: 10px; /* 내부 여백 설정 */
   box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
@@ -362,12 +398,21 @@ h1 {
 
 /*댓글 달기 버튼*/
 #addCommentBtn  {
-  border: 1px solid #fff;
-  padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
+  border: 2px solid #718de0;
+  background-color: #fff;
+  border-radius: 15px;
+  padding:13px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
   font-size: 14px; /* 글꼴 크기를 조절 */
   margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 9px;
   align-self: flex-end; /* 자신을 오른쪽으로 정렬 */
-  margin-right:220px;
+}
+
+#addCommentBtn:hover {
+  border: 2px solid #fff;
+  background-color: #718de0;
+  color: #fff;
 }
 
 /* 답글 달기 버튼 */
@@ -397,6 +442,10 @@ textarea[name='content'] {
   font-family: Arial, sans-serif; 
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+#reportModal .modal-dialog {
+  margin-top: 15%;
 }
 
 /* 맨 위로 올라가기 */
