@@ -1,0 +1,62 @@
+/* 로그인 modal */
+.userlogin-box-div{
+  display: flex;
+}
+
+#userEmail-box,
+#userPassword-box{
+  margin-bottom: 5px;
+}
+
+#userLogin-box,
+#userjoin-box{
+  display: flex;
+  padding-top: 3px;
+}
+
+#findInfo-box{
+  display: flex;
+  margin-top: 5px;
+}
+
+#findEmail-box{
+  margin-right: 10px;
+}
+
+#findEmail-button{
+  padding-left: 0;
+}
+
+.form-check,
+#userLogin-box-btn,
+#userjoin-box{
+  margin-right: 5px;
+}
+
+#googleLogin-box{
+  margin-top: 5px;
+}
+
+/* 이메일 찾기 모달 */
+#user-name-box,
+#user-birth-box{
+  margin-bottom: 5px;
+}
+
+#findEmail-modal-button-box{
+  display: flex;
+}
+#backToLoginModal-button-box{
+  margin-right: 10px;
+}
+
+/* 비밀번호 찾기 모달 */
+#findPassword-modal-button-box{
+  display: flex;
+  margin-top: 5px;
+}
+
+/* 회원가입 모달 */
+#joinMember-content{
+  margin-bottom: 15px;
+}

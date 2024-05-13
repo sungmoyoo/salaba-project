@@ -41,8 +41,8 @@
 /* 후기게시판 - 카드 형식으로 조회 */
   .card {
         border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
+        border-radius: 10px;
+        padding: 0px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         transition: 0.3s;
         width: 20%; /* 각 카드의 너비를 조절하여 한 줄에 4개의 카드가 들어가도록 설정 */

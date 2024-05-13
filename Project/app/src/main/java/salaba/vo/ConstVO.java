@@ -45,7 +45,9 @@ public final class ConstVO {
   public static final char member_state_blocked = '3'; // 제재
 
   public static final char member_state_sleep = '4'; // 휴면
-
+  
+  public static final char login_ok = '0'; // 로그인 성공
+  public static final char login_fail = '9'; // 로그인 실패
 
   // 댓글, 게시글, 답글, 숙소 리뷰 상태
   public static final char text_ok = '0'; // 일반

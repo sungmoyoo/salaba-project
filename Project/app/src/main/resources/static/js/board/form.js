@@ -51,8 +51,3 @@
 });
 
 
-// 게시글 공개범위 설정
-  function setScopeNo(input) {
-    // 선택된 라디오 버튼의 값을 scopeNo에 설정
-    document.getElementById("scopeNo").value = input.dataset.thValue;
-  }

@@ -47,10 +47,15 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public Member checkNickname(String nickname) {
+  public int checkNickname(String nickname) {
     return memberDao.checkNickname(nickname);
   }
-
+////////////////
+  @Override
+  public int checkEmail(String email) {
+    return memberDao.checkEmail(email);
+  }
+////////////
   @Override
   public int delete(Member member) {
     ConstVO constVO = new ConstVO();
@@ -108,7 +113,7 @@ public class DefaultMemberService implements MemberService {
   public List<Member> mythemeList(Member sessionInfo) {
     return memberDao.findAllmyTheme(sessionInfo);
   }
-
+///////////////////
   @Override
   public void insertNotifyHistory (Alarm alarm){ // 알람 추가
     memberDao.addNotifyHistory(alarm);
@@ -123,7 +128,7 @@ public class DefaultMemberService implements MemberService {
   public void updateNotifyHistory ( int notifyNo){ // 알람 업데이트(알람을 읽었을 경우 업데이트)
     memberDao.updateNotifyHistory(ConstVO.state_ok, notifyNo);
   }
-
+//////////////////////
   @Override
   public String boardStateCheck(Board board){ // 알람 업데이트(알람을 읽었을 경우 업데이트)
     return memberDao.boardStateCheck(board);
