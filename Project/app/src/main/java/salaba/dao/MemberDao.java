@@ -18,7 +18,9 @@ public interface MemberDao {
 
   int myinfoUpdate(Member member);
 
-  Member checkNickname(String nickname);
+  int checkNickname(String nickname);
+
+  int checkEmail(String email);
 
   List<Nation> getNation();
 

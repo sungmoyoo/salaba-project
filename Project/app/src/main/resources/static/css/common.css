@@ -115,7 +115,7 @@
   }
   
   .search-container {
-    width: 38%;
+    width: 40%;
     height: 4%;
     margin: 50px auto;
     padding: 20px;
@@ -133,8 +133,7 @@
   .search-input,
   .search-button {
     padding: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-left: 10px;
     border: 1px solid #cccccc;
     border-radius: 4px;
   }
@@ -149,18 +148,3 @@
   .search-button:hover {
     background-color: #0056b3;
   }
-
-/* 로그인 modal */
-#userLogin-box{
-  display: flex;
-  padding-top: 3px;
-}
-
-#userLogin-box span{
-  font-size: 14px;
-  font-weight: 300;
-}
-
-#userLogin-box-btn{
-  padding-left: 10px;
-}
