@@ -97,8 +97,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @GetMapping("board/form") // 게시글 폼
   public void form(int categoryNo, Model model) throws Exception {
-    model.addAttribute("boardName", categoryNo == 0 ? "후기게시판"
-        : (categoryNo == 1 ? "정보공유게시판" : "자유게시판")); // 카테고리 별 분류 - 0 : 후기 / 1 : 정보공유 / 2 : 자유
+    model.addAttribute("boardName", categoryNo == 0 ? "후기글 작성"
+        : (categoryNo == 1 ? "정보공유글 작성" : "자유글 작성")); // 카테고리 별 분류 - 0 : 후기 / 1 : 정보공유 / 2 : 자유
     model.addAttribute("categoryNo", categoryNo);
   }
 

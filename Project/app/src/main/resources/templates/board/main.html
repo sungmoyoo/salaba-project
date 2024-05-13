@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="/css/board/main.css">
   <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/board/card.css">  
+  <link rel="stylesheet" type="text/css" href="/css/board/table.css">
 
 
 </head>
@@ -48,7 +49,7 @@
                   href="view.html">제목:제목입니다.</a></h3>
           <span class="card-text"><span data-th-text="${board.writer.nickname}">홍길동</span></span>
           <div class="card-footer">
-            <span class="card-text"><span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span></span>
+            <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span>
             <i class="fa-solid fa-heart"><span data-th-text="${board.likeCount}"></span></i>
           </div>
         </div>

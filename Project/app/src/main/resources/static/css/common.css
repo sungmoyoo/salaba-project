@@ -22,21 +22,21 @@
   display: inline-block;
 }
 
-nav {
+#navigationBar {
   margin-top: 18px;
 }
 
-nav ul {
+#navigationBar ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-nav ul li {
+#navigationBar ul li {
   display: inline;
 }
 
-nav ul li a {
+#navigationBar ul li a {
   text-decoration: none;
   padding: 10px 20px;
   font-size: 20px;
@@ -49,11 +49,11 @@ nav ul li a {
   border-bottom: 3px solid black; /* 밑줄 추가 */
 }
 
-nav ul li a:hover {
+#navigationBar ul li a:hover {
   font-size: 22px;
 }
 
-nav ul li a:visited{
+#navigationBar ul li a:visited{
   text-decoration: none;
 }
 
