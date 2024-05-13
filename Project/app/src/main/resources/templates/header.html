@@ -6,23 +6,19 @@
 </head>
 <body>
 <header data-th-fragment="header">
-  <div class="logo-div">
-    <a class="logo-link" data-th-href="@{/main}">
-      <img
-          src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
-    </a>
-  </div>
-  <div class="main-menu">
-    <div class="main-menu-item">
-      <span class="main-menu-item-s">
-        <a data-th-href="@{/main}" href="/main">한달살기</a>
-      </span>
+  <div class="logo-container">
+    <div class="logo-div">
+      <a class="logo-link" data-th-href="@{/main}">
+        <img
+            src='https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png'>
+      </a>
     </div>
-    <div class="main-menu-item">
-      <span class="main-menu-item-s">
-        <a data-th-href="@{/board/main}" href="/board/main">커뮤니티</a>
-      </span>
-    </div>
+    <nav id="navigationBar">
+      <ul>
+        <li><a id="mainPage" data-th-href="@{/main}" href="/main" class="menu-link">한달살기</a></li>
+        <li><a id="boardPage" data-th-href="@{/board/main}" href="/board/main" class="menu-link">커뮤니티</a></li>
+      </ul>
+    </nav>
   </div>
   <div class="userInfo-container">
     <button class="userInfo-button">
@@ -63,6 +59,7 @@
     </button>
   </div>
   
+
   <section>
     <div class="search-container">
       <form action="/main" data-th-action="@{main}" id="condition-search" method="get">

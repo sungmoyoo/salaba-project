@@ -32,9 +32,9 @@ $("#addCommentBtn").click(function (e) {
                                   <span class="commentContent">${data.content}</span><br>
                                 </div>
                                 <div class="button-container1">
-                                  <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
-                                  <button class="modi">수정</button>
-                                  <button type="button" class="report-btn comment-report-btn">신고</button><br>
+                                    <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
+                                    <button class="modi"><i class="fa-solid fa-pen"></i></button>
+                                    <button type="button" class="report-btn comment-report-btn"><i class="fa-solid fa-circle-exclamation"></i></button><br>
                                 </div>
                               </div>
                                 <div class="reply-box"></div>
@@ -111,9 +111,9 @@ function addReply(event) {
                               <span class="replContent">${data.content}</span><br>
                             </div>
                             <div class="button-container2">
-                              <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
-                              <button class="modi2">수정</button>
-                              <button type="button" class="report-btn reply-report-btn">신고</button><br>
+                                <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
+                                <button class="modi2"><i class="fa-solid fa-pen"></i></button>
+                                <button type="button" class="report-btn reply-report-btn"><i class="fa-solid fa-circle-exclamation"></i></button><br>
                             </div>
                             </div>
                           </div>
@@ -138,12 +138,12 @@ function addReply(event) {
 }
 
 // 댓글 클릭시 답글폼 추가하기
-$('.comment-container').click(addReplyForm)
+$('.comment').click(addReplyForm)
 
 // 답글폼 추가하기
 function addReplyForm(e) {
     e.stopPropagation();
-    var replyBox = $(this).find('.reply-box');
+    var replyBox = $(this).parent().find('.reply-box');
     console.log(replyBox);
     // 클릭된 댓글 아래로 답글 폼을 이동
     replyBox.append(replyForm);
@@ -184,7 +184,7 @@ function deleteComment(e) {
 // 댓글 수정 기능
 function modifyComment(e) {
     e.stopPropagation();
-    let commentDiv = $(this).parent();
+    let commentDiv = $(this).parents('.comment');
     let commentNo = commentDiv.find('.commentNo').text();
     let oldContent = commentDiv.find(".commentContent").text();
     let modifyForm = $(".commentModifyForm");
@@ -492,3 +492,19 @@ function scrollToTop() {
         behavior: "smooth"
     });
 }
+
+//댓글, 답글에 hover시 삭제,수정,신고버튼 나타남
+$('.comment').mouseenter(appearButtons).mouseleave(disappearButtons);
+
+// '.reply' 클래스를 가진 요소에 대한 hover 이벤트 처리
+$('.reply').mouseenter(appearButtons).mouseleave(disappearButtons);
+$('.buttons').hide();
+function appearButtons() {
+    // 해당 요소 내의 '.buttons' 클래스를 가진 하위 요소를 나타냅니다.
+    $(this).find('.buttons').show();
+}
+
+function disappearButtons() {
+    // 해당 요소 내의 '.buttons' 클래스를 가진 하위 요소를 숨깁니다.
+    $(this).find('.buttons').hide();
+} 

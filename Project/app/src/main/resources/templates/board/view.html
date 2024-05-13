@@ -18,6 +18,8 @@
 
 <body>
 <div data-th-replace="header :: header">머리말</div>
+<main>
+<section id="board-section">
 <!-- 게시글 조회 -->
 <h1 data-th-text="${boardName}">게시판</h1>
 <form action="modify" data-th-action="@{modify}" data-th-object="${board}">
@@ -67,47 +69,58 @@
     <span id="myLikeCount" data-th-text="${isLiked}"></span>
   </button>
 </div>
+</section>
 
-
+<section id="comment-section">
+  <!--댓글 달기 폼-->
+<form id="comment-form" method="post">
+  <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
+  <input id="comment-content" name="content" type="textarea">
+  <button id="addCommentBtn">댓글 작성</button>
+</form>
 <!--댓글, 답글 리스트-->
 <div id="comment-box">
   <div class="comment-container" data-th-each="comment : ${board.commentList}" data-th-object="${comment}">
-    <div data-th-if="*{#strings.equals(state,'1')}" class="textContent">
+    <div data-th-if="*{#strings.equals(state,'1')}" class="comment">
       <span class="commentNo" data-th-text="*{commentNo}" hidden></span>
       <span>삭제된 댓글입니다.</span>
     </div>
     <div data-th-if="*{!#strings.equals(state,'1')}" class="comment">
+      <div class="commentContentDiv">
       <div class="textContent comment-text">
-        <span class="targetNo commentNo" data-th-text="*{commentNo}" hidden></span>
+        <span class="targetNo commentNo" data-th-text="*{commentNo}"></span>
         <!--프로필사진-->
         <img class="profile-img1" height='40px' src='/img/default-photo.jpeg'></a>
         <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
         <span class="comment-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
         <span class="commentContent" data-th-text="*{content}">댓글 내용</span><br>
       </div>
-      <div class="button-container1">
+      <div class="button-container1 buttons">
         <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
-        <button class="modi">수정</button>
-        <button type="button" class="report-btn comment-report-btn">신고</button><br>
+        <button class="modi"><i class="fa-solid fa-pen"></i></button>
+        <button type="button" class="report-btn comment-report-btn"><i class="fa-solid fa-circle-exclamation"></i></button><br>
       </div>
+    </div>
     </div>
     <!--답글-->
     <div class="reply-box">
       <div data-th-each="reply : ${comment.replyList}" data-th-object="${reply}">
         <div class="reply">
+          <div class="replyContentDiv">
           <div class="textContent reply-text">
+            <span>⮑</span>
             <span class="targetNo replyNo" data-th-text="*{replyNo}" hidden></span>
             <!--프로필사진-->
             <img class="profile-img2"  height='40px' src='/img/default-photo.jpeg'></a>
-            <i class="fa-solid fa-reply"></i>
             <span data-th-text="*{writer.nickname}" class="nickname">댓글 작성자</span>
             <span class="reply-date" data-th-text="*{createdDate}">댓글 작성시간</span><br>
             <span class="replContent" data-th-text="*{content}">답글 내용</span><br>
           </div>
-          <div class="button-container2">
+          <div class="button-container2 buttons" hidden>
             <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
-            <button class="modi2">수정</button>
-            <button type="button" class="report-btn reply-report-btn">신고</button><br>
+            <button class="modi2"><i class="fa-solid fa-pen"></i></button>
+            <button type="button" class="report-btn reply-report-btn"><i class="fa-solid fa-circle-exclamation"></i></button><br>
+          </div>
           </div>
         </div>
       </div>
@@ -115,12 +128,7 @@
   </div>
 </div>
 
-<!--댓글 달기 폼-->
-<form id="comment-form" method="post">
-  <span id="boardNum" name="boardNo" data-th-text="${board.boardNo}" hidden></span>
-  <input id="comment-content" name="content" type="textarea">
-  <button id="addCommentBtn">댓글 작성</button>
-</form>
+
 
 <!--답글 달기 폼: 숨김 상태였다가 댓글 내용을 누르면 뜸-->
 <form id="replyForm" class="form-hidden">
@@ -128,6 +136,8 @@
   <textarea id="reply-content" name="content"></textarea>
   <button type="button" id="addReplyBtn">답글 달기</button>
 </form>
+
+</section>
 
 <!-- 신고: 모달 컨테이너 -->
 <div id="reportModal" class="modal fade" tabindex="-1" role="dialog">
@@ -171,8 +181,7 @@
 <div id="scrollToTopBtn2">
   <button onclick="scrollToTop()">🔝</button>
 </div>
-
-
+</main>
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script data-th-src="@{/js/board/view.js}"></script>

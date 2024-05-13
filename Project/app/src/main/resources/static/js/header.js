@@ -1,3 +1,16 @@
+(function() {
+  let mainPageNav = document.getElementById('mainPage');
+  let boardPageNav = document.getElementById('boardPage');
+
+  if (window.location.href.includes('board')) {
+    boardPageNav.classList.add("active");
+    mainPageNav.classList.remove('active');
+  } else {
+    mainPageNav.classList.add('active');
+    boardPageNav.classList.remove("active");
+  }
+})()
+
 const userInfoMenuButton = document.querySelector('.userInfo-button');
 const userInfoMenuContainer = document.querySelector('.userInfo-menu');
 
@@ -239,12 +252,6 @@ function changePassword(){
 
 }
 
-// // 이메일 정규식
-// const emailReg = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]+$/i;
-
-// // 닉네임 정규식
-// const nickNameReg = /^[a-zA-Z0-9가-힣]{2,20}$/;
-
 // 회원가입
 document.addEventListener('DOMContentLoaded', function(){
   'use strict';
@@ -406,7 +413,6 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 
   });
-
 });
 
 // 닉네임 중복 체크
