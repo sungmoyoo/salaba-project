@@ -34,7 +34,7 @@
               </div>
             </div>
             <div id="userjoin-box">
-              <button id="userjoin-button" class="btn btn-secondary">회원가입</button>
+              <button id="userjoin-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#joinMemberModal">회원가입</button>
             </div>
           </div>
         </div>
@@ -239,6 +239,81 @@
     </div>  
   </div>  
 </div>
+
+<!-- 회원가입 모달 -->
+<div class="modal fade" id="joinMemberModal" tabindex="-1" aria-labelledby="joinMemberModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="joinMemberModalLabel">회원가입</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="joinMember-content-box">
+          <form class="joinMember-form needs-validation" novalidate>
+            <div class="form-floating" id="joinMember-content">
+              <input id="joinMember-name" type="text" class="form-control" placeholder="이름" required>
+              <label for="floatingInput">이름</label>
+              <div class="invalid-feedback">
+                <span id="name-invalid-text">이름을 입력해주세요</span>
+              </div>
+            </div>
+            <div class="form-floating has-validation input-group mb-3" id="joinMember-content">
+              <input id="joinMember-nickname" type="text" class="form-control" placeholder="닉네임" aria-describedby="inputGroup-sizing-default" aria-describedby="nickNameCheck-addon" required>
+              <button class="btn btn-secondary" type="button" id="nickNameCheck-addon">
+                중복검사
+              </button>
+              <label for="floatingInput">닉네임</label>
+              <div class="invalid-feedback">
+                <span id="nickname-invalid-text">닉네임을 입력해주세요</span>
+              </div>
+            </div>
+            <div id="joinMember-content">
+              <input id="joinMember-birth" type="date" class="form-control" placeholder="생년월일" required>
+              <div class="invalid-feedback">
+                <span id="birth-invalid-text">생년월일을 입력해주세요</span>
+              </div>
+            </div>
+            <div class="form-floating has-validation input-group mb-3" id="joinMember-content">
+              <input id="joinMember-email" type="email" class="form-control" placeholder="이메일" aria-describedby="inputGroup-sizing-default" aria-describedby="emailCheck-addon" required>
+              <label for="floatingInput">이메일</label>
+              <button class="btn btn-secondary" type="button" id="emailCheck-addon">
+                중복검사
+              </button>
+              <div class="invalid-feedback">
+                <span id="email-invalid-text">이메일을 입력해주세요</span>
+              </div>
+            </div>
+            <div class="form-floating" id="joinMember-content">
+              <input id="joinMember-password-first" type="password" class="form-control" placeholder="비밀번호" required>
+              <label for="floatingInput">비밀번호</label>
+            </div>
+            <div class="form-floating has-validation" id="joinMember-content">
+              <input id="joinMember-password-second" type="password" class="form-control" placeholder="비밀번호 확인" required>
+              <label for="floatingInput">비밀번호 확인</label>
+              <div class="invalid-feedback">
+                <span id="password-invalid-text">비밀번호가 일치하지 않습니다</span>
+              </div>
+            </div>
+            <div id="findEmail-modal-button-box">
+              <div id="backToLoginModal-button-box">
+                <button id="back-button-in-memberjoin" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#userLoginModal">
+                  <span>돌아가기</span>
+                </button>
+              </div>
+              <div id="joinMemberModal-button-box">
+                <button id="joinMember-button" class="btn btn-primary" type="submit">
+                  <span>회원가입</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>  
+  </div>  
+</div>
+
 
 </body>
 </html>

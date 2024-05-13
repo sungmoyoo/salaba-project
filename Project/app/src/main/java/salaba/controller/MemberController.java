@@ -68,11 +68,11 @@ public class MemberController implements InitializingBean {
   public String add(Member member, Model model) throws Exception { // 회원가입
 
     //닉네임 중복체크
-    Member check = memberService.checkNickname(member.getNickname());
-    if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
-      String nickcheck = "Y";
-      return "redirect:form?nickcheck=" + nickcheck;
-    }
+//    Member check = memberService.checkNickname(member.getNickname());
+//    if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
+//      String nickcheck = "Y";
+//      return "redirect:form?nickcheck=" + nickcheck;
+//    }
 
     memberService.add(member);
     return "redirect:/auth/form";
@@ -126,21 +126,34 @@ public class MemberController implements InitializingBean {
     return "redirect:myinfo";
   }
 
-  @PostMapping("myinfoNickNameCheck")
-  public String myinfoNickNameCheck(Member member) throws Exception { // 내정보 수정
-      //닉네임 중복체크
-      Member check = memberService.checkNickname(member.getNickname());
-      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
-        return "redirect:myinfo?nickcheck=Y";
-      }else{
-        return "redirect:myinfo?nickcheck=N&newNickName="+member.getNickname();
-      }
-  }
+//  @PostMapping("myinfoNickNameCheck")
+//  public String myinfoNickNameCheck(Member member) throws Exception { // 내정보 수정
+//      //닉네임 중복체크
+//      Member check = memberService.checkNickname(member.getNickname());
+//      if (check != null) {//닉네임이 중복된 데이터가 발생한 경우
+//        return "redirect:myinfo?nickcheck=Y";
+//      }else{
+//        return "redirect:myinfo?nickcheck=N&newNickName="+member.getNickname();
+//      }
+//  }
 
   @GetMapping("delete")
   public String delete(Member member) throws Exception { // 회원 탈퇴
     memberService.delete(member);
     return "redirect:/auth/logout";
+  }
+
+  ////////////////////////////////
+  @PostMapping("checkNickName")
+  public ResponseEntity<Object> checkNickName( @RequestParam String nickName ) throws Exception{
+    int result = memberService.checkNickname(nickName);
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
+
+  @PostMapping("checkEmail")
+  public ResponseEntity<Object> checkEmail(@RequestParam String email) throws Exception{
+    int result = memberService.checkEmail(email);
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
   @PostMapping("searchEmail")
@@ -175,6 +188,8 @@ public class MemberController implements InitializingBean {
     memberService.changePasswordSave(member);
     return ResponseEntity.ok("비밀번호 변경 완료");
   }
+////////////////////////////////////////////////////////////////
+
 
   @PostMapping("myInfoChangePasswordSave")
   public String myInfoChangePasswordSave(Member member) throws Exception { // 비밀번호 변경
