@@ -15,7 +15,11 @@ public interface MemberService {
 
   int myinfoUpdate(Member member);
 
-  Member checkNickname(String nickname);
+  /////////////
+  int checkNickname(String nickname);
+
+  int checkEmail(String email);
+  //////////////
 
   List<Nation> getNation();
 
@@ -43,12 +47,14 @@ public interface MemberService {
 
   List<Member> mythemeList(Member sessionInfo);
 
+  //////////////////////
   void insertNotifyHistory(Alarm alarm);
 
   List<Alarm> selectNotifyHistory(int memberNo);
 
   void updateNotifyHistory(int notifyNo);
 
+  //////////////////////
   String boardStateCheck(Board board);
 
   List<Board> search(String keyword, String type); // 검색 기능 업데이트

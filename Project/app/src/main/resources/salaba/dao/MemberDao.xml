@@ -104,7 +104,17 @@
     from
       member
     where
-      nickname=#{value}
+      nickname=#{nickName}
+  </select>
+
+  <!-- 이메일 중복 체크 -->
+  <select id="checkEmail" parameterType="String">
+    select
+      count(*)
+    from
+      member
+    where
+      email = #{email}
   </select>
 
   <update id="delete" parameterType="Member"><!--회원탈퇴>-->

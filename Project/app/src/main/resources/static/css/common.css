@@ -1,5 +1,4 @@
 /* 로고 - 검색엔진과 로고 사진을 둘다 사용하는 css로 수정 */
-
 .logo-container {
   display: flex;
   align-content: end;
