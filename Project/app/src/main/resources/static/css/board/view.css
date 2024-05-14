@@ -12,6 +12,10 @@ main {
   align-items: center;
 }
 
+#board-section form {
+  width: 100%;
+}
+
 /*게시판 종류*/
 h1 {
   text-align: left; /* 제목을 왼쪽 정렬 */
@@ -41,13 +45,18 @@ h1 {
   font-size: 18px;
 }
 
+/*작성자와 작성일, 게시글 신고를 나란히 배치*/
+.others-container {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 30px;
+}
+
 /*작성자*/
 .writer-input {
   pointer-events: none;
   border: none;
-  text-align: left;
   width: 10%; 
-  margin-bottom: 30px;
   font-size: 18px;
 }
 
@@ -55,10 +64,8 @@ h1 {
 .date-input {
   pointer-events: none;
   border: none;
-  text-align: left;
   width: 15%; 
-  margin-bottom: 30px;
-  margin-right: 80%;
+  margin-right: 70%;
   font-size: 13px;
   color: rgb(152, 152, 152);
 }
@@ -69,7 +76,6 @@ h1 {
   width: 6%;
   background-color:white;/* 신고 버튼 배경색 */
   color: black; /* 글자색 */
-  justify-content: flex-end; /* 신고 버튼을 우측 정렬 */
   border: 2px solid rgb(229, 102, 117);
   border-radius: 10px;
 }
@@ -82,19 +88,10 @@ h1 {
 
 /* 게시글 수정 버튼 */
 .board-modify {
-  border: 1px solid gray;
   padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
   font-size: 14px; /* 글꼴 크기를 조절 */
-  background-color:white;/* 신고 버튼 배경색 */
   margin-left: 20px;
-  margin-right: 7px;
-}
-
-/*작성자와 작성일, 게시글 신고를 나란히 배치*/
-.others-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  margin-right: 20px;
 }
 
 
@@ -103,7 +100,6 @@ h1 {
   background-color: white;
   padding: 20px;
   margin-bottom: 20px;
-  margin-top: 30px;
 }
 
 /*내용*/
@@ -124,10 +120,9 @@ h1 {
 }
 
 .content-box #summernote p{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* display: flex;
+  flex-direction: column; */
+  min-height: 500px;
 }
 
 /**************************************************************************************************************/
