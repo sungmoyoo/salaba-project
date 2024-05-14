@@ -44,7 +44,7 @@
           data-href="/board/list?categoryNo=0"
           onclick="setActiveAndNavigate(this.id, this.dataset.href)"
         >
-          후기게시판
+          후기
         </button>
         <button
           type="button"
@@ -53,7 +53,7 @@
           data-href="/board/list?categoryNo=1"
           onclick="setActiveAndNavigate(this.id, this.dataset.href)"
         >
-          정보공유게시판
+          정보 공유
         </button>
         <button
           type="button"
@@ -62,7 +62,7 @@
           data-href="/board/list?categoryNo=2"
           onclick="setActiveAndNavigate(this.id, this.dataset.href)"
         >
-          자유게시판
+          자유
         </button>
       </div>
 
@@ -150,7 +150,9 @@
                 </p>
                 <div class="card-footer">
                     <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span>
-                  <i class="fa-solid fa-heart"><span data-th-text="${board.likeCount}"></span></i>
+                    <div class="viewCount"><i class="fa-solid fa-eye"></i><span data-th-text="${board.viewCount}"></span></div>
+                  <div class="likeCount"><i class="fa-solid fa-heart"></i><span data-th-text="${board.likeCount}"></span></div>
+
                 </div>
               </div>
             </div>

@@ -55,6 +55,23 @@ h3 {
       align-items: center;
       border-style: none;
   }
+
+  .card-footer .viewCount {
+    margin-left: 45%;
+  }
+
+  .card-footer .viewCount i {
+    margin-right: 5px;
+  }
+
+  .card-footer .likeCount {
+    margin-right: 10px;
+  }
+
+  .card-footer .likeCount i {
+    color: rgb(226, 49, 35);
+    margin-right: 5px;
+  }
   
   .card-footer .card-text {
       margin: 0;
@@ -123,10 +140,4 @@ h3 {
     object-fit: cover;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-  }
-
-  .fa-heart {
-    font-size: 12px;
-    color: rgb(226, 49, 35);
-    margin-right: 5px;
   }

@@ -50,7 +50,8 @@
           <span class="card-text"><span data-th-text="${board.writer.nickname}">홍길동</span></span>
           <div class="card-footer">
             <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span>
-            <i class="fa-solid fa-heart"><span data-th-text="${board.likeCount}"></span></i>
+            <div class="viewCount"><i class="fa-solid fa-eye"></i><span data-th-text="${board.viewCount}"></span></div>
+            <div class="likeCount"><i class="fa-solid fa-heart"></i><span data-th-text="${board.likeCount}"></span></div>
           </div>
         </div>
       </div>
