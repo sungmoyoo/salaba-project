@@ -282,8 +282,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     model.addAttribute("categoryNo", categoryNo); // 카테고리 별 분류
     model.addAttribute("board", board); // 게시판
-    model.addAttribute("boardName", categoryNo == 0 ? "후기게시판"
-        : (categoryNo == 1 ? "정보공유게시판" : "자유게시판")); // 0: 후기 게시판 - 1 : 정보공유게시판
+    model.addAttribute("boardName", categoryNo == 0 ? "후기"
+        : (categoryNo == 1 ? "정보 공유" : "자유")); // 0: 후기 게시판 - 1 : 정보공유게시판
     model.addAttribute("loginUser", session.getAttribute("loginUser"));
     model.addAttribute("isLiked", isLiked);
     return "board/view";
@@ -345,6 +345,13 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   public void modifyBoard(@RequestParam("boardNo") int boardNo,
       @RequestParam("categoryNo") int categoryNo, Model model) {
     Board board = boardService.getBoard(boardNo, categoryNo);
+    if (categoryNo == 0) {
+      model.addAttribute("boardName", "후기 - 글수정");
+    } else if (categoryNo == 1) {
+      model.addAttribute("boardName", "정보공유 - 글수정");
+    } else {
+      model.addAttribute("boardName", "자유 - 글수정");
+    }
     model.addAttribute("board", board);
     model.addAttribute("categoryNo", categoryNo);
   }

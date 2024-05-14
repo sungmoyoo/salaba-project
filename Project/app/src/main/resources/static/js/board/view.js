@@ -24,6 +24,7 @@ $("#addCommentBtn").click(function (e) {
             success: function (data) {
                 let newComment = $(`<div class="comment-container">
                               <div class="comment">
+                              <div class="commentContentDiv">
                                 <div class="textContent comment-text">
                                   <span class="targetNo commentNo" hidden>${data.commentNo}</span>
                                   <img class="profile-img1" height='40px' src='/img/default-photo.jpeg'></a>
@@ -36,12 +37,13 @@ $("#addCommentBtn").click(function (e) {
                                     <button class="modi"><i class="fa-solid fa-pen"></i></button>
                                     <button type="button" class="report-btn comment-report-btn"><i class="fa-solid fa-circle-exclamation"></i></button><br>
                                 </div>
+                                </div>
                               </div>
                                 <div class="reply-box"></div>
                             </div>`);
                 $("#comment-box").append(newComment); // 새 댓글 추가
                 input.val(""); // 새 댓글 입력 필드 비우기
-                newComment.click(addReplyForm);
+                newComment.find('.comment').click(addReplyForm);
                 newComment.children().find(".del").click(deleteComment);
                 newComment.children().find(".modi").click(modifyComment);
             },
@@ -100,7 +102,7 @@ function addReply(event) {
             success: function (data) {
                 let newReply = $(`<div>
                           <div class="reply">
-                            <div>
+                          <div class="replyContentDiv">
                             <div class="textContent reply-text">
                               <span class="targetNo replyNo" hidden>${data.replyNo}</span>
                               <!--프로필사진-->

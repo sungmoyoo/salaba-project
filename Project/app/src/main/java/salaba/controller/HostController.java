@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.Host;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import salaba.service.HostService;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
-import salaba.util.Translator;
 import salaba.vo.Member;
 import salaba.vo.Region;
 import salaba.vo.host.HostReservation;
@@ -325,7 +323,7 @@ public class HostController {
     List<String> uuidPhotoNames = new ArrayList<>();
 
     for (HostReservation reservation : filteredList) {
-      String photo = memberService.get(reservation.getMemberNo()).getPhoto();
+      String photo = memberService.selectUserInfoForLogin(reservation.getMemberNo()).getPhoto();
       if (photo != null) {
         uuidPhotoNames.add(photo);
       } else {

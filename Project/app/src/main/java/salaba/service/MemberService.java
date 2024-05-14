@@ -5,13 +5,12 @@ import salaba.vo.Alarm;
 import salaba.vo.Member;
 import salaba.vo.Nation;
 import salaba.vo.board.Board;
-import salaba.vo.rental_home.Theme;
 
 public interface MemberService {
 
-  void add(Member member);
+  int addMember(Member member);
 
-  Member get(int no);
+  Member selectUserInfoForLogin(int no);
 
   int myinfoUpdate(Member member);
 
@@ -25,7 +24,7 @@ public interface MemberService {
 
   int delete(Member member);
 
-  Member get(String email, String password);
+  Member selectUserInfoForLogin(String email, String password);
 
   Member findEmail(Member member);
 
@@ -33,7 +32,7 @@ public interface MemberService {
 
   void changePasswordSave(Member member);
 
-  Member myinfoCheckPassword(Member member);
+  int checkPassword(int memberNo, String password);
 
   void insertPreference(Member member);
 
@@ -41,7 +40,7 @@ public interface MemberService {
 
   List<Member> themeList(Member sessionInfo);
 
-  String getMemberPoint(Member member);
+  int getMemberPoint(int no);
 
   Member getGrade(Member member);
 

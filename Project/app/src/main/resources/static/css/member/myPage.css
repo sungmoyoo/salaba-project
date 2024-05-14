@@ -1,0 +1,7 @@
+main{
+  display: flex;
+}
+
+#changePassword-collapse div{
+  margin-top: 5px;
+}
