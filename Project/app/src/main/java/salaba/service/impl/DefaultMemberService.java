@@ -12,7 +12,6 @@ import salaba.vo.ConstVO;
 import salaba.vo.Member;
 import salaba.vo.Nation;
 import salaba.vo.board.Board;
-import salaba.vo.rental_home.Theme;
 
 @RequiredArgsConstructor
 @Service
@@ -22,17 +21,17 @@ public class DefaultMemberService implements MemberService {
   private final MemberDao memberDao;
 
   @Override
-  public void add(Member member) {
-    memberDao.add(member);
+  public int addMember(Member member) {
+    return memberDao.addMember(member);
   }
 
   @Override
-  public Member get(String email, String password) {
-    return memberDao.findByEmailAndPassword(email, password);
+  public Member selectUserInfoForLogin(String email, String password) {
+    return memberDao.selectUserInfoForLogin(email, password);
   }
 
   @Override
-  public Member get(int no) {
+  public Member selectUserInfoForLogin(int no) {
     return memberDao.selectMemberInfo(no);
   }
 
@@ -80,8 +79,8 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public Member myinfoCheckPassword(Member member) {
-    return memberDao.myinfoCheckPassword(member);
+  public int checkPassword(int memberNo, String password) {
+    return memberDao.checkPassword(memberNo, password);
   }
 
   @Override
@@ -100,8 +99,8 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public String getMemberPoint(Member member) {
-    return memberDao.getMemberPoint(member);
+  public int getMemberPoint(int no) {
+    return memberDao.getMemberPoint(no);
   }
 
   @Override

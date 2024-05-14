@@ -258,21 +258,21 @@ document.addEventListener('DOMContentLoaded', function(){
   // 회원가입 모달이 열릴 때 유효성 검사 수행
   $(document).on('shown.bs.modal', '#joinMemberModal', function(){
     const forms = document.querySelectorAll('.needs-validation');
-    let emailinput;
-    let nickNameinput;
-    let passwordinputFirst;
-    let passwordinputSecond;
+    let emailinput; // email
+    let nickNameinput; // 닉네임
+    let passwordinputFirst; // 비밀번호
+    let passwordinputSecond; // 비밀번호 확인
 
-    let checkedNickNameFlag = false;
-    let checkedEmailFlag = false;
+    let checkedNickNameFlag = false; // 닉네임 중복 검사 시행여부 flag
+    let checkedEmailFlag = false; // 이메일 중복 검사 시행여부 flag
 
-    // 이메일 유효성 검사
+    // 이메일 유효성 검사( 이메일 형식 체크 )
     function validateEmail(email) {
       const emailReg = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]+\.[a-zA-Z]+$/i;
       return emailReg.test(email);
     }
 
-    // 닉네임 유효성 검사
+    // 닉네임 유효성 검사 ( 공백불가 , 한글영어 , 최소2글자 최대 20글자 )
     function validateNickname(nickname) {
       const nickNameReg = /^[a-zA-Z가-힣\\\\s]{2,20}$/;
       return nickNameReg.test(nickname);
@@ -287,21 +287,33 @@ document.addEventListener('DOMContentLoaded', function(){
     Array.prototype.slice.call(forms).forEach(function (form){
 
       form.addEventListener('submit', function(event){
+
+        if( !checkedNickNameFlag ){ // 닉네임 중복검사를 하지 않은경우
+          alert("닉네임 중복 검사를 해주세요.");
+          $('#joinMember-nickname').focus();
+          return;
+        }
+
+        if( !checkedEmailFlag ){ // 이메일 중복검사를 하지 않은경우
+          alert("이메일 중복 검사를 해주세요.");
+          $('#joinMember-email').focus();
+          return;
+        }
+        console.log(nickNameinput.val());
         // 닉네임 유효성 검사
-        if(!validateNickname(nickNameinput.val())){
+        if(!validateNickname(nickNameinput.val()) && nickNameinput.val() != ""){
           event.preventDefault();
           event.stopPropagation();
           nickNameinput.addClass('is-invalid');
           nickNameinput.addClass('was-validated');
           return;
         }else{
-          
           nickNameinput.removeClass('is-invalid');
           nickNameinput.addClass('is-valid');
         }
 
         // email 유효성 검사
-        if(!validateEmail(emailinput.val())){
+        if(!validateEmail(emailinput.val()) && emailinput.val() != ""){
           event.preventDefault();
           event.stopPropagation();
           emailinput.addClass('is-invalid');
@@ -313,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         
         // 비밀번호 유효성 검사
-        if( passwordinputFirst.val() != passwordinputSecond.val() ){
+        if( passwordinputFirst.val() != passwordinputSecond.val() || (passwordinputFirst.val() == "" || passwordinputSecond.val() == "") ){
           event.preventDefault();
           event.stopPropagation();
           passwordinputFirst.addClass('is-invalid');
@@ -343,6 +355,44 @@ document.addEventListener('DOMContentLoaded', function(){
         }
 
         form.classList.add('was-validated');
+
+        if(!form.checkValidity()){
+          return;
+        }
+        
+        event.preventDefault();
+
+        const member = {
+          name: $('#joinMember-name').val(),
+          nickname: nickNameinput.val(),
+          birthday: $('#joinMember-birth').val(),
+          email: emailinput.val(),
+          password: passwordinputSecond.val()
+        };
+
+        console.log(member);
+
+        $.ajax({
+          type: "POST",
+          url: "/member/addMember",
+          contentType: "application/json",
+          data: JSON.stringify(member),
+          success: function(data){
+            console.log(data);
+            console.log(typeof data);
+            if( data == 1 ){
+              initJoinMemberModal();
+              $('#back-button-in-memberjoin').click();
+              alert("회원가입이 완료되었습니다.");
+            }else{
+              alert("회원가입 오류");
+            }
+          },
+          error: ()=>{
+            alert("회원가입 에러");
+          }
+        });
+
       }, false)
     });
 
@@ -352,11 +402,6 @@ document.addEventListener('DOMContentLoaded', function(){
       passwordinputFirst = $('#joinMember-password-first');
       passwordinputSecond = $('#joinMember-password-second');
     })
-
-    $('#back-button-in-memberjoin').on('click',function(){
-
-    })
-
 
     // 닉네임 중복 검사
     $('#nickNameCheck-addon').on('click', function(){
@@ -415,14 +460,12 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 
-// 닉네임 중복 체크
-function checkNickName(){
-  const nickName = $('#joinMember-nickname').val();
-  if(nickNameReg.test(nickName)){
-    console.log(nickName);
-
-  }else{
-    console.log(nickName);
-    $('#joinMember-nickname').focus();
-  }
+// 회원가입모달 field 초기화
+function initJoinMemberModal(){
+  $('#joinMemberModal input[type="text"], #joinMemberModal input[type="date"], #joinMemberModal input[type="email"], #joinMemberModal input[type="password"]').val('');
+  const forms = document.querySelectorAll('.needs-validation');
+  forms.forEach(function(form){
+    form.classList.remove('was-validated');
+    form.classList.remove('is-valid');
+  });
 }

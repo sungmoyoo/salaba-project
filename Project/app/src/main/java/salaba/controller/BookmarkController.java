@@ -1,7 +1,6 @@
 package salaba.controller;
 
 
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -12,11 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import salaba.service.BookmarkService;
 import salaba.service.MemberService;
-import salaba.service.ReservationService;
 import salaba.service.StorageService;
 import salaba.vo.Bookmark;
 import salaba.vo.Member;
-import salaba.vo.Reservation;
 
 @RequiredArgsConstructor
 @Controller
@@ -35,7 +32,7 @@ public class BookmarkController {
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    Member member = memberService.get(loginUser.getNo());
+    Member member = memberService.selectUserInfoForLogin(loginUser.getNo());
     bookmark.setNo(loginUser.getNo());
 
     model.addAttribute("bookmark", bookmarkService.bookmark(bookmark));
