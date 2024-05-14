@@ -12,7 +12,7 @@ import salaba.vo.board.Board;
 @Mapper
 public interface MemberDao {
 
-  void add(Member member);
+  int addMember(Member member);
 
   Member selectMemberInfo(int no);
 
@@ -26,7 +26,7 @@ public interface MemberDao {
 
   int delete(Member member);
 
-  Member findByEmailAndPassword(
+  Member selectUserInfoForLogin(
       @Param("email") String email,
       @Param("password") String password);
 
@@ -36,7 +36,7 @@ public interface MemberDao {
 
   public void changePasswordSave(Member member);
 
-  public Member myinfoCheckPassword(Member member);
+  public int checkPassword(@Param("no") int memberNo, @Param("password") String password);
 
   void insertPreference(Member member);
 
@@ -44,7 +44,7 @@ public interface MemberDao {
 
   List<Member> findAllTheme(Member sessionInfo);
 
-  String getMemberPoint(Member member);
+  int getMemberPoint(int no);
 
   Member getGrade(Member member);
 

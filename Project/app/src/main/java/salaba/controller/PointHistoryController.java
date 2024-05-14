@@ -30,10 +30,8 @@ public class PointHistoryController {
       HttpSession session) throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
-    pointHistory.setNo(sessionInfo.getNo());
 
     model.addAttribute("pointList", pointHistoryService.pointList(pointHistory));
-    session.setAttribute("myInfoMenuId", pointHistory.getMyInfoMenuId());
 
   }
 }
