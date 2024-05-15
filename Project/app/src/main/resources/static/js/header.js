@@ -49,6 +49,21 @@ document.addEventListener('click', function(event){
   }
 });
 
+// logout
+function logout(){
+  $.ajax({
+    type: "POST",
+    url: "/auth/logout",
+    success: function(){
+      location.href = "main";
+    },
+    error: ()=>{
+
+    }
+
+  });
+}
+
 
 // login modal 열기
 function openUserLogin(){
@@ -60,7 +75,7 @@ function openUserLogin(){
       $('body').append(modal);
       $('#userLoginModal').modal('show');
     },
-    error: function(){
+    error:()=>{
       
     }
   });
@@ -113,7 +128,7 @@ function checkLogin( data ){
     alert("탈퇴된 회원입니다.");
   }else if( state == "3" ){
     alert("제재된 회원입니다.")
-  }else if( state == "99" ){
+  }else if( state == "9" ){
     alert("이메일 또는 암호가 맞지 않습니다.");
   }else if( state == "4" ){
     

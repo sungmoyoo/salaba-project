@@ -16,7 +16,7 @@ public interface MemberDao {
 
   Member selectMemberInfo(int no);
 
-  int myinfoUpdate(Member member);
+  int updateUserInfo(Member member);
 
   int checkNickname(String nickname);
 
@@ -30,6 +30,8 @@ public interface MemberDao {
       @Param("email") String email,
       @Param("password") String password);
 
+  Member selectUserInfoForUpdateSession(@Param("memberNo") int memberNo);
+
   Member findEmail(Member member);
 
   public Member findPassword(Member member);
@@ -40,7 +42,7 @@ public interface MemberDao {
 
   void insertPreference(Member member);
 
-  void deletePreference(Member member);
+  void deletePreference(@Param("no") int memberNo);
 
   List<Member> findAllTheme(Member sessionInfo);
 

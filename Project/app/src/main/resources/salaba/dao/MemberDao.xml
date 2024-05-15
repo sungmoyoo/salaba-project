@@ -67,24 +67,24 @@
       sha2(#{password},256))
   </insert>
 
-  <select id="getNation" resultMap="NationMap" ><!--국가선택>-->
+  <!-- 국가 전체 검색 -->
+  <select id="getNation" resultMap="NationMap" >
     select
       nation_no,
       nation_name
     from
       nation
-    order by nation_name
+    order by nation_no
   </select>
 
-  <update id="myinfoUpdate" parameterType="Member"><!--내정보 저장>-->
+  <!-- 내정보 수정 -->
+  <update id="updateUserInfo" parameterType="Member">
     update
       member
     set
       name=#{name},
       nickname=#{nickname},
-      email=#{email},
       tel_no=#{telNo},
-      birthday=#{birthday},
       sex=#{sex},
       address=#{address},
       photo=#{photo},
@@ -154,6 +154,36 @@
       and password=sha2(#{password},256)
   </select>
 
+  <!-- 개인정보 업데이트 후 세션 갱신용 -->
+  <select id="selectUserInfoForUpdateSession" resultMap="MemberMap">
+    select
+      t1.member_no,
+      t1.email,
+      t1.name,
+      t1.nickname,
+      t1.birthday,
+      t1.tel_no,
+      t1.nation_no,
+      t1.address,
+      t1.sex,
+      t1.photo,
+      t1.state,
+      t2.grade_name,
+      t3.theme_no,
+      t4.theme_name,
+      t5.save_content,
+      t5.save_point,
+      t5.save_date
+    from
+      member t1
+      inner join grade t2 on t2.grade_no = t1.grade_no
+      left outer join member_preference t3 on t3.member_no = t1.member_no
+      left outer join theme t4 on t4.theme_no = t3.theme_no
+      left outer join point_history t5 on t5.member_no = t1.member_no
+    where
+      t1.member_no = #{memberNo}
+  </select>
+
   <!-- 이메일 찾기 -->
   <select id="findEmail" resultMap="MemberMap">
     select
@@ -202,10 +232,16 @@
   <insert id="insertPreference" parameterType="Member">
     insert into member_preference
     (member_no,theme_no)
-    values(#{no},#{themeNo})
+    values
+    <foreach collection="themes" item="item" separator=",">
+      (
+      #{no},
+      #{item.themeNo}
+      )
+    </foreach>
   </insert>
 
-  <delete id="deletePreference" parameterType="Member">
+  <delete id="deletePreference" parameterType="int">
     delete
     from
       member_preference

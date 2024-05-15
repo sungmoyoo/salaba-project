@@ -85,10 +85,9 @@ public class AuthController {
     return loginInfo;
   }
 
-  @GetMapping("/auth/logout")
-  public String logout(HttpSession session) throws Exception {
+  @PostMapping("/auth/logout")
+  public void logout(HttpSession session) throws Exception {
     session.invalidate();
-    return "auth/logout";
   }
 
   // 회원가입관련 메서드

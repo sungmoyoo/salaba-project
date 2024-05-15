@@ -12,7 +12,7 @@ public interface MemberService {
 
   Member selectUserInfoForLogin(int no);
 
-  int myinfoUpdate(Member member);
+  int updateUserInfo(Member member);
 
   /////////////
   int checkNickname(String nickname);
@@ -26,6 +26,8 @@ public interface MemberService {
 
   Member selectUserInfoForLogin(String email, String password);
 
+  Member selectUserInfoForUpdateSession(int memberNo);
+
   Member findEmail(Member member);
 
   Member findPassword(Member member);
@@ -36,7 +38,7 @@ public interface MemberService {
 
   void insertPreference(Member member);
 
-  void deletePreference(Member member);
+  void deletePreference(int memberNo);
 
   List<Member> themeList(Member sessionInfo);
 

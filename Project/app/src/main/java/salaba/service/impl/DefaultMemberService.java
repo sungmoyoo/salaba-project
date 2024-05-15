@@ -31,6 +31,11 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
+  public Member selectUserInfoForUpdateSession(int memberNo) {
+    return memberDao.selectUserInfoForUpdateSession(memberNo);
+  }
+
+  @Override
   public Member selectUserInfoForLogin(int no) {
     return memberDao.selectMemberInfo(no);
   }
@@ -41,8 +46,8 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public int myinfoUpdate(Member member) {
-    return memberDao.myinfoUpdate(member);
+  public int updateUserInfo(Member member) {
+    return memberDao.updateUserInfo(member);
   }
 
   @Override
@@ -89,8 +94,8 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public void deletePreference(Member member) {
-    memberDao.deletePreference(member);
+  public void deletePreference(int memberNo) {
+    memberDao.deletePreference(memberNo);
   }
 
   @Override
