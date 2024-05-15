@@ -1,9 +1,31 @@
 main{
+  height: 60%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.rentalHomeInfo-container {
+  position: fixed;
+  right: 3%;
+  top: 25%;
+  
 }
 
 #map{
   display: block;
   width: 400px;
   height: 400px;
+}
+
+.hr {
+  height: 3px;
+  color: aqua;
+  
+}
+
+.sub-title {
+  font-size: large;
+  font-weight: 600;
 }

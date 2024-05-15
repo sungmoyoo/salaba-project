@@ -104,25 +104,51 @@ function requestPay(paymethod) {
                               contentType: 'application/json',
                               data : data,
                               success: function() {
-                                alert("결제가 완료되었습니다.");
+                                Swal.fire({
+                                  icon: "success",
+                                  title: "결제가 완료되었습니다.",
+                                  showConfirmButton: false,
+                                  timer: 1500
+                                });
                               },
                               error: function() {
-                                alert("결제 실패");
+                                Swal.fire({
+                                  icon: "error",
+                                  title: "결제 실패.",
+                                  showConfirmButton: false,
+                                  timer: 1500
+                                });
                               }
                           });
                     
                   }
                   else {
-                      alert('결제 실패');
+                    Swal.fire({
+                      icon: "error",
+                      title: "결제에 실패하였습니다.",
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
                   }
               })
               } else {
-                  alert("결제에 실패하였습니다.","에러 내용: " +  rsp.error_msg,"error");
+                Swal.fire({
+                  icon: "error",
+                  title: "결제에 실패하였습니다.",
+                  text: rsp.error_msg,
+                  showConfirmButton: false,
+                  timer: 1500
+                });
               }
           });
     },
     error: function() {
-      alert("로그인이 필요합니다.");
+      Swal.fire({
+        icon: "error",
+        title: "로그인이 필요합니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
       return;
     }
   });
