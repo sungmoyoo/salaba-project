@@ -95,13 +95,6 @@ public class DefaultRentalHomeService implements RentalHomeService {
     return rentalHomeDao.getReservationInfo(rentalHomeNo);
   }
 
-  @Override
-  public void addReservation(Reservation2 reservation) {
-    rentalHomeDao.addReservation(reservation);
-  }
 
-  @Override
-  public int getReservationKey() {
-    return rentalHomeDao.getReservationKey();
-  }
+
 }

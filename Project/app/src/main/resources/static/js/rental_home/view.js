@@ -291,7 +291,6 @@ document.addEventListener("DOMContentLoaded", function() {
     calendar.querySelectorAll("td").forEach(function(td) {
       td.addEventListener("click", function() {
         const selectedDate = new Date(year, month, parseInt(td.textContent));
-
         // 체크인 날짜 선택
         if (!checkInDate || calendar.classList.contains("select-check-out")) {
           checkInDate = selectedDate;

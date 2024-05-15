@@ -28,6 +28,7 @@
     <div data-th-replace="header :: header">header</div>
   </section>
 <main>
+  <h1>확인 및 결제</h1>
   <section class="userInfo-section-r">
     <div class="userInfo-container-r">
       <div class="userInfo-box">
@@ -35,7 +36,7 @@
       </div>
       <div class="userInfo-reservation">
         <div id="reservation-info">
-          <span>에약 정보</span>
+          <h2>에약 정보</h2>
         </div>
         <div>
           <div id="reservation-date">
@@ -54,9 +55,53 @@
           </div>
         </div>
       </div>
+      <div class="payment-reservation">
+        <div id="payment-info">
+          <h2>요금 세부정보</h2>
+          <div id="days-fee">
+            <span data-th-text="${'₩' + reservationInfo.price + ' × ' + days + '박'}"></span>
+            <span data-th-text="${'₩' + reservationInfo.price * days}"></span>
+          </div>
+          <div id="clean-fee">
+            <span>청소비</span>
+            <span data-th-text="${'₩' + reservationInfo.cleanFee}"></span>
+          </div>
+          <div id="total-info">
+            <span>총합계(KRW)</span>
+            <span id="total" data-th-text="${'₩' + (reservationInfo.price * days + reservationInfo.cleanFee)}"></span>
+          </div>
+
+        </div>
+      </div>
+      <div class="refund-policy">
+        <div id="refund-info">
+          <h2>환불 정책</h2>
+          <div id="refund-content">
+            <span data-th-text="${'체크인 날짜인 ' + checkInDate  + ' 이전에 취소하면 부분 환불을 받으실 수 있습니다. 그 이후에는 취소 시점에 따라 환불액이 결정됩니다.'}"></span>
+          </div>
+        </div>
+      </div>
+      <div class="rule-policy">
+        <div id="rule-info">
+          <h2>기본 규칙</h2>
+          <div id="rule-content">
+            <span>훌륭한 게스트가 되기 위한 몇 가지 간단한 규칙을 지켜주실 것을 모든 게스트에게 당부드리고 있습니다.</span>
+            <ul>
+              <li>숙소 이용규칙을 준수하세요.</li>
+              <li>호스트의 집도 자신의 집처럼 아껴주세요.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div>
-        <button id="reservationButton">
-          <span>예약 하기</span>
+        <button id="paymentButton">
+          <span>일반결제</span>
+        </button>
+        <button id="kakaopay">
+          <span>카카오페이 결제</span>
+        </button>
+        <button id="naverpay">
+          <span>네이버페이 결제</span>
         </button>
       </div>
     </div>
@@ -66,6 +111,9 @@
       <div class="rentalHomeInfo-box">
         <div id="rentalHome-info">
           <span>숙소 정보</span>
+        </div>
+        <div id="rentalHome-photo">
+          <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + ${reservationInfo.rentalHomePhotos[0].uuidPhotoName}}">
         </div>
         <div id="rentalHome-name">
           <span data-th-text="${reservationInfo.name}"></span>
@@ -83,7 +131,11 @@
 <section class="footer-section">
   <div data-th-replace="footer :: footer" class="footer-div">footer</div>
 </section>
-</body>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script data-th-src="@{/js/rental_home/reservation.js}"></script>
+
+</body>
+
 </html>

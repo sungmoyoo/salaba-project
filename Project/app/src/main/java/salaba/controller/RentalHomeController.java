@@ -3,12 +3,16 @@ package salaba.controller;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import salaba.service.PaymentService;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
 import salaba.vo.Reservation2;
@@ -30,6 +35,7 @@ public class RentalHomeController {
 
   private final static Log log = LogFactory.getLog(RentalHomeController.class);
   private final RentalHomeService rentalHomeService; // RentalHomeService
+  private final PaymentService paymentService;
 
   @GetMapping("/main")
   public String rentalHomeMain( HttpSession httpSession, Model model,
@@ -132,20 +138,20 @@ public class RentalHomeController {
     model.addAttribute("reservationInfo", rentalHomeService.getReservationInfo(rentalHomeNo));
     model.addAttribute("checkInDate", checkInDate);
     model.addAttribute("checkOutDate", checkOutDate);
+    model.addAttribute("days", dateDifferenceCalculator(checkInDate, checkOutDate));
     model.addAttribute("guests", guests);
   }
 
-  @PostMapping("/rentalHome/reservation")
-  public ResponseEntity<String> addReservation(@RequestBody Reservation2 reservation)
-      throws IOException {
-    int reservationNo = rentalHomeService.getReservationKey();
-    reservation.setChatFileName("chat-"+reservationNo);
-    rentalHomeService.addReservation(reservation);
+  private long dateDifferenceCalculator(String startDateStr, String endDateStr) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
 
-    File file = new File("src/main/resources/chat/log/"+reservation.getChatFileName()+".json");
-    file.createNewFile();
+    // 문자열을 LocalDate 객체로 변환
+    LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+    LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
-    return ResponseEntity.ok("예약 신청이 완료됐습니다.");
+    // 날짜 간의 차이 계산
+    return ChronoUnit.DAYS.between(startDate, endDate);
   }
+
 }
 

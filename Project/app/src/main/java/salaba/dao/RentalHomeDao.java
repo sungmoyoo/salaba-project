@@ -59,8 +59,4 @@ public interface RentalHomeDao {
   List<Region> getAllRegion();
 
   RentalHome getReservationInfo(int rentalHomeNo);
-
-  void addReservation(Reservation2 reservation);
-
-  int getReservationKey();
 }

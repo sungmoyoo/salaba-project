@@ -430,35 +430,4 @@
       t2.photo_order = 1
   </select>
 
-  <!-- 숙소 예약 테이블 pk값을 1더해서 가져오기 -->
-  <select id="getReservationKey" resultType="int">
-    select
-      MAX(reservation_no)+1
-    from
-      reservation
-  </select>
-
-  <!--  숙소 예약 -->
-  <insert id="addReservation" parameterType="salaba.vo.Reservation2">
-    insert into
-      reservation
-      (
-        member_no,
-        rental_home_no,
-        start_date,
-        end_date,
-        chat_file_name,
-        number_of_people
-      )
-    values
-      (
-        #{memberNo},
-        #{rentalHomeNo},
-        #{startDate},
-        #{endDate},
-        #{chatFileName},
-        #{numberOfPeople}
-      )
-  </insert>
-
 </mapper>

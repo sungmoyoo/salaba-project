@@ -38,8 +38,4 @@ public interface RentalHomeService {
   List<RentalHomeReview> getRentalHomeReviewList( int rentalHomeNo );
 
   RentalHome getReservationInfo(int rentalHomeNo);
-
-  void addReservation( Reservation2 reservation);
-
-  int getReservationKey();
 }
