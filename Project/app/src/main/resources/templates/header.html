@@ -5,7 +5,7 @@
   <title>사라바</title>
 </head>
 <body>
-<header data-th-fragment="header">
+<header id="header" data-th-fragment="header">
   <div class="logo-container">
     <div class="logo-div">
       <a class="logo-link" data-th-href="@{/main}">
@@ -58,29 +58,15 @@
       </div>
     </button>
   </div>
-  
-
-  <section>
-    <div class="search-container">
-      <form action="/main" data-th-action="@{main}" id="condition-search" method="get">
-        <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
-        <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
-        <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
-        <input class="search-input" type="number" name="capacity" id="guests" placeholder="인원">
-        <button class="search-button" type="submit">검색</button>
-      </form>
-    </div>
-  </section>
   </header>
+  <script data-th-inline="javascript">
+    let sessionInfo = /*[[${session.loginUser}]]*/ '';
+  </script>
+  <!-- <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script> -->
+  <script src="/js/header.js"></script>
+  <script>
+    const se = sessionInfo;
+    console.log(se);
+  </script>
 </body>
-<script data-th-inline="javascript">
-  let sessionInfo = /*[[${session.loginUser}]]*/ '';
-</script>
-<!-- <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script> -->
-<script data-th-src="@{/js/header.js}"></script>
-<script>
-  const se = sessionInfo;
-  console.log(se);
-</script>
-
 </html>

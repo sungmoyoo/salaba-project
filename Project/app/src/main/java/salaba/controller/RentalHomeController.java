@@ -135,11 +135,13 @@ public class RentalHomeController {
       @RequestParam("checkOutDate") String checkOutDate,
       @RequestParam("guests") int guests,
       Model model ){
+
     model.addAttribute("reservationInfo", rentalHomeService.getReservationInfo(rentalHomeNo));
     model.addAttribute("checkInDate", checkInDate);
     model.addAttribute("checkOutDate", checkOutDate);
     model.addAttribute("days", dateDifferenceCalculator(checkInDate, checkOutDate));
     model.addAttribute("guests", guests);
+    model.addAttribute("reviewAverage",Math.round(rentalHomeService.rentalHomeReviewAverage(rentalHomeNo) * 100) / 100.0);
   }
 
   private long dateDifferenceCalculator(String startDateStr, String endDateStr) {

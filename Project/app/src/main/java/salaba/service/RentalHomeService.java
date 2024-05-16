@@ -18,6 +18,8 @@ public interface RentalHomeService {
 
   RentalHome getRentalHomeDetailView( int rentalHomeNo );
 
+  double rentalHomeReviewAverage(int rentalHomeNo);
+
   List<RentalHome> getRentalHomeConditionSearch(
       String regionName, Date checkInDate, Date checkOutDate, int capacity);
 

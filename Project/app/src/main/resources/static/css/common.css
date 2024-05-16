@@ -1,3 +1,8 @@
+#header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
 /* 로고 - 검색엔진과 로고 사진을 둘다 사용하는 css로 수정 */
 .logo-container {
   display: flex;
@@ -129,16 +134,27 @@
   color: inherit;
 }
 
+
 .search-container {
-  width: 38%;
-  height: 4%;
-  margin: 50px auto;
-  padding: 20px;
+  position: fixed;
+  top: 1%;
+  left: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
+  margin: 80px 0px;
+  padding: 10px;
   background-color: #ffffff;
   border: #8b8b8b;
   border-radius: 50px;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
   /* 내부 그림자 및 외부 그림자 설정 */
+}
+
+.search-container form {
+  display: flex;
+  flex-direction: column;
 }
 
 #condition-search {

@@ -71,6 +71,11 @@ public class DefaultRentalHomeService implements RentalHomeService {
   }
 
   @Override
+  public double rentalHomeReviewAverage(int rentalHomeNo) { //숙소 리뷰 평균 조회
+    return rentalHomeDao.rentalHomeReviewAverage(rentalHomeNo);
+  }
+
+  @Override
   public List<RentalHomePhoto> getRentalHomePhotos(int rentalHomeNo) { // 숙소 사진 조회
     return rentalHomeDao.rentalHomePhotoSelect(rentalHomeNo);
   }
