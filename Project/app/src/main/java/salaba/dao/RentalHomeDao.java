@@ -38,6 +38,9 @@ public interface RentalHomeDao {
   // 숙소 리뷰 조회
   List<RentalHomeReview> rentalHomeReviewSelect(@Param("rental_home_no") int rentalHomeNo);
 
+  // 숙소 리뷰 평균 조회
+  double rentalHomeReviewAverage(int rentalHomeNo);
+
   // 숙소 시설 조회
   List<RentalHomeFacility> rentalHomeFacilitySelect(int rentalHomeNo);
 
@@ -59,8 +62,4 @@ public interface RentalHomeDao {
   List<Region> getAllRegion();
 
   RentalHome getReservationInfo(int rentalHomeNo);
-
-  void addReservation(Reservation2 reservation);
-
-  int getReservationKey();
 }
