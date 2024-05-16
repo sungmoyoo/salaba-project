@@ -40,7 +40,6 @@ public class RentalHomeController {
       @DateTimeFormat( pattern = "yyyy-MM-dd") Date checkOutDate,
       @RequestParam( value = "capacity", defaultValue = "1") int capacity) throws Exception{ // 메인화면
     Member loginUser = (Member) httpSession.getAttribute("loginUser");
-    
     // 세션에 테마가 없는 경우 세션에 테마 저장
     if(httpSession.getAttribute("themeList") == null ){
       httpSession.setAttribute("themeList", rentalHomeService.getAllThemes());
@@ -54,11 +53,12 @@ public class RentalHomeController {
     // LogIn User Check
     if(  loginUser == null   && ( regionName.equalsIgnoreCase("all") &&
         checkInDate == null && checkOutDate == null && capacity == 1 ) ){
+
       // 로그인하지 않은 경우 기본 숙소 목록 출력 검색 하지 않은 경우
       model.addAttribute("rentalHomeList", rentalHomeService.getRentalHomeMain());
     }
     else if(
-         loginUser != null && loginUser.getThemes() != null &&
+         loginUser != null && loginUser.getThemes() != null && !loginUser.getThemes().isEmpty()   &&
          regionName.equalsIgnoreCase("all") &&
         checkInDate == null && checkOutDate == null && capacity == 1 ){
       // 로그인한 유저 중 선호 사항을 고른 유저의 경우

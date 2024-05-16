@@ -1,31 +1,24 @@
 package salaba.controller;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.BoardService;
 import salaba.service.MemberService;
 import salaba.service.StorageService;
-import salaba.vo.ConstVO;
 import salaba.vo.Member;
 import salaba.vo.Nation;
 import salaba.vo.board.Board;
@@ -53,54 +46,40 @@ public class MemberController implements InitializingBean {
     log.debug(String.format("bucketname: %s", this.bucketName));
   }
 
-  @GetMapping("/member/myPage")
-  public void myinfo(
-      Model model,
-      HttpServletRequest request,
-      HttpSession session) throws Exception { // 내정보 조회
-
+  @GetMapping("/member/myPage") // 마이페이지
+  public void myPage( Model model ) throws Exception {
+    // 국가 전체 선택
+    List<Nation> nation = memberService.getNation();
+    model.addAttribute("nationList", nation);
   }
 
-  @PostMapping("myinfoUpdate")
-  public String myinfoUpdate(Member member, MultipartFile file, HttpSession session) throws Exception { // 내정보 수정
+  @PostMapping("/member/updateUserInfo")
+  public ResponseEntity<String> updateUserInfo(
+      @ModelAttribute Member member,
+      @RequestParam("file") MultipartFile file,
+      HttpSession session) throws Exception { // 내정보 수정
 
-    Member old = memberService.selectUserInfoForLogin(member.getNo());
+    log.debug(String.format("업데이트 로그 Member : %s" , member.toString()));
+    log.debug(String.format("MultipartFile : %s", file));
 
-    if (file.getSize() > 0) {
-      String filename = storageService.upload(this.bucketName, this.uploadDir, file);
-      System.out.println(filename);
-      member.setPhoto(filename);
-      storageService.delete(this.bucketName, this.uploadDir, old.getPhoto());
-    } else {
-      member.setPhoto(old.getPhoto());
+    if( file.getSize() != 0 ){
+      String fileName = storageService.upload(bucketName,uploadDir,file);
+      log.debug(String.format("로그 filename : %s", fileName));
+      member.setPhoto(fileName);
     }
-    memberService.myinfoUpdate(member);
+    // 업데이트 처리
+    memberService.updateUserInfo(member);
+    memberService.deletePreference(member.getNo());
+    memberService.insertPreference(member);
+    
+    // 업데이트 후 개인정부 다시 불러오기
+    Member newMember = memberService.selectUserInfoForUpdateSession(member.getNo());
 
-    Member memberSave = memberService.selectUserInfoForLogin(member.getNo());
-    //회원정보
-    session.setAttribute("loginUser", memberSave);
+    // 세션 정보 삭제 후 재등록
+    session.removeAttribute("loginUser");
+    session.setAttribute("loginUser", newMember);
 
-    return "redirect:myinfo";
-  }
-
-  @GetMapping("delete")
-  public String delete(Member member) throws Exception { // 회원 탈퇴
-    memberService.delete(member);
-    return "redirect:/auth/logout";
-  }
-
-  @PostMapping("myInfoChangePasswordSave")
-  public String myInfoChangePasswordSave(Member member) throws Exception { // 비밀번호 변경
-    memberService.changePasswordSave(member);
-    return "redirect:/member/myinfo";
-  }
-
-  // 선호사항 폼
-  @GetMapping("mytheme")
-  public void mytheme(Member member, Model model, HttpSession session){
-    Member sessionInfo = (Member) session.getAttribute("loginUser");
-
-    model.addAttribute("themeList", memberService.themeList(sessionInfo));
+    return ResponseEntity.ok("회원정보를 저장했습니다");
   }
 
   @GetMapping("boardHistory")  // 작성글 내역

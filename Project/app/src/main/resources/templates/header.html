@@ -37,7 +37,7 @@
       <div class="userInfo-menu">
         <div class="userInfo-menu-item mypage">
           <span class="userInfo-menu-item">
-            <a class="userInfo-menu-item" data-th-href="@{/member/myPage}" data-th-if="${session.loginUser != null}">마이페이지</a>
+            <a class="userInfo-menu-item" data-th-href="@{/member/myPage(memberNo=${session.loginUser.no})}" data-th-if="${session.loginUser != null}">마이페이지</a>
           </span>
         </div>
         <div class="userInfo-menu-item hostmode">
@@ -46,8 +46,8 @@
           </span>
         </div>
         <div class="userInfo-menu-item logout">
-          <span class="userInfo-menu-item">
-            <a class="userInfo-menu-item" data-th-href="@{/auth/logout}" data-th-if="${session.loginUser != null}" href="auth/logout">로그아웃</a>
+          <span class="userInfo-menu-item" onclick="logout()">
+            <a class="userInfo-menu-item" data-th-if="${session.loginUser != null}">로그아웃</a>
           </span>
         </div>
         <div class="userInfo-menu-item login">
@@ -71,7 +71,7 @@
       </form>
     </div>
   </section>
-  </header>
+</header>
 </body>
 <script data-th-inline="javascript">
   let sessionInfo = /*[[${session.loginUser}]]*/ '';

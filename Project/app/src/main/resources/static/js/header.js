@@ -49,6 +49,21 @@ document.addEventListener('click', function(event){
   }
 });
 
+// logout
+function logout(){
+  $.ajax({
+    type: "POST",
+    url: "/auth/logout",
+    success: function(){
+      location.href = "main";
+    },
+    error: ()=>{
+
+    }
+
+  });
+}
+
 
 // login modal 열기
 function openUserLogin(){
@@ -60,7 +75,7 @@ function openUserLogin(){
       $('body').append(modal);
       $('#userLoginModal').modal('show');
     },
-    error: function(){
+    error:()=>{
       
     }
   });
@@ -113,7 +128,7 @@ function checkLogin( data ){
     alert("탈퇴된 회원입니다.");
   }else if( state == "3" ){
     alert("제재된 회원입니다.")
-  }else if( state == "99" ){
+  }else if( state == "9" ){
     alert("이메일 또는 암호가 맞지 않습니다.");
   }else if( state == "4" ){
     
@@ -272,9 +287,9 @@ document.addEventListener('DOMContentLoaded', function(){
       return emailReg.test(email);
     }
 
-    // 닉네임 유효성 검사 ( 공백불가 , 한글영어 , 최소2글자 최대 20글자 )
+    // 닉네임 유효성 검사 ( 공백불가 , 한글영어 , 숫자 , 최소2글자 최대 20글자 )
     function validateNickname(nickname) {
-      const nickNameReg = /^[a-zA-Z가-힣\\\\s]{2,20}$/;
+      const nickNameReg = /^[a-zA-Z가-힣0-9\\\\s]{2,20}$/;
       return nickNameReg.test(nickname);
     }
 

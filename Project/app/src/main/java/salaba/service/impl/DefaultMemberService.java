@@ -31,6 +31,11 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
+  public Member selectUserInfoForUpdateSession(int memberNo) {
+    return memberDao.selectUserInfoForUpdateSession(memberNo);
+  }
+
+  @Override
   public Member selectUserInfoForLogin(int no) {
     return memberDao.selectMemberInfo(no);
   }
@@ -41,8 +46,8 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public int myinfoUpdate(Member member) {
-    return memberDao.myinfoUpdate(member);
+  public int updateUserInfo(Member member) {
+    return memberDao.updateUserInfo(member);
   }
 
   @Override
@@ -56,11 +61,8 @@ public class DefaultMemberService implements MemberService {
   }
 ////////////
   @Override
-  public int delete(Member member) {
-    ConstVO constVO = new ConstVO();
-
-    member.setState(constVO.member_state_resign);
-    return memberDao.delete(member);
+  public int updateMemberWithdrawal(int memberNo) {
+    return memberDao.updateMemberWithdrawal(memberNo);
   }
 
   @Override
@@ -89,8 +91,8 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
-  public void deletePreference(Member member) {
-    memberDao.deletePreference(member);
+  public void deletePreference(int memberNo) {
+    memberDao.deletePreference(memberNo);
   }
 
   @Override
