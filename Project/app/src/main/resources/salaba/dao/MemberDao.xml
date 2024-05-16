@@ -113,14 +113,15 @@
       email = #{email}
   </select>
 
-  <update id="delete" parameterType="Member"><!--회원탈퇴>-->
+  <!-- 회원탈퇴 -->
+  <update id="updateMemberWithdrawal" parameterType="int">
     update
       member
     set
-      state=#{state},
+      state='1',
       exit_date=now()
     where
-      member_no=#{no}
+      member_no=#{memberNo}
   </update>
 
   <!-- 로그인 -->

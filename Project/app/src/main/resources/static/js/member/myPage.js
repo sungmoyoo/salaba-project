@@ -2,15 +2,25 @@ let loginUser = sessionInfo; // 세션 로그인 정보
 const nationList = nationListModel;
 let userPreference = [];
 
+function sideMenuActiveMyPage(){
+  $('#sideMenu-nav a.active').removeClass('active');
+  const sideMenu = $('#sideMenu-MyPage');
+  sideMenu.addClass('active');
+}
+
+sideMenuActiveMyPage();
+
 $(document).ready(function(){
-  myPageAuthorize();
-  chooseNation();
-  genderRadioButtonSet();
-  openPreferenceModal();
-  preferenceModalSetting();
-  previewPhoto();
-  changePassword();
-  updateUserInfo();
+  myPageAuthorize(); // 마이페이지 접근
+  chooseNation(); // 국가선택
+  checkNickName(); // 닉네임 중복검사
+  genderRadioButtonSet(); // 성별버튼 셋팅
+  openPreferenceModal(); // 선호사항 Modal
+  preferenceModalSetting(); // 선호사항 Modal 초기값 세팅
+  previewPhoto(); // 사진 변경 바로 적용
+  changePassword(); // 비밀번호 변경
+  updateUserInfo(); // 저장 버튼 - 업데이트 처리
+  memberWithdrawal() // 회원탈퇴
 });
 
 // 마이페이지 비밀번호 확인
@@ -62,6 +72,50 @@ function chooseNation(){
 function getNationNo(name){
   const nation = nationList.find(element => element.nationName === name);
   return nation ? nation.nationNo : null;
+}
+
+// 닉네임 중복검사
+function checkNickName(){
+  $('#nicknameCheck').on('click', function(){
+    const nickName = $('#nicknameInput').val();
+    console.log(nickName);
+    if(nickName === ""){
+      alert("닉네임을 입력해주세요");
+      $('#nicknameInput').focus();
+      return;
+    }
+    if(!validateNickname(nickName)){
+      alert("공백불가,한글 및 영문 숫자 최소2글자 최대 20글자");
+      $('#nicknameInput').focus();
+      return;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/member/checkNickName",
+      data: {
+        nickName: nickName
+      },
+      success: function(data){
+        if(data == 0){
+          alert("사용 가능한 닉네임입니다.");
+        }else{
+          alert("사용 중인 닉네임입니다.");
+          $('#nicknameInput').focus();
+          return;
+        }
+      },
+      error: ()=>{
+        alert("닉네임 체크 에러");
+      }
+    });
+  });
+}
+
+// 닉네임 유효성 검사 ( 공백불가 , 한글영어 , 숫자 , 최소2글자 최대 20글자 )
+function validateNickname(nickname) {
+  const nickNameReg = /^[a-zA-Z가-힣0-9\\\\s]{2,20}$/;
+  return nickNameReg.test(nickname);
 }
 
 // 성별 라디오버튼 설정
@@ -221,7 +275,7 @@ function validatePassword(password){ // 대,소문자,숫자,특수문자를 포
   return passwordReg.test(password);
 }
 
-
+// 회원정보 업데이트
 function updateUserInfo(){
   // 저장버튼 눌렀을 때
   $('#myPage-UserInfo-Update').on('click',function(){
@@ -259,3 +313,25 @@ function updateUserInfo(){
   });
 }
 
+// 회원 탈퇴
+function memberWithdrawal(){
+  $('#memberWithdrawal-button').on('click',function(){
+    $.ajax({
+      type: "POST",
+      url: "/member/withdrawal",
+      data:{
+        memberNo: loginUser.no
+      },
+      success: function(data){
+        if(data == 1){
+          alert("회원탈퇴되었습니다.");
+          location.href = "/main";
+        }
+      },
+      error:()=>{
+        alert("회원탈퇴 에러");
+        return;
+      }
+    });
+  });
+}

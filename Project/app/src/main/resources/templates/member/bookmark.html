@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/bookmark.css">
+  <link rel="stylesheet" type="text/css" href="/css/modal/loginModal.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <script th:inline="javascript">
+    const sessionInfo = /*[[${session.loginUser}]]*/ null;
+    const session = /*[[${session}]]*/ null;
+    const nationListModel = /*[[${nationList}]]*/ null;
+    const bookmarkInfo = /*[[${bookMarkList}]]*/ null;
+    console.log(sessionInfo);
+    console.log(session);
+    console.log(bookmarkInfo);
+  </script>
+</head>
+<body>
+  <div data-th-replace="header :: header">header</div>
+<main class="row">
+  <section id="myPage-leftSection" class="col-2">
+    <div data-th-replace="/member/myPageSideMenu :: myPageSideMenu">a</div>
+  </section>
+  
+  <section id="myPage-rightSection" class="row col-8">
+    <div id="myPage-title-container">
+      <div>
+        
+      </div>
+    </div>
+    
+    <div class="container-xxl">
+      <div class="row" id="bookMark-contents-container">
+
+      </div>
+    </div>
+
+    <!-- 즐겨찾기 삭제 모달 -->
+    <div class="modal" tabindex="-1" id="deleteBookMark-Modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">즐겨찾기 삭제</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>즐겨찾기를 삭제하겠습니까?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="deleteBookMark-button">삭제</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </section>
+</main>
+  <div data-th-replace="footer :: footer" class="footer-div">footer</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/bookmark.js}"></script>
+</html>

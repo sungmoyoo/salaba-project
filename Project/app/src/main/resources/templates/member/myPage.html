@@ -63,7 +63,10 @@
               <label for="nicknameInput" class="form-label">닉네임</label>
             </div>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="nicknameInput" data-th-value="${session.loginUser.nickname}">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="nicknameInput" data-th-value="${session.loginUser.nickname}" aria-describedby="nicknameCheck">
+                <button class="btn btn-secondary" id="nicknameCheck">중복확인</button>
+              </div>
             </div>
           </div>
           <div class="mb-4 row">
@@ -192,7 +195,7 @@
               <button class="btn btn-primary" id="myPage-UserInfo-Update">저장</button>
             </div>
             <div class="col-auto">
-              <button class="btn btn-danger">회원 탈퇴</button>
+              <button class="btn btn-danger" id="memberWithdrawal-button">회원 탈퇴</button>
             </div>
           </div>
         </div>

@@ -22,7 +22,7 @@ public interface MemberService {
 
   List<Nation> getNation();
 
-  int delete(Member member);
+  int updateMemberWithdrawal(int memberNo);
 
   Member selectUserInfoForLogin(String email, String password);
 

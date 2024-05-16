@@ -2,21 +2,18 @@ package salaba.controller;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import salaba.service.BoardService;
@@ -50,7 +47,7 @@ public class MemberController implements InitializingBean {
   }
 
   @GetMapping("/member/myPage") // 마이페이지
-  public void myinfo( Model model ) throws Exception {
+  public void myPage( Model model ) throws Exception {
     // 국가 전체 선택
     List<Nation> nation = memberService.getNation();
     model.addAttribute("nationList", nation);
@@ -83,26 +80,6 @@ public class MemberController implements InitializingBean {
     session.setAttribute("loginUser", newMember);
 
     return ResponseEntity.ok("회원정보를 저장했습니다");
-  }
-
-  @GetMapping("delete")
-  public String delete(Member member) throws Exception { // 회원 탈퇴
-    memberService.delete(member);
-    return "redirect:/auth/logout";
-  }
-
-  @PostMapping("myInfoChangePasswordSave")
-  public String myInfoChangePasswordSave(Member member) throws Exception { // 비밀번호 변경
-    memberService.changePasswordSave(member);
-    return "redirect:/member/myinfo";
-  }
-
-  // 선호사항 폼
-  @GetMapping("mytheme")
-  public void mytheme(Member member, Model model, HttpSession session){
-    Member sessionInfo = (Member) session.getAttribute("loginUser");
-
-    model.addAttribute("themeList", memberService.themeList(sessionInfo));
   }
 
   @GetMapping("boardHistory")  // 작성글 내역

@@ -24,7 +24,7 @@ public interface MemberDao {
 
   List<Nation> getNation();
 
-  int delete(Member member);
+  int updateMemberWithdrawal(@Param("memberNo") int memberNo);
 
   Member selectUserInfoForLogin(
       @Param("email") String email,

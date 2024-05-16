@@ -61,11 +61,8 @@ public class DefaultMemberService implements MemberService {
   }
 ////////////
   @Override
-  public int delete(Member member) {
-    ConstVO constVO = new ConstVO();
-
-    member.setState(constVO.member_state_resign);
-    return memberDao.delete(member);
+  public int updateMemberWithdrawal(int memberNo) {
+    return memberDao.updateMemberWithdrawal(memberNo);
   }
 
   @Override

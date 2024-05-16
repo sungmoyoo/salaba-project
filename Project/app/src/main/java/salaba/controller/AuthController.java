@@ -148,4 +148,15 @@ public class AuthController {
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
+  // 회원탈퇴
+  @PostMapping("/member/withdrawal")
+  public ResponseEntity<Object> updateMemberWithdrawal(@RequestParam int memberNo,
+      HttpSession session) throws Exception {
+    int result = memberService.updateMemberWithdrawal(memberNo);
+    if(result == 1){
+      session.invalidate();
+    }
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
+
 }

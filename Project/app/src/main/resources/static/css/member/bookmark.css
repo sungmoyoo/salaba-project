@@ -1,0 +1,47 @@
+html{
+  font-family: "Noto Sans KR";
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.card-title{
+  font-size: 28px;
+  font-weight: 600;
+}
+
+#card-text-address{
+  font-size: 20px;
+  font-weight: 500;
+}
+
+#card-text-box{
+  margin-top: 40px;
+  padding-top: 20px;
+}
+#link-box{
+  margin-top: 7px;
+  padding-top: 3px;
+  border: 1px solid #cccccc;
+  border-radius: 0.75rem;
+  text-align: center;
+}
+
+#card-text-like-box{
+  font-size: 28px;
+  font-weight: 400;
+  text-align: center;
+}
+#card-text-like-box span{
+  margin-left: 10px;
+  text-align: end;
+}
+
+#rentalHome-Link{
+  color: black;
+  text-decoration: none;
+}
+
+.card-delete-box{
+  text-align: center;
+}

@@ -287,9 +287,9 @@ document.addEventListener('DOMContentLoaded', function(){
       return emailReg.test(email);
     }
 
-    // 닉네임 유효성 검사 ( 공백불가 , 한글영어 , 최소2글자 최대 20글자 )
+    // 닉네임 유효성 검사 ( 공백불가 , 한글영어 , 숫자 , 최소2글자 최대 20글자 )
     function validateNickname(nickname) {
-      const nickNameReg = /^[a-zA-Z가-힣\\\\s]{2,20}$/;
+      const nickNameReg = /^[a-zA-Z가-힣0-9\\\\s]{2,20}$/;
       return nickNameReg.test(nickname);
     }
 
