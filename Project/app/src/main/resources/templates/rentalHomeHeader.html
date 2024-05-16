@@ -1,0 +1,24 @@
+    <div data-th-fragment="rentalHomeHeader" class="search-container">
+      <form action="/main" data-th-action="@{main}" id="condition-search" method="get">
+        <div id="firstSearchLine">
+          <input class="search-input" type="text" name="regionName" id="location" placeholder="장소 입력">
+          <input class="search-input" type="date" name="checkInDate" id="check-in" placeholder="체크인 날짜">
+        </div>
+        <div id="secondSearchLine">
+          <input class="search-input" type="date" name="checkOutDate" id="check-out" placeholder="체크아웃 날짜">
+          <input class="search-input" type="number" name="capacity" id="guests" placeholder="인원">
+          <button class="search-button" type="submit">검색</button>
+        </div>
+      </form>
+    </div>
+<script data-th-inline="javascript">
+  let sessionInfo = /*[[${session.loginUser}]]*/ '';
+</script>
+<!-- <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script> -->
+<script data-th-src="@{/js/header.js}"></script>
+<script>
+  const se = sessionInfo;
+  console.log(se);
+</script>
+
+</html>

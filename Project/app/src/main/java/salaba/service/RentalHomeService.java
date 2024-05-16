@@ -18,6 +18,8 @@ public interface RentalHomeService {
 
   RentalHome getRentalHomeDetailView( int rentalHomeNo );
 
+  double rentalHomeReviewAverage(int rentalHomeNo);
+
   List<RentalHome> getRentalHomeConditionSearch(
       String regionName, Date checkInDate, Date checkOutDate, int capacity);
 
@@ -38,8 +40,4 @@ public interface RentalHomeService {
   List<RentalHomeReview> getRentalHomeReviewList( int rentalHomeNo );
 
   RentalHome getReservationInfo(int rentalHomeNo);
-
-  void addReservation( Reservation2 reservation);
-
-  int getReservationKey();
 }

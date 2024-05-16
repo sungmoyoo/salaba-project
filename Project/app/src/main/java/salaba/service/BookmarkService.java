@@ -1,12 +1,11 @@
 package salaba.service;
 
 import java.util.List;
-import salaba.vo.Bookmark;
-import salaba.vo.Reservation;
+import org.apache.ibatis.annotations.Param;
+import salaba.vo.rental_home.RentalHome;
 
 public interface BookmarkService {
 
-  List<Bookmark> bookmark(Bookmark bookmark);
-
-
+  List<RentalHome> selectUserBookMark(int memberNo);
+  int deleteBookMark(@Param("memberNo") int memberNo , @Param("rentalHomeNo") int rentalHomeNo);
 }

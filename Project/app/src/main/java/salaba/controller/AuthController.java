@@ -85,10 +85,9 @@ public class AuthController {
     return loginInfo;
   }
 
-  @GetMapping("/auth/logout")
-  public String logout(HttpSession session) throws Exception {
+  @PostMapping("/auth/logout")
+  public void logout(HttpSession session) throws Exception {
     session.invalidate();
-    return "auth/logout";
   }
 
   // 회원가입관련 메서드
@@ -146,6 +145,17 @@ public class AuthController {
   @PostMapping("/member/checkPassword")
   public ResponseEntity<Object> checkPassword(@RequestBody Member member){
     int result = memberService.checkPassword(member.getNo(), member.getPassword());
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
+
+  // 회원탈퇴
+  @PostMapping("/member/withdrawal")
+  public ResponseEntity<Object> updateMemberWithdrawal(@RequestParam int memberNo,
+      HttpSession session) throws Exception {
+    int result = memberService.updateMemberWithdrawal(memberNo);
+    if(result == 1){
+      session.invalidate();
+    }
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 

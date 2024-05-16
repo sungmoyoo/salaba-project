@@ -5,36 +5,53 @@
 
 <mapper namespace="salaba.dao.BookmarkDao">
 
-  <resultMap id="BookmarkMap" type="Bookmark">
+  <resultMap id="BookmarkMap" type="salaba.vo.rental_home.RentalHome">
     <id column="rental_home_no" property="rentalHomeNo"/>
-    <result column="member_no" property="no"/>
     <result column="name" property="name"/>
-    <result column="uuid_photo_name" property="uuidPhotoName"/>
     <result column="address" property="address"/>
     <result column="price" property="price"/>
-    <result column="photo" property="photo"/>
+    <result column="like_count" property="rentalHomeLikeCount"/>
+    <result column="state" property="state"/>
 
-    <collection property="photoList" ofType="Bookmark">
+    <collection property="rentalHomePhotos" ofType="salaba.vo.rental_home.RentalHomePhoto">
       <id column="photo_no" property="photoNo"/>
       <result column="photo_order" property="photoOrder"/>
       <result column="uuid_photo_name" property="uuidPhotoName"/>
     </collection>
   </resultMap>
 
-  <select id="findAll" resultMap="BookmarkMap">
+  <select id="selectUserBookMark" resultMap="BookmarkMap">
     SELECT
-      rh.rental_home_no,
-      rh.name,
-      rh.address,
-      rh.price,
-      rhp.uuid_photo_name,
-      rhp.photo_order,
-      rhp.photo_no
+      t2.rental_home_no,
+      t2.name,
+      t2.address,
+      t2.price,
+      t3.photo_no,
+      t3.uuid_photo_name,
+      t3.photo_order,
+      (
+        select
+          count(*)
+        from
+          rental_home_like
+        where
+          t1.rental_home_no = rental_home_no
+      ) as like_count
     FROM
-      bookmark b
-    INNER JOIN rental_home rh ON b.rental_home_no = rh.rental_home_no
-    LEFT OUTER JOIN rental_home_photo rhp on rh.rental_home_no = rhp.rental_home_no
+      bookmark t1
+      inner join rental_home t2 ON t2.rental_home_no = t1.rental_home_no
+      inner join rental_home_photo t3 on t3.rental_home_no = t1.rental_home_no
     WHERE
-      b.member_no=#{no}
+      t1.member_no=#{memberNo} and
+      t2.state = '1';
   </select>
+
+  <delete id="deleteBookMark">
+    delete
+    from
+      bookmark
+    where
+      member_no = #{memberNo} and
+      rental_home_no = #{rentalHomeNo}
+  </delete>
 </mapper>

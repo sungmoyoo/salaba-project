@@ -7,6 +7,8 @@ public final class ConstVO {
 
   public static final char state_ok = '1'; // 완료
 
+  public static final char state_cancel = '2'; //취소
+
   // 예약 내역
   public static final char reservation_state_await = '0'; // 승인 대기
 

@@ -30,7 +30,7 @@ const checkInDate = checkIn;
 const checkOutDate = checkOut;
 const reservationInfo = reservationInform;
 const guests = guest;
-const memberNo = loginUser.no;
+// const memberNo = loginUser.no;
 console.log("**********");
 console.log(checkInDate);
 console.log(checkOutDate);
@@ -45,25 +45,126 @@ function formatDate(input){
   return year + "-" + month + "-" + day;
 }
 
-$("#reservationButton").click(function(){
-  let reservation = {
-    memberNo:memberNo,
-    rentalHomeNo:reservationInfo.rentalHomeNo,
-    startDate:formatDate(checkInDate),
-    endDate:formatDate(checkOutDate),
-    numberOfPeople:guests
-  }
-  console.log(reservation);
+
+const inicis = 'html5_inicis';
+const kakaopay = 'kakaopay';
+
+$("#paymentButton").click(() => requestPay(inicis));
+$("#kakaopay").click(() => requestPay(kakaopay));
+
+function requestPay(paymethod) {
   $.ajax({
-    url: "/rentalHome/reservation",
-    type: "POST",
-    contentType: "application/json",
-    data: JSON.stringify(reservation),
-    success: function(data){
-      alert(data);
+    url: '/payment/getLoginUser',
+    type: 'get',
+    success: function(loginUser) {
+      var uid = '';
+      IMP.init('imp86666655');
+      const total = $('#total').text().replace(/\D/g, '');
+      const paymentNo = createOrderNum()
+      IMP.request_pay({ // param
+          pg: paymethod,
+          pay_method: "card",
+          merchant_uid: paymentNo,
+          name: $('#rentalHome-name').find('span').text(), //결제창에 노출될 상품명
+          amount: total, //금액
+          buyer_email : loginUser.email, 
+          buyer_name : loginUser.name,
+          buyer_tel : loginUser.telNo,
+      }, function (rsp) { // callback
+          if (rsp.success) { // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+              uid = rsp.imp_uid;
+              // 결제검증
+              $.ajax({
+                  url: '/payment/validation/'+ rsp.imp_uid,
+                  type: 'post'
+              }).done(function(data) {
+                  // 결제를 요청했던 금액과 실제 결제된 금액이 같으면 해당 주문건의 결제가 정상적으로 완료된 것으로 간주한다.
+                  if (total == data.response.amount) {
+                      // jQuery로 HTTP 요청
+                      // 주문정보 생성 및 테이블에 저장 
+                          // 데이터를 json으로 보내기 위해 바꿔준다.
+                          data = JSON.stringify({
+                              memberNo: loginUser.no,
+                              rentalHomeNo: reservationInfo.rentalHomeNo,
+                              startDate: formatDate(checkInDate),
+                              endDate: formatDate(checkOutDate),
+                              numberOfPeople: guests,
+                              payment: {
+                                paymentNo: paymentNo,
+                                amount: data.response.amount,
+                                payMethod: paymethod
+                              }
+                              
+                          });
+            
+                          $.ajax({
+                              url: "/reservation/payment/complete", 
+                              type: "POST",
+                              dataType: 'json',
+                              contentType: 'application/json',
+                              data : data,
+                              success: function() {
+                                Swal.fire({
+                                  icon: "success",
+                                  title: "결제가 완료되었습니다.",
+                                  showConfirmButton: false,
+                                  timer: 1500
+                                });
+                              },
+                              error: function() {
+                                Swal.fire({
+                                  icon: "error",
+                                  title: "결제 실패.",
+                                  showConfirmButton: false,
+                                  timer: 1500
+                                });
+                              }
+                          });
+                    
+                  }
+                  else {
+                    Swal.fire({
+                      icon: "error",
+                      title: "결제에 실패하였습니다.",
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                  }
+              })
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "결제에 실패하였습니다.",
+                  text: rsp.error_msg,
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+              }
+          });
     },
-    error: function(){
-      alert("예약 신청 오류");
+    error: function() {
+      Swal.fire({
+        icon: "error",
+        title: "로그인이 필요합니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      return;
     }
   });
-});
+
+
+}
+
+function createOrderNum(){
+	const date = new Date();
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	
+	let orderNum = year + month + day;
+	for(let i=0;i<10;i++) {
+		orderNum += Math.floor(Math.random() * 8);	
+	}
+	return orderNum;
+}

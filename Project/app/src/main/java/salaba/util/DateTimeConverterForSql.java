@@ -1,4 +1,4 @@
-package salaba;
+package salaba.util;
 
 import java.sql.Date;
 import org.joda.time.DateTime;

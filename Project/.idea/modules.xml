@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Project.salaba.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Project.salaba.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Project.salaba.app.main~1.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Project.salaba.app.main~1.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.salaba.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.salaba.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/salaba.iml" filepath="$PROJECT_DIR$/.idea/modules/salaba.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/salaba.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/salaba.app.iml" />
