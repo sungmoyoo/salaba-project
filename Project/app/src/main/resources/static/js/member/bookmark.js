@@ -4,9 +4,10 @@ function sideMenuActiveBookMark(){
   const sideMenu = $('#sideMenu-BookMark');
   sideMenu.addClass('active');
 }
-sideMenuActiveBookMark();
+
 
 $(document).ready(function() {
+  sideMenuActiveBookMark();
   bookMarkPageSet();
   deleteBookMarkModalOpen();
   deleteBookMark();
