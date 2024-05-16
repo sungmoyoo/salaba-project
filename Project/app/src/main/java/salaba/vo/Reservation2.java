@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Reservation2 implements Serializable { // 임시
 
   private static final long serialVersionUID = 100L;
+  private int reservationNo;
 
   private int memberNo;
 
@@ -21,7 +22,11 @@ public class Reservation2 implements Serializable { // 임시
 
   private Date endDate;
 
+  private String state;
+
   private String chatFileName;
 
   private int numberOfPeople;
+
+  private Payment payment;
 }

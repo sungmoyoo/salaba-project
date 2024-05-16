@@ -5,7 +5,7 @@
   <title>사라바</title>
 </head>
 <body>
-<header data-th-fragment="header">
+<header id="header" data-th-fragment="header">
   <div class="logo-container">
     <div class="logo-div">
       <a class="logo-link" data-th-href="@{/main}">
@@ -59,7 +59,6 @@
     </button>
   </div>
   
-
   <section>
     <div class="search-container">
       <form action="/main" data-th-action="@{main}" id="condition-search" method="get">
@@ -73,14 +72,4 @@
   </section>
 </header>
 </body>
-<script data-th-inline="javascript">
-  let sessionInfo = /*[[${session.loginUser}]]*/ '';
-</script>
-<!-- <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script> -->
-<script data-th-src="@{/js/header.js}"></script>
-<script>
-  const se = sessionInfo;
-  console.log(se);
-</script>
-
 </html>

@@ -1,8 +1,8 @@
 body {
   display: flex;
   flex-direction: column;
-  /* justify-content: center;
-  align-items: center; */
+  justify-content: center;
+  align-items: center;
   
 }
 
@@ -11,18 +11,20 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
 }
 
 
 /* 게시판 별 버튼 위치 조정 */
 #board-header {
+  margin-top: 50px;
   display: flex;
   justify-content: center;
   /* 가로 중앙 정렬 */
   align-items: center;
   /* 세로 중앙 정렬 */
   height: 100px;
+  margin-right: 20px;
   /* 필요에 따라 높이 조정 */
 }
 
@@ -68,7 +70,7 @@ main {
 
 #bsearch-container {
   position: absolute;
-  right: 8%;
+  right: 11%;
   top: 130px;
 }
 
@@ -96,7 +98,7 @@ main {
 #write-button-container {
   margin-top: 40px; /* 버튼과 게시판 내용 사이의 간격 */
   margin-bottom: 40px;
-  margin-left: 75%;
+  margin-left: 85%;
 }
 
 #write-button {

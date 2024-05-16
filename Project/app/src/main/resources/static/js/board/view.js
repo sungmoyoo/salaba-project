@@ -49,12 +49,37 @@ $("#addCommentBtn").click(function (e) {
             },
             error: function () {
                 // 오류 메시지
-                alert("권한이 없습니다.");
+                Swal.fire({
+                    title: "<strong>HTML <u>example</u></strong>",
+                    icon: "info",
+                    html: `
+                      You can use <b>bold text</b>,
+                      <a href="#">links</a>,
+                      and other HTML tags
+                    `,
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: `
+                      <i class="fa fa-thumbs-up"></i> Great!
+                    `,
+                    confirmButtonAriaLabel: "Thumbs up, great!",
+                    cancelButtonText: `
+                      <i class="fa fa-thumbs-down"></i>
+                    `,
+                    cancelButtonAriaLabel: "Thumbs down"
+                  });
+            
             }
         });
     } else {
         // 내용이 비어있는 경우
-        alert("내용을 작성하세요");
+        Swal.fire({
+            icon: "error",
+            title: "내용을 작성하세요.",
+            showConfirmButton: false,
+            timer: 1500
+          });
     }
 });
 
@@ -128,11 +153,21 @@ function addReply(event) {
                 newReply.find('.button-container2').find(".modi2").click(modifyReply);
             },
             error: function () {
-                window.alert("권한이 없습니다.");
+                Swal.fire({
+                    icon: "error",
+                    title: "권한이 없습니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             },
         });
     } else {
-        alert("내용을 작성하세요");
+        Swal.fire({
+            icon: "error",
+            title: "내용을 작성하세요.",
+            showConfirmButton: false,
+            timer: 1500
+          });
     }
     replyForm.hide();
     $("#replyContent").val(""); // 내용 지우기
@@ -179,7 +214,14 @@ function deleteComment(e) {
         success: () => {
             commentDiv.html("<span>삭제된 댓글입니다.</span>");
         },
-        error: () => alert("권한이 없습니다."),
+        error: function() {
+            Swal.fire({
+                icon: "error",
+                title: "권한이 없습니다.",
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }
     });
 }
 
@@ -225,12 +267,22 @@ function modifyComment(e) {
                         commentDiv.find(".commentContent").text(newContent);
                     },
                     error: function (error) {
-                        window.alert("수정 권한이 없습니다.");
+                        Swal.fire({
+                            icon: "error",
+                            title: "수정 권한이 없습니다.",
+                            showConfirmButton: false,
+                            timer: 1500
+                          });
                         updateFormHTML.remove();
                     }
                 });
             } else {
-                alert("내용을 작성하세요.");
+                Swal.fire({
+                    icon: "error",
+                    title: "내용을 작성하세요.",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             }
         });
 
@@ -258,7 +310,12 @@ function deleteReply(e) {
             replyDiv.remove();
         },
         error: function () {
-            alert("삭제 권한이 없습니다.");
+            Swal.fire({
+                icon: "error",
+                title: "삭제 권한이 없습니다.",
+                showConfirmButton: false,
+                timer: 1500
+              });
         },
     });
 }
@@ -302,12 +359,22 @@ function modifyReply(e) {
                         modifyForm.remove();
                     },
                     error: function () {
-                        alert("수정 권한이 없습니다.");
+                        Swal.fire({
+                            icon: "error",
+                            title: "수정 권한이 없습니다.",
+                            showConfirmButton: false,
+                            timer: 1500
+                          });
                         modifyForm.remove();
                     }
                 });
             } else {
-                alert("내용을 작성하세요");
+                Swal.fire({
+                    icon: "error",
+                    title: "내용을 작성하세요.",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             }
         });
 
@@ -327,7 +394,12 @@ let isLoggedIn = $("#loginUser").length > 0;
 
 // 로그인 필요 알림 함수
 function requireLogin() {
-    alert('로그인이 필요합니다.');
+    Swal.fire({
+        title: 'Error!',
+        text: '로그인이 필요합니다.',
+        icon: 'error',
+        confirmButtonText: 'Cool'
+      })
 }
 
 let likeButton = $("#likeButton");
@@ -363,9 +435,6 @@ const processChanges = debounce(function () {
             },
             success: function () {
                 initialMyLikeCount = initialMyLikeCount == 1 ? 0 : 1;
-            },
-            error: function () {
-                // alert('실패');
             }
         });
     }
@@ -450,16 +519,30 @@ $("#submitBtn").click(function (e) {
 		contentType : false,
         data: formData,
         success: function (response) {
-            alert(response)
             $("#reportModal").modal("hide");
             clearReportForm();
+            Swal.fire({
+                icon: "success",
+                title: "신고가 정상적으로 접수되었습니다.",
+                showConfirmButton: false,
+                timer: 1500
+              });
         },
         error: function(error) {
             if (error.status == 409) {
-                alert("이미 신고되었습니다..")
+                Swal.fire({
+                    icon: "error",
+                    title: "이미 신고되었습니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             } else if (error.status == 401) {
-                alert("로그인이 필요합니다.")
-                location.href = '/auth/form'
+                Swal.fire({
+                    icon: "error",
+                    title: "로그인이 필요합니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             }
             $("#reportModal").modal("hide");
             clearReportForm();

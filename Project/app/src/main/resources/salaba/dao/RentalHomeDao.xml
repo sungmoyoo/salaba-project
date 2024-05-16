@@ -45,7 +45,6 @@
     <result column="like_count" property="rentalHomeLikeCount"/>
     <result column="lat" property="lat"/>
     <result column="lon" property="lon"/>
-
     <collection property="rentalHomePhotos" resultMap="rentalHomePhotos"/>
     <collection property="themes" resultMap="themeMap"/>
     <collection property="rentalHomeFacilities" resultMap="rentalHomeFacilityMap"/>
@@ -330,6 +329,14 @@
       t2.created_date desc;
   </select>
 
+  <!-- 숙소 리뷰 평균 조회  -->
+  <select id="rentalHomeReviewAverage" resultType="double" parameterType="int">
+    select COALESCE(AVG(rhr.score), 0.00)
+    from rental_home_review  rhr
+    left join reservation r on rhr.reservation_no = r.reservation_no
+    where r.rental_home_no = #{rentalHomeNo};
+  </select>
+
   <!-- 숙소 편의 시설 조회 -->
   <select id="rentalHomeFacilitySelect" resultMap="rentalHomeFacilityMap">
     select
@@ -422,6 +429,7 @@
       t1.lon,
       t1.clean_fee,
       t2.uuid_photo_name
+
     from
       rental_home t1
       inner join rental_home_photo t2 on t2.rental_home_no = t1.rental_home_no
@@ -429,36 +437,5 @@
       t1.rental_home_no = #{rentalHomeNo} and
       t2.photo_order = 1
   </select>
-
-  <!-- 숙소 예약 테이블 pk값을 1더해서 가져오기 -->
-  <select id="getReservationKey" resultType="int">
-    select
-      MAX(reservation_no)+1
-    from
-      reservation
-  </select>
-
-  <!--  숙소 예약 -->
-  <insert id="addReservation" parameterType="salaba.vo.Reservation2">
-    insert into
-      reservation
-      (
-        member_no,
-        rental_home_no,
-        start_date,
-        end_date,
-        chat_file_name,
-        number_of_people
-      )
-    values
-      (
-        #{memberNo},
-        #{rentalHomeNo},
-        #{startDate},
-        #{endDate},
-        #{chatFileName},
-        #{numberOfPeople}
-      )
-  </insert>
 
 </mapper>
