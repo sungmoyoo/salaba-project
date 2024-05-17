@@ -82,10 +82,9 @@ public class MemberController implements InitializingBean {
     return ResponseEntity.ok("회원정보를 저장했습니다");
   }
 
-  @GetMapping("boardHistory")  // 작성글 내역
+  @GetMapping("/member/boardHistory")  // 작성글 내역
   public void BoardHistory(@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
-      @RequestParam( value = "pageSize" ,defaultValue = "10") int pageSize,
-      Member member,
+      @RequestParam(value = "pageSize" ,defaultValue = "10") int pageSize,
       Model model,
       HttpSession session) throws Exception {
 
@@ -112,15 +111,9 @@ public class MemberController implements InitializingBean {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
-//
-//    if(member.getMyInfoMenuId() == null || "".equals(member.getMyInfoMenuId())){
-//      session.setAttribute("myInfoMenuId", "boardHistory");
-//    }else {
-//      session.setAttribute("myInfoMenuId", member.getMyInfoMenuId());
-//    }
   }
 
-  @GetMapping("commentHistory")  // 작성댓글 내역
+  @GetMapping("/member/commentHistory")  // 작성댓글 내역
   public void commentHistory(@RequestParam( value = "pageNo",defaultValue = "1") int pageNo,
       @RequestParam( value = "pageSize",defaultValue = "10") int pageSize,
       Model model,
@@ -145,8 +138,6 @@ public class MemberController implements InitializingBean {
 
     List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
 
-
-    //commentList = sort(commentList); // 정렬 함수 호출
     model.addAttribute("list", commentList);
 
     model.addAttribute("pageNo", pageNo);
@@ -156,9 +147,7 @@ public class MemberController implements InitializingBean {
 
   @PostMapping("boardStateCheck")  // 작성댓글 내역
   public ResponseEntity<?> boardStateCheck(
-      Board board,
-      Model model) throws Exception {
-
+      Board board ) throws Exception {
     String state = memberService.boardStateCheck(board);
     return ResponseEntity.ok(state);
   }

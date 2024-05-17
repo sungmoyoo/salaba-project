@@ -8,9 +8,9 @@ function sideMenuActiveMyPage(){
   sideMenu.addClass('active');
 }
 
-sideMenuActiveMyPage();
 
 $(document).ready(function(){
+  sideMenuActiveMyPage(); // SideMenu Active
   myPageAuthorize(); // 마이페이지 접근
   chooseNation(); // 국가선택
   checkNickName(); // 닉네임 중복검사

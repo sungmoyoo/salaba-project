@@ -1,0 +1,7 @@
+#contact-title-box{
+  display: flex;
+}
+
+#contact-title-box svg{
+  margin-right: 5px;
+}

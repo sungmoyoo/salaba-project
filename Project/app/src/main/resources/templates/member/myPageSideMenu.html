@@ -14,16 +14,21 @@
         id="sideMenu-MyPage" data-th-href="@{/member/myPage(memberNo=${session.loginUser.no})}">마이페이지</a>
       <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" 
         id="sideMenu-BookMark" data-th-href="@{/member/bookmark}">즐겨찾기</a>
-      <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" id="sideMenu-ReservationHistory">예약 내역</a>
+      <a class="nav-link btn btn-outline-info" data-th-href="@{/member/reservationList}" tabindex="-1" aria-disabled="true" id="sideMenu-reservationList">예약 내역</a>
       <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" 
-        data-bs-toggle="collapse" href="#sideMenu-collapse" role="button" 
-        aria-expanded="false" aria-controls="sideMenu-collapse" id="sideMenu-WriteHistory">작성글 내역</a>
-        <div id="sideMenu-collapse" class="collapse">
-          <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" id="sideMenu-WriteHistory-Board">게시글 내역</a>
-          <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" id="sideMenu-WriteHistory-Reply">댓글 내역</a>
+        data-bs-toggle="collapse" href="#sideMenu-collapse-writeHistory" role="button" 
+        aria-expanded="false" aria-controls="sideMenu-collapse-writeHistory" id="sideMenu-WriteHistory">작성글 내역</a>
+        <div id="sideMenu-collapse-writeHistory" class="collapse">
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/boardHistory}" tabindex="-1" aria-disabled="true" id="sideMenu-WriteHistory-Board">게시글 내역</a>
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/commentHistory}" tabindex="-1" aria-disabled="true" id="sideMenu-WriteHistory-Reply">댓글 내역</a>
         </div>
-      <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" id="sideMenu-PointHistory">포인트 내역</a>
-      <a class="nav-link btn btn-outline-info" href="#" tabindex="-1" aria-disabled="true" id="sideMenu-HelpCenter">고객센터</a>
+      <a class="nav-link btn btn-outline-info" data-th-href="@{/member/pointHistory}" tabindex="-1" aria-disabled="true" id="sideMenu-PointHistory">포인트 내역</a>
+      <a class="nav-link btn btn-outline-info" href="#sideMenu-collapse-HelpCenter" tabindex="-1" aria-disabled="true" id="sideMenu-HelpCenter" role="button" 
+        data-bs-toggle="collapse" aria-expanded="false" aria-controls="sideMenu-collapse-HelpCenter">고객센터</a>
+        <div id="sideMenu-collapse-HelpCenter" class="collapse">
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/question}" tabindex="-1" aria-disabled="true" id="sideMenu-Question">질문답변 조회</a>
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/contact}" tabindex="-1" aria-disabled="true" id="sideMenu-contact">문의하기</a>
+        </div>
     </nav>
   </div>
 </body>

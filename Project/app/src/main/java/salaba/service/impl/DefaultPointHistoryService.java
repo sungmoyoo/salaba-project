@@ -14,8 +14,8 @@ public class DefaultPointHistoryService implements PointHistoryService {
   private final PointHistoryDao pointHistoryDao;
 
   @Override
-  public List<PointHistory> pointList(PointHistory pointHistory) {
-    return pointHistoryDao.findAll(pointHistory);
+  public List<PointHistory> selectUserPointHistory(int memberNo) {
+    return pointHistoryDao.selectUserPointHistory(memberNo);
   }
 
 }

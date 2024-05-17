@@ -6,26 +6,37 @@
 <mapper namespace="salaba.dao.PointHistoryDao">
 
   <resultMap id="PointHistoryMap" type="PointHistory">
-    <id column="member_no" property="no"/>
+    <id column="no" property="no"/>
     <result column="save_content" property="saveContent"/>
     <result column="save_point" property="savePoint"/>
     <result column="save_date" property="saveDate"/>
     <result column="total_point" property="totalPoint"/>
   </resultMap>
 
-  <select id="findAll" resultMap="PointHistoryMap">
-      select
-        member_no,
-        save_content,
-        save_point,
-        save_date,
-        SUM(save_point) OVER(order by save_date) as total_point
-      from
-        point_history
-      where
-        member_no=#{no}
-      order by
-        save_date desc
+  <select id="selectUserPointHistory" resultMap="PointHistoryMap">
+    select
+      no,
+      save_content,
+      save_point,
+      save_date,
+      SUM(save_point) OVER(order by save_date) as total_point
+    from
+      (
+        select
+          @rownum := @rownum +1 as no,
+          save_content,
+          save_point,
+          save_date
+        from
+          point_history,
+          (select @rownum := 0) r
+        where
+          member_no=18
+        order by
+          save_date
+      ) as sub
+    order by
+      save_date desc;
     </select>
 </mapper>
 
