@@ -37,12 +37,10 @@ main {
 
 
 /* 게시판 공통 컨테이너 설정 */
-.all-board {
-  /* width: 90%; 전체 너비의 90% 사용 */
-  margin: auto; /* 자동으로 좌우 마진 설정하여 가운데 정렬 */
-  display: flex; /* Flexbox 모델 적용 */
-  flex-direction: column; /* 아이템들을 수직으로 정렬 */
-  align-items: center; /* 가로축 기준 중앙 정렬 */
+.container {
+ width: 100%;
+ display: flex;
+ justify-content: center;
 }
 
 /*제목과 첨부파일 아이콘 사이 간격 띄우기*/
@@ -51,13 +49,12 @@ main {
 }
 
 
-
 /*게시글 제목 위치*/
 h1 {
-     text-align: left; /* 제목을 가운데 정렬 */
-     margin-left: 20px; /* 좌측 여백을 40px로 설정 */
-     margin-top: 20px; /* 상단 여백 추가 */
-     margin-bottom: 20px; /* 하단 여백 추가 */
+  text-align: left; /* 제목을 가운데 정렬 */
+  margin-left: 20px; /* 좌측 여백을 40px로 설정 */
+  margin-top: 20px; /* 상단 여백 추가 */
+  margin-bottom: 20px; /* 하단 여백 추가 */
 }
 
 
@@ -76,5 +73,10 @@ section {
 
 .board-container .board {
   margin-top: 50px;
-  width: 47%;
+  width: 48%;
 }
+
+th, td {
+  font-size: 12px;
+}
+

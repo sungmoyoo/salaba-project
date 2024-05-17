@@ -103,20 +103,22 @@ function requestPay(paymethod) {
                               dataType: 'json',
                               contentType: 'application/json',
                               data : data,
-                              success: function() {
+                              success: function(data) {
+                                console.log("success", data);
                                 Swal.fire({
                                   icon: "success",
                                   title: "결제가 완료되었습니다.",
                                   showConfirmButton: false,
-                                  timer: 1500
+                                  timer: 1000
                                 });
                               },
-                              error: function() {
+                              error: function(error) {
+                                console.log("error", error);
                                 Swal.fire({
                                   icon: "error",
                                   title: "결제 실패.",
                                   showConfirmButton: false,
-                                  timer: 1500
+                                  timer: 1000
                                 });
                               }
                           });
