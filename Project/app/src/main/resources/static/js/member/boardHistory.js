@@ -7,7 +7,7 @@ $(document).ready(function(){
 function sideMenuActiveBoardHistory(){
   $('#sideMenu-nav a.active').removeClass('active');
   const sideMenu = $('#sideMenu-WriteHistory-Board');
-  $('#sideMenu-collapse').collapse('show');
+  $('#sideMenu-collapse-writeHistory').collapse('show');
   sideMenu.addClass('active');
 }
 

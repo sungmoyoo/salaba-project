@@ -7,11 +7,16 @@
 
   <resultMap id="QuestionMap" type="Question">
     <id column="question_no" property="questionNo"/>
-    <result column="member_no" property="no"/>
+    <result column="member_no" property="memberNo"/>
     <result column="title" property="title"/>
     <result column="content" property="content"/>
     <result column="state" property="state"/>
     <result column="register_date" property="registerDate"/>
+
+    <association property="qna" javaType="Qna">
+      <result column="answer" property="answer"/>
+      <result column="answer_date" property="answerDate"/>
+    </association>
 
     <collection property="questionFileList" ofType="QuestionFile">
       <id column="question_file_no" property="questionFileNo"/>
@@ -19,66 +24,54 @@
       <result column="ori_file_name" property="oriFileName"/>
       <result column="uuid_file_name" property="uuidFileName"/>
     </collection>
+
   </resultMap>
 
-  <resultMap id="QnaMap" type="Qna">
-    <id column="question_no" property="questionNo"/>
-    <result column="answer" property="answer"/>
-    <result column="answer_date" property="answerDate"/>
-  </resultMap>
+
 
   <select id="getQuestionNo" resultType="int">
-    SELECT max(question_no)+1 FROM team.question
+    SELECT
+      MAX(question_no)+1
+    FROM
+      question
   </select>
 
   <insert id="questionAdd" parameterType="Question">
-    insert into question(question_no, member_no,title,content)
-    values(#{questionNo}, #{no},#{title}, #{content})
+    insert into
+      question
+      (
+        question_no,
+        member_no,
+        title,
+        content
+      )
+    values
+      (
+        #{questionNo},
+        #{memberNo},
+        #{title},
+        #{content}
+      )
   </insert>
 
-  <select id="findAll" resultMap="QuestionMap">
+  <select id="selectQuestionList" resultMap="QuestionMap">
     select
-      question_no,
-      member_no,
-      title,
-      case when state = '0' then '미답변'
-           when state = '1' then '답변완료'
-           else ''
+      t1.question_no,
+      t1.title,
+      t1.content,
+      t1.register_date,
+      case
+        when t1.state = '0' then '미완료'
+        when t1.state = '1' then '답변완료'
       end as state,
-      register_date
+      t2.answer,
+      t2.answer_date
     from
-      question
+      question t1
+      left outer join qna t2 on t2.question_no = t1.question_no
     where
-      member_no=#{no}
+      member_no=#{memberNo}
     order by
       register_date desc
-  </select>
-
-  <select id="findBy" resultMap="QuestionMap" parameterType="int">
-    select
-      q.question_no,
-      q.title,
-      q.content,
-      q.state,
-      q.register_date,
-      qf.question_file_no,
-      qf.ori_file_name,
-      qf.uuid_file_name
-    from
-      question q
-      inner join question_file qf on q.question_no = qf.question_no
-    where
-      q.question_no=#{value}
-  </select>
-
-  <select id="getAnswer" resultMap="QnaMap" parameterType="int">
-    select
-      question_no,
-      answer,
-      answer_date
-    from
-      qna
-    where
-      question_no=#{value}
   </select>
 </mapper>

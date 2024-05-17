@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import salaba.dao.PaymentDao;
 import salaba.service.PaymentService;
 import salaba.vo.Payment;
-import salaba.vo.Reservation2;
+import salaba.vo.Reservation;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public class DefaultPaymentService implements PaymentService {
         return paymentDao.getReservationKey();
     }
     @Override
-    public void addReservation(Reservation2 reservation) {
+    public void addReservation(Reservation reservation) {
         paymentDao.addReservation(reservation);
     }
     @Override

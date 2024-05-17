@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.PaymentService;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
-import salaba.vo.Reservation2;
+import salaba.vo.Reservation;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomePhoto;
 import salaba.vo.rental_home.RentalHomeReport;
