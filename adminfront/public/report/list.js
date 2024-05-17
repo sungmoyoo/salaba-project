@@ -9,7 +9,12 @@ let menu = pageContext.params.get("menu");
             let result = response.data;
             console.log(result);
             if (response.status == "failure") {
-                alert(response.error);
+                Swal.fire({
+                    icon: "error",
+                    title: response.error,
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
                 return;
             }
             var trTemplate = Handlebars.compile($("#tr-template").html());
@@ -45,18 +50,17 @@ let menu = pageContext.params.get("menu");
                                 axiosInstance.put(`${RESTAPI_HOST}/report/update/0/${$('#selection2').val()}/${data.reporter.memberNo}`, requestData)
                                     .then((response) => {
                                         if (response.status == 'failure') {
-                                            alert('이미 처리되었습니다');
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "이미 처리되었습니다",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                              });
                                             return;
                                         }
                                         closeButton.click();
                                     })
-                                    .catch((error) => {
-                                        // 에러가 발생했을 때의 처리
-                                        if (error.response.status === 403) {
-                                            alert('권한이 없습니다.');
-                                            // 특정 작업 수행
-                                        }
-                                    });
+                                   
                                     
                             })
                         })
@@ -90,15 +94,32 @@ let menu = pageContext.params.get("menu");
                                 axiosInstance.put(`${RESTAPI_HOST}/report/update/${$('#selection').val()}/0/${data.reporter.memberNo}`, requestData)
                                     .then((response) => {
                                         if (response.status == 'failure') {
-                                            alert('이미 처리되었습니다');
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "처리중 오류 발생",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                              });
                                             return;
                                         }
-                                        closeButton.click();
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "성공적으로 처리되었습니다.",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then(() => {
+                                            closeButton.click();
+                                        });
                                     })
                                     .catch((error) => {
                                         // 에러가 발생했을 때의 처리
                                         if (error.response.status === 403) {
-                                            alert('권한이 없습니다.');
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "권한이 없습니다.",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                              });
                                             // 특정 작업 수행
                                         }
                                     });
