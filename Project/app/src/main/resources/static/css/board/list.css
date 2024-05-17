@@ -11,7 +11,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 90%;
 }
 
 
@@ -98,7 +98,7 @@ main {
 #write-button-container {
   margin-top: 40px; /* 버튼과 게시판 내용 사이의 간격 */
   margin-bottom: 40px;
-  margin-left: 85%;
+  margin-left: 76%;
 }
 
 #write-button {
@@ -119,9 +119,6 @@ main {
 main table {
   width: 80%;
 }
-
-
-
 
 
 /* 게시글 제목 링크 */

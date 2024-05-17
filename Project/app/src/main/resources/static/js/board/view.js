@@ -27,7 +27,7 @@ $("#addCommentBtn").click(function (e) {
                               <div class="commentContentDiv">
                                 <div class="textContent comment-text">
                                   <span class="targetNo commentNo" hidden>${data.commentNo}</span>
-                                  <img class="profile-img1" height='40px' src='/img/default-photo.jpeg'></a>
+                                  <img class="profile-img1" height='40px' src='https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.writer.photo}'>
                                   <span class="nickname">${data.writer.nickname}</span>
                                   <span class="comment-date">${data.createdDate}</span><br>
                                   <span class="commentContent">${data.content}</span><br>
@@ -50,26 +50,13 @@ $("#addCommentBtn").click(function (e) {
             error: function () {
                 // 오류 메시지
                 Swal.fire({
-                    title: "<strong>HTML <u>example</u></strong>",
-                    icon: "info",
-                    html: `
-                      You can use <b>bold text</b>,
-                      <a href="#">links</a>,
-                      and other HTML tags
-                    `,
-                    showCloseButton: true,
-                    showCancelButton: true,
-                    focusConfirm: false,
-                    confirmButtonText: `
-                      <i class="fa fa-thumbs-up"></i> Great!
-                    `,
-                    confirmButtonAriaLabel: "Thumbs up, great!",
-                    cancelButtonText: `
-                      <i class="fa fa-thumbs-down"></i>
-                    `,
-                    cancelButtonAriaLabel: "Thumbs down"
+                    icon: "error",
+                    title: "로그인이 필요합니다.",
+                    showConfirmButton: false,
+                    timer: 1000
                   });
-            
+                  input.val("");
+                  
             }
         });
     } else {
@@ -78,7 +65,7 @@ $("#addCommentBtn").click(function (e) {
             icon: "error",
             title: "내용을 작성하세요.",
             showConfirmButton: false,
-            timer: 1500
+            timer: 1000
           });
     }
 });
@@ -129,10 +116,10 @@ function addReply(event) {
                           <div class="reply">
                           <div class="replyContentDiv">
                             <div class="textContent reply-text">
+                            <span>⮑</span>
                               <span class="targetNo replyNo" hidden>${data.replyNo}</span>
                               <!--프로필사진-->
-                              <img class="profile-img2"  height='40px' src='/img/default-photo.jpeg'></a>
-                              <i class="fa-solid fa-reply"></i>
+                              <img class="profile-img2"  height='40px' src= 'https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.writer.photo}'>
                               <span class="nickname">${data.writer.nickname}</span>
                               <span class="reply-date">${data.createdDate}</span><br>
                               <span class="replContent">${data.content}</span><br>
@@ -157,7 +144,7 @@ function addReply(event) {
                     icon: "error",
                     title: "권한이 없습니다.",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1000
                   });
             },
         });
@@ -166,7 +153,7 @@ function addReply(event) {
             icon: "error",
             title: "내용을 작성하세요.",
             showConfirmButton: false,
-            timer: 1500
+            timer: 1000
           });
     }
     replyForm.hide();
@@ -203,26 +190,46 @@ $(".del2").click(deleteReply);
 $(".modi2").click(modifyReply);
 
 function deleteComment(e) {
-    console.log($(this));
-    let commentDiv = $(this).closest('.comment'); // 삭제 버튼의 가장 가까운 상위 '.comment' 요소를 찾습니다.
-    let commentNo = commentDiv.find(".commentNo").text(); // '.comment' 내부에서 '.commentNo'를 찾습니다.
-    console.log(commentNo);
-    $.ajax({
-        url: "/board/comment/delete",
-        type: "GET",
-        data: { commentNo: commentNo },
-        success: () => {
-            commentDiv.html("<span>삭제된 댓글입니다.</span>");
-        },
-        error: function() {
-            Swal.fire({
-                icon: "error",
-                title: "권한이 없습니다.",
-                showConfirmButton: false,
-                timer: 1500
-              });
+    e.stopPropagation();
+    Swal.fire({
+        title: "정말로 삭제하시겠습니까?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            let commentDiv = $(this).closest('.comment'); // 삭제 버튼의 가장 가까운 상위 '.comment' 요소를 찾습니다.
+            let commentNo = commentDiv.find(".commentNo").text(); // '.comment' 내부에서 '.commentNo'를 찾습니다.
+            console.log(commentNo);
+            $.ajax({
+                url: "/board/comment/delete",
+                type: "GET",
+                data: { commentNo: commentNo },
+                success: () => {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "삭제가 완료되었습니다.",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000
+                      });
+                    commentDiv.html("<span>삭제된 댓글입니다.</span>");
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: "error",
+                        title: "권한이 없습니다.",
+                        showConfirmButton: false,
+                        timer: 1000
+                      });
+                }
+            });
         }
-    });
+      });
+
 }
 
 // 댓글 수정 기능
@@ -271,7 +278,7 @@ function modifyComment(e) {
                             icon: "error",
                             title: "수정 권한이 없습니다.",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 1000
                           });
                         updateFormHTML.remove();
                     }
@@ -281,7 +288,7 @@ function modifyComment(e) {
                     icon: "error",
                     title: "내용을 작성하세요.",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1000
                   });
             }
         });
@@ -300,25 +307,46 @@ function deleteReply(e) {
     e.stopPropagation();
     let replyDiv = $(this).closest('.reply');
     let replyNo = replyDiv.find(".replyNo").text();
-    console.log(replyNo);
-    $.ajax({
-        url: "/board/reply/delete",
-        type: "GET",
-        dataType: "json",
-        data: { replyNo: replyNo },
-        success: function () {
-            replyDiv.remove();
-        },
-        error: function () {
-            Swal.fire({
-                icon: "error",
-                title: "삭제 권한이 없습니다.",
-                showConfirmButton: false,
-                timer: 1500
-              });
-        },
-    });
+    Swal.fire({
+        title: "정말로 삭제하시겠습니까?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "/board/reply/delete",
+                type: "GET",
+                dataType: "json",
+                data: { replyNo: replyNo },
+                success: function () {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "삭제가 완료되었습니다.",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000
+                      });
+                    replyDiv.remove();
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "삭제 권한이 없습니다.",
+                        showConfirmButton: false,
+                        timer: 1000
+                      });
+                },
+            });
+        }
+      });
+
 }
+
+
 
 /* 답글 수정 */
 function modifyReply(e) {
@@ -363,7 +391,7 @@ function modifyReply(e) {
                             icon: "error",
                             title: "수정 권한이 없습니다.",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 1000
                           });
                         modifyForm.remove();
                     }
@@ -373,7 +401,7 @@ function modifyReply(e) {
                     icon: "error",
                     title: "내용을 작성하세요.",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1000
                   });
             }
         });
@@ -395,11 +423,11 @@ let isLoggedIn = $("#loginUser").length > 0;
 // 로그인 필요 알림 함수
 function requireLogin() {
     Swal.fire({
-        title: 'Error!',
-        text: '로그인이 필요합니다.',
-        icon: 'error',
-        confirmButtonText: 'Cool'
-      })
+        icon: "error",
+        title: "로그인이 필요합니다.",
+        showConfirmButton: false,
+        timer: 1000
+      });
 }
 
 let likeButton = $("#likeButton");
@@ -438,7 +466,7 @@ const processChanges = debounce(function () {
             }
         });
     }
-}, 2000);
+}, 1000);
 
 
 likeButton.click(function () {
@@ -525,7 +553,7 @@ $("#submitBtn").click(function (e) {
                 icon: "success",
                 title: "신고가 정상적으로 접수되었습니다.",
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1000
               });
         },
         error: function(error) {
@@ -534,14 +562,14 @@ $("#submitBtn").click(function (e) {
                     icon: "error",
                     title: "이미 신고되었습니다.",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1000
                   });
             } else if (error.status == 401) {
                 Swal.fire({
                     icon: "error",
                     title: "로그인이 필요합니다.",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1000
                   });
             }
             $("#reportModal").modal("hide");

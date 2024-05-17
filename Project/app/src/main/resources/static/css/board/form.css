@@ -14,6 +14,10 @@ section {
   align-items: center;
 }
 
+section form {
+  width: 80%;
+}
+
 /*게시글 제목 위치*/
 h1 {
   text-align: left;
@@ -56,6 +60,10 @@ h1 {
   /* 또는 너비를 필요에 따라 조절하여 중앙 정렬을 조절할 수 있습니다 */
 }
 
+.note-editor{
+  width: 100% !important; /* summernote의 기본 1440px고정넓이라는 우선순위를 무시하고 다음이 적용되도록 한다.*/
+}
+
 
 #write-button-container {
   text-align: right;
@@ -65,7 +73,7 @@ h1 {
 }
 
 #write-button {
-  padding: 10px 20px;
+  padding: 8px 15px;
   /* 글쓰기 버튼의 패딩 */
   background-color: #718de0;
   color: white;
