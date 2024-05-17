@@ -13,7 +13,12 @@ axiosInstance.interceptors.response.use(
     },
     (error) => {
         if (error.response.status === 403) {
-            alert('권한이 없습니다.');
+            Swal.fire({
+                icon: "error",
+                title: "권한이 없습니다.",
+                showConfirmButton: false,
+                timer: 1500
+              });
             // 특정 작업 수행
         } else if (error.response.status === 401) {
             location.href = '/';

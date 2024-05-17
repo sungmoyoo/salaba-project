@@ -262,7 +262,6 @@ function changePassword(){
     error: ()=>{
       alert("비밀번호 변경 에러");
     }
-
   })
 
 }

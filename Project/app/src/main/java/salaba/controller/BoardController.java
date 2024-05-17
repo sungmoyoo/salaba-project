@@ -95,11 +95,24 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     return combinedList;
   }
 
+  @GetMapping("/board/getLoginUser")
+  public ResponseEntity<?> returnLoginUser(HttpSession session) {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 유저가 없습니다.");
+    }
+    return ResponseEntity.ok(loginUser);
+  }
+
   @GetMapping("board/form") // 게시글 폼
-  public void form(int categoryNo, Model model) throws Exception {
+  public String form(int categoryNo, Model model, HttpSession session) throws Exception {
+    if (session.getAttribute("loginUser") == null) {
+
+    }
     model.addAttribute("boardName", categoryNo == 0 ? "후기글 작성"
         : (categoryNo == 1 ? "정보공유글 작성" : "자유글 작성")); // 카테고리 별 분류 - 0 : 후기 / 1 : 정보공유 / 2 : 자유
     model.addAttribute("categoryNo", categoryNo);
+    return "board/form";
   }
 
   @PostMapping("board/add")

@@ -148,7 +148,7 @@
                 <p class="card-text">
                   <span data-th-text="${board.writer.nickname}">홍길동</span>
                 </p>
-                <div class="card-footer">
+                <div class="boardcard-footer">
                     <span data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd')}">2024-03-27</span>
                     <div class="viewCount"><i class="fa-solid fa-eye"></i><span data-th-text="${board.viewCount}"></span></div>
                   <div class="likeCount"><i class="fa-solid fa-heart"></i><span data-th-text="${board.likeCount}"></span></div>
@@ -326,8 +326,9 @@
       </div>
     </main>
     <div data-th-replace="footer :: footer">꼬리말</div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script data-th-src="@{/js/board/list.js}"></script>
+    <script data-th-src="@{/js/board/alert.js}"></script>
     <script data-th-src="@{/js/common/alarm.js}"></script>
     <script data-th-src="@{/js/header.js}"></script>
   </body>

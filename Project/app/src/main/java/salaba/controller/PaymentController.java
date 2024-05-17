@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import salaba.service.PaymentService;
 import salaba.vo.Member;
-import salaba.vo.Payment;
-import salaba.vo.Reservation2;
+import salaba.vo.Reservation;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,20 +45,22 @@ public class PaymentController {
 
     @PostMapping("/reservation/payment/complete")
     @Transactional
-    public ResponseEntity<String> paymentComplete(@RequestBody Reservation2 reservation) {
+    public ResponseEntity<String> paymentComplete(@RequestBody Reservation reservation) throws IOException {
 
         try {
             int reservationNo = paymentService.getReservationKey();
-            reservation.setChatFileName("chat-"+reservationNo);
+            reservation.setChatFileName("chat-" + reservationNo);
             paymentService.addReservation(reservation);
-            File file = new File("src/main/resources/chat/log/"+reservation.getChatFileName()+".json");
+            File file = new File("src/main/resources/chat/log/" + reservation.getChatFileName() + ".json");
             file.createNewFile();
             reservation.getPayment().setReservationNo(reservation.getReservationNo());
             paymentService.addPayment(reservation.getPayment());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body("{\"message\":\"success\"}");
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("{\"error\":\"" + e.getMessage() + "\"}");
         }
+
     }
 
 

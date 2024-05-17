@@ -11,7 +11,12 @@
         .then((response) => {
             let result = response.data;
             if (result.status == 'failure') {
-                alert(response.error);
+                Swal.fire({
+                    icon: "error",
+                    title: response.error,
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
                 return;
             }
 
@@ -61,11 +66,22 @@
                         axiosInstance.put(`${RESTAPI_HOST}/rental/update`, requestData)
                         .then((response) => {
                             if (response.state == 'failure') {
-                                alert('숙소 승인/거부 오류')
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "처리중 오류 발생",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                  });
                                 return;
                             }
-                            alert('처리 되었습니다.')
-                            closeButton.click();
+                            Swal.fire({
+                                icon: "success",
+                                title: "성공적으로 처리되었습니다.",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                closeButton.click();
+                            });
                         });
                     }) 
                 })

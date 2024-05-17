@@ -20,55 +20,20 @@ public class DefaultQuestionService implements QuestionService {
 
   @Transactional
   @Override
-  public void questionAdd(Question question) {
-    int questionNo = questionDao.getQuestionNo();
-
-    question.setQuestionNo(questionNo);
+  public void questionAdd(Question question, List<QuestionFile> questionFileList) {
     questionDao.questionAdd(question);
-    if (question.getQuestionFileList() != null && question.getQuestionFileList().size() > 0) {
-      for (QuestionFile questionFile : question.getQuestionFileList()) {
-        questionFile.setQuestionNo(question.getQuestionNo());
-      }
-      questionFileDao.addAll(question.getQuestionFileList());
+    if (questionFileList != null && questionFileList.size() > 0) {
+      questionFileDao.addAll(questionFileList);
     }
   }
 
   @Override
-  public List<Question> questionList(Question question) {
-    return questionDao.findAll(question);
+  public List<Question> selectQuestionList(int memberNo) {
+    return questionDao.selectQuestionList(memberNo);
   }
 
   @Override
-  public Question get(int questionNo) {
-    return questionDao.findBy(questionNo);
+  public int getQuestionNo() {
+    return questionDao.getQuestionNo();
   }
-
-  @Override
-  public Qna getAnswer(int questionNo) {
-    return questionDao.getAnswer(questionNo);
-  }
-
-  @Transactional
-  @Override
-  public int questionUpdate(Question question) {
-    if (question.getQuestionFileList() != null && question.getQuestionFileList().size() > 0) {
-      for (QuestionFile questionFile : question.getQuestionFileList()) {
-        questionFile.setQuestionNo(question.getQuestionNo());
-      }
-      questionFileDao.addAll(question.getQuestionFileList());
-    }
-    return questionDao.questionUpdate(question);
-  }
-
-  @Override
-  public List<QuestionFile> getQuestionFiles(int no) {
-    return questionFileDao.findAllByQuestionNo(no);
-  }
-
-  @Override
-  public QuestionFile getQuestionFile(int fileNo) {
-    return questionFileDao.findByNo(fileNo);
-  }
-
-
 }

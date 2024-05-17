@@ -5,7 +5,7 @@
 
 <mapper namespace="salaba.dao.PaymentDao">
 
-    <resultMap id="ReservationMap2" type="Reservation2">
+    <resultMap id="ReservationMap" type="Reservation">
         <id column="reservation_no" property="reservationNo"/>
         <result column="member_no" property="memberNo"/>
         <result column="rental_home_no" property="rentalHomeNo"/>
@@ -36,7 +36,7 @@
     </select>
 
     <!--  숙소 예약 -->
-    <insert id="addReservation" parameterType="salaba.vo.Reservation2" useGeneratedKeys="true"
+    <insert id="addReservation" parameterType="salaba.vo.Reservation" useGeneratedKeys="true"
     keyColumn="reservation_no" keyProperty="reservationNo">
         insert into
         reservation

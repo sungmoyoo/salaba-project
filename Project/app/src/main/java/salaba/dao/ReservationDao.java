@@ -2,16 +2,15 @@ package salaba.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
-import salaba.vo.Question;
+import org.apache.ibatis.annotations.Param;
 import salaba.vo.Reservation;
-import salaba.vo.rental_home.RentalHome;
 
 @Mapper
 public interface ReservationDao {
 
 
-  List<Reservation> findAll(Reservation reservation);
+  List<Reservation> selectReservationList(@Param("memberNo") int memberNo);
 
-  Reservation findBy(int reservationNo);
+  Reservation selectReservation(@Param("reservationNo") int reservationNo);
 
 }
