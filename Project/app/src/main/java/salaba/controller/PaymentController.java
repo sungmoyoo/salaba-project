@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import salaba.service.PaymentService;
 import salaba.vo.Member;
-import salaba.vo.Payment;
-import salaba.vo.Reservation2;
+import salaba.vo.Reservation;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -46,7 +45,7 @@ public class PaymentController {
 
     @PostMapping("/reservation/payment/complete")
     @Transactional
-    public ResponseEntity<String> paymentComplete(@RequestBody Reservation2 reservation) throws IOException {
+    public ResponseEntity<String> paymentComplete(@RequestBody Reservation reservation) throws IOException {
 
         try {
             int reservationNo = paymentService.getReservationKey();

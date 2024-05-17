@@ -13,15 +13,33 @@
   </resultMap>
 
   <insert id="add" parameterType="QuestionFile">
-    insert into question_file (question_no, ori_file_name, uuid_file_name)
-    values (#{questionNo},#{oriFileName},#{uuidFileName})
+    insert into
+      question_file
+        (
+          question_no,
+          ori_file_name,
+          uuid_file_name
+        )
+    values
+      (
+        #{questionNo},
+        #{oriFileName},
+        #{uuidFileName}
+      )
   </insert>
 
   <insert id="addAll" parameterType="list">
-    insert into question_file (question_no, ori_file_name, uuid_file_name) values
-    <foreach collection="list" item="item" separator=",">
-      (#{item.questionNo},#{item.oriFileName},#{item.uuidFileName})
-    </foreach>
+    insert into
+      question_file
+      (
+        question_no,
+        ori_file_name,
+        uuid_file_name
+      )
+      values
+        <foreach collection="list" item="item" separator=",">
+          ( #{item.questionNo}, #{item.oriFileName}, #{item.uuidFileName} )
+        </foreach>
   </insert>
 
   <select id="findAllByQuestionNo" resultMap="QuestionFileMap" parameterType="int">
@@ -49,5 +67,4 @@
     where
       question_file_no=#{questionNo}
   </select>
-
 </mapper>

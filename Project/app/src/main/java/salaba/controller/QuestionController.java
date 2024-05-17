@@ -26,67 +26,51 @@ import salaba.vo.QuestionFile;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/question")
 public class QuestionController {
 
   private static final Log log = LogFactory.getLog(QuestionController.class);
   private final QuestionService questionService;
   private final StorageService storageService;
-  private final MemberService memberService;
   private String uploadDir = "question/";
 
   @Value("${ncpbucketname}")
   private String bucketName;
 
-  @PostMapping("questionAdd")
+  @PostMapping("/member/questionAdd")
   public String questionAdd(
       Question question,
-      MultipartFile[] questionFiles,
-      HttpSession session) throws Exception {
+      MultipartFile[] questionFiles) throws Exception {
 
-    Member sessionInfo = (Member) session.getAttribute("loginUser");
-    question.setNo(sessionInfo.getNo());
-
-    System.out.println("questionFiles :"+questionFiles.length);
-
-    ArrayList<QuestionFile> questionFileList = new ArrayList<>();
+    List<QuestionFile> questionFileList = new ArrayList<>();
+    int questionNo = questionService.getQuestionNo();
+    question.setQuestionNo(questionNo);
     if (questionFiles != null && questionFiles.length > 0) {
+      log.debug(String.format("로그로그 question No : %s", questionNo));
       for (MultipartFile file: questionFiles) {
         if (file.getSize() == 0) {
-          throw new Exception("첨부파일을 등록하세요!");
+          continue;
         }
+        log.debug(String.format("로그로그 file : %s", file.toString()));
         String filename = storageService.upload(this.bucketName, this.uploadDir, file);
-        questionFileList.add(QuestionFile.builder().uuidFileName(filename).oriFileName(file.getOriginalFilename()).build());
+        questionFileList.add(QuestionFile.builder().questionNo(questionNo).uuidFileName(filename).oriFileName(file.getOriginalFilename()).build());
       }
     }
 
-    if (questionFileList.size() > 0) {
-      question.setQuestionFileList(questionFileList);
-    }
-
-    questionService.questionAdd(question);
-    return "redirect:questionList";
+    questionService.questionAdd(question, questionFileList);
+    return "redirect:/member/contact";
   }
 
-  @GetMapping("questionList")
+  @GetMapping("/member/question")
   public void questionList(
-      Question question,
       Model model,
       HttpSession session) throws Exception {
 
     Member sessionInfo = (Member) session.getAttribute("loginUser");
-    question.setNo(sessionInfo.getNo());
-
-    model.addAttribute("questionList", questionService.questionList(question));
-    session.setAttribute("myInfoMenuId", question.getMyInfoMenuId());
+    model.addAttribute("questionList", questionService.selectQuestionList(sessionInfo.getNo()));
   }
 
-  @GetMapping("questionView")
-  public void questionView(int questionNo, Model model) throws Exception {
-
-    Question question = questionService.get(questionNo);
-    model.addAttribute("question", question);
-    Qna qna = questionService.getAnswer(questionNo);
-    model.addAttribute("qna", qna);
+  @GetMapping("/member/contact")
+  public void contact(){
   }
+
 }
