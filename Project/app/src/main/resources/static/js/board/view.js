@@ -167,7 +167,7 @@ $('.comment').click(addReplyForm)
 // 답글폼 추가하기
 function addReplyForm(e) {
     e.stopPropagation();
-    var replyBox = $(this).parent().find('.reply-box');
+    let replyBox = $(this).parent().find('.reply-box');
     console.log(replyBox);
     // 클릭된 댓글 아래로 답글 폼을 이동
     replyBox.append(replyForm);
@@ -176,7 +176,7 @@ function addReplyForm(e) {
 
 
     // 클릭된 댓글의 번호 가져오기
-    var commentNo = $(this).find('.commentNo').text();
+    let commentNo = $(this).find('.commentNo').text();
     replyForm.find("input[name='commentNo']").val(commentNo);
 };
 
