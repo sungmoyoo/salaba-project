@@ -39,7 +39,7 @@
 <body>
 <div data-th-replace="header :: header">머리말</div>
 <h1 data-th-text="${boardName}" hidden>게시판</h1>
-<main>
+<main class="container-sm">
   <div id="board-header">
     <!-- 게시판 버튼 -->
     <button
@@ -112,7 +112,7 @@
 
   <!-- 게시판 -->
   <!-- 후기 게시판 카드형식 목록 -->
-  <div class="container" data-th-if="*{categoryNo == 0}">
+  <div class="card-container" data-th-if="*{categoryNo == 0}">
     <div class="card-deck">
       <div
           data-th-each="board : ${list}"
