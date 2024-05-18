@@ -2,7 +2,7 @@ package salaba.service;
 
 import java.sql.Date;
 import java.util.List;
-import salaba.vo.Reservation2;
+import salaba.vo.Reservation;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;
@@ -17,6 +17,8 @@ public interface RentalHomeService {
   List<RentalHome> getRentalHomeMainForLoginUser( List<Theme> themes );
 
   RentalHome getRentalHomeDetailView( int rentalHomeNo );
+
+  double rentalHomeReviewAverage(int rentalHomeNo);
 
   List<RentalHome> getRentalHomeConditionSearch(
       String regionName, Date checkInDate, Date checkOutDate, int capacity);
@@ -38,8 +40,4 @@ public interface RentalHomeService {
   List<RentalHomeReview> getRentalHomeReviewList( int rentalHomeNo );
 
   RentalHome getReservationInfo(int rentalHomeNo);
-
-  void addReservation( Reservation2 reservation);
-
-  int getReservationKey();
 }

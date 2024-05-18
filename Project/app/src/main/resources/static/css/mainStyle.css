@@ -8,18 +8,19 @@
     font-style: normal;
   }
 
-  header{
+  /* header{
     position: fixed;
     top:0;
     width: 100%;
-    z-index: 1000;
-  }
+    height: 30%;
+    z-index: 800;
+  } */
 
   footer{
     position: fixed;
     bottom: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 800;
   }
 
   body {
@@ -63,7 +64,7 @@
     border-top: 0.5px solid #cccccc;
     padding-top: 14px;
     display: flex;
-    z-index: 1000;
+    z-index: 900;
   }
 
   .theme-container{
@@ -266,7 +267,7 @@
     justify-content: center;
   }
 
-  /* 팝업 스타일 */
+  /* filter 팝업 스타일 */
   .popup {
     display: none;
     position: fixed;

@@ -16,9 +16,6 @@
     <result column="address" property="address"/>
     <result column="sex" property="sex"/>
     <result column="photo" property="photo"/>
-    <result column="my_theme_yn" property="myThemeYn"/>
-    <result column="theme_no" property="themeNo"/>
-    <result column="theme_name" property="themeName"/>
     <result column="state" property="state"/>
 
     <!-- grade 정보 가져오기 -->
@@ -26,12 +23,28 @@
       <id column="grade_no" property="gradeNo"/>
       <result column="grade_name" property="gradeName"/>
     </association>
+    <!--  테마 정보 가져오기  -->
+    <collection property="themes" resultMap="themeMap"/>
+    <!--  포인트 정보 가져오기  -->
+    <collection property="pointHistory" resultMap="PointMap"/>
+  </resultMap>
+
+  <resultMap id="themeMap" type="salaba.vo.rental_home.Theme">
+    <id column="theme_no" property="themeNo"/>
+    <result column="theme_name" property="themeName"/>
   </resultMap>
 
   <resultMap id="NationMap" type="Nation"><!--국가선택 준비-->
     <id column="nation_no" property="nationNo"/>
     <result column="nation_name" property="nationName"/>
   </resultMap>
+
+  <resultMap id="PointMap" type="PointHistory">
+    <result column="save_content" property="saveContent"/>
+    <result column="save_point" property="savePoint"/>
+    <result column="save_date" property="saveDate"/>
+  </resultMap>
+
   <resultMap id="AlarmMap" type="salaba.vo.Alarm">
     <id column="notify_no" property="notifyNo"/>
     <result column="member_no" property="memberNo"/>
@@ -39,7 +52,7 @@
     <result column="notify_date" property="notifyDate"/>
   </resultMap>
 
-  <insert id="add" parameterType="Member"><!--회원가입>-->
+  <insert id="addMember" parameterType="Member"><!--회원가입>-->
     insert into member(
       name,
       nickname,
@@ -49,47 +62,29 @@
     values(
       #{name},
       #{nickname},
-      STR_TO_DATE(#{birthday}, '%Y-%m-%d'), <!--생년월일 입력형식을 바꿔주는 sql문법-->
+      #{birthday},
       #{email},
       sha2(#{password},256))
   </insert>
 
-  <select id="selectMemberInfo" resultMap="MemberMap" parameterType="int"><!--내정보>-->
-    select
-      member_no,
-      name,
-      nickname,
-      email,
-      tel_no,
-      birthday,
-      nation_no,
-      sex,
-      address,
-      photo
-    from
-      member
-    where
-      member_no=#{value}
-  </select>
-
-  <select id="getNation" resultMap="NationMap" ><!--국가선택>-->
+  <!-- 국가 전체 검색 -->
+  <select id="getNation" resultMap="NationMap" >
     select
       nation_no,
       nation_name
     from
       nation
-    order by nation_name
+    order by nation_no
   </select>
 
-  <update id="myinfoUpdate" parameterType="Member"><!--내정보 저장>-->
+  <!-- 내정보 수정 -->
+  <update id="updateUserInfo" parameterType="Member">
     update
       member
     set
       name=#{name},
       nickname=#{nickname},
-      email=#{email},
       tel_no=#{telNo},
-      birthday=#{birthday},
       sex=#{sex},
       address=#{address},
       photo=#{photo},
@@ -98,46 +93,100 @@
       member_no=#{no}
   </update>
 
-  <select id="checkNickname" parameterType="String"><!--닉넴 중복체크>-->
+  <!-- 닉네임 중복체크 -->
+  <select id="checkNickname" parameterType="String">
     select
       count(*)
     from
       member
     where
-      nickname=#{value}
+      nickname=#{nickName}
   </select>
 
-  <update id="delete" parameterType="Member"><!--회원탈퇴>-->
+  <!-- 이메일 중복 체크 -->
+  <select id="checkEmail" parameterType="String">
+    select
+      count(*)
+    from
+      member
+    where
+      email = #{email}
+  </select>
+
+  <!-- 회원탈퇴 -->
+  <update id="updateMemberWithdrawal" parameterType="int">
     update
       member
     set
-      state=#{state},
+      state='1',
       exit_date=now()
     where
-      member_no=#{no}
+      member_no=#{memberNo}
   </update>
 
-  <select id="findByEmailAndPassword" resultMap="MemberMap"><!--로그인>-->
+  <!-- 로그인 -->
+  <select id="selectUserInfoForLogin" resultMap="MemberMap">
     select
-      member_no,
-      email,
-      name,
-      nickname,
-      birthday,
-      tel_no,
-      nation_no,
-      address,
-      sex,
-      photo,
-      state
+      t1.member_no,
+      t1.email,
+      t1.name,
+      t1.nickname,
+      t1.birthday,
+      t1.tel_no,
+      t1.nation_no,
+      t1.address,
+      t1.sex,
+      t1.photo,
+      t1.state,
+      t2.grade_name,
+      t3.theme_no,
+      t4.theme_name,
+      t5.save_content,
+      t5.save_point,
+      t5.save_date
     from
-      member
+      member t1
+      inner join grade t2 on t2.grade_no = t1.grade_no
+      left outer join member_preference t3 on t3.member_no = t1.member_no
+      left outer join theme t4 on t4.theme_no = t3.theme_no
+      left outer join point_history t5 on t5.member_no = t1.member_no
     where
       email= #{email}
       and password=sha2(#{password},256)
   </select>
 
-  <select id="findEmail" resultMap="MemberMap"><!--이메일 찾기>-->
+  <!-- 개인정보 업데이트 후 세션 갱신용 -->
+  <select id="selectUserInfoForUpdateSession" resultMap="MemberMap">
+    select
+      t1.member_no,
+      t1.email,
+      t1.name,
+      t1.nickname,
+      t1.birthday,
+      t1.tel_no,
+      t1.nation_no,
+      t1.address,
+      t1.sex,
+      t1.photo,
+      t1.state,
+      t2.grade_name,
+      t3.theme_no,
+      t4.theme_name,
+      t5.save_content,
+      t5.save_point,
+      t5.save_date
+    from
+      member t1
+      inner join grade t2 on t2.grade_no = t1.grade_no
+      left outer join member_preference t3 on t3.member_no = t1.member_no
+      left outer join theme t4 on t4.theme_no = t3.theme_no
+      left outer join point_history t5 on t5.member_no = t1.member_no
+    where
+      t1.member_no = #{memberNo}
+  </select>
+
+  <!-- 이메일 찾기 -->
+  <select id="findEmail" resultMap="MemberMap">
     select
       email,
       name
@@ -148,7 +197,8 @@
       and birthday=#{birthday}
   </select>
 
-  <select id="findPassword" resultMap="MemberMap"><!--비밀번호 찾기>-->
+  <!-- 비밀번호 찾기 -->
+  <select id="findPassword" resultMap="MemberMap">
     select
       member_no
     from
@@ -158,7 +208,8 @@
       and name= #{name}
   </select>
 
-  <update id="changePasswordSave" parameterType="Member"><!--비밀번호 변경>-->
+  <!--비밀번호 변경 -->
+  <update id="changePasswordSave" parameterType="Member">
     update
       member
     set
@@ -168,9 +219,10 @@
       member_no=#{no}
   </update>
 
-  <select id="myinfoCheckPassword" resultMap="MemberMap"><!--비밀번호 확인>-->
+  <!-- 비밀번호 확인 -->
+  <select id="checkPassword" resultType="int">
     select
-      member_no
+      count(*)
     from
       member
     where
@@ -181,52 +233,16 @@
   <insert id="insertPreference" parameterType="Member">
     insert into member_preference
     (member_no,theme_no)
-    values(#{no},#{themeNo})
+    values
+    <foreach collection="themes" item="item" separator=",">
+      (
+      #{no},
+      #{item.themeNo}
+      )
+    </foreach>
   </insert>
 
-  <select id="findAllTheme" resultMap="MemberMap">
-    select
-      t.theme_no,
-      t.theme_name,
-      case when m.theme_no is null then 'N'
-      else 'Y'
-      end as my_theme_yn
-    from
-      theme t
-      left outer join member_preference m on t.theme_no = m.theme_no and member_no = #{no}
-  </select>
-
-  <select id="findAllmyTheme" resultMap="MemberMap">
-    select
-      theme_no
-    from
-      member_preference
-    where
-      member_no = #{no}
-  </select>
-
-  <select id="getMemberPoint" resultType="String">
-    select
-      SUM(save_point)
-    from
-      point_history
-    where
-      member_no = #{no}
-  </select>
-
-  <select id="getGrade" resultMap="MemberMap">
-    select
-      m.member_no,
-      m.grade_no,
-      g.grade_name
-    from
-      member m
-      inner join grade g on m.grade_no = g.grade_no
-    where
-      m.member_no= #{no}
-  </select>
-
-  <delete id="deletePreference" parameterType="Member">
+  <delete id="deletePreference" parameterType="int">
     delete
     from
       member_preference

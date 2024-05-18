@@ -1,89 +1,156 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Title</title>
-  <link rel="stylesheet" type="text/css" href="/css/common.css">
-  <link rel="stylesheet" type="text/css" href="/css/rental_home/reservation.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-  <script th:inline="javascript">
-    const loginUser = /*[[${session.loginUser}]]*/ null;
-    const reservationInform = /*[[${reservationInfo}]]*/ null;
-    const checkIn = /*[[${checkInDate}]]*/ null;
-    const checkOut = /*[[${checkOutDate}]]*/ null;
-    const guest = /*[[${guests}]]*/ null;
-    console.log(loginUser);
-    console.log(reservationInform);
-    console.log(checkIn);
-    console.log(checkOut);
-    console.log(guest);
-  </script>
-</head>
-<body>
-  <section class="header-section">
-    <div data-th-replace="header :: header">header</div>
-  </section>
-<main>
-  <section class="userInfo-section-r">
-    <div class="userInfo-container-r">
-      <div class="userInfo-box">
-        
-      </div>
-      <div class="userInfo-reservation">
-        <div id="reservation-info">
-          <span>에약 정보</span>
+<html
+  lang="en"
+  xmlns:data-th="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.w3.org/1999/xhtml"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/css/rental_home/reservation.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script th:inline="javascript">
+      const loginUser = /*[[${session.loginUser}]]*/ null;
+      const reservationInform = /*[[${reservationInfo}]]*/ null;
+      const checkIn = /*[[${checkInDate}]]*/ null;
+      const checkOut = /*[[${checkOutDate}]]*/ null;
+      const guest = /*[[${guests}]]*/ null;
+      console.log(loginUser);
+      console.log(reservationInform);
+      console.log(checkIn);
+      console.log(checkOut);
+      console.log(guest);
+    </script>
+  </head>
+  <body>
+    
+      <div data-th-replace="header :: header">header</div>
+    
+    <main>
+      <section class="userInfo-section-r">
+        <h1>확인 및 결제</h1>
+        <div class="reservation">
+          <div class="info-reservation info">
+            <h3>예약 정보</h3>
+              <div id="reservation-date">
+                <span class="sub-title">날짜</span>
+              </div>
+              <div id="reservation-duration">
+                <span data-th-text="${checkInDate+' ~ '+checkOutDate}"></span>
+              </div>
+              <div id="reservation-guest">
+                <span class="sub-title">게스트</span>
+              </div>
+              <div>
+                <span data-th-text="${guests+'명'}"></span>
+              </div>
+          </div>
+          <div class="hr"></div>
         </div>
-        <div>
-          <div id="reservation-date">
-            <span>날짜</span>
+          
+          <div class="payment-reservation">
+            <div id="payment-info" class="info">
+              <h3>요금 세부정보</h3>
+              <div id="days-fee">
+                <span class="sub-title" data-th-text="${'₩' + reservationInfo.price + ' × ' + days + '박'}"></span>
+                <span data-th-text="${'₩' + reservationInfo.price * days}"></span>
+              </div>
+              <div id="clean-fee">
+                <span class="sub-title">청소비</span>
+                <span data-th-text="${'₩' + reservationInfo.cleanFee}"></span>
+              </div>
+              <div id="total-info">
+                <span class="sub-title">총합계(KRW)</span>
+                <span id="total" data-th-text="${'₩' + (reservationInfo.price * days + reservationInfo.cleanFee)}"></span>
+              </div>
+            </div>
+            <div class="hr"></div>
           </div>
-          <div id="reservation-duration">
-            <span data-th-text="${checkInDate+' ~ '+checkOutDate}"></span>
+          
+          <div class="refund-policy">
+            <div id="refund-info" class="info">
+              <h3>환불 정책</h3>
+              <div id="refund-content">
+                <span
+                  data-th-text="${'체크인 날짜인 ' + checkInDate  + ' 이전에 취소하면 부분 환불을 받으실 수 있습니다.'}"></span>
+                  <br>
+                  <span> 그 이후에는 취소 시점에 따라 환불액이 결정됩니다.</span>
+              </div>
+            </div>
+            <div class="hr"></div>
           </div>
-        </div>
-        <div>
-          <div id="reservation-guest">
-            <span>게스트</span>
+          
+          <div class="rule-policy">
+            <div id="rule-info info">
+              <h3>기본 규칙</h3>
+              <div id="rule-content">
+                <span
+                  >훌륭한 게스트가 되기 위한 몇 가지 간단한 규칙을 지켜주실 것을
+                  모든 게스트에게 당부드리고 있습니다.</span
+                >
+                <ul>
+                  <li>숙소 이용규칙을 준수하세요.</li>
+                  <li>호스트의 집도 자신의 집처럼 아껴주세요.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="hr"></div>
           </div>
+          
+          <div id="button-container">
+            <button id="paymentButton">
+              <span>확인 및 결제</span>
+            </button>
+            <button id="kakaopay">
+              <img src="https://kr.object.ncloudstorage.com/tp3-salaba/icon/kakaopay-box.png">
+            </button>
+          </div>
+      </section>
+    </main>
+    
+      <aside class="rentalHomeInfo-container">
+        <div class="rentalHomeInfo-box">
+          <h3>숙소 정보</h3>
           <div>
-            <span data-th-text="${guests+'명'}"></span>
+          <div id="rentalHome-photo">
+            <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + ${reservationInfo.rentalHomePhotos[0].uuidPhotoName}}"/>
+          </div>
+            <div id="rentalHome-info">
+              <div id="rentalHome-name">
+                <span data-th-text="${reservationInfo.name}"></span>
+              </div>
+              <div id="rentalHome-address">
+                <span data-th-text="${reservationInfo.address}"></span>
+              </div>
+              <div id="rentalHome-review">
+                <span>★</span>
+                <span data-th-text="${reviewAverage}"></span>
+              </div>
           </div>
         </div>
-      </div>
-      <div>
-        <button id="reservationButton">
-          <span>예약 하기</span>
-        </button>
-      </div>
-    </div>
-  </section>
-  <section class="rentalHomeInfo-section">
-    <div class="rentalHomeInfo-container">
-      <div class="rentalHomeInfo-box">
-        <div id="rentalHome-info">
-          <span>숙소 정보</span>
+        <div class="hr"></div>
         </div>
-        <div id="rentalHome-name">
-          <span data-th-text="${reservationInfo.name}"></span>
-        </div>
-        <div id="rentalHome-address">
-          <span data-th-text="${reservationInfo.address}"></span>
-        </div>
-      </div>
-      <div id="map">
-
-      </div>
-    </div>
-  </section>
-</main>
-<section class="footer-section">
-  <div data-th-replace="footer :: footer" class="footer-div">footer</div>
-</section>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script data-th-src="@{/js/rental_home/reservation.js}"></script>
+        <div id="map"></div>
+      </aside>
+    
+    <section class="footer-section">
+      <div data-th-replace="footer :: footer" class="footer-div">footer</div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script data-th-src="@{/js/header.js}"></script>
+    <script data-th-src="@{/js/rental_home/reservation.js}"></script>
+  </body>
 </html>

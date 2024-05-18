@@ -7,17 +7,12 @@ import salaba.vo.QuestionFile;
 
 public interface QuestionService {
 
-  void questionAdd(Question question);
+  void questionAdd(Question question, List<QuestionFile> questionFileList);
 
-  List<Question> questionList(Question question);
+  List<Question> selectQuestionList(int memberNo);
 
-  Question get(int questionNo);
+//  Question get(int questionNo);
 
-  Qna getAnswer(int questionNo);
+  int getQuestionNo();
 
-  int questionUpdate(Question question);
-
-  List<QuestionFile> getQuestionFiles(int no);
-
-  QuestionFile getQuestionFile(int fileNo);
 }

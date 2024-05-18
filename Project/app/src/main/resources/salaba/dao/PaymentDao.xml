@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.PaymentDao">
+
+    <resultMap id="ReservationMap" type="Reservation">
+        <id column="reservation_no" property="reservationNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="rental_home_no" property="rentalHomeNo"/>
+        <result column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="state" property="state"/>
+        <result column="chat_file_name" property="chatFileName"/>
+        <result column="number_of_people" property="numberOfPeople"/>
+
+        <association property="payment" javaType="Payment">
+            <id column="payment_no" property="paymentNo"/>
+            <result column="reservation_no" property="reservationNo"/>
+            <result column="payment_date" property="paymentDate"/>
+            <result column="amount" property="amount"/>
+            <result column="state" property="state"/>
+            <result column="pay_method" property="payMethod"/>
+        </association>
+
+
+    </resultMap>
+
+    <!-- 숙소 예약 테이블 pk값을 1더해서 가져오기 -->
+    <select id="getReservationKey" resultType="int">
+        select
+        MAX(reservation_no)+1
+        from
+        reservation
+    </select>
+
+    <!--  숙소 예약 -->
+    <insert id="addReservation" parameterType="salaba.vo.Reservation" useGeneratedKeys="true"
+    keyColumn="reservation_no" keyProperty="reservationNo">
+        insert into
+        reservation
+        (
+        member_no,
+        rental_home_no,
+        start_date,
+        end_date,
+        chat_file_name,
+        number_of_people
+        )
+        values
+        (
+        #{memberNo},
+        #{rentalHomeNo},
+        #{startDate},
+        #{endDate},
+        #{chatFileName},
+        #{numberOfPeople}
+        )
+    </insert>
+
+    <insert id="addPayment" parameterType="Payment">
+        insert into payment(reservation_no, payment_no, payment_date, amount, state, pay_method)
+        values(#{reservationNo}, #{paymentNo}, #{paymentDate}, #{amount}, '1', #{payMethod});
+    </insert>
+
+    <update id="cancelPayment">
+        update payment set state = '2' where payment_no = #{paymentNo}
+    </update>
+</mapper>

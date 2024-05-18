@@ -7,14 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
-
     #main-container {
       font-family: "Noto Sans KR";
       font-weight: 400;
-      width: 90%;
-      margin-left: 60px;
     }
 
     #bar-container {
@@ -23,11 +20,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 20px 60px;
       padding: 10px;
       background-color: #f8f9fa;
       border-radius: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
     }
 
     #income-container {
@@ -88,7 +85,6 @@
       justify-content: center;
       align-items: center;
       background: linear-gradient(120deg, #fff, #f8f9fa);
-
     }
 
     .rentalHome-container:hover {
@@ -98,14 +94,10 @@
     }
 
     .span-content {
-      flex:1;
+      flex: 1;
       max-width: 300px;
       word-wrap: break-word;
       text-align: center;
-    }
-
-    span {
-      padding: 10px;
     }
 
     .thumbnails {
@@ -113,22 +105,34 @@
       border-radius: 20px;
     }
 
-    // 모달 css
-
+    /* 모달 css */
     .modal-header {
       background-color: #f8f9fa;
+      padding: 20px;
+    }
 
+    .modal-xl {
+      max-width: 80% !important;
     }
 
     .modal-title {
       color: #343a40;
-<!--      font-weight: bold;-->
+      font-weight: bold;
     }
 
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 20px;
+      color: #000;
+      opacity: 0.5;
+      min-width: 2%;
+    }
 
     .detail-item {
-      border: 1px solid black;
-      margin: 10px;
+      border: 1px solid #CCCCCC;
+      margin: 15px 10px 15px 10px;
       border-radius: 4px;
     }
 
@@ -137,26 +141,23 @@
     .value-div {
       display: flex;
       justify-content: space-between;
+      padding: 10px;
     }
 
-    info-div span,
+    .info-div span,
     .name-div span,
     .value-div span {
       flex: 1;
     }
 
-<!--    .info-div span {-->
-<!--      margin-right: 80px;-->
-<!--    }-->
-
     .info-div {
-      background-color: #fff
-      border: 1px solid black;
+      background-color: #fff;
     }
 
     .name-div {
       background-color: #f8f9fa;
     }
+
     .value-div {
       background-color: #e9ecef;
     }
@@ -164,41 +165,53 @@
     .useDate {
       min-width: 250px;
     }
+
+    #totalSumSection {
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    #totalSumAmount {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+
   </style>
 </head>
 <body>
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+<div class="container-sm">
+  <div id="bar-container">
+    <div id="income-container">
+      전체 수입: <span id="totalIncome">0</span>
+    </div>
 
-<div id="bar-container">
-  <div id="income-container">
-    전체 수입: <span id="totalIncome">0</span>
+    <div id="search-container">
+      <input id='startDate' data-th-value="${showStartDate}" type='date'/>
+      <span id="~">~</span>
+      <input id='endDate' data-th-value="${showEndDate}" type='date'/>
+      <a id="searchButton">조회</a>
+    </div>
   </div>
 
-  <div id="search-container">
-    <input id='startDate' data-th-value="${showStartDate}" type='date'/>
-    <span id="~">~</span>
-    <input id='endDate' data-th-value="${showEndDate}" type='date'/>
-    <a id="searchButton">조회</a>
+  <div id="main-container">
+    <div data-th-each="rentalHome : ${rentalHomeList}" data-th-object="${rentalHome}"
+         class="rentalHome-container"
+         data-th-data-price="*{price}" data-price="10000"
+         data-th-data-no="*{rentalHomeNo}" data-no="1"
+         data-th-data-cleanFee="*{cleanFee}" data-cleanFee="2000"
+         data-toggle="modal" data-target="#detailModal">
+      <img class="thumbnails"
+           data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=80,h=80,ttype=jpg)}"
+           src="/photo1.jpg">
+      <span class="span-content" data-th-text="*{name}">xxx</span>
+      <span class="span-content" data-th-text="*{registeDate}">2024-01-01</span>
+      <span class="span-content address" data-th-text="*{address}">서울시 강남구...</span>
+      <span class="span-content" data-th-id="'usageCount_' + *{rentalHomeNo}">0</span>
+    </div>
   </div>
 </div>
-
-<div id="main-container">
-  <div data-th-each="rentalHome : ${rentalHomeList}" data-th-object="${rentalHome}"
-       class="rentalHome-container"
-       data-th-data-price="*{price}" data-price="10000"
-       data-th-data-no="*{rentalHomeNo}" data-no="1"
-       data-th-data-cleanFee="*{cleanFee}" data-cleanFee="2000"
-       data-toggle="modal" data-target="#detailModal">
-    <img class="thumbnails"
-         data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=80,h=80,ttype=jpg)}"
-         src="/photo1.jpg">
-    <span class="span-content" data-th-text="*{name}">xxx</span>
-    <span class="span-content" data-th-text="*{registeDate}">2024-01-01</span>
-    <span class="span-content address" data-th-text="*{address}">서울시 강남구...</span>
-    <span class="span-content" data-th-id="'usageCount_' + *{rentalHomeNo}">0</span>
-  </div>
-</div>
-
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
     <div class="modal-content">
@@ -209,16 +222,15 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="detailContainer">
-          <div class="modal-body">
-            <div id="detailContainer"></div>
-          </div>
+        <div id="detailContainer"></div>
+        <div id="totalSumSection">
+          <h3>합산 금액</h3>
+          <p id="totalSumAmount"></p>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
@@ -282,7 +294,6 @@
     let detailContainer = document.getElementById("detailContainer");
     detailContainer.innerHTML = ""; // 기존 내용 초기화
 
-
     if (rentalHomeReservationList.length != 0) {
       rentalHomeReservationList.forEach(function(reservationEl) {
         let detailItem = `
@@ -293,7 +304,7 @@
               <span>게스트: ${reservationEl.memberName}</span>
               <span class="useDate">이용 기간: ${reservationEl.startDate} ~ ${reservationEl.endDate}</span>
             </div>
-            <div content-div>
+            <div class="content-div">
               <div class="name-div">
                 <span>결제금액</span>
                 <span>청소비</span>
@@ -311,10 +322,14 @@
         `;
         detailContainer.innerHTML += detailItem;
       });
+      let totalSum = rentalHomeReservationList.reduce((acc, curr) => acc + curr.amount, 0);
+
+      document.getElementById("totalSumAmount").textContent = "총계: " + formatter.format(totalSum) + '원';
     } else {
       detailContainer.innerHTML = "<p>해당 기간 내 예약 내역이 없습니다.</p>";
     }
   }
+
 
   // 기본 예약 내역 출력 및 총 수입 계산
   function getDefaultReservation(reservationList) {
@@ -339,4 +354,7 @@
   }
 </script>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script data-th-src="@{/js/host/hostHeader.js}"></script>
 </html>

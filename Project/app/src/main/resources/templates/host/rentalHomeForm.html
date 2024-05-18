@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
   <style>
     * {
@@ -21,22 +21,54 @@
     #main-container {
       text-align: center;
       font-size: 20px;
-      text-align: center;
-      max-width: 90%;
-      margin: 0 auto;
-      padding: 40px;
+      padding-top: 20px;
+      border: 0.5px solid #CCCCCC;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
     }
 
-    .basic-info {
-      width: 500px;
+
+    .state-form {
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
     }
 
-    .location-info {
-      width: 50%;
-      margin: 0 auto;
+    .state-form h1 {
+      font-size: 24px;
     }
+
+    .state-select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .status-button {
+      background-color: #35C5B3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .info {
+      margin 100px 0;
+    }
+
+    .input-file-button:hover,
+    .status-button:hover {
+      background-color: #1C9189;
+    }
+
+
 
     .image-container {
       display: flex;
@@ -77,38 +109,146 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       text-align: center;
-      margin-top: 10px;
+      margin: 10px 0 0 0 !important;
     }
 
+
     .delete-button {
-      background-color: red;
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-radius: 5px;
+    }
+
+
+    .basic-info {
+      width: 500px;
+    }
+
+    .location-info {
+      width: 50%;
+    }
+
+
+    .input-file-button{
+      padding: 6px 25px;
+      background-color:#35C5B3;
+      border-radius: 4px;
       color: white;
-      border: none;
-      padding: 5px 10px;
       cursor: pointer;
-      position: absolute;
-      top: 0;
-      right: 0;
+    }
+
+
+    .room-theme,
+    .room-type {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 60%;
+      margin: 30px auto;
+    }
+
+    .type-option {
+      flex: 1 1 calc(20% - 10px);
+      width: 100px;
+      height: 100px;
+      border: 2px solid #CCCCCC;
+      border-radius: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      padding: 10px 0;
+      justify-content: center;
+    }
+
+    .theme-option {
+      flex: 1 1 calc(20% - 10px);
+      width: 60%;
+      border: 2px solid #CCCCCC;
+      border-radius: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      padding: 10px 0;
+      justify-content: center;
+    }
+
+    .icon {
       border-radius: 5px;
     }
 
-    .input-file-button,
-    button[type="submit"] {
-      background-color: #35C5B3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin: 20px 0 40px 0;
+    input[type="checkbox"],
+    input[type="radio"] {
+      display: none;
+      -webkit-appearance: none; /* Chrome, Safari, Edge 등의 웹킷 기반 브라우저 */
+      -moz-appearance: none; /* Firefox 브라우저 */
+      appearance: none; /* 일반적인 브라우저 */
     }
 
-    .input-file-button:hover,
-    button[type="submit"]:hover {
-      background-color: #1C9189;
+    .theme-option.selected,
+    .type-option.selected {
+      border: 4px solid #35C5B3;
     }
+
+    #basic-facility {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        margin: 25px auto;
+      }
+
+      .convenience-facility {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 60%;
+        margin: 25px auto;
+
+      }
+
+      .facility-option {
+        flex: 1 1 calc(20% - 10px);
+        width: 100px;
+        height: 100px;
+        border: 2px solid #CCCCCC;
+        border-radius: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        padding: 10px 0;
+        justify-content: center;
+      }
+
+      .quantity {
+        margin: 20px auto;
+        font-size: 20px;
+        border-bottom: 2px solid #CCCCCC;
+        padding-bottom: 30px;
+        max-width: 550px;
+        text-align: center;
+      }
+
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;/* input type:number 마우스오버시 보이는 화살표 제거 */
+      }
+
+      .fa-solid {
+        font-size: 25px;
+        margin: 15px;
+      }
+
+      .facility-option.selected {
+        border-color: #35C5B3;
+      }
 
     /* 지도 */
     #map {
@@ -131,15 +271,12 @@
       border: 0;
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-      margin: 10px 0 10px 0;
-      padding: 0 0.5em;
+      margin: 10px;
+      padding: 0.5em;
       overflow: hidden;
-      line-height: 40px;
-      margin-right: 0;
-      min-width: 25%;
       font-size: 16px;
+      min-width: 25%;
     }
-
 
     input[type=button] {
       background-color: #fff;
@@ -147,64 +284,38 @@
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
-      padding: 0 0.5em;
+      padding: 0.5em;
+      font-weight: 200;
       overflow: hidden;
-      height: 40px;
       cursor: pointer;
+      font-size: 15px;
       margin-left: 5px;
-      font-size: 16px;
     }
+
     input[type=button]:hover {
       background: rgb(235, 235, 235);
     }
-
 
     input[type=button].button-primary {
       background-color: #35C5B3;
       color: white;
     }
+
     input[type=button].button-primary:hover {
       background-color: #1765cc;
     }
+
     input[type=button].button-secondary {
       background-color: white;
       color: #35C5B3;
     }
+
     input[type=button].button-secondary:hover {
       background-color: #d2e3fc;
     }
-
-    #mapInput {
-      margin-left: 10px;
-
-    }
-
-    .duration-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .duration-item {
-      flex-basis: 48%;
-      max-width: 16%;
-    }
-
-    .duration-item label {
-      display: block;
-      font-size: 20px;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 10px;
-    }
-
-    .hostingDate {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
+    #response {
+      margin: 5px;
+      font-size: 15px;
     }
 
     #response-container {
@@ -212,11 +323,11 @@
       border: 0;
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-      margin: 10px;
       padding: 0 0.5em;
+      font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
+      margin: 10px;
       overflow: auto;
-      max-height: 50%;
       max-width: 90%;
       background-color: rgba(255, 255, 255, 0.95);
       font-size: small;
@@ -228,25 +339,108 @@
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
-      padding: 0 0.5em;
+      padding: 0.5em;
+      font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
       padding: 1rem;
       font-size: medium;
     }
 
-    h4 {
-        font-size: 20px;
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 10px;
+    button[type="button"] {
+    color: white;
+    background-color: #FF99B3;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 30px;
     }
+
+    button[type="button"]:hover {
+      transition: background-color 0.3s ease;
+      background-color: #FF66A3;
+    }
+
+    #modalButton {
+      background-color: #35C5B3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-left: 30px;
+    }
+
+    #modalButton:hover {
+      background-color: #1C9189;
+    }
+
+    #modalWrap {
+      position: fixed;
+      z-index: 1;
+      padding-top: 250px;;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none;
+    }
+
+    #modalBody {
+      text-align: center;
+      font-size: 23px;
+      width: 700px;
+      height: auto;
+      padding: 20px;
+      margin: 0 auto;
+      border: 1px solid #777;
+      background-color: #fff;
+      border-radius: 8px;
+   }
+
+    #saveButton {
+      font-weight: bold;
+      color: #fff;
+      background-color: #35C5B3;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 30px;
+      margin-right: 15px;
+    }
+
+
+    #closeButton {
+      font-weight: bold;
+      color: #fff;
+      background-color: #FA5858;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 30px;
+      margin-left: 15px;
+    }
+
+
+    #submitButton:hover,
+    #closeButton:hover {
+    background-color: #1C9189;
   </style>
 <body>
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 <br>
 
-<div id="main-container">
+<div id="main-container" class="container-sm">
   <form id="myForm" enctype="multipart/form-data" method='post'>
 
     <div class="info">
@@ -287,10 +481,12 @@
     <br><br>
 
 
-    <div class="photo-section">
+    <div class="info">
     <h1>숙소 사진</h1>
       <h4>5장 이상의 사진을 선택해주세요.</h4>
+      <br>
       <label class="input-file-button" for="photoInput">사진 추가</label>
+      <br><br>
       <input type="file" multiple id="photoInput" name="photos" style="display:none;"
              onchange="photoCountAndDisplay(this.files)"/>
       <div class="image-container">
@@ -324,19 +520,16 @@
       </div>
     </div>
     <br><br>
-
     <div class="info">
-      <h1>호스팅 기간</h1>
-      <br>
-      <div class="duration-container">
-        <div class="duration-item">
-          <label for="hostingStartDate">호스팅 시작일:</label>
-          <input class="hostingDate" name='hostingStartDate' id="hostingStartDate" type='date'>
-        </div>
-        <div class="duration-item">
-          <label for="hostingEndDate">호스팅 종료일:</label>
-          <input class="hostingDate" name='hostingEndDate' id="hostingEndDate" type='date'>
-        </div>
+      <div class="duration-item">
+        <h1>호스팅 기간</h1>
+        <br>
+        호스팅 시작일: <input readonly data-th-value='*{hostingStartDate}' id="hostingStartDate"
+                        value="2024-03-24" name="hostingStartDate" type='date'>
+      </div>
+      <div class="duration-item">
+        호스팅 종료일: <input data-th-value='*{hostingEndDate}' id="hostingEndDate"
+                        value="2024-03-24" name="hostingEndDate" type='date'>
       </div>
     </div>
   </form>
@@ -643,6 +836,8 @@
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script data-th-src="@{/js/host/hostHeader.js}"></script>
+
 
 </html>

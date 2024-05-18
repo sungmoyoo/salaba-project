@@ -24,7 +24,12 @@
                 })
                 .done(function(result) {
                     if (result.length == 0) {
-                        alert('로그인 하세요!');
+                        Swal.fire({
+                            icon: "error",
+                            title: "로그인이 필요합니다.",
+                            showConfirmButton: false,
+                            timer: 1000
+                          });
                         return;
                     }
 
@@ -43,7 +48,13 @@
                 })
                 .fail(function(xhr, status, error) {
                     console.error('Upload failed: ' + error);
-                    alert('이미지 업로드 실패: ' + error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "이미지 업로드에 실패하였습니다.",
+                        text: error,
+                        showConfirmButton: false,
+                        timer: 1000
+                      });
                 });
             }
         }
@@ -51,8 +62,46 @@
 });
 
 
-// 게시글 공개범위 설정
-  function setScopeNo(input) {
-    // 선택된 라디오 버튼의 값을 scopeNo에 설정
-    document.getElementById("scopeNo").value = input.dataset.thValue;
-  }
+$('#write-button').click(function(e) {
+    e.preventDefault();
+    let content = $('.note-editable').html();
+    console.log(content);
+    let imageCount = countImages(content);
+    if (imageCount < 3) {
+        Swal.fire({
+            icon: "error",
+            title: "이미지 파일을 3개이상 올려주세요",
+            showConfirmButton: false,
+            timer: 1000
+          });
+          return;
+    }
+
+    if ($("#titleInput").val().trim().length <= 2 || $("#summernote").val().trim().length <= 2) {
+        Swal.fire({
+            icon: "error",
+            title: "제목과 내용은 2자 이상이여야 합니다.",
+            showConfirmButton: false,
+            timer: 1000
+          });
+          return;
+      } 
+
+    // $('form').submit();
+    
+  })
+
+  function countImages(htmlString) {
+    // 1. HTML 문자열을 DOM으로 파싱
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(htmlString, 'text/html');
+
+    // 2. 모든 img 태그를 찾기
+    var images = doc.querySelectorAll('img');
+    console.log(images)
+
+    // 4. styledImages의 개수를 반환
+    return images.length;
+}
+
+

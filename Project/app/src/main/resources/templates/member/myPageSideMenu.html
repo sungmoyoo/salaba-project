@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:data-th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div data-th-fragment="myPageSideMenu">
+    <nav class="nav flex-column" id="sideMenu-nav">
+      <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" 
+        id="sideMenu-MyPage" data-th-href="@{/member/myPage(memberNo=${session.loginUser.no})}">마이페이지</a>
+      <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" 
+        id="sideMenu-BookMark" data-th-href="@{/member/bookmark}">즐겨찾기</a>
+      <a class="nav-link btn btn-outline-info" data-th-href="@{/member/reservationList}" tabindex="-1" aria-disabled="true" id="sideMenu-reservationList">예약 내역</a>
+      <a class="nav-link btn btn-outline-info" tabindex="-1" aria-disabled="true" 
+        data-bs-toggle="collapse" href="#sideMenu-collapse-writeHistory" role="button" 
+        aria-expanded="false" aria-controls="sideMenu-collapse-writeHistory" id="sideMenu-WriteHistory">작성글 내역</a>
+        <div id="sideMenu-collapse-writeHistory" class="collapse">
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/boardHistory}" tabindex="-1" aria-disabled="true" id="sideMenu-WriteHistory-Board">게시글 내역</a>
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/commentHistory}" tabindex="-1" aria-disabled="true" id="sideMenu-WriteHistory-Reply">댓글 내역</a>
+        </div>
+      <a class="nav-link btn btn-outline-info" data-th-href="@{/member/pointHistory}" tabindex="-1" aria-disabled="true" id="sideMenu-PointHistory">포인트 내역</a>
+      <a class="nav-link btn btn-outline-info" href="#sideMenu-collapse-HelpCenter" tabindex="-1" aria-disabled="true" id="sideMenu-HelpCenter" role="button" 
+        data-bs-toggle="collapse" aria-expanded="false" aria-controls="sideMenu-collapse-HelpCenter">고객센터</a>
+        <div id="sideMenu-collapse-HelpCenter" class="collapse">
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/question}" tabindex="-1" aria-disabled="true" id="sideMenu-Question">질문답변 조회</a>
+          <a class="nav-link btn btn-outline-info" data-th-href="@{/member/contact}" tabindex="-1" aria-disabled="true" id="sideMenu-contact">문의하기</a>
+        </div>
+    </nav>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</html>

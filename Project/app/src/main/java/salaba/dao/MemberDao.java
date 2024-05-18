@@ -12,21 +12,25 @@ import salaba.vo.board.Board;
 @Mapper
 public interface MemberDao {
 
-  void add(Member member);
+  int addMember(Member member);
 
   Member selectMemberInfo(int no);
 
-  int myinfoUpdate(Member member);
+  int updateUserInfo(Member member);
 
-  Member checkNickname(String nickname);
+  int checkNickname(String nickname);
+
+  int checkEmail(String email);
 
   List<Nation> getNation();
 
-  int delete(Member member);
+  int updateMemberWithdrawal(@Param("memberNo") int memberNo);
 
-  Member findByEmailAndPassword(
+  Member selectUserInfoForLogin(
       @Param("email") String email,
       @Param("password") String password);
+
+  Member selectUserInfoForUpdateSession(@Param("memberNo") int memberNo);
 
   Member findEmail(Member member);
 
@@ -34,15 +38,15 @@ public interface MemberDao {
 
   public void changePasswordSave(Member member);
 
-  public Member myinfoCheckPassword(Member member);
+  public int checkPassword(@Param("no") int memberNo, @Param("password") String password);
 
   void insertPreference(Member member);
 
-  void deletePreference(Member member);
+  void deletePreference(@Param("no") int memberNo);
 
   List<Member> findAllTheme(Member sessionInfo);
 
-  String getMemberPoint(Member member);
+  int getMemberPoint(int no);
 
   Member getGrade(Member member);
 

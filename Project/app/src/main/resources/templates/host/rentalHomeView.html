@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <style>
 
@@ -20,10 +20,8 @@
     #main-container {
       text-align: center;
       font-size: 20px;
-      text-align: center;
-      max-width: 90%;
-      margin: 0 auto;
-      padding: 40px;
+      padding-top: 20px;
+      border: 0.5px solid #CCCCCC;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
     }
@@ -40,7 +38,6 @@
 
     .state-form h1 {
       font-size: 24px;
-      margin-bottom: 20px;
     }
 
     .state-select {
@@ -56,7 +53,7 @@
       border: none;
       border-radius: 4px;
       padding: 8px 16px;
-      font-size: 16px;
+      font-size: 20px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -107,7 +104,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       text-align: center;
-      margin-top: 10px;
+      margin: 10px 0 0 0 !important;
     }
 
 
@@ -147,33 +144,32 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 600px;
+      width: 60%;
       margin: 30px auto;
     }
 
     .type-option {
-      flex: 1 1 calc(25% - 20px);
+      flex: 1 1 calc(20% - 10px);
       width: 100px;
-      height: 90px;
+      height: 100px;
       border: 2px solid #CCCCCC;
       border-radius: 10px;
       margin-right: 10px;
       margin-bottom: 10px;
       cursor: pointer;
-      padding-top: 10px;
+      padding: 10px 0;
       justify-content: center;
     }
 
     .theme-option {
       flex: 1 1 calc(20% - 10px);
-      width: 100px;
-      height: 90px;
+      width: 60%;
       border: 2px solid #CCCCCC;
       border-radius: 10px;
-      margin-right: 20px;
-      margin-bottom: 20px;
+      margin-right: 10px;
+      margin-bottom: 10px;
       cursor: pointer;
-      padding-top: 10px;
+      padding: 10px 0;
       justify-content: center;
     }
 
@@ -183,6 +179,7 @@
 
     input[type="checkbox"],
     input[type="radio"] {
+      display: none;
       -webkit-appearance: none; /* Chrome, Safari, Edge 등의 웹킷 기반 브라우저 */
       -moz-appearance: none; /* Firefox 브라우저 */
       appearance: none; /* 일반적인 브라우저 */
@@ -190,7 +187,7 @@
 
     .theme-option.selected,
     .type-option.selected {
-      border-color: #35C5B3;
+      border: 4px solid #35C5B3;
     }
 
     #basic-facility {
@@ -206,7 +203,7 @@
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
-        max-width: 600px;
+        width: 60%;
         margin: 25px auto;
 
       }
@@ -214,12 +211,14 @@
       .facility-option {
         flex: 1 1 calc(20% - 10px);
         width: 100px;
-        height: 90px;
+        height: 100px;
         border: 2px solid #CCCCCC;
         border-radius: 10px;
-        margin: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
         cursor: pointer;
-        padding-top: 10px;
+        padding: 10px 0;
+        justify-content: center;
       }
 
       .quantity {
@@ -264,16 +263,17 @@
     }
 
     textarea,
+    input[type=date],
     input[type=text],
     input[type=number] {
       background-color: #fff;
       border: 0;
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-      margin: 10px 0;
-      padding: 0 0.5em;
+      margin: 10px;
+      padding: 0.5em;
       overflow: hidden;
-      line-height: 40px;
+      font-size: 16px;
       min-width: 25%;
     }
 
@@ -283,12 +283,11 @@
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
-      padding: 0 0.5em;
-
-      font-weight: 100;
+      padding: 0.5em;
+      font-weight: 200;
       overflow: hidden;
-      height: 40px;
       cursor: pointer;
+      font-size: 15px;
       margin-left: 5px;
     }
 
@@ -313,18 +312,21 @@
     input[type=button].button-secondary:hover {
       background-color: #d2e3fc;
     }
+    #response {
+      margin: 5px;
+      font-size: 15px;
+    }
 
     #response-container {
       background-color: #fff;
       border: 0;
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-      margin: 10px;
       padding: 0 0.5em;
       font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
+      margin: 10px;
       overflow: auto;
-      max-height: 50%;
       max-width: 90%;
       background-color: rgba(255, 255, 255, 0.95);
       font-size: small;
@@ -336,7 +338,7 @@
       border-radius: 2px;
       box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
       margin: 10px;
-      padding: 0 0.5em;
+      padding: 0.5em;
       font: 400 18px Roboto, Arial, sans-serif;
       overflow: hidden;
       padding: 1rem;
@@ -439,7 +441,7 @@
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 <br>
 
-<div id="main-container">
+<div id="main-container" class="container-sm">
   <form action="update" data-th-action="@{rentalHomeStateUpdate}" enctype='multipart/form-data'
         method='post' data-th-object="${rentalHome}" class="state-form">
 
@@ -548,6 +550,7 @@
     <div class="info">
       <h1>요금 설정</h1>
       <div class="price-info">
+        <br>
         <h4>이용요금(주 기준)</h4>
         <input type="number" data-th-value="*{price}" value="10000" name="price"
                           id="price" onkeyup="calc(this.value)"/>
@@ -1020,8 +1023,7 @@
     const inputText = document.createElement("input");
 
     inputText.type = "text";
-    inputText.placeholder = "Enter a location";
-
+    inputText.placeholder = "주소 검색";
     const submitButton = document.createElement("input");
 
     submitButton.type = "button";
@@ -1154,5 +1156,7 @@
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script data-th-src="@{/js/host/hostHeader.js}"></script>
+
 </html>

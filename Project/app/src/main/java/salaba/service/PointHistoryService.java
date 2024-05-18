@@ -5,6 +5,6 @@ import salaba.vo.PointHistory;
 
 public interface PointHistoryService {
 
-  List<PointHistory> pointList(PointHistory pointHistory);
+  List<PointHistory> selectUserPointHistory(int memberNo);
 
 }

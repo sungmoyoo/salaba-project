@@ -6,8 +6,8 @@ import salaba.vo.rental_home.RentalHome;
 
 public interface ReservationService {
 
-  List<Reservation> reservationList(Reservation reservation);
+  List<Reservation> selectReservationList(int memberNo);
 
-  Reservation get(int reservationNo);
+  Reservation selectReservation(int reservationNo);
 
 }

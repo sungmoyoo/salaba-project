@@ -9,7 +9,6 @@ html{
 /* header */
 header{
     position: relative;
-    border-bottom: 1px solid #cccccc;
     top:0;
     width: 100%;
     z-index: 900;
@@ -31,6 +30,7 @@ body{
 
 /* main */
 main{
+    border-top: 1px solid #cccccc;
     position: absolute;
     top: 250px;
     width: 100%;

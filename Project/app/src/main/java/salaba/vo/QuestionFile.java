@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionFile implements Serializable {
+
   private static final long serialVersionUID = 100L;
-  private int questionFileNo;
-  private int questionNo;
-  private String oriFileName;
-  private String uuidFileName;
+
+  private int questionNo; // 질문번호
+  private int questionFileNo; // 파일번호
+  private String oriFileName; // Original File name
+  private String uuidFileName; // UUID File name
 }

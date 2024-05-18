@@ -5,23 +5,28 @@ import salaba.vo.Alarm;
 import salaba.vo.Member;
 import salaba.vo.Nation;
 import salaba.vo.board.Board;
-import salaba.vo.rental_home.Theme;
 
 public interface MemberService {
 
-  void add(Member member);
+  int addMember(Member member);
 
-  Member get(int no);
+  Member selectUserInfoForLogin(int no);
 
-  int myinfoUpdate(Member member);
+  int updateUserInfo(Member member);
 
-  Member checkNickname(String nickname);
+  /////////////
+  int checkNickname(String nickname);
+
+  int checkEmail(String email);
+  //////////////
 
   List<Nation> getNation();
 
-  int delete(Member member);
+  int updateMemberWithdrawal(int memberNo);
 
-  Member get(String email, String password);
+  Member selectUserInfoForLogin(String email, String password);
+
+  Member selectUserInfoForUpdateSession(int memberNo);
 
   Member findEmail(Member member);
 
@@ -29,26 +34,28 @@ public interface MemberService {
 
   void changePasswordSave(Member member);
 
-  Member myinfoCheckPassword(Member member);
+  int checkPassword(int memberNo, String password);
 
   void insertPreference(Member member);
 
-  void deletePreference(Member member);
+  void deletePreference(int memberNo);
 
   List<Member> themeList(Member sessionInfo);
 
-  String getMemberPoint(Member member);
+  int getMemberPoint(int no);
 
   Member getGrade(Member member);
 
   List<Member> mythemeList(Member sessionInfo);
 
+  //////////////////////
   void insertNotifyHistory(Alarm alarm);
 
   List<Alarm> selectNotifyHistory(int memberNo);
 
   void updateNotifyHistory(int notifyNo);
 
+  //////////////////////
   String boardStateCheck(Board board);
 
   List<Board> search(String keyword, String type); // 검색 기능 업데이트

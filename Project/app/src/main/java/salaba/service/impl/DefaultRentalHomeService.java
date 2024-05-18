@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import salaba.dao.RentalHomeDao;
 import salaba.service.RentalHomeService;
-import salaba.vo.Reservation2;
+import salaba.vo.Reservation;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;
@@ -71,6 +71,11 @@ public class DefaultRentalHomeService implements RentalHomeService {
   }
 
   @Override
+  public double rentalHomeReviewAverage(int rentalHomeNo) { //숙소 리뷰 평균 조회
+    return rentalHomeDao.rentalHomeReviewAverage(rentalHomeNo);
+  }
+
+  @Override
   public List<RentalHomePhoto> getRentalHomePhotos(int rentalHomeNo) { // 숙소 사진 조회
     return rentalHomeDao.rentalHomePhotoSelect(rentalHomeNo);
   }
@@ -95,13 +100,6 @@ public class DefaultRentalHomeService implements RentalHomeService {
     return rentalHomeDao.getReservationInfo(rentalHomeNo);
   }
 
-  @Override
-  public void addReservation(Reservation2 reservation) {
-    rentalHomeDao.addReservation(reservation);
-  }
 
-  @Override
-  public int getReservationKey() {
-    return rentalHomeDao.getReservationKey();
-  }
+
 }

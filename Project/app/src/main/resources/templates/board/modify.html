@@ -10,37 +10,40 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- include summernote css/js -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="/css/board/board.css">
+  <link rel="stylesheet" type="text/css" href="/css/board/modify.css">
+  <link rel="stylesheet" type="text/css" href="/css/common.css"/>
 
 </head>
 <body>
 <div data-th-replace="header :: header">머리말</div>
 
+<section>
 <!-- 게시글 수정 -->
-<h1 data-th-text="${boardName}">게시판</h1>
+<h2 data-th-text="${boardName}">게시판</h2>
 <form action="update" data-th-action="@{update}" data-th-object="${board}"
       enctype='multipart/form-data'
       method='post'>
   <input id="categoryNo" data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
 
-  <div>
+  <div hidden>
     번호: <input data-th-value="*{boardNo}" name='boardNo' readonly type='text' value="100">
   </div>
-  <div>
+  <div hidden>
     작성자: <input data-th-value="${board.writer.nickname}" readonly type='text' value="홍길동">
   </div>
-  <div>
-    작성일:<input data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly
-               type='text' value="2024-03-27">
+  <div hidden>
+    작성일:<input data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly type='text' value="2024-03-27">
   </div>
 
   <!--말머리-->
-  <div data-th-if="*{categoryNo != 0}">
-    <select name="headNo">
+  <div class="info-box">
+  <div id ="head" class="selectBox" data-th-if="*{categoryNo != 0}">
+    <span data-th-text="${board.headNo}" hidden></span>
+    <select class="form-select form-select-sm" name="headNo">
       분류:
       <option value="1" hidden>공지</option> <!-- 일반 회원은 공지 작성 권한 없음 -->
       <optgroup data-th-if="*{categoryNo == 1}" label="[정보공유]">
@@ -55,19 +58,18 @@
     </select>
   </div>
 
+
   <!--공개범위 -->
-  <div>
-    공개범위:
-    <input data-th-value="0" type="radio" name="scopeNo" onchange="setScopeNo(this)">
-    <label>전체공개</label><br>
-    <input data-th-value="1" type="radio" name="scopeNo" onchange="setScopeNo(this)">
-    <label>회원공개</label><br>
-    <input data-th-value="2" type="radio" name="scopeNo" onchange="setScopeNo(this)">
-    <label>비공개</label><br>
+  <div id="scope">
+    <span data-th-text="${board.scopeNo}" hidden></span>
+    <label><input name="scopeNo" value="0" type="radio"/><span class="on"></span>전체공개</label>
+    <label><input name="scopeNo" value="1" type="radio"/><span class="on"></span>회원공개</label>
+    <label><input name="scopeNo" value="2" type="radio"/><span class="on"></span>비공개</label>
   </div>
   <!--위치 -->
-  <div data-th-if="*{categoryNo == 0}">
-    <select name="regionNo">
+  <div id="region" class="selectBox" data-th-if="*{categoryNo == 0}">
+    <span data-th-text="${board.region.regionNo}" hidden></span>
+    <select class="form-select form-select-sm" name="regionNo">
       지역:
       <optgroup label="[국내여행]">
         <option value="1">서울</option>
@@ -88,23 +90,57 @@
       </optgroup>
     </select>
   </div>
+</div>
   <!-- 제목, 내용 -->
   <div>
-    제목: <input data-th-value="*{title}" name='title' type='text' value="제목입니다.">
+    <input data-th-value="*{title}" name='title' type='text' value="제목입니다.">
   </div>
   <div>
-    내용: <textarea id="summernote" data-th-text="*{content}" name='content' style="display: none;"/></textarea>
+    <textarea id="summernote" data-th-text="*{content}" name='content' style="display: none;"/></textarea>
   </div>
   <!--변경 버튼을 누르면 update 완료-->
-  <div>
-    <button>변경</button>
-    <a data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
+  <div id="button-container">
+    <button id="modify-button">변경</button>
+    <a id="boardDelBtn" data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
   </div>
   </div>
 </form>
+</section>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script data-th-src="@{/js/board/form.js}"></script>
+<script data-th-src="@{/js/board/alert.js}"></script>
 </body>
 </html>
+
+<script>
+  //기존글의 공개범위 표시
+  let scopeNo = $('#scope').find('span').text();
+  $('#scope').find('input').each(function() {
+    if ($(this).val() == scopeNo) {
+      $(this).prop('checked', true);
+    }
+  });
+
+  // 기존글의 지역 표시
+  let regionNo = $('#region').find('span').text();
+  let regionOptions = $('#region').find('option');
+  regionOptions.each(function() {
+    if ($(this).val() == regionNo) {
+      $(this).prop('selected', true);
+    }
+  })
+
+  //기존글의 말머리 표시
+  let headNo = $('#head').find('span').text();
+  let headOptions = $('#head').find('option');
+  console.log(headNo);
+  headOptions.each(function() {
+    if ($(this).val() == headNo) {
+      $(this).prop('selected', true);
+      console.log("equal")
+    }
+  })
+  
+</script>
