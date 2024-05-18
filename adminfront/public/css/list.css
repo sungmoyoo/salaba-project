@@ -5,8 +5,12 @@ h3 {
     margin-bottom: 15px;
 }
 
+.rentalList-title {
+    text-align: left;
+}
+
 table {
-    width: 80%;
+    width: 100%;
     table-layout: fixed;
 }
 
@@ -24,7 +28,7 @@ th {
     padding: 20px 15px;
     text-align: left;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 13px;
     color: #fff;
     text-transform: uppercase;
 }
@@ -34,7 +38,7 @@ td {
     text-align: left;
     vertical-align: middle;
     font-weight: 300;
-    font-size: 12px;
+    font-size: 13px;
     color: black;
     border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
@@ -75,17 +79,16 @@ table th {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-
 .container {
     margin-top: 7%;
-    width: 80%;
+    width: 70%;
     height: 80%;
     position: absolute;
-    left: 15%;
+    left: 20%;
     display: flex;
     flex-direction: column;
-    margin-left: 7%;
 }
+
 
 .searchBar {
     display: flex;

@@ -95,11 +95,11 @@
                 <div class="hr"></div>
             </div>
             <div class="infoBox">
-                <div class="info"><span>숙소 설명</span> <span>{{explanation}}</span></div>
+                <div class="info"><span>숙소 설명</span> <textarea readonly>{{explanation}}</textarea></div>
                 <div class="hr"></div>
             </div>
             <div class="infoBox">
-                <div class="info"><span>숙소 이용규칙</span> <span>{{rule}}</span></div>
+                <div class="info"><span>숙소 이용규칙</span> <textarea readonly>{{rule}}</textarea></div>
                 <div class="hr"></div>
             </div>
             <div class="infoBox">
@@ -121,7 +121,8 @@
             </div>
             {{#each facilities}}
             <div>
-                <div class="infoBox" data-th-if="*{facilityNo < 4}">
+                <div class="infoBox typeBox" data-th-if="*{facilityNo < 4}">
+                    <span hidden>{{facilityNo}}</span>
                     <div class="info basicFacility">
                         <span>{{name}}</span >
                         <span>{{count}}</span>
@@ -145,7 +146,7 @@
             <div class="itemList">
             {{#each themes}}
             <div>
-                <span  data-th-if="*{themeNo >= 10}">{{themeName}}</span>
+                <span>{{themeName}}</span>
             </div>
             {{/each}}
             </div>

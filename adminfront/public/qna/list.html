@@ -91,16 +91,15 @@
             </div>
             <div class="hr"></div>
           </div>
-          <h4 class="partTitle">첨부 파일</h4>
 
-          <div class="infoBox">
+          <div class="infoBox answer-info">
             <div class="info">
               <span>답변</span>
-              <textarea id="answer">{{answer}}</textarea>
+              <textarea readonly>{{answer}}</textarea>
             </div>
             <div class="hr"></div>
           </div>
-          <div class="infoBox">
+          <div class="infoBox answer-info">
             <div class="info">
               <span>답변 날짜</span>
               <span>{{ansDate}}</span>
@@ -114,7 +113,7 @@
             <div class="hr"></div>
           </div>
 
-          <h4 class="partTitle">문의 파일</h4>
+          <h4 class="partTitle">첨부 파일</h4>
           <div class="imgFiles">
             {{#each photos}}
             <div>
@@ -125,7 +124,10 @@
             {{/each}}
             <div class="hr"></div>
         </div>
+        <div class="dealBox">
+          <textarea id="answer"></textarea>
           <button class="dealBtn">답변</button>
+        </div>
         </form>
       </div>
     </script>

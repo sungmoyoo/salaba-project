@@ -23,7 +23,7 @@ $('#signIn').click((e) => {
                 icon: "error",
                 title: "유효하지 않거나 권한이 없습니다.",
                 showConfirmButton: false,
-                timer: 1000000
+                timer: 1000
               })
         }
     });

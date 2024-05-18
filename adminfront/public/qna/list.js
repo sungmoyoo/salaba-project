@@ -30,8 +30,9 @@ const tbody = $("tbody");
           modalContent.html(detailTemplate(data));
           console.log(data.state);
           if (data.state != "0") {
-            $("#answer").prop("readonly", true);
-            $(".dealBtn").hide();
+            $(".dealBox").hide();
+          } else {
+            $('.answer-info').hide();
           }
 
           $(".dealBtn").click((e) => {
