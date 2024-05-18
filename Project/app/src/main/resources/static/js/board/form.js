@@ -67,7 +67,8 @@ $('#write-button').click(function(e) {
     let content = $('.note-editable').html();
     console.log(content);
     let imageCount = countImages(content);
-    if (imageCount < 3) {
+    let categoryNo = $('#categoryNo').val();
+    if (imageCount < 3 && categoryNo == 0) {
         Swal.fire({
             icon: "error",
             title: "이미지 파일을 3개이상 올려주세요",
@@ -85,12 +86,11 @@ $('#write-button').click(function(e) {
             timer: 1000
           });
           return;
-      } 
+      }
 
-    // $('form').submit();
-    
+     $('form').submit();
+
   })
-
   function countImages(htmlString) {
     // 1. HTML 문자열을 DOM으로 파싱
     var parser = new DOMParser();
