@@ -98,3 +98,19 @@ function clearButtonStyles() {
       button.classList.remove('active');
   });
 }
+
+// 게시판: 공간적 여유를 위해 제목에 말줄임표 표시
+  document.addEventListener("DOMContentLoaded", function() {
+    let titles = document.querySelectorAll('.board-title');
+    titles.forEach(function(title) {
+      let maxLength = 15; // 제목의 최대 길이 설정
+      console.log(title.textContent.length);
+      if (title.textContent.length > maxLength) {
+
+        title.textContent = title.textContent.slice(0, maxLength) + '...';
+        console.log(title.textContent);
+
+      }
+    });
+  });
+

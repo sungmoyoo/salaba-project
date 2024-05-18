@@ -22,89 +22,77 @@
 <div data-th-replace="header :: header">머리말</div>
 
 <section>
-<!-- 게시글 수정 -->
-<h2 data-th-text="${boardName}">게시판</h2>
-<form action="update" data-th-action="@{update}" data-th-object="${board}"
-      enctype='multipart/form-data'
-      method='post'>
-  <input id="categoryNo" data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
+  <!-- 게시글 수정 -->
+  <h2 data-th-text="${boardName}">게시판</h2>
+  <form action="update" data-th-action="@{update}" data-th-object="${board}"
+        enctype='multipart/form-data'
+        method='post'>
+    <input id="categoryNo" data-th-value="*{categoryNo}" name='categoryNo' type='hidden'>
 
-  <div hidden>
-    번호: <input data-th-value="*{boardNo}" name='boardNo' readonly type='text' value="100">
-  </div>
-  <div hidden>
-    작성자: <input data-th-value="${board.writer.nickname}" readonly type='text' value="홍길동">
-  </div>
-  <div hidden>
-    작성일:<input data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly type='text' value="2024-03-27">
-  </div>
+    <div hidden>
+      번호: <input data-th-value="*{boardNo}" name='boardNo' readonly type='text' value="100">
+    </div>
+    <div hidden>
+      작성자: <input data-th-value="${board.writer.nickname}" readonly type='text' value="홍길동">
+    </div>
+    <div hidden>
+      작성일:<input data-th-value="${#dates.format(board.createdDate,'yyyy-MM-dd')}" readonly type='text' value="2024-03-27">
+    </div>
 
-  <!--말머리-->
-  <div class="info-box">
-  <div id ="head" class="selectBox" data-th-if="*{categoryNo != 0}">
-    <span data-th-text="${board.headNo}" hidden></span>
-    <select class="form-select form-select-sm" name="headNo">
-      분류:
-      <option value="1" hidden>공지</option> <!-- 일반 회원은 공지 작성 권한 없음 -->
-      <optgroup data-th-if="*{categoryNo == 1}" label="[정보공유]">
-        <option selected value="2">이벤트</option>
-        <option value="3">홍보</option>
-        <option value="4">꿀팁</option>
-      </optgroup>
-      <optgroup data-th-if="*{categoryNo == 2}" label="[자유]">
-        <option selected value="5">잡담</option>
-        <option value="6">질문</option>
-      </optgroup>
-    </select>
-  </div>
+    <!--말머리-->
+    <div class="info-box">
+      <div id ="head" class="selectBox" data-th-if="*{categoryNo != 0}">
+        <span data-th-text="${board.headNo}" hidden></span>
+        <select class="form-select form-select-sm" name="headNo">
+          분류:
+          <option value="1" hidden>공지</option> <!-- 일반 회원은 공지 작성 권한 없음 -->
+          <optgroup data-th-if="*{categoryNo == 1}" label="[정보공유]">
+            <option selected value="2">이벤트</option>
+            <option value="3">홍보</option>
+            <option value="4">꿀팁</option>
+          </optgroup>
+          <optgroup data-th-if="*{categoryNo == 2}" label="[자유]">
+            <option selected value="5">잡담</option>
+            <option value="6">질문</option>
+          </optgroup>
+        </select>
+      </div>
 
 
-  <!--공개범위 -->
-  <div id="scope">
-    <span data-th-text="${board.scopeNo}" hidden></span>
-    <label><input name="scopeNo" value="0" type="radio"/><span class="on"></span>전체공개</label>
-    <label><input name="scopeNo" value="1" type="radio"/><span class="on"></span>회원공개</label>
-    <label><input name="scopeNo" value="2" type="radio"/><span class="on"></span>비공개</label>
-  </div>
-  <!--위치 -->
-  <div id="region" class="selectBox" data-th-if="*{categoryNo == 0}">
-    <span data-th-text="${board.region.regionNo}" hidden></span>
-    <select class="form-select form-select-sm" name="regionNo">
-      지역:
-      <optgroup label="[국내여행]">
-        <option value="1">서울</option>
-        <option value="2">제주도</option>
-        <option value="3">전주</option>
-      </optgroup>
-      <optgroup label="[해외여행]">
-        <option value="11">삿포로</option>
-        <option value="12">오사카</option>
-        <option value="13">후쿠오카</option>
-        <option value="21">베를린</option>
-        <option value="22">프랑크푸르트</option>
-        <option value="31">브리즈번</option>
-        <option value="32">멜버른</option>
-        <option value="33">시드니</option>
-        <option value="41">파리</option>
-        <option value="42">몽펠리에</option>
-      </optgroup>
-    </select>
-  </div>
-</div>
-  <!-- 제목, 내용 -->
-  <div>
-    <input data-th-value="*{title}" name='title' type='text' value="제목입니다.">
-  </div>
-  <div>
-    <textarea id="summernote" data-th-text="*{content}" name='content' style="display: none;"/></textarea>
-  </div>
-  <!--변경 버튼을 누르면 update 완료-->
-  <div id="button-container">
-    <button id="modify-button">변경</button>
-    <a id="boardDelBtn" data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
-  </div>
-  </div>
-</form>
+      <!--공개범위 -->
+      <div id="scope">
+        <span data-th-text="${board.scopeNo}" hidden></span>
+        <label><input name="scopeNo" value="0" type="radio"/><span class="on"></span>전체공개</label>
+        <label><input name="scopeNo" value="1" type="radio"/><span class="on"></span>회원공개</label>
+        <label><input name="scopeNo" value="2" type="radio"/><span class="on"></span>비공개</label>
+      </div>
+
+      <!--지역 -->
+      <div id="region" class="selectBox" data-th-if="*{categoryNo == 0}">
+        <span data-th-text="${board.region.regionNo}" hidden></span>
+        <select class="form-select form-select-sm" name="regionNo">
+          지역:
+          <optgroup data-th-each="nation : ${nations}" data-th-object="${nation}" data-th-label="*{nationName}">
+            <option data-th-each="region : ${nation.regionList}" data-th-object="${region}" data-th-value="*{regionNo}" data-th-text="*{regionName}">지역이름</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <!-- 제목, 내용 -->
+    <div>
+      <input data-th-value="*{title}" name='title' type='text' value="제목입니다.">
+    </div>
+    <div>
+      <textarea id="summernote" data-th-text="*{content}" name='content' style="display: none;"/></textarea>
+    </div>
+    <!--변경 버튼을 누르면 update 완료-->
+    <div id="button-container">
+      <button id="modify-button">변경</button>
+      <a id="boardDelBtn" data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">[삭제]</a>
+    </div>
+    </div>
+  </form>
 </section>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
@@ -142,5 +130,5 @@
       console.log("equal")
     }
   })
-  
+
 </script>
