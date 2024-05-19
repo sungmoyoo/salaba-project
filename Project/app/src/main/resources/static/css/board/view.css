@@ -88,6 +88,7 @@ h1 {
 
 .modify-delete {
     text-align: right;
+    margin-right: 20px;
 }
 
 /* 게시글 수정 버튼 */
@@ -96,7 +97,7 @@ h1 {
   font-size: 14px; /* 글꼴 크기를 조절 */
   border: 2px solid #718de0;
   background-color: #fff;
-  border-radius: 15px;
+  border-radius: 13px;
   color: black;
   text-decoration: none;
 }
@@ -113,7 +114,7 @@ h1 {
   font-size: 14px;
   border: 2px solid #718de0;
   background-color: #fff;
-  border-radius: 15px;
+  border-radius: 13px;
   color: black;
   text-decoration: none;
 }
@@ -135,15 +136,14 @@ h1 {
 .content-box {
   overflow-y: auto;
   background-color: white;
-  padding: 40px; /* 패딩을 늘림 */
+  padding: 40px;
   margin-top: 20px;
-  width: 100%; /* 너비를 늘림 */
- /* 최소 높이 설정 */
-  font-size: 18px; /* 글꼴 크기 증가 */
-  overflow: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
-  box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
-  border-top: 2px solid rgb(152, 152, 152); /* 상단에 구분선 추가 */
-  border-bottom: 2px solid rgb(152, 152, 152); /* 하단에 구분선 추가 */
+  width: 100%;
+  font-size: 18px;
+  overflow: auto;
+  box-sizing: border-box;
+  border-top: 2px solid rgb(152, 152, 152);
+  border-bottom: 2px solid rgb(152, 152, 152);
 }
 
 .content-box #summernote{
