@@ -1,0 +1,166 @@
+#main-container {
+  font-family: "Noto Sans KR";
+  font-weight: 400;
+}
+
+#bar-container {
+  font-family: "Noto Sans KR";
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
+
+#income-container {
+  font-size: 23px;
+  color: #555555;
+  margin-left: 20px;
+}
+
+#totalIncome {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  color: #555555;
+}
+
+#search-container {
+  color: #555555;
+  text-align: right;
+  margin: 20px 60px 20px 0px;;
+  font-size: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+#startDate,
+#endDate {
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#searchButton {
+  display: inline-block;
+  padding: 6px 9px;
+  cursor: pointer;
+  text-align: center;
+  margin-left: 10px;
+  border: 2px solid #35C5B3; /* 테두리 색상 */
+  color: #35C5B3; /* 텍스트 색상 */
+  border-radius: 5px; /* 버튼 모서리 둥글게 */
+}
+
+#searchButton:hover {
+  color: #fff; /* 호버 시 텍스트 색상 변경 */
+  background-color: #35C5B3; /* 호버 시 배경 색상 변경 */
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.rentalHome-container {
+  display: flex;
+  box-shadow: 0 4px 6px rgba(0, 0.1, 0, 0.3);
+  border-radius: 20px;
+  margin: 15px 5px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(120deg, #fff, #f8f9fa);
+}
+
+.rentalHome-container:hover {
+  background-color: #eaeaea;
+  transform: scale(1.05);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.span-content {
+  flex: 1;
+  max-width: 300px;
+  word-wrap: break-word;
+  text-align: center;
+}
+
+.thumbnails {
+  margin: 10px;
+  border-radius: 20px;
+}
+
+/* 모달 css */
+.modal-header {
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+.modal-xl {
+  max-width: 80% !important;
+}
+
+.modal-title {
+  color: #343a40;
+  font-weight: bold;
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  font-size: 20px;
+  color: #000;
+  opacity: 0.5;
+  min-width: 2%;
+}
+
+.detail-item {
+  border: 1px solid #CCCCCC;
+  margin: 15px 10px 15px 10px;
+  border-radius: 4px;
+}
+
+.info-div,
+.name-div,
+.value-div {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.info-div span,
+.name-div span,
+.value-div span {
+  flex: 1;
+}
+
+.info-div {
+  background-color: #fff;
+}
+
+.name-div {
+  background-color: #f8f9fa;
+}
+
+.value-div {
+  background-color: #e9ecef;
+}
+
+.useDate {
+  min-width: 250px;
+}
+
+#totalSumSection {
+  text-align: right;
+  margin-right: 10px;
+}
+
+#totalSumAmount {
+  font-size: 20px;
+  font-weight: bold;
+}

@@ -1,0 +1,105 @@
+* {
+  font-family: "Noto Sans KR";
+  font-weight: 400;
+  font-size: 16px;
+}
+
+#main-container {
+  text-align: center;
+  margin: 0 auto;
+  padding: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.room-theme,
+.room-type {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 60%;
+  margin: 30px auto;
+}
+
+.type-option {
+  flex: 1 1 calc(20% - 10px);
+  width: 100px;
+  height: 100px;
+  border: 2px solid #CCCCCC;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.theme-option {
+  flex: 1 1 calc(20% - 10px);
+  width: 60%;
+  border: 2px solid #CCCCCC;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.icon {
+  border-radius: 5px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  display: none;
+  -webkit-appearance: none; /* Chrome, Safari, Edge 등의 웹킷 기반 브라우저 */
+  -moz-appearance: none; /* Firefox 브라우저 */
+  appearance: none; /* 일반적인 브라우저 */
+}
+
+.theme-option.selected,
+.type-option.selected {
+  border: 4px solid #35C5B3;
+}
+
+
+#nextButton {
+  background-color: #35C5B3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#nextButton:hover {
+  transition: background-color 0.3s ease;
+  background-color: #1C9189;
+}
+
+#preButton {
+  color: white;
+  background-color: #aaa;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+
+}
+#preButton:hover {
+  transition: background-color 0.3s ease;
+  background-color: #888;
+}
+
+#nextButton.disabled {
+  background-color: #aaa;
+}
+
+#nextButton.enabled {
+  background-color: #35C5B3;
+}
+
+#nextButton.enabled:hover {
+  background-color: #2A9D8F;
+}

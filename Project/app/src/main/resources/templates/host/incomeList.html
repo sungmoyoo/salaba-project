@@ -4,180 +4,11 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/host/incomeList.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <style>
-    #main-container {
-      font-family: "Noto Sans KR";
-      font-weight: 400;
-    }
-
-    #bar-container {
-      font-family: "Noto Sans KR";
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background-color: #f8f9fa;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-top: 30px;
-    }
-
-    #income-container {
-      font-size: 23px;
-      color: #555555;
-      margin-left: 20px;
-    }
-
-    #totalIncome {
-      margin-left: 10px;
-      padding: 5px 10px;
-      border-radius: 5px;
-      background-color: #f8f9fa;
-      color: #555555;
-    }
-
-    #search-container {
-      color: #555555;
-      text-align: right;
-      margin: 20px 60px 20px 0px;;
-      font-size: 16px;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #startDate,
-    #endDate {
-      padding: 5px 8px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #searchButton {
-      display: inline-block;
-      padding: 6px 9px;
-      cursor: pointer;
-      text-align: center;
-      margin-left: 10px;
-      border: 2px solid #35C5B3; /* 테두리 색상 */
-      color: #35C5B3; /* 텍스트 색상 */
-      border-radius: 5px; /* 버튼 모서리 둥글게 */
-    }
-
-    #searchButton:hover {
-      color: #fff; /* 호버 시 텍스트 색상 변경 */
-      background-color: #35C5B3; /* 호버 시 배경 색상 변경 */
-      transition: color 0.3s, background-color 0.3s;
-    }
-
-    .rentalHome-container {
-      display: flex;
-      box-shadow: 0 4px 6px rgba(0, 0.1, 0, 0.3);
-      border-radius: 20px;
-      margin: 15px 5px;
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(120deg, #fff, #f8f9fa);
-    }
-
-    .rentalHome-container:hover {
-      background-color: #eaeaea;
-      transform: scale(1.05);
-      transition: background-color 0.3s, transform 0.3s;
-    }
-
-    .span-content {
-      flex: 1;
-      max-width: 300px;
-      word-wrap: break-word;
-      text-align: center;
-    }
-
-    .thumbnails {
-      margin: 10px;
-      border-radius: 20px;
-    }
-
-    /* 모달 css */
-    .modal-header {
-      background-color: #f8f9fa;
-      padding: 20px;
-    }
-
-    .modal-xl {
-      max-width: 80% !important;
-    }
-
-    .modal-title {
-      color: #343a40;
-      font-weight: bold;
-    }
-
-    .close {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      font-size: 20px;
-      color: #000;
-      opacity: 0.5;
-      min-width: 2%;
-    }
-
-    .detail-item {
-      border: 1px solid #CCCCCC;
-      margin: 15px 10px 15px 10px;
-      border-radius: 4px;
-    }
-
-    .info-div,
-    .name-div,
-    .value-div {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-    }
-
-    .info-div span,
-    .name-div span,
-    .value-div span {
-      flex: 1;
-    }
-
-    .info-div {
-      background-color: #fff;
-    }
-
-    .name-div {
-      background-color: #f8f9fa;
-    }
-
-    .value-div {
-      background-color: #e9ecef;
-    }
-
-    .useDate {
-      min-width: 250px;
-    }
-
-    #totalSumSection {
-      text-align: right;
-      margin-right: 10px;
-    }
-
-    #totalSumAmount {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-
-  </style>
 </head>
 <body>
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
@@ -201,7 +32,7 @@
          data-th-data-price="*{price}" data-price="10000"
          data-th-data-no="*{rentalHomeNo}" data-no="1"
          data-th-data-cleanFee="*{cleanFee}" data-cleanFee="2000"
-         data-toggle="modal" data-target="#detailModal">
+         data-bs-toggle="modal" data-bs-target="#detailModal">
       <img class="thumbnails"
            data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${rentalHome.rentalHomePhotos[0].uuidPhotoName}(type=f,w=80,h=80,ttype=jpg)}"
            src="/photo1.jpg">
@@ -212,14 +43,13 @@
     </div>
   </div>
 </div>
+
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="detailModalLabel">상세 정보</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div id="detailContainer"></div>
@@ -234,127 +64,14 @@
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script data-th-inline="javascript">
-  // 화면에 필요한 정보들 변수에 저장
-  var reservationList = [[${reservationList}]];
-  var rentalHomeList = document.querySelectorAll(".rentalHome-container");
-  var filteredReservationList;
-
-  let formatter = new Intl.NumberFormat('ko-KR'); // 한국 통화 포맷을 사용하도록 설정
-
-  // 날짜 조회 버튼
-  var searchButton = document.getElementById("searchButton");
-  searchButton.addEventListener('click', () => {
-    let startDate = document.getElementById("startDate").value;
-    let endDate = document.getElementById("endDate").value;
-
-    // 예약내역 필터링
-    filteredReservationList = reservationList.filter(function(reservation) {
-      return reservation.paymentDate >= startDate && reservation.paymentDate <= endDate;
-    });
-
-    getDefaultReservation(filteredReservationList);
-  })
-
-  // 상세 보기 이벤트 설정
-  rentalHomeList.forEach(el => {
-    el.addEventListener('click', (e) => {
-      let rentalHomeNo = e.currentTarget.getAttribute("data-no");
-      if (filteredReservationList != null) {
-        showDetail(rentalHomeNo, filteredReservationList);
-      } else {
-        showDetail(rentalHomeNo, reservationList);
-      }
-    })
-  });
-
-  // 이용건수, 총 수입 초기화하는 함수(기본, 전체)
-  document.addEventListener('DOMContentLoaded', function() {
-    getDefaultReservation(reservationList);
-  });
-
-  // 상세 보기 출력(모달 방식)
-  function showDetail(rentalHomeNo, reservationList) {
-    let rentalHomeEl = document.querySelector(`.rentalHome-container[data-no="${rentalHomeNo}"]`);
-    let no = rentalHomeEl.getAttribute("data-no");
-
-    let cleanFee = rentalHomeEl.getAttribute("data-cleanFee");
-    let rentalHomeReservationList = [];
-
-    // 숙소별 예약내역 리스트 받기
-    reservationList.forEach(function(reservation) {
-      if (reservation.rentalHomeNo == no) {
-        rentalHomeReservationList.push(reservation);
-      }
-    });
-
-    let detailContainer = document.getElementById("detailContainer");
-    detailContainer.innerHTML = ""; // 기존 내용 초기화
-
-    if (rentalHomeReservationList.length != 0) {
-      rentalHomeReservationList.forEach(function(reservationEl) {
-        let detailItem = `
-          <div class="detail-item">
-            <div class="info-div">
-              <span>예약번호: ${reservationEl.reservationNo}</span>
-              <span>결제일: ${reservationEl.paymentDate}</span>
-              <span>게스트: ${reservationEl.memberName}</span>
-              <span class="useDate">이용 기간: ${reservationEl.startDate} ~ ${reservationEl.endDate}</span>
-            </div>
-            <div class="content-div">
-              <div class="name-div">
-                <span>결제금액</span>
-                <span>청소비</span>
-                <span>수수료</span>
-                <span>정산금액</span>
-              </div>
-              <div class="value-div">
-                <span>${formatter.format(reservationEl.amount)}원</span>
-                <span>${formatter.format(cleanFee)}원</span>
-                <span>${formatter.format(Math.round(reservationEl.amount * 0.03))}원</span>
-                <span>${formatter.format(reservationEl.amount - cleanFee - (Math.round(reservationEl.amount * 0.03)))}원</span>
-              </div>
-            </div>
-          </div>
-        `;
-        detailContainer.innerHTML += detailItem;
-      });
-      let totalSum = rentalHomeReservationList.reduce((acc, curr) => acc + curr.amount, 0);
-
-      document.getElementById("totalSumAmount").textContent = "총계: " + formatter.format(totalSum) + '원';
-    } else {
-      detailContainer.innerHTML = "<p>해당 기간 내 예약 내역이 없습니다.</p>";
-    }
-  }
 
 
-  // 기본 예약 내역 출력 및 총 수입 계산
-  function getDefaultReservation(reservationList) {
-    let totalIncome = 0;
-
-    rentalHomeList.forEach(el => {
-      let no = el.getAttribute("data-no");
-      let cleanFee = el.getAttribute("data-cleanFee");
-      let usageCount = 0;
-
-      reservationList.forEach(function(reservation) {
-        if (reservation.rentalHomeNo == no) {
-          usageCount++;
-          totalIncome += reservation.amount - cleanFee - (Math.round(reservation.amount * 0.03));
-        }
-      });
-
-      document.getElementById("usageCount_" + no).textContent = usageCount;
-    });
-
-    document.getElementById("totalIncome").textContent = formatter.format(totalIncome) + '원';
-  }
-</script>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script data-th-inline="javascript">
+  let reservationList = [[${reservationList}]];
+</script>
+<script data-th-src="@{/js/host/incomeList.js}"></script>
 <script data-th-src="@{/js/host/hostHeader.js}"></script>
 </html>
