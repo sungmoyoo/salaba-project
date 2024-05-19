@@ -25,3 +25,9 @@
       console.log("equal")
     }
   })
+
+
+// 지역정보 바꿀 때마다 찍어보기
+  document.querySelector('select[name="regionNo"]').addEventListener('change', function() {
+      console.log('Selected region:', this.value);
+  });

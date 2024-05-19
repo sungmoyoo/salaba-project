@@ -57,9 +57,9 @@
   <div>
     <input id="boardNo" data-th-value="*{boardNo}" name='boardNo' type='hidden' value="100">
   </div>
-  <div data-th-if="${loginUser != null && board.writer.no == loginUser.no}">
-    <a data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html" class="board-modify">수정</a>
-    <a id="boardDelBtn" data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">삭제</i></a>
+  <div class="modify-delete" data-th-if="${loginUser != null && board.writer.no == loginUser.no}">
+    <a data-th-href="@{modify(categoryNo=*{categoryNo}, boardNo=*{boardNo})}" href="modify.html" class="board-modify">수정 <i class="fa-solid fa-pencil"></i></a>
+    <a id="boardDelBtn" data-th-href="@{delete(categoryNo=*{categoryNo}, boardNo=*{boardNo})}">삭제 <i class="fa-solid fa-trash-can"></i></a>
   </div>
 </form>
 

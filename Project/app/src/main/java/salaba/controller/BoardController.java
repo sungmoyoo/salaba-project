@@ -370,6 +370,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     if (categoryNo == 0) {
       List<Nation> nations = boardService.getAllNations();
       model.addAttribute("nations", nations);
+      log.debug("-----------" + nations);
       model.addAttribute("boardName", "후기 - 글수정");
     } else if (categoryNo == 1) {
       model.addAttribute("boardName", "정보공유 - 글수정");

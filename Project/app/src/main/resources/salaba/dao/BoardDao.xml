@@ -304,14 +304,18 @@
   <!-- 게시글 변경 -->
   <update id="updateBoard" parameterType="Board">
     update
-    board
+      board
     set
-    title=#{title},
-    content=#{content},
-    head_no=#{headNo},
-    scope_no=#{scopeNo}
+      title=#{title},
+      content=#{content},
+      head_no=#{headNo},
+      <if test="categoryNo == 0">
+      region_no=#{region.regionNo},
+
+      </if>
+      scope_no=#{scopeNo}
     where
-    board_no=#{boardNo}
+      board_no=#{boardNo}
   </update>
 
   <!-- 댓글 작성 시 게시판 번호 찾기 -->
