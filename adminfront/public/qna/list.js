@@ -10,6 +10,11 @@ const tbody = $("tbody");
     }
     var trTemplate = Handlebars.compile($("#tr-template").html());
     $("tbody").html(trTemplate(result));
+    let incomplete = pageContext.params.get("incomplete");
+
+    if (incomplete == 'true') {
+        $('#incomplete').click();
+    }
 
     $(".rowItem").click(function () {
       let modal = $("#detailModal");
