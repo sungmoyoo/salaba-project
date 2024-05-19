@@ -50,4 +50,6 @@ public interface BoardService {
   List<Board> commentHistory(int pageNo, int pageSize, int no); // 작성댓글 내역
   int countAllCommentHistory(int memberNo); // count
 
+  int selectBoardWriterInfo(int boardNo);
+
 }

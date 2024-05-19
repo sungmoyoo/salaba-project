@@ -22,12 +22,12 @@
 </head>
 <body>
   <div data-th-replace="header :: header">header</div>
-<main>
-  <section id="myPage-leftSection" class="col-2">
+<main class="container-sm">
+  <section id="myPage-leftSection" class="g-col-2 mt-5">
     <div data-th-replace="/member/myPageSideMenu :: myPageSideMenu">a</div>
   </section>
   
-  <section id="myPage-rightSection" class="row col-8">
+  <section id="myPage-rightSection" class="row col-8 mt-5">
     <div id="myPage-title-container">
       <div>
 
@@ -49,7 +49,7 @@
 
     <div id="myInformation-container" style="display: none;">
       <div>
-        <div class="container-xxl">
+        <div>
           <div class="mb-4 row">
             <div class="col-sm align-items-end">
               <label for="nameInput" class="form-label">이름</label>

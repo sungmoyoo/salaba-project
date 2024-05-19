@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.BookmarkService;
-import salaba.service.MemberService;
 import salaba.vo.Member;
 
 @RequiredArgsConstructor
@@ -21,7 +20,6 @@ public class BookmarkController {
 
   private static final Log log = LogFactory.getLog(BookmarkController.class);
   private final BookmarkService bookmarkService;
-  private final MemberService memberService;
 
   @GetMapping("/member/bookmark")
   public void getUserBookMark(

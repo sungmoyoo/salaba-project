@@ -7,8 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import salaba.dao.MemberDao;
 import salaba.service.MemberService;
-import salaba.vo.Alarm;
-import salaba.vo.ConstVO;
 import salaba.vo.Member;
 import salaba.vo.Nation;
 import salaba.vo.board.Board;
@@ -95,40 +93,6 @@ public class DefaultMemberService implements MemberService {
     memberDao.deletePreference(memberNo);
   }
 
-  @Override
-  public List<Member> themeList(Member sessionInfo) {
-    return memberDao.findAllTheme(sessionInfo);
-  }
-
-  @Override
-  public int getMemberPoint(int no) {
-    return memberDao.getMemberPoint(no);
-  }
-
-  @Override
-  public Member getGrade(Member member) {
-    return memberDao.getGrade(member);
-  }
-
-  @Override
-  public List<Member> mythemeList(Member sessionInfo) {
-    return memberDao.findAllmyTheme(sessionInfo);
-  }
-///////////////////
-  @Override
-  public void insertNotifyHistory (Alarm alarm){ // 알람 추가
-    memberDao.addNotifyHistory(alarm);
-  }
-
-  @Override
-  public List<Alarm> selectNotifyHistory ( int memberNo){ // 알람 가져오기
-    return memberDao.selectNotifyHistory(memberNo);
-  }
-
-  @Override
-  public void updateNotifyHistory ( int notifyNo){ // 알람 업데이트(알람을 읽었을 경우 업데이트)
-    memberDao.updateNotifyHistory(ConstVO.state_ok, notifyNo);
-  }
 //////////////////////
   @Override
   public String boardStateCheck(Board board){ // 알람 업데이트(알람을 읽었을 경우 업데이트)

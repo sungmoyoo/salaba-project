@@ -68,23 +68,59 @@
   <insert id="addBoard" parameterType="Board"
     useGeneratedKeys="true" keyColumn="board_no" keyProperty="boardNo">
     <if test="categoryNo == 0">
-      insert into board(scope_no,title,content,member_no,board_category_no,region_no,head_no)
-      values(#{scopeNo},#{title},#{content},#{writer.no},#{categoryNo},#{region.regionNo},0)
+      insert into
+        board
+        (
+          scope_no,
+          title,
+          content,
+          member_no,
+          board_category_no,
+          region_no,
+          head_no
+        )
+      values
+        (
+          #{scopeNo},
+          #{title},
+          #{content},
+          #{writer.no},
+          #{categoryNo},
+          #{region.regionNo},
+          0
+        )
     </if>
     <if test="categoryNo != 0">
-      insert into board(scope_no,head_no,title,content,member_no,board_category_no)
-      values(#{scopeNo},#{headNo},#{title},#{content},#{writer.no},#{categoryNo})
+      insert into
+        board
+        (
+          scope_no,
+          head_no,
+          title,
+          content,
+          member_no,
+          board_category_no
+        )
+      values
+        (
+          #{scopeNo},
+          #{headNo},
+          #{title},
+          #{content},
+          #{writer.no},
+          #{categoryNo}
+        )
     </if>
   </insert>
 
   <!-- 게시글 삭제: 상태 update로 관리함 -->
   <update id="deleteBoard">
     update
-    board
+      board
     set
-    state='1'
+      state='1'
     where
-    board_no=#{boardNo}
+      board_no=#{boardNo}
   </update>
 
   <!-- 공지 제외 목록 별 조회 -->
@@ -92,63 +128,77 @@
     <if test="categoryNo == 0">
       <!-- 카테고리 : 후기게시판 -->
       SELECT
-      b.board_no,
-      b.board_category_no,
-      b.title,
-      b.created_date,
-      b.view_count,
-      b.state,
-      h.head_no,
-      (SELECT count(*) FROM board_like WHERE board_no = b.board_no) AS like_count,
-      m.member_no,
-      m.nickname,
-      r.region_no,
-      r.region_name,
-      bf.file_no,
-      bf.uuid_file_name
+        b.board_no,
+        b.board_category_no,
+        b.title,
+        b.created_date,
+        b.view_count,
+        b.state,
+        h.head_no,
+        (
+          SELECT
+            count(*)
+          FROM
+            board_like
+          WHERE
+            board_no = b.board_no
+        ) AS like_count,
+        m.member_no,
+        m.nickname,
+        r.region_no,
+        r.region_name,
+        bf.file_no,
+        bf.uuid_file_name
       FROM
-      board b
-      INNER JOIN head h ON b.head_no = h.head_no
-      INNER JOIN member m ON b.member_no = m.member_no
-      LEFT JOIN board_like bl ON b.board_no = bl.board_no
-      LEFT JOIN region r ON b.region_no = r.region_no
-      LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
+        board b
+        INNER JOIN head h ON b.head_no = h.head_no
+        INNER JOIN member m ON b.member_no = m.member_no
+        LEFT JOIN board_like bl ON b.board_no = bl.board_no
+        LEFT JOIN region r ON b.region_no = r.region_no
+        LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
       WHERE
-      b.board_category_no = 0
-      AND b.state != '1'
+        b.board_category_no = 0
+        AND b.state != '1'
       ORDER BY
-      b.created_date desc,
-      like_count desc
+        b.created_date desc,
+        like_count desc
     </if>
     <if test="categoryNo != 0">
       <!-- 정보공유, 자유게시판 & 나머지 -->
       SELECT
-      b.board_no,
-      b.board_category_no,
-      b.title,
-      b.content,
-      b.created_date,
-      b.view_count,
-      b.state,
-      (SELECT count(*) FROM board_like WHERE board_no = b.board_no) AS like_count,
-      m.member_no,
-      m.nickname,
-      h.head_no,
-      h.head_content,
-      (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count
+        b.board_no,
+        b.board_category_no,
+        b.title,
+        b.content,
+        b.created_date,
+        b.view_count,
+        b.state,
+        (
+          SELECT
+            count(*)
+          FROM
+            board_like
+          WHERE
+            board_no = b.board_no
+        ) AS like_count,
+        m.member_no,
+        m.nickname,
+        h.head_no,
+        h.head_content,
+        (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count
       FROM
-      board b
-      INNER JOIN head h ON b.head_no = h.head_no
-      INNER JOIN member m ON b.member_no = m.member_no
-      LEFT JOIN board_like bl ON b.board_no = bl.board_no
+        board b
+        INNER JOIN head h ON b.head_no = h.head_no
+        INNER JOIN member m ON b.member_no = m.member_no
+        LEFT JOIN board_like bl ON b.board_no = bl.board_no
       WHERE
-      b.board_category_no = #{categoryNo}
-      AND b.state != '1'
-      AND h.head_no != 1
+        b.board_category_no = #{categoryNo}
+        AND b.state != '1'
+        AND h.head_no != 1
       ORDER BY
-      b.created_date desc,
-      like_count desc
-      limit #{rowCount} offset #{offset}
+        b.created_date desc,
+        like_count desc
+        limit #{rowCount} offset #{offset}
     </if>
   </select>
 
@@ -157,66 +207,80 @@
     <!-- 정보공유, 자유게시판 공지글 -->
     <if test="categoryNo != 0">
       SELECT
-      b.board_no,
-      b.board_category_no,
-      b.title,
-      b.content,
-      b.created_date,
-      b.view_count,
-      b.state,
-      (SELECT count(*) FROM board_like WHERE board_no = b.board_no) AS like_count,
-      m.member_no,
-      m.nickname,
-      h.head_no,
-      h.head_content,
-      (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count
+        b.board_no,
+        b.board_category_no,
+        b.title,
+        b.content,
+        b.created_date,
+        b.view_count,
+        b.state,
+        (
+          SELECT
+            count(*)
+          FROM
+            board_like
+          WHERE
+            board_no = b.board_no
+        ) AS like_count,
+        m.member_no,
+        m.nickname,
+        h.head_no,
+        h.head_content,
+        (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count
       FROM
-      board b
-      INNER JOIN head h ON b.head_no = h.head_no
-      INNER JOIN member m ON b.member_no = m.member_no
-      LEFT JOIN board_like bl ON b.board_no = bl.board_no
-      LEFT JOIN board_file bf ON b.board_no = bf.board_no
+        board b
+        INNER JOIN head h ON b.head_no = h.head_no
+        INNER JOIN member m ON b.member_no = m.member_no
+        LEFT JOIN board_like bl ON b.board_no = bl.board_no
+        LEFT JOIN board_file bf ON b.board_no = bf.board_no
       WHERE
-      b.board_category_no = #{categoryNo}
-      AND b.state != '1'
-      AND h.head_no = 1
+        b.board_category_no = #{categoryNo}
+        AND b.state != '1'
+        AND h.head_no = 1
       ORDER BY
-      b.created_date desc,
-      like_count
+        b.created_date desc,
+        like_count
     </if>
   </select>
 
   <!-- 메인 화면 - 일반 게시글 -->
   <select id="main" resultMap="BoardMap">
     select
-    b.board_no,
-    b.board_category_no,
-    b.title,
-    b.view_count,
-    b.content,
-    b.created_date,
-    b.state,
-    (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
-    m.member_no,
-    m.nickname,
-    h.head_no,
-    h.head_content,
-    bf.file_no,
-    bf.uuid_file_name,
-    r.region_no,
-    r.region_name
+      b.board_no,
+      b.board_category_no,
+      b.title,
+      b.view_count,
+      b.content,
+      b.created_date,
+      b.state,
+      (
+        select
+          count(*)
+        from
+          board_like bl
+        where
+          bl.board_no=b.board_no
+      ) as like_count,
+      m.member_no,
+      m.nickname,
+      h.head_no,
+      h.head_content,
+      bf.file_no,
+      bf.uuid_file_name,
+      r.region_no,
+      r.region_name
     from
-    board b
-    inner join head h on b.head_no=h.head_no
-    inner join member m on b.member_no=m.member_no
-    left join board_file bf on b.board_no=bf.board_no
-    left join region r on b.region_no=r.region_no
+      board b
+      inner join head h on b.head_no=h.head_no
+      inner join member m on b.member_no=m.member_no
+      left join board_file bf on b.board_no=bf.board_no
+      left join region r on b.region_no=r.region_no
     where
-    b.state != '1'
+      b.state != '1'
     order by
-    b.created_date desc,
-    like_count desc
-    limit #{rowCount} offset #{offset}
+      b.created_date desc,
+      like_count desc
+      limit #{rowCount} offset #{offset}
   </select>
 
   <!-- 상세 조회 -->
@@ -243,101 +307,107 @@
       m.nickname,
       (select count(*) from board_like where board_no=#{boardNo}) as like_count
     from
-    board b
-    left join head h on b.head_no=h.head_no
-    inner join board_scope bs on b.scope_no=bs.scope_no
-    inner join member m on b.member_no=m.member_no
-    left outer join comment c on b.board_no = c.board_no
-    left outer join reply rp on c.comment_no = rp.comment_no
-    left join region r on b.region_no=r.region_no
+      board b
+      left join head h on b.head_no=h.head_no
+      inner join board_scope bs on b.scope_no=bs.scope_no
+      inner join member m on b.member_no=m.member_no
+      left outer join comment c on b.board_no = c.board_no
+      left outer join reply rp on c.comment_no = rp.comment_no
+      left join region r on b.region_no=r.region_no
     where
-    b.board_no= #{boardNo}
+      b.board_no= #{boardNo}
     and
-    b.state != '1'
+      b.state != '1'
     order by
-    b.created_date desc,
-    b.like_count desc
+      b.created_date desc,
+      b.like_count desc
   </select>
 
   <!-- 게시글 썸네일 사진 가져오기-->
   <select id="boardThumbnail" resultMap="fileList">
     SELECT
-    bf.file_no,
-    bf.board_no,
-    bf.ori_file_name,
-    bf.uuid_file_name
+      bf.file_no,
+      bf.board_no,
+      bf.ori_file_name,
+      bf.uuid_file_name
     FROM
-    board_file bf
+      board_file bf
     WHERE
-    bf.board_no = #{boardNo}
+      bf.board_no = #{boardNo}
     ORDER BY
-    bf.file_no ASC
-    LIMIT 3
+      bf.file_no ASC
+      LIMIT 3
   </select>
 
   <!-- 게시글 변경 -->
   <update id="updateBoard" parameterType="Board">
     update
-    board
+      board
     set
-    title=#{title},
-    content=#{content},
-    head_no=#{headNo},
-    scope_no=#{scopeNo}
+      title=#{title},
+      content=#{content},
+      head_no=#{headNo},
+      scope_no=#{scopeNo}
     where
-    board_no=#{boardNo}
+      board_no=#{boardNo}
   </update>
 
   <!-- 댓글 작성 시 게시판 번호 찾기 -->
   <select id="findByBoardNo" parameterType="int" resultType="Board">
     SELECT
-    board_no
+      board_no
     FROM
-    board
+      board
     WHERE
-    board_no = #{boardNo}
+      board_no = #{boardNo}
   </select>
 
   <!-- 조회수 업데이트: 비공개 글에서는 조회수 증가 불가 -->
   <update id="increaseViewCount" parameterType="Board">
     UPDATE
-    board
+      board
     SET
-    view_count = view_count + 1
+      view_count = view_count + 1
     WHERE
-    board_no = #{boardNo}
-    AND
-    scope_no != 2
+      board_no = #{boardNo} AND
+      scope_no != 2
   </update>
 
 
   <!-- 추천수 업데이트 -->
   <insert id="increaseLikeCount">
-    INSERT INTO board_like (board_no, member_no)
-    VALUES (#{boardNo}, #{memberNo})
+    INSERT INTO
+      board_like
+      (
+        board_no,
+        member_no
+      )
+    VALUES
+      (
+        #{boardNo},
+        #{memberNo}
+      )
   </insert>
 
   <!-- 추천수 감소 -->
   <delete id="decreaseLikeCount">
     delete from
-    board_like
+      board_like
     where
-    board_no = #{boardNo}
-    and
-    member_no = #{memberNo}
+      board_no = #{boardNo} and
+      member_no = #{memberNo}
   </delete>
 
 
   <!-- 자신의 추천 여부 -->
   <select id="isLiked" resultType="int">
     select
-    count(*)
+      count(*)
     from
-    board_like
+      board_like
     where
-    board_no = #{boardNo}
-    and
-    member_no = #{memberNo}
+      board_no = #{boardNo} and
+      member_no = #{memberNo}
   </select>
 
 
@@ -409,11 +479,11 @@
       </when>
       <otherwise>
         SELECT
-        *
+          *
         FROM
-        board
+          board
         WHERE
-        false  <!-- 검색 유형이 유효하지 않을 경우 빈 결과 반환 -->
+          false  <!-- 검색 유형이 유효하지 않을 경우 빈 결과 반환 -->
       </otherwise>
     </choose>
   </select>
@@ -421,13 +491,12 @@
   <!-- 페이징 처리: 후기 제외, 공지사항 제외 일반 게시글 수 계산 -->
   <select id="countAll" resultType="int" parameterType="int">
     SELECT
-    COUNT(*)
+      COUNT(*)
     FROM
-    board
+      board
     WHERE
-    head_no != 1
-    AND
-    board_category_no = #{value}
+      head_no != 1 AND
+      board_category_no = #{value}
   </select>
 
   <!-- 검색 결과 페이징 처리 -->
@@ -435,27 +504,27 @@
     <choose>
       <when test='type.equals("title")'>
         SELECT
-        COUNT(*)
+          COUNT(*)
         FROM
-        board b
-        INNER JOIN head h ON b.head_no = h.head_no
+          board b
+          INNER JOIN head h ON b.head_no = h.head_no
         WHERE
-        b.title
-        LIKE CONCAT('%', #{keyword}, '%')
-        AND b.board_category_no = #{categoryNo}
-        AND b.state != '1'
+          b.title
+          LIKE CONCAT('%', #{keyword}, '%')
+          AND b.board_category_no = #{categoryNo}
+          AND b.state != '1'
       </when>
       <when test='type.equals("content")'>
         SELECT
-        COUNT(*)
+          COUNT(*)
         FROM
-        board b
-        INNER JOIN head h ON b.head_no = h.head_no
+          board b
+          INNER JOIN head h ON b.head_no = h.head_no
         WHERE
-        b.content
-        LIKE CONCAT('%', #{keyword}, '%')
-        AND b.board_category_no = #{categoryNo}
-        AND b.state != '1'
+          b.content
+          LIKE CONCAT('%', #{keyword}, '%')
+          AND b.board_category_no = #{categoryNo}
+          AND b.state != '1'
       </when>
       <otherwise>
         SELECT 0  <!-- 검색 유형이 유효하지 않을 경우 0 반환 -->
@@ -467,39 +536,43 @@
   <!-- 작성글 내역 -->
   <select id="findHistory" resultMap="BoardMap">
     select
-    b.board_no,
-    b.board_category_no,
-    case when b.board_category_no = 0 then '후기'
-    when b.board_category_no = 1 then '정보공유'
-    when b.board_category_no = 2 then '자유'
-    else ''
-    end as board_category_nm,
-    b.title,
-    b.created_date,
-    b.view_count,
-    count(bl.member_no) as like_count,
-    m.member_no,
-    bf.file_no,
-    bf.uuid_file_name
+      b.board_no,
+      b.board_category_no,
+      case when b.board_category_no = 0 then '후기'
+      when b.board_category_no = 1 then '정보공유'
+      when b.board_category_no = 2 then '자유'
+      else ''
+      end as board_category_nm,
+      b.title,
+      b.created_date,
+      b.view_count,
+      count(bl.member_no) as like_count,
+      m.member_no,
+      bf.file_no,
+      bf.uuid_file_name
     from
-    board b
-    inner join member m on b.member_no=m.member_no
-    left join board_like bl on b.board_no=bl.board_no
-    left join board_file bf on b.board_no=bf.board_no
+      board b
+      inner join member m on b.member_no=m.member_no
+      left join board_like bl on b.board_no=bl.board_no
+      left join board_file bf on b.board_no=bf.board_no
     where
-    b.state != '1'
-    And
-    m.member_no=#{no}
+      b.state != '1' And
+      m.member_no=#{no}
     group by
-    b.board_no
+      b.board_no
     order by
-    b.created_date desc
-    limit #{rowCount} offset #{offset}
+      b.created_date desc
+      limit #{rowCount} offset #{offset}
   </select>
 
   <select id="countAllHistory" resultType="int" parameterType="int">
-    select count(*) from board
-    where member_no = #{value} and state = 0
+    select
+      count(*)
+    from
+      board
+    where
+      member_no = #{value} and
+      state = 0
   </select>
 
   <!-- 작성댓글 내역 -->
@@ -553,6 +626,15 @@
       where r.member_no = #{no}
         and r.state = 0
     ) cnr
+  </select>
+
+  <select id="selectBoardWriterInfo">
+    select
+      member_no
+    from
+      board
+    where
+      board_no = #{boardNo}
   </select>
 
 </mapper>

@@ -51,8 +51,15 @@ function reservationListPageSet(){
       cardHtml += '<div id="card-text-box"><span class="card-text" id="card-text-start-date">이용기간 : '+ reservation.startDate +' ~ </span>';
       cardHtml += '<span class="card-text" id="card-text-end-date">'+ reservation.endDate +'</span>';
       cardHtml += '<span class="card-text" id="card-text-people"> 이용인원 : '+ reservation.numberOfPeople +'</span></div>'
+      
+      // 상태가 "완료됨"인 경우 리뷰 쓰러가기 링크 추가
+      if (reservation.state === "완료됨") {
+        cardHtml += '<div id="review-link-box"><a id="review-Link" href="/member/reviewWrite?reservationNo='+ reservation.reservationNo +'"><span>리뷰 쓰러가기</span></a></div>';
+      }
+
       cardHtml += '<div class="col align-self-end card-delete-box"><span id="card-text-reservation-state">'+ reservation.state +'</span></div>';
       cardHtml += '</div></div></div></div>';
+
       // 페이지에 카드를 추가합니다.
       $('#reservation-contents-container').append(cardHtml);
   });

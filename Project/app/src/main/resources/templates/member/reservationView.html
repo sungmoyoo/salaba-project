@@ -7,10 +7,12 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/modal/loginModal.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/reservationView.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sweetalert2.min.css">
   <script th:inline="javascript">
     const sessionInfo = /*[[${session.loginUser}]]*/ null;
     const reservationInfo = /*[[${reservation}]]*/ null;
@@ -20,47 +22,146 @@
 </head>
 <body>
   <div data-th-replace="header :: header">header</div>
-<main>
-  <section id="reservationView-PhotoSection" class="container-sm">
-    <div class="row" id="reservationView-photo-container">
-      <div class="row-6">
-        <div class="col-sm-2">
-          <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${reservation.photoList[0].uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}">
-        </div>
-        <div class="container overflow-hidden text-center">
-          <div class="col-sm-9 row gy-3">
-            <div class="col-2">
-              <div class="p-3">
-                <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${reservation.photoList[1].uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}">
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="p-3">
-                <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${reservation.photoList[1].uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}">
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="p-3">
-                <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${reservation.photoList[2].uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}">
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="p-3">
-                <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${reservation.photoList[2].uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}">
-              </div>
-            </div>
-          </div>
+<main class="container-sm">
+  <section id="reservationView-PhotoSection" class="container-fluid mt-5">
+    <div class="container-fluid" id="reservationView-photo-container">
+        
+    </div>
+  </section>
+  
+  <section id="reservationView-ContentSection" class="container-fluid mt-5 mb-5">
+    <div id="rentalHomeRule" class="container-fluid">
+      <div class="p-2" id="rentalHomeRule-title">
+        <span>숙소 이용 규칙</span>
+      </div>
+      <div class="p-2" id="rentalHomeRule-content">
+        <div class="row g-0">
+          <span class="col" data-th-text="${reservation.rentalHomeRule}" id="rentalHomeRule-text"></span>
+          <button type="button" class="btn btn-link col-sm-2 align-self-end" data-bs-toggle="modal" data-bs-target="#rentalHomeRuleModal" id="showMoreButton" style="display: none;">더 보기</button>
         </div>
       </div>
     </div>
-  </section>
-  <section id="reservationView-ContentSection">
+    <div id="rentalHomeAddress" class="container-fluid">
+      <div class="p-2" id="rentalHomeAddress-content">
+        <span>숙소 주소</span>
+      </div>
+      <div class="p-2" id="rentalHomeAddress-text">
+        <span data-th-text="${reservation.address}"></span>
+      </div>
+      <div class="p-2" id="rentalHomeAddress-map">
+        <div class="p-2" id="map" style="height: 600px;">
 
+        </div>
+      </div>
+    </div>
+    <div id="reservationInfo" class="container-fluid">
+      <div class="p-2" id="reservation-content">
+        <div class="row g-0">
+          <span class="col" data-th-text="${'예약번호 : '+ reservation.reservationNo}"></span>
+          <button type="button" class="btn btn-secondary col-sm-2 align-self-end" 
+              data-th-if="${reservation.state != '3'}" data-bs-toggle="modal" data-bs-target="#reservationCancel">예약 취소</button>
+        </div>
+      </div>
+      <div class="p-2" id="payment-content">
+        <div class="row g-0">
+          <span class="col" data-th-text="${'결제금액 : '+ reservation.payment.amount}"></span>
+          <button type="button" class="btn btn-secondary col-sm-2 align-self-end">결제 상세</button>
+        </div>
+      </div>
+    </div>
+    <div id="refundInfo" class="container-fluid">
+      <div class="p-2" id="refund-title">
+        <span>환불 정책</span>
+      </div>
+      <div class="p-2" id="refund-content">
+        <span></span>
+      </div>
+    </div>
   </section>
+  
+  
+  <!-- 숙소 사진 모달 -->
+  <div class="modal fade" id="rentalHomePhotoList" tabindex="-1" aria-labelledby="rentalHomePhotoListLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-5">사진</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="rentalHomePhoto" class="d-flex flex-column align-items-center" data-th-each="photo : ${reservation.photoList}">
+            <div id="PhotoExplanation" class="mb-2 text-center">
+              <span data-th-text="${photo.photoExplanation}"></span>
+            </div>
+            <div class="text-center">
+              <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/'+ ${photo.uuidPhotoName}+'?type=f&w=265&h=252&faceopt=false&ttype=jpg'}" class="img-fluid">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 숙소 이용규칙 모달 -->
+  <div class="modal fade" id="rentalHomeRuleModal" tabindex="-1" aria-labelledby="rentalHomeRuleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rentalHomeRuleModalLabel">숙소 이용규칙</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <span data-th-text="${reservation.rentalHomeRule}"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 예약 취소 모달 -->
+  <div class="modal fade" id="reservationCancel" tabindex="-1" aria-labelledby="reservationCancelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="reservationCancelLabel">예약 취소</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <span data-th-text="${'예약번호 : ' + reservation.reservationNo}"></span>
+          </div>
+          <div>
+            <span data-th-text="${'예약자명 : ' + session.loginUser.name}"></span>
+          </div>
+          <div>
+            <span data-th-text="${'예약 숙소 : ' + reservation.nickname + '님의 숙소'}"></span>
+          </div>
+          <div>
+            <span data-th-text="${'결제 일시 : ' + reservation.payment.paymentDate}"></span>
+          </div>
+          <div>
+            <span data-th-text="${'결제 금액 : ' + reservation.payment.amount}"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="reservationCancelButton" data-bs-dismiss="modal">예약 취소</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
 </main>
+  
   <div data-th-replace="footer :: footer" class="footer-div">footer</div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/js/member/reservationView.js}"></script>
 </html>

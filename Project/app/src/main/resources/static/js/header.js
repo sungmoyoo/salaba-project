@@ -16,6 +16,16 @@ const userInfoMenuContainer = document.querySelector('.userInfo-menu');
 
 let isMenuOpen = false;
 
+document.addEventListener('DOMContentLoaded', function(){
+  let popoverTrigger = document.getElementById('notificationIcon');
+  let popoverContent = document.getElementById('notificationPopup').innerHTML;
+
+  let popover = new bootstrap.Popover(popoverTrigger, {
+    content: popoverContent,
+    html: true
+  }); 
+})
+
 // 메뉴 버튼
 userInfoMenuButton.addEventListener('click', function(event){
   if(isMenuOpen){

@@ -22,4 +22,9 @@ public class DefaultReservationService implements ReservationService {
   public Reservation selectReservation(int reservationNo) {
     return reservationDao.selectReservation(reservationNo);
   }
+
+  @Override
+  public int updateReservationForCancel(int reservationNo) {
+    return reservationDao.updateReservationForCancel(reservationNo);
+  }
 }

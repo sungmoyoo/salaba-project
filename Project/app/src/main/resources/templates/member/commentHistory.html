@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>사라바</title>
   <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/member/boardHistory.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -21,15 +22,15 @@
 </script>
 <body>
   <div data-th-replace="header :: header">머리말</div>
-<main class="row">
-  <section id="myPage-leftSection" class="col-2">
+  <main class="container-sm">
+  <section id="myPage-leftSection" class="g-col-2 mt-5">
     <div data-th-replace="/member/myPageSideMenu :: myPageSideMenu">a</div>
   </section>
 
-  <section id="myPage-rightSection" class="row col-8">
+  <section id="myPage-rightSection" class="row g-col-8 p-4 mt-5">
     <div id="myPage-title-container">
       <div>
-        <h1>작성댓글 내역</h1>
+        <h1>댓글 내역</h1>
       </div>
     </div>
 
@@ -38,7 +39,7 @@
         <thead>
           <tr class="table-light">
             <th></th>
-            <th>작성된 글제목</th>
+            <th>글제목</th>
             <th>내용</th>
             <th>작성일/시간</th>
           </tr>
@@ -46,17 +47,17 @@
         <tbody>
           <tr class="table-light" data-th-each="board : ${list}" data-th-object="${board}">
             <td class="table-light" data-th-text="*{cnr}"></td>
-            <td class="table-light">
+            <td class="table-light" id="title">
               <input type="hidden" data-th-value="*{boardNo}" id="boardNo" />
               <input type="hidden" data-th-value="*{categoryNo}" id="categoryNo" />
-              <a data-th-text="*{title}"
+              <a data-th-text="*{title}" id="boardViewLink"
                 href="javascript:void(0);" onclick="checkBoard(this);"></a></td>
-            <td class="table-light" data-th-text="*{content}"></td>
+            <td id="content" class="table-light" data-th-text="*{content}"></td>
             <td class="table-light" data-th-text="${#dates.format(board.createdDate,'yyyy-MM-dd/hh:mm:ss')}"></td>
           </tr>
         </tbody>
       </table>
-      <div>
+      <div class="d-flex justify-content-center">
         <nav aria-label="Page navigation">
           <ul class="pagination">
             <li class="page-item">

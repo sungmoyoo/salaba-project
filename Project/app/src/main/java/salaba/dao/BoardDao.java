@@ -57,4 +57,6 @@ public interface BoardDao {  // 게시판 인터페이스
       @Param("no") int no);
 
   int countAllCommentHistory(int no);// count
+  
+  int selectBoardWriterInfo(@Param("boardNo") int boardNo); // 게시글 작성자 회원번호 가져오기
 }

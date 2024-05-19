@@ -145,7 +145,7 @@ public class MemberController implements InitializingBean {
     model.addAttribute("numOfPage", numOfPage);
   }
 
-  @PostMapping("boardStateCheck")  // 작성댓글 내역
+  @PostMapping("/member/boardStateCheck")  // 작성댓글 내역
   public ResponseEntity<?> boardStateCheck(
       Board board ) throws Exception {
     String state = memberService.boardStateCheck(board);

@@ -31,6 +31,9 @@
     <link rel="stylesheet" type="text/css" href="/css/board/card.css" />
     <link rel="stylesheet" type="text/css" href="/css/board/table.css" />
   </head>
+  <script th:inline="javascript">
+    const sessionInfo = /*[[${session}]]*/ null;
+  </script>
   <body>
     <div data-th-replace="header :: header">머리말</div>
     <h1 data-th-text="${boardName}" hidden>게시판</h1>
@@ -329,7 +332,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script data-th-src="@{/js/board/list.js}"></script>
     <script data-th-src="@{/js/board/alert.js}"></script>
-    <script data-th-src="@{/js/common/alarm.js}"></script>
+    <script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script>
     <script data-th-src="@{/js/header.js}"></script>
   </body>
 </html>

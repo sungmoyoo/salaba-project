@@ -40,24 +40,13 @@ public interface MemberService {
 
   void deletePreference(int memberNo);
 
-  List<Member> themeList(Member sessionInfo);
 
-  int getMemberPoint(int no);
-
-  Member getGrade(Member member);
-
-  List<Member> mythemeList(Member sessionInfo);
-
-  //////////////////////
-  void insertNotifyHistory(Alarm alarm);
-
-  List<Alarm> selectNotifyHistory(int memberNo);
-
-  void updateNotifyHistory(int notifyNo);
-
-  //////////////////////
   String boardStateCheck(Board board);
 
+
+
+
+  ///////////////////////////////////////////////////////////////////////////
   List<Board> search(String keyword, String type); // 검색 기능 업데이트
 
   int countFiltered(String type, String keyword); // 검색 결과 페이징 처리

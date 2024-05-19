@@ -52,11 +52,6 @@ public interface MemberDao {
 
   List<Member> findAllmyTheme(Member sessionInfo);
 
-  void addNotifyHistory(Alarm alarm);
-
-  List<Alarm> selectNotifyHistory(int memberNo);
-
-  void updateNotifyHistory(char state, int notifyNo);
 
   String boardStateCheck(Board board);
 

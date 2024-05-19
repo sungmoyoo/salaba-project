@@ -170,4 +170,9 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   public int countAllCommentHistory(int no) {
     return boardDao.countAllCommentHistory(no);
   } // count
+
+  @Override
+  public int selectBoardWriterInfo(int boardNo) {
+    return boardDao.selectBoardWriterInfo(boardNo);
+  }
 }

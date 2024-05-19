@@ -2,7 +2,6 @@ package salaba.service;
 
 import java.util.List;
 import salaba.vo.Reservation;
-import salaba.vo.rental_home.RentalHome;
 
 public interface ReservationService {
 
@@ -10,4 +9,5 @@ public interface ReservationService {
 
   Reservation selectReservation(int reservationNo);
 
+  int updateReservationForCancel(int reservationNo);
 }

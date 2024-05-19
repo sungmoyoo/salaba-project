@@ -7,7 +7,7 @@ $(document).ready(function(){
 function sideMenuActiveCommentHistory(){
   $('#sideMenu-nav a.active').removeClass('active');
   const sideMenu = $('#sideMenu-WriteHistory-Reply');
-  $('#sideMenu-collapse-HelpCenter').collapse('show');
+  $('#sideMenu-collapse-writeHistory').collapse('show');
   sideMenu.addClass('active');
 }
 
@@ -25,7 +25,8 @@ function activePageNav(){
 function checkBoard(obj){
   const boardNo = $(obj).parent().find("#boardNo").val();
   const categoryNo = $(obj).parent().find("#categoryNo").val();
-
+  console.log(boardNo);
+  console.log(categoryNo);
     $.ajax({
       url: "/member/boardStateCheck",
       type: "post",

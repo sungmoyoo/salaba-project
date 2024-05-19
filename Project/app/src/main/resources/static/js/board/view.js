@@ -3,7 +3,9 @@
 
 const reportForm = $("#report-form");
 let boardNo = $("#boardNum").text();  // jQuery를 사용하여 data 속성에서 boardNo 추출: 게시글 번호
-
+const alarmContent = window.location.href;
+const alarmMessageComment = "댓글";
+const alarmMessageReply = "답글";
 //-------------------------------------댓글-------------------------------------
 //댓글 작성하기
 $("#addCommentBtn").click(function (e) {
@@ -20,17 +22,18 @@ $("#addCommentBtn").click(function (e) {
                 // 서버로 보낼 데이터
                 boardNo: boardNo,
                 content: content,
+                alarmContent: alarmContent
             },
             success: function (data) {
                 let newComment = $(`<div class="comment-container">
                               <div class="comment">
                               <div class="commentContentDiv">
                                 <div class="textContent comment-text">
-                                  <span class="targetNo commentNo" hidden>${data.commentNo}</span>
-                                  <img class="profile-img1" height='40px' src='https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.writer.photo}'>
-                                  <span class="nickname">${data.writer.nickname}</span>
-                                  <span class="comment-date">${data.createdDate}</span><br>
-                                  <span class="commentContent">${data.content}</span><br>
+                                  <span class="targetNo commentNo" hidden>${data.result.commentNo}</span>
+                                  <img class="profile-img1" height='40px' src='https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.result.writer.photo}'>
+                                  <span class="nickname">${data.result.writer.nickname}</span>
+                                  <span class="comment-date">${data.result.createdDate}</span><br>
+                                  <span class="commentContent">${data.result.content}</span><br>
                                 </div>
                                 <div class="button-container1">
                                     <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
@@ -46,6 +49,7 @@ $("#addCommentBtn").click(function (e) {
                 newComment.find('.comment').click(addReplyForm);
                 newComment.children().find(".del").click(deleteComment);
                 newComment.children().find(".modi").click(modifyComment);
+                window.sendAlarm(data.alarm, alarmMessageComment);
             },
             error: function () {
                 // 오류 메시지
@@ -109,7 +113,8 @@ function addReply(event) {
             dataType: "json",
             data: {
                 commentNo: commentNo,
-                content: replyContent
+                content: replyContent,
+                alarmContent: alarmContent
             },
             success: function (data) {
                 let newReply = $(`<div>
@@ -117,12 +122,12 @@ function addReply(event) {
                           <div class="replyContentDiv">
                             <div class="textContent reply-text">
                             <span>⮑</span>
-                              <span class="targetNo replyNo" hidden>${data.replyNo}</span>
+                              <span class="targetNo replyNo" hidden>${data.result.replyNo}</span>
                               <!--프로필사진-->
-                              <img class="profile-img2"  height='40px' src= 'https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.writer.photo}'>
-                              <span class="nickname">${data.writer.nickname}</span>
-                              <span class="reply-date">${data.createdDate}</span><br>
-                              <span class="replContent">${data.content}</span><br>
+                              <img class="profile-img2"  height='40px' src= 'https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.result.writer.photo}'>
+                              <span class="nickname">${data.result.writer.nickname}</span>
+                              <span class="reply-date">${data.result.createdDate}</span><br>
+                              <span class="replContent">${data.result.content}</span><br>
                             </div>
                             <div class="button-container2">
                                 <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
@@ -138,6 +143,7 @@ function addReply(event) {
                 replyForm.find('#reply-content').val("");
                 newReply.find('.button-container2').find(".del2").click(deleteReply);
                 newReply.find('.button-container2').find(".modi2").click(modifyReply);
+                window.sendAlarm(data.alarm,alarmMessageReply);
             },
             error: function () {
                 Swal.fire({

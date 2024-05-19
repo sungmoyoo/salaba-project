@@ -51,96 +51,106 @@ mapButton.addEventListener('click', function(){
 });
 
 // googleMap 초기화
-async function initMap(){
+async function initMap() {
   let rentalHomeProp = [];
   let rentalHome = rentalHomeList; // 숙소 목록
   
-  let priceTag = document.createElement("div");
-  priceTag.className = "price-tag"
-
   // 숙소 목록에 대한 정보 작성
-  rentalHomeList.forEach(rentalHome =>{
+  rentalHomeList.forEach(rentalHome => {
     let photos = [];
-    rentalHome.rentalHomePhotos.forEach(photo =>{
-      photos.push( photo.uuidPhotoName );
+    rentalHome.rentalHomePhotos.forEach(photo => {
+      photos.push(photo.uuidPhotoName);
     });
-    rentalHomeProp.push( { 
+    rentalHomeProp.push({
+      rentalHomeNo: rentalHome.rentalHomeNo,
       photo: photos,
       name: rentalHome.name,
       price: rentalHome.price,
-      position: {lat:Number(rentalHome.lat) , lng:Number(rentalHome.lon)},
-     });
+      position: { lat: Number(rentalHome.lat), lng: Number(rentalHome.lon) }
+    });
   });
 
   // googleMap 변수 / 라이브러리
-  const{ Map } = await google.maps.importLibrary("maps");
-  const{ AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   
   // google맵 초기 위치 설정
   let map = new Map(document.getElementById("map"), {
-    zoom : 10,
-    center: {lat:rentalHomeProp[0].position.lat, lng:rentalHomeProp[0].position.lng},
+    zoom: 10,
+    center: { lat: rentalHomeProp[0].position.lat, lng: rentalHomeProp[0].position.lng },
     mapId: '470e45162ba863f'
   });
 
   // 구글맵에 표시할 마커에 대한 정보 설정
-  for( const property of rentalHomeProp ){
-    const advancedMarkerView = new google.maps.marker.AdvancedMarkerElement({
-      map,
-      // content: buildContent(property), // 구글맵 마커 안쪽에서 표시할 것들 설정
-      position:property.position, // 구글맵 마커 위치 설정
-      title:property.name,
+  for (const property of rentalHomeProp) {
+    const marker = new google.maps.Marker({
+      position: property.position,
+      map: map,
+      title: property.name,
     });
     
-    // 마커 동작에 대한 event
-    const element = advancedMarkerView.element;
-    ["focus", "pointerenter"].forEach((event) => {
-      element.addEventListener(event, ()=>{
-        highlight(advancedMarkerView, property);
-      });
+    // 마커 클릭 이벤트 추가
+    const infowindow = new google.maps.InfoWindow({
+      content: buildContent(property)
     });
-    ["blur","pointerleave"].forEach((event)=>{
-      element.addEventListener(event, () =>{
-        unhighlight(advancedMarkerView, property);
-      });
-    });
-    advancedMarkerView.addListener("click",(event) =>{
-      unhighlight(advancedMarkerView, property);
+    
+    marker.addListener("click", () => {
+      infowindow.open(map, marker);
+      // 캐러셀 초기화
+      setTimeout(() => {
+        const myCarousel = document.querySelector(`#carousel-${property.rentalHomeNo}`);
+        const carousel = new bootstrap.Carousel(myCarousel, {
+          interval: 2000
+        });
+      }, 0); // DOM이 갱신된 후 캐러셀을 초기화하기 위해 setTimeout 사용
     });
   }
-}
-
-function highlight(markerView, property){
-  markerView.content.classList.add("highlight");
-  markerView.element.style.zIndex = 1;
-}
-
-function unhighlight(markerView, property){
-  markerView.content.classList.remove("highlight");
-  markerView.element.style.zIndex = "";
 }
 
 // googleMap 마커 내용 설정
-function buildContent(property){
+function buildContent(property) {
   let content = document.createElement("div");
-  
   content.classList.add("property");
-  content.innerHTML = "<div class='price-tag'><span class='mapPrice'>"+property.price+"</span></div>";
-  
-  let mapSlideContainer = document.createElement("div");
-  mapSlideContainer.classList.add("mapSlide-container");
-  
-  // 숙소 이미지 설정 appendChild로 html에서 자식으로 부여되도록 함
-  for( var i = 0; i < property.photo.length; i++ ){
-    let img = document.createElement("img");
-    img.classList.add("mapSlider-image");
-    img.src = 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/" + property.photo[i] + "?type=f&w=150&h=150&ttype=jpg';
-    img.alt = "숙소이미지";
-    mapSlideContainer.appendChild(img);
-  }
-  content.appendChild(mapSlideContainer);
 
-  content.innerHTML += "<button class='slide-button prev-button'>&lt;</button><button class='slide-button next-button'>&gt;</button><span>" + property.name + "</span><span>" + property.price + "</span>";
+  let carouselItems = '';
+  property.photo.forEach(function(photo, index) {
+    carouselItems += `
+      <div class="carousel-item ${index === 0 ? 'active' : ''}">
+        <a href="rentalHome/view?rentalHomeNo=${property.rentalHomeNo}" name="rentalHomeNo">
+          <img class="slide-image" src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/${photo}?type=f&w=265&h=252&faceopt=false&ttype=jpg" alt="숙소 이미지">
+        </a>
+      </div>
+    `;
+  });
+
+  content.innerHTML = `
+  <div class="details">
+    <div class="card p-2 mx-auto mb-4">
+      <div id="carousel-${property.rentalHomeNo}" class="carousel slide">
+        <div class="carousel-inner">
+          ${carouselItems}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${property.rentalHomeNo}" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel-${property.rentalHomeNo}" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="listing-text">
+          <span>${property.name}</span>
+        </div>
+        <div class="listing-price">
+          <span>$ </span>
+          <span>${property.price}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;
 
   return content;
 }
@@ -219,86 +229,62 @@ function scrollThemes(offset) { // 테마 스크롤 이벤트
   }
 }
 
-// 숙소 이미지 슬라이더 이벤트
-function bindSliderEvents(listItem){
-  let $slideImages = listItem.find('.slide-image');
-  let currentIndex = 0;
-
-  function showSlide(index){
-    $slideImages.hide().eq(index).show();
-  }
-
-  function showNextSlide(){
-    currentIndex = (currentIndex + 1) % $slideImages.length;
-    showSlide(currentIndex);
-  }
-
-  function showPreviousSlide(){
-    currentIndex = (currentIndex -1 + $slideImages.length) % $slideImages.length;
-    showSlide(currentIndex);
-  }
-
-  listItem.find('.next-button').off('click').on('click', showNextSlide);
-  listItem.find('.prev-button').off('click').on('click', showPreviousSlide);
-
-  showSlide(currentIndex);
-}
-
-// 각 숙소의 이미지 슬라이더 처리
-$('.listing-item').each(function () {
-  const $slideImages = $(this).find('.slide-image');
-  let currentIndex = 0;
-
-  function showSlide(index) {
-    $slideImages.hide().eq(index).show();
-  }
-
-  function showNextSlide() {
-    currentIndex = (currentIndex + 1) % $slideImages.length;
-    showSlide(currentIndex);
-  }
-
-  function showPreviousSlide() {
-    currentIndex = (currentIndex - 1 + $slideImages.length) % $slideImages.length;
-    showSlide(currentIndex);
-  }
-
-  $(this).find('.next-button').click(showNextSlide);
-  $(this).find('.prev-button').click(showPreviousSlide);
-
-  showSlide(currentIndex);
-});
-
 // 숙소 목록 재할당
-function updateRentalHomeList(newRentalHomeList){
+function updateRentalHomeList(newRentalHomeList) {
   let listContainer = $('.listing-container'); // 가장 바깥 html 태그의 class 아이디
   listContainer.empty();
 
-  newRentalHomeList.forEach(function(rentalHome){ // html을 재할당된 숙소 목록으로 재작성
-      let listItem = $( '<div class="listing-item">' );
-      let sliderDiv = $( '<div class="listing-slider">' );
-      
-      rentalHome.rentalHomePhotos.forEach(function(photos){
-        let image = $( '<img class="slide-image">' )
-        .attr( 'src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + photos.uuidPhotoName + '?type=f&w=265&h=252&faceopt=false&ttype=jpg' )
-        .attr( 'alt', '숙소이미지' );
-        sliderDiv.append(image);
-      });
-      let imageLeftButton = $('<button class="slide-button prev-button"></button>');
-      let imageRightButton = $('<button class="slide-button next-button"></button>');
-      let nameSpan = $('<span>').text(rentalHome.name);
-      let priceSpan = $('<span>').text(rentalHome.price);
-      
-      sliderDiv.append(imageLeftButton);
-      sliderDiv.append(imageRightButton);
-      sliderDiv.append(nameSpan);
-      sliderDiv.append(priceSpan);
-      listItem.append(sliderDiv);
+  newRentalHomeList.forEach(function(rentalHome) { // html을 재할당된 숙소 목록으로 재작성
+    let cardDiv = $('<div class="card p-2 mx-auto mb-4" style="width: 18rem;">');
 
-      listContainer.append(listItem); // html 작성한것 적용
-      
-      // 사진 슬라이더 이벤트 재할당
-      bindSliderEvents(listItem);
+    let carouselDiv = $('<div class="carousel slide" data-bs-ride="carousel">');
+    carouselDiv.attr('id', 'carousel-'+rentalHome.rentalHomeNo);
+    let carouselInnerDiv = $('<div class="carousel-inner">');
+
+    rentalHome.rentalHomePhotos.forEach(function(photo, index) {
+      let carouselItemDiv = $('<div class="carousel-item">');
+      if (index === 0) {
+        carouselItemDiv.addClass('active');
+      }
+      let imageAnchor = $('<a>')
+        .attr('href', 'rentalHome/view?rentalHomeNo=' + rentalHome.rentalHomeNo)
+        .attr('name', 'rentalHomeNo');
+      let image = $('<img class="slide-image">')
+        .attr('src', 'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + photo.uuidPhotoName + '?type=f&w=265&h=252&faceopt=false&ttype=jpg')
+        .attr('alt', '숙소 이미지');
+      imageAnchor.append(image);
+      carouselItemDiv.append(imageAnchor);
+      carouselInnerDiv.append(carouselItemDiv);
+    });
+
+    let prevButton = $('<button class="carousel-control-prev" type="button" data-bs-target="#carousel-'+ rentalHome.rentalHomeNo +'" data-bs-slide="prev">');
+    prevButton.append('<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>');
+
+    let nextButton = $('<button class="carousel-control-next" type="button" data-bs-target="#carousel-'+rentalHome.rentalHomeNo+'" data-bs-slide="next">');
+    nextButton.append('<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>');
+
+    carouselDiv.append(carouselInnerDiv);
+    carouselDiv.append(prevButton);
+    carouselDiv.append(nextButton);
+
+    let cardBodyDiv = $('<div class="card-body">');
+    let listingTextDiv = $('<div class="listing-text">');
+    let nameSpan = $('<span>').text(rentalHome.name);
+    let listingPriceDiv = $('<div class="listing-price">');
+    let dollarSpan = $('<span>').text('$ ');
+    let priceSpan = $('<span>').text(rentalHome.price);
+
+    listingTextDiv.append(nameSpan);
+    listingPriceDiv.append(dollarSpan);
+    listingPriceDiv.append(priceSpan);
+
+    cardBodyDiv.append(listingTextDiv);
+    cardBodyDiv.append(listingPriceDiv);
+
+    cardDiv.append(carouselDiv);
+    cardDiv.append(cardBodyDiv);
+
+    listContainer.append(cardDiv); // html 작성한것 적용
   });
 }
 
@@ -306,3 +292,19 @@ function updateRentalHomeList(newRentalHomeList){
 function handleNewRentalHomeList(newRentalHomeList){
   updateRentalHomeList(newRentalHomeList);
 }
+
+$(document).ready(function() {
+  const rentalHome = rentalHomeList;
+  rentalHome.forEach(item=>{
+    $('#carousel-' + item.rentalHomeNo + ' .carousel-control-prev').attr('data-bs-target', '#carousel-' + item.rentalHomeNo);
+    $('#carousel-' + item.rentalHomeNo + ' .carousel-control-next').attr('data-bs-target', '#carousel-' + item.rentalHomeNo);
+  });
+});
+
+// function bindcarousel( rentalHomeList ){
+//   const rentalHome = rentalHomeList;
+//   rentalHome.forEach(item=>{
+//     $('#carousel-' + item.rentalHomeNo + ' .carousel-control-prev').attr('data-bs-target', '#carousel-' + item.rentalHomeNo);
+//     $('#carousel-' + item.rentalHomeNo + ' .carousel-control-next').attr('data-bs-target', '#carousel-' + item.rentalHomeNo);
+//   });
+// }

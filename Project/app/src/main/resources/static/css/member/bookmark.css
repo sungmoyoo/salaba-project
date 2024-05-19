@@ -5,6 +5,14 @@ html{
   font-style: normal;
 }
 
+main{
+  display: flex;
+  font-family: "Noto Sans KR";
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .card-title{
   font-size: 28px;
   font-weight: 600;
@@ -19,6 +27,7 @@ html{
   margin-top: 40px;
   padding-top: 20px;
 }
+
 #link-box{
   margin-top: 7px;
   padding-top: 3px;
