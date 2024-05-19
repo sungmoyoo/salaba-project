@@ -25,18 +25,16 @@
     }
 
     #main-container {
-      text-align: center;
-      max-width: 90%;
-      margin: 0 auto;
-      padding: 40px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
+        text-align: center;
+        margin: 0 auto;
+        padding: 40px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
 
     h1 {
         font-size: 32px;
         font-weight: 700;
-        color: #333;
         margin-bottom: 10px;
         text-align: center;
     }
@@ -44,13 +42,11 @@
     h4 {
         font-size: 20px;
         font-weight: 600;
-        color: #555;
         margin-bottom: 10px;
     }
 
     p {
         font-size: 18px;
-        color: #777;
         line-height: 1.6;
     }
 
@@ -108,7 +104,7 @@
     }
 
     #map {
-        height: 400px;
+        height: 600px;
         width: 100%;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -121,11 +117,10 @@
       display: inline-block;
       margin: 10px 15px 10px 0;
     }
-
-    button {
+    #preButton {
         font-weight: 600;
         color: #fff;
-        background-color: #FF99B3;
+        background-color: #aaa;
         border: none;
         border-radius: 4px;
         padding: 10px 20px;
@@ -133,101 +128,23 @@
         transition: background-color 0.3s ease;
     }
 
-    button:hover {
-        background-color: #FF66A3;
+    #preButton:hover {
+        background-color: #888;
     }
 
-    #modalButton {
+    #saveButton {
         background-color: #35C5B3;
-    }
-
-    #modalButton:hover {
-        background-color: #1C9189;
-    }
-
-    #modalWrap {
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.7);
-        display: none;
-    }
-
-    #modalBody {
-        max-width: 700px;
-        margin: 15% auto;
-        padding: 40px;
-        background-color: #fff;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    #modalBody p {
-        font-size: 20px;
-        color: #555;
-        margin-bottom: 30px;
-    }
-
-    #submitButton,
-    #closeButton {
-        font-size: 18px;
-        font-weight: 600;
-        color: #fff;
+        color: white;
         border: none;
         border-radius: 4px;
-        padding: 12px 24px;
+        padding: 10px 20px;
         cursor: pointer;
+      }
+
+      #saveButton:hover {
         transition: background-color 0.3s ease;
-        margin: 0 10px;
-    }
-
-    #submitButton {
-        background-color: #35C5B3;
-    }
-
-    #submitButton:hover {
         background-color: #1C9189;
-    }
-
-    #closeButton {
-        background-color: #FA5858;
-    }
-
-    #closeButton:hover {
-        background-color: #E53E3E;
-    }
-
-
-
-    @media (max-width: 768px) {
-        #main-container {
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 28px;
-        }
-
-        h4 {
-            font-size: 18px;
-        }
-
-        p {
-            font-size: 16px;
-        }
-
-        #modalBody {
-            padding: 20px;
-        }
-
-        #modalBody p {
-            font-size: 18px;
-        }
-    }
+      }
   </style>
 </head>
 
@@ -237,7 +154,7 @@
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 <br>
 
-<div id="main-container">
+<div id="main-container" class="container-sm">
 
   <div class="area">
     <h1>숙소 기본 정보</h1>
@@ -357,20 +274,12 @@
       <a data-th-text="*{facilityName}">aaa</a>
     </p>
   </div>
-  <button type="button" onclick="window.history.back()">이전</button>
-  <button id="modalButton" type="button">등록</button>
+  <button id="preButton" onclick="window.history.back()">이전</button>
+  <button id="saveButton" type="button">등록</button>
 </div>
 
 
 
-<div id="modalWrap"> <!-- 모달 창을 감싸는 div -->
-  <div id="modalBody">
-    <p>숙소 등록에 필요한 심사가 영업일 기준 7~14일 소요될 수 있습니다. </p> <!-- 모달 창 내용 -->
-    <button id="submitButton">등록</button> <!-- 모달을 닫는 X 버튼 -->
-    <button id="closeButton">취소</button>
-
-  </div>
-</div>
 <br>
 
 <div class="footer" data-th-replace="footer :: footer">꼬리말</div>
@@ -396,24 +305,35 @@
 
   initMap();
 
-  // 등록 최종 확인 및 안내메시지 모달
-  const modal = document.getElementById("modalWrap");
+  // 등록 최종 확인 및 안내메시지
+  document.querySelector("#saveButton").onclick= () => {
+   Swal.fire({
+      text: "숙소 등록에 필요한 심사가 영업일 기준 7~14일 소요될 수 있습니다.",
+      showCancelButton: true,
+      width: 600,
+      confirmButtonText: "등록",
+      confirmButtonColor: "#35C5B3",
+      cancelButtonText: "취소"
 
-  document.querySelector("#modalButton").onclick= () => {
-    modal.style.display = "block";
-  }
-
-  document.querySelector("#submitButton").onclick = () => {
-    window.location.href = "rentalHomeAdd";
-  }
-
-  document.querySelector("#closeButton").onclick = () => {
-    modal.style.display = "none";
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "등록되었습니다.",
+          showConfirmButton: false,
+          timer: 2000
+        }).then((result) => {
+          window.location.href = "rentalHomeAdd";
+        });
+      }
+    });
   }
 
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script data-th-src="@{/js/host/hostHeader.js}"></script>
 </body>
 </html>

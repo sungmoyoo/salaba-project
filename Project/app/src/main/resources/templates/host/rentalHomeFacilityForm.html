@@ -17,7 +17,6 @@
 
       #main-container {
         text-align: center;
-        max-width: 90%;
         margin: 0 auto;
         padding: 40px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,23 +33,25 @@
 
       .convenience-facility {
         display: flex;
-        justify-content: center; /* 가로 방향으로 가운데 정렬합니다. */
-        align-items: center; /* 세로 방향으로 가운데 정렬합니다. */
-        flex-wrap: wrap; /* 내용이 넘칠 경우 다음 줄에 배치합니다. */
-        max-width: 600px;
-        margin: 25px auto; /* 좌우 여백을 자동으로 조절하여 가운데 정렬합니다. */
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 60%;
+        margin: 25px auto;
 
       }
 
       .facility-option {
         flex: 1 1 calc(20% - 10px);
         width: 100px;
-        height: 90px;
+        height: 100px;
         border: 2px solid #CCCCCC;
         border-radius: 10px;
-        margin: 10px; /* 요소 간 간격을 조정합니다. */
+        margin-right: 10px;
+        margin-bottom: 10px;
         cursor: pointer;
-        padding-top: 10px;
+        padding: 10px 0;
+        justify-content: center;
       }
 
       .quantity {
@@ -81,10 +82,10 @@
       }
 
       .facility-option.selected {
-        border-color: #35C5B3;
+        border: 4px solid #35C5B3;
       }
 
-      button[type="submit"] {
+      #nextButton {
         background-color: #35C5B3;
         color: white;
         border: none;
@@ -93,13 +94,13 @@
         cursor: pointer;
       }
 
-      button[type="submit"]:hover {
+      #nextButton:hover {
         transition: background-color 0.3s ease;
         background-color: #1C9189;
       }
 
-      button[type="button"] {
-        background-color: #FF99B3;
+      #preButton {
+        background-color: #aaa;
         color: white;
         border: none;
         border-radius: 4px;
@@ -107,9 +108,21 @@
         cursor: pointer;
 
       }
-      button[type="button"]:hover {
+      #preButton:hover {
         transition: background-color 0.3s ease;
-        background-color: #FF66A3;
+        background-color: #888;
+      }
+
+      #nextButton.disabled {
+        background-color: #aaa;
+      }
+
+      #nextButton.enabled {
+        background-color: #35C5B3;
+      }
+
+      #nextButton.enabled:hover {
+        background-color: #2A9D8F;
       }
   </style>
 </head>
@@ -117,7 +130,7 @@
 
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
 
-<div id="main-container">
+<div id="main-container" class="container-sm">
   <form action="facilityForm" data-th-action="@{rentalHomeFacilitySave}" method='post'>
 
     <h1>숙소 시설</h1>
@@ -156,8 +169,8 @@
         </div>
     </div>
     <div>
-        <button type="button" onclick="window.history.back()">이전</button>
-        <button type="submit" id="next-button">다음</button>
+        <button type="button" id="preButton" onclick="window.history.back()">이전</button>
+        <button type="submit" id="nextButton">다음</button>
     </div>
 
   </form>
@@ -211,14 +224,16 @@
 
     let isEmpty = roomFacility.some(facility => Number(facility.value) <= 0)
 
-    const nextButton = document.getElementById('next-button');
+    const nextButton = document.getElementById('nextButton');
 
    if (isEmpty || checkboxes.length <= 0) {
       nextButton.disabled = true;
-      nextButton.style.backgroundColor = '#CCCCCC';
+      nextButton.classList.add('disabled');
+      nextButton.classList.remove('enabled');
     } else {
       nextButton.disabled = false;
-      nextButton.style.backgroundColor = '#35C5B3';
+      nextButton.classList.add('enabled');
+      nextButton.classList.remove('disabled');
     }
 
 
