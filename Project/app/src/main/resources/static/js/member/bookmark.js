@@ -79,17 +79,25 @@ function deleteBookMark(){
         rentalHomeNo: deleteBookMarkTarget
       },
       success:function(data){
-        alert(data);
-        const index = bookmarkInfo.findIndex(function(item){
-          return item.rentalHomeNo === deleteBookMarkTarget;
+        Swal.fire({
+          title: data,
+          icon: "success",
+          confirmButtonText: "확인"
+        }).then((result)=>{
+          const index = bookmarkInfo.findIndex(function(item){
+            return item.rentalHomeNo === deleteBookMarkTarget;
+          });
+          if(index > -1){
+            bookmarkInfo.splice(index, 1);
+          }
+          location.href = "/member/bookmark";
         });
-        if(index > -1){
-          bookmarkInfo.splice(index, 1);
-        }
-        location.href = "/member/bookmark";
       },
       error:()=>{
-        alert("즐겨찾기 삭제 에러");
+        Swal.fire({
+          icon: "error",
+          title: "즐겨찾기 삭제 에러"
+        });
       }
     });
   });

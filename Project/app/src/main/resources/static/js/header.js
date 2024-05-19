@@ -102,14 +102,24 @@ function userLogin(){
   console.log(saveEmail);
 
   if( email == "" ){
-    alert("이메일을 입력하세요.");
-    $('#userEmail').focus();
-    return;
+    Swal.fire({
+      icon: "error",
+      title: "이메일을 입력하세요.",
+      confirmButtonText: "확인"
+    }).then((result)=>{
+      $('#userEmail').focus();
+      return;
+    });
   }
   if( password == "" ){
-    alert("비밀번호를 입력하세요.");
-    $('#userPassword').focus();
-    return;
+    Swal.fire({
+      icon: "error",
+      title: "비밀번호를 입력하세요.",
+      confirmButtonText: "확인"
+    }).then((result)=>{
+      $('#userPassword').focus();
+      return;
+    });
   }
 
   $.ajax({
@@ -124,7 +134,10 @@ function userLogin(){
      checkLogin(response);
     },
     error:()=>{
-      alert("다시 시도하세요.");
+      Swal.fire({
+        icon: "error",
+        title: "다시 시도하세요.",
+      })
     }
   });
 }
@@ -135,11 +148,20 @@ function checkLogin( data ){
   if( state == "0" ){
     location.href = "main";
   }else if( state == "1" ){
-    alert("탈퇴된 회원입니다.");
+    Swal.fire({
+      icon: "error",
+      title: "탈퇴된 회원입니다.",
+    })
   }else if( state == "3" ){
-    alert("제재된 회원입니다.")
+    Swal.fire({
+      icon: "error",
+      title: "제재된 회원입니다.",
+    })
   }else if( state == "9" ){
-    alert("이메일 또는 암호가 맞지 않습니다.");
+    Swal.fire({
+      icon: "error",
+      title: "이메일 또는 암호가 맞지 않습니다.",
+    })
   }else if( state == "4" ){
     
   }
@@ -155,13 +177,23 @@ function findUserEmail(){
   const userBirth = $('#find-email-userbirth').val();
   
   if( userName == "" ){
-    alert("이름을 입력하세요.");
-    $('#find-email-username').focus();
-    return
+    Swal.fire({
+      icon: "error",
+      title: "이름을 입력하세요.",
+      confirmButtonText: "확인"
+    }).then((result)=>{
+      $('#find-email-username').focus();
+      return;
+    });
   }else if( userBirth == "" ){
-    alert("생년월일을 입력하세요.");
-    $('#find-email-userbirth').focus();
-    return
+    Swal.fire({
+      icon: "error",
+      title: "생년월일을 입력하세요.",
+      confirmButtonText: "확인"
+    }).then((result)=>{
+      $('#find-email-userbirth').focus();
+      return;
+    });
   }
   
   $.ajax({
@@ -189,7 +221,10 @@ function findUserEmail(){
       }
     },
     error: ()=>{
-      alert("이메일 찾기 에러");
+      Swal.fire({
+        icon: "error",
+        title: "이메일 찾기 에러",
+      });
     }
   });
 }
@@ -204,14 +239,24 @@ function findUserPassword(){
   const userEmail = $('#find-password-useremail').val();
 
   if( userName == "" ){
-    alert("이름을 입력하세요.");
-    $('#find-password-username').focus();
-    return;
+    Swal.fire({
+      icon: "error",
+      title: "이름을 입력하세요.",
+      confirmButtonText: "확인"
+    }).then((result)=>{
+      $('#find-password-username').focus();
+      return;
+    });
   }
   else if( userEmail == "" ){
-    alert("이메일을 입력하세요.");
-    $('#find-password-useremail').focus();
-    return;
+    Swal.fire({
+      icon: "error",
+      title: "이메일을 입력하세요.",
+      confirmButtonText: "확인"
+    }).then((result)=>{
+      $('#find-password-useremail').focus();
+      return;
+    });
   }
 
   $.ajax({
@@ -236,7 +281,10 @@ function findUserPassword(){
       }
     },
     error: ()=>{
-      alert("비밀번호 찾기 에러");
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호 찾기 에러",
+      });
     }
   });
 }
@@ -249,9 +297,14 @@ function changePassword(){
 
   console.log(memberNo);
   if( firstPassword !== secondPassword ){
-    alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
-    $('#password-second').focus();
-    return;
+    Swal.fire({
+      icon: "error",
+      title: "비밀번호가 일치하지 않습니다. 다시 확인해주세요.",
+      confirmButtonText: "확인"
+    }).then((result)=>{
+      $('#password-second').focus();
+      return;
+    });
   }
 
   $.ajax({
@@ -270,7 +323,10 @@ function changePassword(){
       $('#change-password-back-button').click();
     },
     error: ()=>{
-      alert("비밀번호 변경 에러");
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호 변경 에러",
+      });
     }
   })
 
@@ -313,15 +369,26 @@ document.addEventListener('DOMContentLoaded', function(){
       form.addEventListener('submit', function(event){
 
         if( !checkedNickNameFlag ){ // 닉네임 중복검사를 하지 않은경우
-          alert("닉네임 중복 검사를 해주세요.");
-          $('#joinMember-nickname').focus();
-          return;
+          Swal.fire({
+            icon: "error",
+            title: "닉네임 중복 검사를 해주세요.",
+            confirmButtonText: "확인"
+          }).then((result)=>{
+            $('#joinMember-nickname').focus();
+            return;
+          });
+          
         }
 
         if( !checkedEmailFlag ){ // 이메일 중복검사를 하지 않은경우
-          alert("이메일 중복 검사를 해주세요.");
-          $('#joinMember-email').focus();
-          return;
+          Swal.fire({
+            icon: "error",
+            title: "이메일 중복 검사를 해주세요.",
+            confirmButtonText: "확인"
+          }).then((result)=>{
+            $('#joinMember-email').focus();
+            return;
+          });
         }
         console.log(nickNameinput.val());
         // 닉네임 유효성 검사
@@ -407,13 +474,22 @@ document.addEventListener('DOMContentLoaded', function(){
             if( data == 1 ){
               initJoinMemberModal();
               $('#back-button-in-memberjoin').click();
-              alert("회원가입이 완료되었습니다.");
+              Swal.fire({
+                icon: "success",
+                title: "회원가입이 완료되었습니다.",
+              })
             }else{
-              alert("회원가입 오류");
+              Swal.fire({
+                icon: "error",
+                title: "회원가입 오류",
+              })
             }
           },
           error: ()=>{
-            alert("회원가입 에러");
+            Swal.fire({
+              icon: "error",
+              title: "회원가입 에러",
+            })
           }
         });
 
@@ -439,17 +515,30 @@ document.addEventListener('DOMContentLoaded', function(){
         success: function(data){
           if( data == 0 ){
             checkedNickNameFlag = true;
-            alert("사용 가능한 닉네임입니다.");
-            $('#joinMember-nickname').addClass('is-valid');
-            $('#joinMember-nickname').addClass('was-validated');
+            Swal.fire({
+              icon: "success",
+              title: "사용 가능한 닉네임입니다.",
+              confirmButtonText: "확인"
+            }).then((result)=>{
+              $('#joinMember-nickname').addClass('is-valid');
+              $('#joinMember-nickname').addClass('was-validated');
+            });
           }
           else{
-            alert("사용 중인 닉네임입니다.");
-            $('#joinMember-nickname').focus();
+            Swal.fire({
+              icon: "error",
+              title: "사용 중인 닉네임입니다.",
+              confirmButtonText: "확인"
+            }).then((result)=>{
+              $('#joinMember-nickname').focus();
+            });
           }
         },
         error: ()=>{
-          alert("닉네임 중복검사 에러");
+          Swal.fire({
+            icon: "error",
+            title: "닉네임 중복검사 에러",
+          })
         }
       });
     });
@@ -466,17 +555,30 @@ document.addEventListener('DOMContentLoaded', function(){
         success: function(data){
           if( data == 0 ){
             checkedEmailFlag = true;
-            alert("사용 가능한 이메일입니다.");
-            $('#joinMember-email').addClass('is-valid');
-            $('#joinMember-email').addClass('was-validated');
+            Swal.fire({
+              icon: "success",
+              title: "사용 가능한 이메일입니다.",
+              confirmButtonText: "확인"
+            }).then((result)=>{
+              $('#joinMember-email').addClass('is-valid');
+              $('#joinMember-email').addClass('was-validated');
+            });
           }
           else{
-            alert("사용 중인 이메일입니다.");
-            $('#joinMember-email').focus();
+            Swal.fire({
+              icon: "error",
+              title: "사용 중인 이메일입니다.",
+              confirmButtonText: "확인"
+            }).then((result)=>{
+              $('#joinMember-email').focus();
+            });
           }
         },
         error: ()=>{
-          alert("이메일 중복검사 에러");
+          Swal.fire({
+            icon: "error",
+            title: "이메일 중복검사 에러",
+          })
         }
       })
     })

@@ -36,7 +36,10 @@ function checkBoard(obj){
       },
       success: function(data) {
         if(data == "1"){
-          alert("삭제된 게시글입니다.");
+          Swal.fire({
+            icon: "error",
+            title: "삭제된 게시글입니다."
+          });
         }else{
           location.href = "/board/view?boardNo="+boardNo+"&categoryNo="+categoryNo;
         }
