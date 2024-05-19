@@ -313,7 +313,11 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("board/update")
   public String updateBoard( // 게시글 수정
-      Board board, HttpSession session, SessionStatus sessionStatus) throws Exception {
+      Board board,
+      HttpSession session,
+      SessionStatus sessionStatus
+      //, @RequestParam(required = false) Integer regionNo
+  ) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -350,6 +354,15 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
         }
       }
 
+      // regionNo로 Region 객체 설정
+//      if (regionNo != null && regionNo != 0) { // regionNo가 제공되고 유효한 경우에만 설정
+//        Region region = new Region();
+//        region.setRegionNo(regionNo);
+//        board.setRegion(region);
+//      } else if (regionNo == 0) { // regionNo가 0으로 설정되면 region을 null로 처리
+//        board.setRegion(null);
+//      }
+
       if (boardFiles.size() > 0) {
         board.setFileList(boardFiles);
       }
@@ -361,8 +374,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     sessionStatus.setComplete();
 
     return "redirect:list?categoryNo=" + board.getCategoryNo();
-
   }
+
   @GetMapping("board/modify") // 수정 폼으로 들어가기
   public void modifyBoard(@RequestParam("boardNo") int boardNo,
       @RequestParam("categoryNo") int categoryNo, Model model) {
@@ -370,7 +383,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     if (categoryNo == 0) {
       List<Nation> nations = boardService.getAllNations();
       model.addAttribute("nations", nations);
-      log.debug("-----------" + nations);
+
       model.addAttribute("boardName", "후기 - 글수정");
     } else if (categoryNo == 1) {
       model.addAttribute("boardName", "정보공유 - 글수정");

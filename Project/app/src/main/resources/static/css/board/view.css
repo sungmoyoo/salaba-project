@@ -64,9 +64,9 @@ h1 {
 .date-input {
   pointer-events: none;
   border: none;
-  width: 15%; 
+  width: 10%;
   margin-right: 70%;
-  font-size: 13px;
+  font-size: 14px;
   color: rgb(152, 152, 152);
 }
 

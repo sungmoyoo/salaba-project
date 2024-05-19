@@ -311,7 +311,6 @@
       head_no=#{headNo},
       <if test="categoryNo == 0">
       region_no=#{region.regionNo},
-
       </if>
       scope_no=#{scopeNo}
     where

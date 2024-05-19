@@ -70,7 +70,7 @@
       <!--지역 -->
       <div id="region" class="selectBox" data-th-if="*{categoryNo == 0}">
         <span data-th-text="${board.region.regionNo}" hidden></span>
-        <select class="form-select form-select-sm" name="regionNo">
+        <select class="form-select form-select-sm" name="region.regionNo">
           지역:
           <optgroup data-th-each="nation : ${nations}" data-th-object="${nation}" data-th-label="*{nationName}">
             <option data-th-each="region : ${nation.regionList}" data-th-object="${region}" data-th-value="*{regionNo}" data-th-text="*{regionName}">지역이름</option>
