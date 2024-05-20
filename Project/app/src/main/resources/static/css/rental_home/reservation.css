@@ -63,8 +63,17 @@ main{
   font-weight: 600;
 }
 
+.refund-policy {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 #refund-info {
-  height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 #button-container {

@@ -2,9 +2,9 @@ $('#signIn').click((e) => {
     let email = $('#email').children().first().val();
     let pw = $('#pw').children().first().val();
     let jsonData = {
-            email: email,
-            password: pw
-        }
+        email: email,
+        password: pw
+    }
     $.ajax({
         url: `${RESTAPI_HOST}/auth/login`,
         type: 'POST',
@@ -13,12 +13,11 @@ $('#signIn').click((e) => {
         data: JSON.stringify(jsonData),
 
         success: (response) => {
-            console.log(response);
-            //accessToken은 sessionStorage에
+
             sessionStorage.setItem('accessToken', response.accessToken);
+            sessionStorage.setItem('refreshToken', response.refreshToken);
             sessionStorage.setItem('memberNo', response.memberNo);
             sessionStorage.setItem('name', response.name);
-            sessionStorage.setItem('remainingTime', 30 * 60);
             window.location.href = '/home';
         },
         error: (error) => {
@@ -27,7 +26,7 @@ $('#signIn').click((e) => {
                 title: "유효하지 않거나 권한이 없습니다.",
                 showConfirmButton: false,
                 timer: 1000
-              })
+            })
         }
     });
 });

@@ -93,6 +93,7 @@ public class ReportManageController {
                                    @PathVariable String selection2,
                                    @PathVariable int writerNo,
                                    @RequestBody Report report) {
+        //게시물, 댓글, 대댓글 신고
         if (selection2.equals("0")) {
             textReportService.updateState(report.getReportNo());
             memberService.updateWarningCountBy(report.getReportNo());
@@ -100,6 +101,7 @@ public class ReportManageController {
             return RestResult.builder()
                     .status(RestResult.SUCCESS)
                     .build();
+        //숙소 신고
         } else {
             rentalReportService.updateState(report.getTargetNo(), writerNo);
             memberService.updateWarningCount(writerNo);

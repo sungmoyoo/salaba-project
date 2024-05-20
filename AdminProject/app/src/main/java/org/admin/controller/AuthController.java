@@ -50,11 +50,11 @@ public class AuthController {
 
         MemberSignupResponseDto memberSignupResponseDto =
                 MemberSignupResponseDto.builder()
-                .memberNo(newMember.getMemberNo())
-                .name(newMember.getName())
-                .email(newMember.getEmail())
-                .regdate(newMember.getJoinDate())
-                .build();
+                        .memberNo(newMember.getMemberNo())
+                        .name(newMember.getName())
+                        .email(newMember.getEmail())
+                        .regdate(newMember.getJoinDate())
+                        .build();
 
         return new ResponseEntity<>(memberSignupResponseDto, HttpStatus.CREATED);
     }
