@@ -327,14 +327,15 @@ function validatePassword(password){ // 대,소문자,숫자,특수문자를 포
 function updateUserInfo(){
   // 저장버튼 눌렀을 때
   $('#myPage-UserInfo-Update').on('click',function(){
-
     let themes = [];
     userPreference.forEach(item =>{
       themes.push(item);
     });
 
     const formData = new FormData();
-    formData.append('file', $('#inputUserPhoto')[0].files[0]); // 파일 추가
+    if( $('#inputUserPhoto')[0].files[0] != null && $('#inputUserPhoto')[0].files[0] != undefined ){
+      formData.append('file', $('#inputUserPhoto')[0].files[0]); // 파일 추가
+    }
     formData.append('no', loginUser.no);
     formData.append('name', $('#nameInput').val());
     formData.append('nickname', $('#nicknameInput').val());
@@ -342,8 +343,13 @@ function updateUserInfo(){
     formData.append('sex', $('input[name="gender"]:checked').val());
     formData.append('nationNo', getNationNo($('.form-select').val()));
     formData.append('address', $('#addressInput').val());
-    formData.append('themes', themes);
-    formData.append('photo', getFileName());
+    
+    if(themes.length > 0){
+      formData.append('themes', themes);
+    }
+    if(getFileName() != ""){
+      formData.append('photo', getFileName());
+    }
 
     $.ajax({
       type: "POST",

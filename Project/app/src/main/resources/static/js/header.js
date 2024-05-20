@@ -65,7 +65,7 @@ function logout(){
     type: "POST",
     url: "/auth/logout",
     success: function(){
-      location.href = "main";
+      location.href = "/main";
     },
     error: ()=>{
 
