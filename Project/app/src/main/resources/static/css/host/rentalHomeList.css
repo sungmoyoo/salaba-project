@@ -1,0 +1,97 @@
+#mainContainer {
+  font-family: "Noto Sans KR";
+  font-weight: 400;
+  margin-top: 50px;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 0;
+}
+
+
+.contentContainer {
+  position: relative;
+  max-height: 150px;
+}
+
+.table {
+  display: flex;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.table-row {
+  border: 1px solid #CCCCCC;
+  display: flex;
+  align-items: center;
+}
+
+.table-cell {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.rentalHomePhoto img,
+#empty {
+  width: 150px;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.name,
+#name,
+.capacity,
+#capacity,
+.address,
+#address,
+.price,
+#price,
+.state,
+#state,
+.startDate,
+#startDate {
+  flex: 1;
+  padding: 5px;
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+.table-row:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  background-color: #35C5B3;
+  color: #FFFFFF;
+  transition: box-shadow 0.3s, transform 0.3s, background-color 0.3s, color 0.3s;
+}
+
+#addContainer:hover #plus {
+  color: #FFFFFF; /* 상위 태그가 호버될 때 plus 아이콘 색상 변경 */
+}
+
+.table-header {
+  padding: 10px 0px 10px 0px;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  text-align: right;
+  font-size: 16px;
+  background-color: #f2f2f2;
+}
+
+#addContainer {
+  height: 166px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#plus {
+  font-size: 80px;
+  color: #696969;
+}
+
+#plus:hover {
+  color: #8ADFD7; /* 호버 시 아이콘 색상 변경 */
+}

@@ -56,7 +56,6 @@ $("#addCommentBtn").click(function (e) {
                     timer: 1000
                   });
                   input.val("");
-
             }
         });
     } else {
@@ -519,13 +518,11 @@ $(".report-btn").click(function (e) {
 
      // 모달 열기
      $("#reportModal").modal("show");
-
 });
 
 $("#submitBtn").click(function (e) {
     e.preventDefault();
     let reportFiles = $('input[name="reportFiles"]')[0].files;
-
      // FormData 객체 생성
      let formData = new FormData();
 
@@ -538,7 +535,6 @@ $("#submitBtn").click(function (e) {
      for (let i = 0; i < reportFiles.length; i++) {
          formData.append('reportFiles', reportFiles[i]);
      }
-
     console.log(formData);
 
     $.ajax({

@@ -77,12 +77,12 @@ public class HostController {
   @PostMapping("rentalHomeSave")
   @ResponseBody
   public String rentalHomeSave(
-      HttpSession session,
       Model model,
       RentalHome rentalHome,
       MultipartFile[] photos,
       String[] photoExplanations) throws Exception {
-
+    log.debug("@@rentalHome: " + rentalHome.getName());
+    log.debug(rentalHome.getHostingStartDate());
     List<Region> regionList = hostService.regionList();
 
     for (Region region : regionList) {
@@ -323,7 +323,7 @@ public class HostController {
     List<String> uuidPhotoNames = new ArrayList<>();
 
     for (HostReservation reservation : filteredList) {
-      String photo = memberService.selectUserInfoForLogin(reservation.getMemberNo()).getPhoto();
+      String photo = memberService.selectUserInfoForUpdateSession(reservation.getMemberNo()).getPhoto();
       if (photo != null) {
         uuidPhotoNames.add(photo);
       } else {

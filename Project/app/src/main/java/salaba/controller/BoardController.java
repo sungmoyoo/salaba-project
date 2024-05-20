@@ -381,6 +381,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       @RequestParam("categoryNo") int categoryNo, Model model) {
     Board board = boardService.getBoard(boardNo, categoryNo);
     if (categoryNo == 0) {
+
       List<Nation> nations = boardService.getAllNations();
       model.addAttribute("nations", nations);
 
