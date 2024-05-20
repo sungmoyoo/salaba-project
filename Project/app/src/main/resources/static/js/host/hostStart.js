@@ -4,8 +4,15 @@ validator.onclick = () => {
   if (loginUser.telNo != null) {
     window.location.href= "rentalHomeForm";
   } else {
-    window.alert("숙소 등록은 본인 인증 후 가능합니다.");
-    window.location.href= "/member/chkPw";
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "호스트 신청은 본인 인증 후 가능합니다.",
+      showConfirmButton: false,
+      timer: 2000
+    }).then((result) => {
+       window.location.href= "/member/myPage?memberNo=" + loginUser.no;
+    });
   }
 };
 
