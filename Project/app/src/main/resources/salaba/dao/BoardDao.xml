@@ -143,8 +143,7 @@
       b.board_category_no = 0
       AND b.state != '1'
       ORDER BY
-      b.created_date desc,
-      like_count desc
+      b.created_date desc
     </if>
     <if test="categoryNo != 0">
       <!-- 정보공유, 자유게시판 & 나머지 -->
@@ -172,8 +171,7 @@
       AND b.state != '1'
       AND h.head_no != 1
       ORDER BY
-      b.created_date desc,
-      like_count desc
+      b.created_date desc
       limit #{rowCount} offset #{offset}
     </if>
   </select>
@@ -207,8 +205,7 @@
       AND b.state != '1'
       AND h.head_no = 1
       ORDER BY
-      b.created_date desc,
-      like_count
+      b.created_date desc
     </if>
   </select>
 
@@ -240,8 +237,7 @@
     where
     b.state != '1'
     order by
-    b.created_date desc,
-    like_count desc
+    b.created_date desc
     limit #{rowCount} offset #{offset}
   </select>
 
@@ -281,8 +277,7 @@
     and
     b.state != '1'
     order by
-    b.created_date desc,
-    b.like_count desc
+    b.created_date desc
   </select>
 
   <!-- 게시글 썸네일 사진 가져오기-->
