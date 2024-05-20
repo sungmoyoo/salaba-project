@@ -19,6 +19,7 @@
   </script>
   <link rel="stylesheet" type="text/css" href="/css/rental_home/view.css">
   <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/css/searchContainer.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
@@ -27,7 +28,11 @@
 </head>
 <body>
 <div data-th-replace="header :: header">header</div>
-<div data-th-replace="rentalHomeHeader :: rentalHomeHeader">header</div>
+<div class="container-fluid row mb-5">
+  <div class="col-sm-4 container text-center">
+    <div data-th-replace="rentalHomeHeader :: rentalHomeHeader">header</div>
+  </div>
+</div>
 <main class="container-sm">
   <!-- 숙소 사진 -->
   <section class="photo-gallery">
@@ -209,4 +214,5 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script data-th-src="@{/js/header.js}"></script>
 <script data-th-src="@{/js/rental_home/view.js}"></script>
+<script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script>
 </html>
