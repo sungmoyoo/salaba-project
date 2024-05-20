@@ -17,7 +17,8 @@ const region = config.ncpregionname;
 const access_key = config.ncpaccesskey;
 const secret_key = config.ncpsecretkey;
 const bucket_name = config.ncpbucketname;
-const uploadDir = 'chat/'
+const uploadDir = 'chat/';
+const localDir = '../chat/log/';
 const chat = express(); // 'express' 변수명 수정
 const server = http.createServer(chat);
 const wss = new WebSocket.Server({ server });
@@ -68,8 +69,8 @@ wss.on('connection', (ws) => {
     const roomInfo = sentPreviousMessagesRooms.get(messageObj.reservationNo);
 
     chatFile.chatFileName = messageObj.chatName;
-    chatFile.chatFilePath = 'tmp/';
-    chatFile.chatFileFullPath ='tmp/' + chatFile.chatFileName;
+    chatFile.chatFilePath = localDir;
+    chatFile.chatFileFullPath = localDir + chatFile.chatFileName;
 
 
     if(messageObj.message === 'getChat'){
