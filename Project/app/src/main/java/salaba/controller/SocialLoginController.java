@@ -1,5 +1,6 @@
 package salaba.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,27 +32,35 @@ public class SocialLoginController {
 
   @PostMapping("/auth/login/google")
   public void loginUrlGoogle(HttpServletResponse response) throws IOException {
-    System.out.println("구글로그인 111111111111111111111111");
     String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
         + "&redirect_uri=http://localhost:8888/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
     response.sendRedirect(reqUrl);
   }
 
   @GetMapping("/api/v1/oauth2/google")
-  public ResponseEntity<Object> googleLogin(@RequestParam("code") String authCode) throws IOException {
+  public void googleLogin(@RequestParam("code") String authCode, HttpServletResponse response) throws IOException {
     String jwtToken = getGoogleJwtToken(authCode);
     GoogleInfResponse userInfo = getUserInfoFromToken(jwtToken);
     Member member = createMemberFromUserInfo(userInfo);
     Member existingMember = memberService.selectEmailForGoogle(member.getEmail());
-    Map<String, Object> mapData = new HashMap<>();
+    ObjectMapper objectMapper = new ObjectMapper(); // JSON 객체 매퍼
+    String jsonData;
     if (existingMember == null) {
-      mapData.put("data",member);
+      jsonData = objectMapper.writeValueAsString(member);
       //창을 닫고 회원가입 페이지로 이동(추가적인 정보필요)
     } else {
-      mapData.put("data",existingMember);
+      jsonData = objectMapper.writeValueAsString(existingMember);
       //창을 닫고 홈으로 이동
     }
-    return new ResponseEntity<>(mapData, HttpStatus.OK);
+
+    jsonData = jsonData.replace("\n", "\\n").replace("\r", "\\r").replace("'", "\\'");
+    String script = "<script>" +
+        "window.opener.postMessage(" + jsonData + ", 'http://localhost:8888');" +
+        "window.close();" +
+        "</script>";
+    response.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html");
+    response.getWriter().write(script);
   }
 
   // 구글 OAuth를 통해 토큰 가져오기
