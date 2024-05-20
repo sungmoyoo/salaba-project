@@ -4,13 +4,17 @@
       id="logo"
       src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png"
     />
-    <h1 id="title">관리자 페이지</h1>
+    <h2 id="title">관리자 페이지</h2>
   </div>
-  <div class="login-info">
-    <span id="timer"></span>
-    <button id="extendToken">연장</button>
-    <span id="userName"></span>
-    <a id="logout">로그아웃</a>
+  <div class="right-part">
+    <div class="timerDiv">
+      <span id="timer"></span>
+      <button id="extendToken">연장</button>
+    </div>
+    <div class="login-info">
+      <span id="userName"></span>
+      <a id="logout">로그아웃</a>
+    </div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -20,13 +24,20 @@
     position: absolute; /* 절대적인 위치 설정 */
     top: 0; /* 상단에 위치 */
     left: 0; /* 좌측에 위치 */
-    padding: 10px; /* 내부 여백 설정 */
+    padding-left: 10px;
+    padding-right: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 98%;
+    height: 80px;
   }
   
+  .logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
   #logo {
     vertical-align: middle; /* 수직 정렬 */
@@ -34,27 +45,52 @@
 
   #title {
     display: inline-block; /* 요소를 인라인 블록 요소로 설정하여 다른 요소와 가로로 나란히 정렬 */
-    margin: 0; /* 여백 제거 */
     padding-left: 10px; /* 텍스트와 이미지 사이의 간격 조정 */
-    vertical-align: middle; /* 수직 정렬 */
+    margin-top: 43px;
   }
 
-  .login-info {
-    margin-right: 1%;
-    width: 15%;
+  .right-part {
+    width: 250px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
   }
+
+  #userName {
+    font-weight: bold;
+  }
+
+  
 
   #logout {
     cursor: pointer;
     transition: color 0.3s ease;
     left: 30px;
+    border: 1px solid red;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 14px;
   }
 
   #logout:hover {
-    color: red;
+    background-color: rgb(237, 137, 151);
+    color: white;
+  }
+
+  #extendToken {
+    cursor: pointer;
+    transition: color 0.3s ease;
+    left: 30px;
+    border: 1px solid #718DE0;
+    background-color: white;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  #extendToken:hover {
+    background-color: #718DE0;
+    color: white;
   }
 </style>
 <script>
@@ -71,7 +107,7 @@
     function startTimer(duration, display) {
         let timer = duration, minutes, seconds;
         const interval = setInterval(function () {
-            localStorage.setItem('remainingTime', timer);
+            sessionStorage.setItem('remainingTime', timer);
 
             minutes = Math.floor(timer / 60);
             seconds = timer % 60;
@@ -83,14 +119,14 @@
 
             if (--timer < 0) {
                 clearInterval(interval);
-                localStorage.removeItem('remainingTime');
+                sessionStorage.removeItem('remainingTime');
                 alert('Token expired! Please login again.');
             }
         }, 1000);
     }
 
     function getRemainingTime() {
-        const savedTime = localStorage.getItem('remainingTime');
+        const savedTime = sessionStorage.getItem('remainingTime');
         if (savedTime) {
             return parseInt(savedTime, 10);
         }
@@ -101,21 +137,33 @@
     startTimer(remainingTime, display);
 
     extendButton.click(function() {
-        // $.ajax({
-        //     url: '/api/token/extend', // Your server endpoint to extend the token
-        //     method: 'POST',
-        //     data: { refreshToken: getCookie('refreshToken') }, // Assuming refresh token is stored in cookie
-        //     success: function(response) {
-        //         localStorage.setItem('remainingTime', initialDuration); // Reset the timer
-        //         startTimer(initialDuration, display);
-        //         alert('Token extended successfully!');
-        //     },
-        //     error: function() {
-        //         alert('Failed to extend token.');
-        //     }
-        // });
+      console.log("extend");
+        $.ajax({
+            url: `${RESTAPI_HOST}/auth/refreshToken`, // Your server endpoint to extend the token
+            method: 'POST',
+             // Assuming refresh token is stored in cookie
+            success: function(response) {
+                console.log(response);
+                sessionStorage.setItem('remainingTime', initialDuration); // Reset the timer
+                startTimer(initialDuration, display);
+                Swal.fire({
+                            icon: "success",
+                            title: "연장되었습니다.",
+                            showConfirmButton: false,
+                            timer: 1500
+                          });
+            },
+            error: function() {
+              Swal.fire({
+                            icon: "error",
+                            title: "오류.",
+                            showConfirmButton: false,
+                            timer: 1500
+                          });
+            }
+        });
 
-        localStorage.setItem('remainingTime', initialDuration); // Reset the timer
+        sessionStorage.setItem('remainingTime', initialDuration); // Reset the timer
                 startTimer(initialDuration, display);
     });
 

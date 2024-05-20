@@ -18,8 +18,7 @@ $('#signIn').click((e) => {
             sessionStorage.setItem('accessToken', response.accessToken);
             sessionStorage.setItem('memberNo', response.memberNo);
             sessionStorage.setItem('name', response.name);
-            //refreshToken은 HttpOnly 쿠키에(요청시 자동으로 전송되지만 JavaScript로 절대 읽을 수 없다.)
-            document.cookie = `refreshToken=${response.refreshToken}; Secure; HttpOnly; SameSite=Strict`;
+            sessionStorage.setItem('remainingTime', 30 * 60);
             window.location.href = '/home';
         },
         error: (error) => {
