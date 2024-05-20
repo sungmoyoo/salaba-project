@@ -152,42 +152,5 @@ public class MemberController implements InitializingBean {
     return ResponseEntity.ok(state);
   }
 
-  // 검색
-  @GetMapping("/member/search")
-  public String searchBoardHistory(
-      @RequestParam("type") String type,
-      @RequestParam("keyword") String keyword,
-      @RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "8") int pageSize,
-      Model model) {
-
-    List<Board> filteredBoardList;
-
-    // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
-    if ("title".equals(type)) {
-      filteredBoardList = memberService.searchByTitle(keyword);
-    } else if ("content".equals(type)) {
-      filteredBoardList = memberService.searchByContent(keyword);
-    } else {
-      // 유효하지 않은 검색 유형을 처리하는 경우
-      filteredBoardList = Collections.emptyList(); // 빈 리스트 반환
-      model.addAttribute("message", "검색 결과가 없습니다");
-    }
-
-    // 페이징 처리를 위해 검색 결과의 총 개수를 계산
-    int numOfRecord = memberService.countFiltered(type, keyword);
-    int numOfPage = (numOfRecord / pageSize) + (numOfRecord % pageSize > 0 ? 1 : 0);
-    pageNo = Math.max(1, Math.min(pageNo, numOfPage));
-
-    // 필터링된 게시글 목록을 화면에 전달
-    model.addAttribute("list", filteredBoardList);
-    model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
-    model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
-    model.addAttribute("pageNo", pageNo);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("numOfPage", numOfPage);
-
-    return "member/boardHistory"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
-  }
 }
 

@@ -329,7 +329,54 @@ function changePassword(){
       });
     }
   })
+}
 
+
+$(document).on("click","#googleLogin-button",function(){
+  loginForGoogle();
+});
+
+// 구글 로그인
+function loginForGoogle(){
+  let googleLoginWindow = window.open('' , '_blank', 'width=600,height=400' );
+
+  let form = googleLoginWindow.document.createElement('form');
+  form.method = 'post';
+  form.action = '/auth/login/google';
+
+  let input = googleLoginWindow.document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'parameterName';
+  input.value = 'parameterValue';
+  form.appendChild(input);
+
+  googleLoginWindow.document.body.appendChild(form);
+
+  form.submit();
+
+  if(googleLoginWindow){
+    console.log(1111);
+    googleLoginWindow.onbeforeunload = function(data){
+      console.log(2222);
+      googleLoginWindow.close();
+      if(data.no == 0){
+        console.log(3333);
+        $('#userjoin-button').click();
+        $('#joinMember-name').val(data.name);
+        $('#joinMember-email').val(data.email);
+        
+        $('#joinMember-name').prop('disabled');
+        $('#joinMember-email').prop('disabled');
+        $('#joinMember-name').addClass('is-valid');
+        $('#joinMember-email').addClass('is-valid');
+      }else{
+        console.log(4444);
+        sessionStorage.setItem('loginUser', data);
+        modalCloseButton.click();
+        location.href = "main";
+      }
+    }
+  }
 }
 
 // 회원가입
