@@ -276,53 +276,15 @@
       b.content,
       b.created_date,
       b.state,
-      (
-        select
-          count(*)
-        from
-          board_like bl
-        where
-          bl.board_no=b.board_no
-      ) as like_count,
+      (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
       m.member_no,
       m.nickname,
       h.head_no,
       h.head_content,
-      (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count
-      FROM
-      board b
-      INNER JOIN head h ON b.head_no = h.head_no
-      INNER JOIN member m ON b.member_no = m.member_no
-      LEFT JOIN board_like bl ON b.board_no = bl.board_no
-      LEFT JOIN board_file bf ON b.board_no = bf.board_no
-      WHERE
-      b.board_category_no = #{categoryNo}
-      AND b.state != '1'
-      AND h.head_no = 1
-      ORDER BY
-      b.created_date desc
-    </if>
-  </select>
-
-  <!-- 메인 화면 - 일반 게시글 -->
-  <select id="main" resultMap="BoardMap">
-    select
-    b.board_no,
-    b.board_category_no,
-    b.title,
-    b.view_count,
-    b.content,
-    b.created_date,
-    b.state,
-    (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
-    m.member_no,
-    m.nickname,
-    h.head_no,
-    h.head_content,
-    bf.file_no,
-    bf.uuid_file_name,
-    r.region_no,
-    r.region_name
+      bf.file_no,
+      bf.uuid_file_name,
+      r.region_no,
+      r.region_name
     from
       board b
       inner join head h on b.head_no=h.head_no
@@ -339,26 +301,26 @@
   <!-- 상세 조회 -->
   <select id="findBy" resultMap="BoardMap">
     select
-    b.board_no,
-    b.board_category_no,
-    b.title,
-    b.content,
-    b.view_count,
-    b.created_date,
-    b.state,
-    <if test="categoryNo != 0">
-      h.head_no,
-      h.head_content,
-    </if>
-    <if test="categoryNo == 0">
-      r.region_no,
-      r.region_name,
-    </if>
-    bs.scope_name,
-    bs.scope_no,
-    m.member_no,
-    m.nickname,
-    (select count(*) from board_like where board_no=#{boardNo}) as like_count
+      b.board_no,
+      b.board_category_no,
+      b.title,
+      b.content,
+      b.view_count,
+      b.created_date,
+      b.state,
+      <if test="categoryNo != 0">
+        h.head_no,
+        h.head_content,
+      </if>
+      <if test="categoryNo == 0">
+        r.region_no,
+        r.region_name,
+      </if>
+      bs.scope_name,
+      bs.scope_no,
+      m.member_no,
+      m.nickname,
+      (select count(*) from board_like where board_no=#{boardNo}) as like_count
     from
       board b
       left join head h on b.head_no=h.head_no
