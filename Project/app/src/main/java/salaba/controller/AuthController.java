@@ -93,6 +93,7 @@ public class AuthController {
   // 회원가입관련 메서드
   @PostMapping("/member/addMember")
   public ResponseEntity<Object> add(@RequestBody Member member) throws Exception { // 회원가입
+
     int result = memberService.addMember(member); // 리턴값 = 성공 - 1 , 실패 - 0
 
     return new ResponseEntity<>(result, HttpStatus.OK);
