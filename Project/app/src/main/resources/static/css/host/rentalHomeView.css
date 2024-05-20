@@ -228,7 +228,7 @@ input[type="radio"] {
   }
 
   .facility-option.selected {
-    border-color: #35C5B3;
+  border: 4px solid #35C5B3;
   }
 
   #default-image {

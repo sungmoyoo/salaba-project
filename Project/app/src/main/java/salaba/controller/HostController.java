@@ -77,12 +77,12 @@ public class HostController {
   @PostMapping("rentalHomeSave")
   @ResponseBody
   public String rentalHomeSave(
-      HttpSession session,
       Model model,
       RentalHome rentalHome,
       MultipartFile[] photos,
       String[] photoExplanations) throws Exception {
-
+    log.debug("@@rentalHome: " + rentalHome.getName());
+    log.debug(rentalHome.getHostingStartDate());
     List<Region> regionList = hostService.regionList();
 
     for (Region region : regionList) {

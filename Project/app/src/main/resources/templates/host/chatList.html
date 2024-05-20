@@ -12,6 +12,7 @@
 </head>
 <body>
 <div data-th-replace="host/hostHeader :: hostHeader">머리말</div>
+<br>
 <h2 id="chatRoomsTitle">채팅방 목록</h2>
 <div class="container-sm" style="display: flex; flex-wrap: wrap;">
   <div data-th-if="${list.size() == 0}" id="emptyChatNotification">현재 채팅할 수 있는 게스트가 없습니다.</div>

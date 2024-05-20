@@ -5,6 +5,8 @@
 });
 
 let filesArray = []; // 이미지 배열
+let startDate;
+let endDate;
 let formData = new FormData(); // 폼데이터
 
 function checkRequiredFields() {
@@ -28,6 +30,10 @@ let isDescriptionEmpty = filesArray.some(file => !file.description.value.trim())
 
 // 다음 버튼 가져오기
 const nextButton = document.querySelector('#nextButton');
+nextButton.onclick = () => {
+  submitForm();
+}
+
 
 // 필수 입력 필드가 비어 있으면 다음 버튼을 비활성화
 if (isEmpty || filesArray.length < 5 || isDescriptionEmpty) {
@@ -67,9 +73,8 @@ function submitForm() {
 
   formData.append('price', document.querySelector('#price').value);
   formData.append('cleanFee', document.querySelector('#cleanFee').value);
-  formData.append('hostingStartDate', document.querySelector('#hostingStartDate').value);
-  formData.append('hostingEndDate', document.querySelector('#hostingEndDate').value);
-
+  formData.append('hostingStartDate', startDate);
+  formData.append('hostingEndDate', endDate);
   updateFormData(); // FormData 업데이트
 
 
@@ -163,6 +168,27 @@ function photoCountAndDisplay(files) {
     reader.readAsDataURL(file);
   }
 }
+
+$('.hostingDate').daterangepicker({
+  autoUpdateInput: false,
+  locale: {
+    cancelLabel: 'Clear'
+  }
+});
+
+$('.hostingDate').on('apply.daterangepicker', function (ev, picker) {
+  startDate = picker.startDate.format('YYYY-MM-DD');
+  endDate = picker.endDate.format('YYYY-MM-DD');
+  $('#hostingStartDate').val(picker.startDate.format('YYYY년 MM월 DD일'));
+  $('#hostingEndDate').val(picker.endDate.format('YYYY년 MM월 DD일'));
+  checkRequiredFields();
+});
+
+$('.hostingDate').on('cancel.daterangepicker', function (ev, picker) {
+  $('#hostingStartDate').val('');
+  $('#hostingEndDate').val('');
+  checkRequiredFields();
+});
 
 let map;
 let marker;

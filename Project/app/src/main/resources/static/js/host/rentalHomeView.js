@@ -1,4 +1,6 @@
 let filesArray = []; // 이미지 배열
+let startDate;
+let endDate;
 let formData = new FormData(); // 폼데이터
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -15,6 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
       break;
     }
   }
+
+    // 날짜 초기화
+    const startInput = document.getElementById('hostingStartDate');
+    startDate = startInput.value;
+    startInput.value = formatDate(startInput.value);
+    const endInput = document.getElementById('hostingEndDate');
+    endInput.value = formatDate(endInput.value);
 
   const deleteButtons = document.querySelectorAll('.delete-button');
   deleteButtons.forEach(button => {
@@ -52,8 +61,8 @@ function submitForm() {
 
   formData.append('price', document.getElementById('price').value);
   formData.append('cleanFee', document.getElementById('cleanFee').value);
-  formData.append('hostingStartDate', document.getElementById('hostingStartDate').value);
-  formData.append('hostingEndDate', document.getElementById('hostingEndDate').value);
+  formData.append('hostingStartDate', startDate);
+  formData.append('hostingEndDate', endDate);
 
   formData.append('capacity', document.getElementById('capacity').value);
 
@@ -286,11 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     });
-
-
-
   }
-
 });
 
 function checkRequiredFields() {
@@ -328,9 +333,45 @@ function checkRequiredFields() {
   }
 }
 
+// date range picker
+$('#hostingEndDate').daterangepicker({
+    singleDatePicker: true,
+    autoUpdateInput: false,
+    locale: {
+      format: 'YYYY년 MM월 DD일',
+      cancelLabel: 'Clear'
+    }
+  });
+
+  $('#hostingEndDate').on('apply.daterangepicker', function(ev, picker) {
+    endDate = picker.startDate.format('YYYY-MM-DD');
+    $(this).val(picker.startDate.format('YYYY년 MM월 DD일'));
+    $(this).css('background-color', '#35C5B3');
+    $(this).css('color', 'white');
+    checkRequiredFields();
+  });
+
+  $('#hostingEndDate').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+    checkRequiredFields();
+  });
+
+// 날짜 변환 함수
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 1을 더해줌
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}년 ${month}월 ${day}일`;
+}
+
+
+
 
 // 변경 확인
 window.onload = function() {
+
+
   document.querySelectorAll('input').forEach(element => {
     element.addEventListener('change', checkRequiredFields);
   });
