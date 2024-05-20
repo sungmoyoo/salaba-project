@@ -56,22 +56,25 @@ public class MemberController implements InitializingBean {
   @PostMapping("/member/updateUserInfo")
   public ResponseEntity<String> updateUserInfo(
       @ModelAttribute Member member,
-      @RequestParam("file") MultipartFile file,
+      @RequestParam(value = "file",required = false) MultipartFile file,
       HttpSession session) throws Exception { // 내정보 수정
 
     log.debug(String.format("업데이트 로그 Member : %s" , member.toString()));
-    log.debug(String.format("MultipartFile : %s", file));
 
-    if( file.getSize() != 0 ){
-      String fileName = storageService.upload(bucketName,uploadDir,file);
-      log.debug(String.format("로그 filename : %s", fileName));
-      member.setPhoto(fileName);
+    if( file != null ){
+      if( file.getSize() != 0 ){
+        String fileName = storageService.upload(bucketName,uploadDir,file);
+        log.debug(String.format("로그 filename : %s", fileName));
+        member.setPhoto(fileName);
+      }
     }
     // 업데이트 처리
     memberService.updateUserInfo(member);
-    memberService.deletePreference(member.getNo());
-    memberService.insertPreference(member);
-    
+    if( member.getThemes() != null ){
+      memberService.deletePreference(member.getNo());
+      memberService.insertPreference(member);
+    }
+
     // 업데이트 후 개인정부 다시 불러오기
     Member newMember = memberService.selectUserInfoForUpdateSession(member.getNo());
 
@@ -100,17 +103,18 @@ public class MemberController implements InitializingBean {
 
     int numOfRecord = boardService.countAllHistory(loginUser.getNo());
     int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+    if(numOfRecord > 0){
+      if (pageNo > numOfPage) {
+        pageNo = numOfPage;
+      }
 
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
+      List<Board> boardList = boardService.boardHistory(pageNo, pageSize, loginUser.getNo());
+      model.addAttribute("list", boardList);
+
+      model.addAttribute("pageNo", pageNo);
+      model.addAttribute("pageSize", pageSize);
+      model.addAttribute("numOfPage", numOfPage);
     }
-
-    List<Board> boardList = boardService.boardHistory(pageNo, pageSize, loginUser.getNo());
-    model.addAttribute("list", boardList);
-
-    model.addAttribute("pageNo", pageNo);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("numOfPage", numOfPage);
   }
 
   @GetMapping("/member/commentHistory")  // 작성댓글 내역
@@ -132,17 +136,20 @@ public class MemberController implements InitializingBean {
     int numOfRecord = boardService.countAllCommentHistory(loginUser.getNo());
     int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
 
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
+    if( numOfRecord > 0 ){
+      if (pageNo > numOfPage) {
+        pageNo = numOfPage;
+      }
+
+      List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
+
+      model.addAttribute("list", commentList);
+
+      model.addAttribute("pageNo", pageNo);
+      model.addAttribute("pageSize", pageSize);
+      model.addAttribute("numOfPage", numOfPage);
     }
 
-    List<Board> commentList = boardService.commentHistory(pageNo, pageSize, loginUser.getNo());
-
-    model.addAttribute("list", commentList);
-
-    model.addAttribute("pageNo", pageNo);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("numOfPage", numOfPage);
   }
 
   @PostMapping("/member/boardStateCheck")  // 작성댓글 내역
