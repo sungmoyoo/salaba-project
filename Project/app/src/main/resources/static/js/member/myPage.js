@@ -345,8 +345,8 @@ function updateUserInfo(){
       formData.append('telNo', $('#telInput').val());
     }
 
-    if( getNationNo($('.form-select').val()) != null ){
-      formData.append('nationNo', getNationNo($('.form-select').val()));
+    if( $('.form-select').val() != null ){
+      formData.append('nationNo', $('.form-select').val());
     }
 
     if( $('#addressInput').val() != "" || $('#addressInput').val() != null ){
