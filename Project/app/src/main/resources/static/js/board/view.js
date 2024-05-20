@@ -56,7 +56,7 @@ $("#addCommentBtn").click(function (e) {
                     timer: 1000
                   });
                   input.val("");
-                  
+
             }
         });
     } else {
@@ -167,7 +167,7 @@ $('.comment').click(addReplyForm)
 // 답글폼 추가하기
 function addReplyForm(e) {
     e.stopPropagation();
-    let replyBox = $(this).parent().find('.reply-box');
+    var replyBox = $(this).parent().find('.reply-box');
     console.log(replyBox);
     // 클릭된 댓글 아래로 답글 폼을 이동
     replyBox.append(replyForm);
@@ -176,7 +176,7 @@ function addReplyForm(e) {
 
 
     // 클릭된 댓글의 번호 가져오기
-    let commentNo = $(this).find('.commentNo').text();
+    var commentNo = $(this).find('.commentNo').text();
     replyForm.find("input[name='commentNo']").val(commentNo);
 };
 
@@ -187,6 +187,7 @@ function addReplyForm(e) {
 $(".del2").click(deleteReply);
 
 //답글 수정
+
 $(".modi2").click(modifyReply);
 
 function deleteComment(e) {
@@ -518,13 +519,13 @@ $(".report-btn").click(function (e) {
 
      // 모달 열기
      $("#reportModal").modal("show");
-     
+
 });
 
 $("#submitBtn").click(function (e) {
     e.preventDefault();
     let reportFiles = $('input[name="reportFiles"]')[0].files;
-   
+
      // FormData 객체 생성
      let formData = new FormData();
 
@@ -537,7 +538,7 @@ $("#submitBtn").click(function (e) {
      for (let i = 0; i < reportFiles.length; i++) {
          formData.append('reportFiles', reportFiles[i]);
      }
-    
+
     console.log(formData);
 
     $.ajax({
@@ -620,4 +621,4 @@ function appearButtons() {
 function disappearButtons() {
     // 해당 요소 내의 '.buttons' 클래스를 가진 하위 요소를 숨깁니다.
     $(this).find('.buttons').hide();
-} 
+}
