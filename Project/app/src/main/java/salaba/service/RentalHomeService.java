@@ -2,7 +2,6 @@ package salaba.service;
 
 import java.sql.Date;
 import java.util.List;
-import salaba.vo.Reservation;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;

@@ -21,9 +21,6 @@
         text-align: left;
     }
 
-    .content {
-
-    }
 
     .infoBox {
         padding-top: 30px;
@@ -40,6 +37,17 @@
         height: 50px;
     }
 
+    .infoBox .info textarea {
+        width: 50%;
+        border-style: none;
+        resize: none;
+        text-align: right;
+    }
+
+    .infoBox .info textarea:focus {
+        outline: none;
+    }
+
     .infoBox .hr {
         display: block;
         /* margin-top: 200px; */
@@ -49,36 +57,9 @@
         background-color: gainsboro;
     }
 
-    .dealSelect{
-        width: 200px;
-        border: 1px solid #C4C4C4;
-        box-sizing: border-box;
-        border-radius: 10px;
-        padding: 10px;
-        font-family: 'Roboto';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 16px;
-        margin-top: 80px;
-    }
     
-    .dealSelect:focus{
-        border: 1px solid #3377d6;
-        box-sizing: border-box;
-        border-radius: 10px;
-        outline: 3px solid #F8E4FF;
-        border-radius: 10px;
-    }
 
-    .dealBtn {
-        padding: 10px;
-        background-color: #3377d6;
-        color: white;
-        border: 0;
-        border-radius: 5px;
-        margin-top: 80px;
-    }
+   
 
     .itemList { 
         height:15vh;
@@ -95,10 +76,51 @@
         margin-right: 10px;
     }
 
-    #answer {
+    .dealBox {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-top: 80px;
+    }
+
+
+    .dealBox #answer {
         width: 80%;
+        height: 100px;
         border: solid 2px #1E90FF;
 		border-radius: 5px;
 		font-size: 16px;
-		resize: both;
+		resize: none;
     }
+
+    .dealBox .dealBtn {
+        padding: 10px;
+        background-color: #3377d6;
+        color: white;
+        border: 0;
+        border-radius: 5px;
+        margin-left: 20px;
+    }
+
+    .dealBox .dealSelect{
+        width: 200px;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 10px;
+        padding: 10px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+    }
+    
+    .dealBox .dealSelect:focus{
+        border: 1px solid #3377d6;
+        box-sizing: border-box;
+        border-radius: 10px;
+        outline: 3px solid #F8E4FF;
+        border-radius: 10px;
+    }
+

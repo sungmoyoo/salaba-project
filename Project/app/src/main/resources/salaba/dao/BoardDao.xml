@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="salaba.dao.BoardDao">
 
@@ -43,7 +43,6 @@
       <result column="uuid_file_name" property="uuidFileName"/>
     </collection>
   </resultMap>
-
   <!--   후기게시판 - 국가, 지역 정보 불러오기-->
   <resultMap id="NationMap" type="Nation">
     <id column="nation_no" property="nationNo"/>
@@ -78,7 +77,7 @@
 
   <!-- 게시글 작성 -->
   <insert id="addBoard" parameterType="Board"
-    useGeneratedKeys="true" keyColumn="board_no" keyProperty="boardNo">
+          useGeneratedKeys="true" keyColumn="board_no" keyProperty="boardNo">
     <if test="categoryNo == 0">
       insert into board(scope_no,title,content,member_no,board_category_no,region_no,head_no)
       values(#{scopeNo},#{title},#{content},#{writer.no},#{categoryNo},#{region.regionNo},0)

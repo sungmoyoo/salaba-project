@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import lombok.Data;
 
 @Data
 @Builder
@@ -19,6 +20,5 @@ public class Nation implements Serializable { // 국가
   private int nationNo; // 국가 번호
   private String nationName; // 이름
   private List<Region> regionList; // 지역 정보 받아오기
-
 
 }

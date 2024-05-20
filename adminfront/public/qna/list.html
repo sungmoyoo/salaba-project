@@ -18,6 +18,11 @@
     <sidebar class="x-page-sidebar"></sidebar>
     <div class="container">
       <h3>1:1 문의내역</h3>
+      <div class="button-container">
+        <button id="all">전체</button>
+        <button id="incomplete">미처리</button>
+        <button id="complete">처리</button>
+      </div>
       <div class="tbl-header">
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
@@ -46,7 +51,7 @@
         <tr class="rowItem">
           <td class="qno">{{questionNo}}</td>
           <td>{{title}}</td>
-          <td>{{stateStr}}</td>
+          <td class="state">{{stateStr}}</td>
           <td>{{regDate}}</td>
         </tr>
       {{/each}}
@@ -91,16 +96,15 @@
             </div>
             <div class="hr"></div>
           </div>
-          <h4 class="partTitle">첨부 파일</h4>
 
-          <div class="infoBox">
+          <div class="infoBox answer-info">
             <div class="info">
               <span>답변</span>
-              <textarea id="answer">{{answer}}</textarea>
+              <textarea readonly>{{answer}}</textarea>
             </div>
             <div class="hr"></div>
           </div>
-          <div class="infoBox">
+          <div class="infoBox answer-info">
             <div class="info">
               <span>답변 날짜</span>
               <span>{{ansDate}}</span>
@@ -114,7 +118,7 @@
             <div class="hr"></div>
           </div>
 
-          <h4 class="partTitle">문의 파일</h4>
+          <h4 class="partTitle">첨부 파일</h4>
           <div class="imgFiles">
             {{#each photos}}
             <div>
@@ -125,15 +129,18 @@
             {{/each}}
             <div class="hr"></div>
         </div>
+        <div class="dealBox">
+          <textarea id="answer"></textarea>
           <button class="dealBtn">답변</button>
+        </div>
         </form>
       </div>
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/js/list.js"></script>
     <script src="/js/common.js"></script>
     <script src="/js/page-init.js"></script>
     <script src="list.js"></script>
+    <script src="/js/list.js"></script>
 
   </body>
 </html>

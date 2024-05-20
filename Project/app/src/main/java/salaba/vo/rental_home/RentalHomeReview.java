@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import salaba.vo.Member;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,4 +25,6 @@ public class RentalHomeReview implements Serializable {
   private String review; // 리뷰 내용
   
   private char state; // 상태
+
+  private Member writer;
 }
