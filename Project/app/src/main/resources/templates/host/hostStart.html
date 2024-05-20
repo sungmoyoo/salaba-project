@@ -3,108 +3,11 @@
 <head>
   <meta charset='UTF-8'>
   <title>호스트 숙소등록 시작</title>
+  <link rel="stylesheet" type="text/css" href="/css/host/hostStart.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    html {
-      font-family: "Noto Sans KR";
-      font-weight: 100;
-      font-optical-sizing: auto;
-    }
-
-    .left-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 50%;
-      height: 100%;
-      background-color: #35C5B3;
-      z-index: -1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .left-container {
-      margin-left: 100px;
-    }
-
-    #text {
-      font-size: 65px;
-      font-weight: bold;
-    }
-
-    .blink {
-      animation: blink 0.5s infinite;
-      font-size: 65px;
-    }
-
-    @keyframes blink {
-      to {
-        opacity: 0;
-      }
-    }
-
-    #validator {
-      background-color: white;
-      border: 0;
-      border-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      padding: 12px 24px;
-      font-size: 20px;
-      font-weight: bold;
-      width: 120px;
-      height: 60px;
-      padding: 3px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    #validator:hover {
-
-    }
-
-    .right-background {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 50%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .right-container {
-      width: 100%;
-    }
-
-    .step {
-      display: flex;
-      align-items: center;
-
-      max-height: 250px;
-    }
-
-    .step-text {
-      flex:1;
-      font-size: 35px;
-      font-weight:bold;
-      padding-left: 70px;
-
-    }
-
-    .step-image {
-      flex:1;
-      padding: 30px;
-      max-height: 250px;
-      max-width: 250px;
-    }
-
-  </style>
-
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -139,38 +42,9 @@
   </div>
 </div>
 
-
-
-<script data-th-inline="javascript">
-  var loginUser = [[${session.loginUser}]];
-  console.log(loginUser);
-
-  var validator = document.getElementById('validator');
-  validator.onclick = () => {
-    console.log(loginUser.name);
-    if (loginUser.telNo != null) {
-      window.location.href= "rentalHomeForm";
-    } else {
-      window.alert("숙소 등록은 본인 인증 후 가능합니다.");
-      window.location.href= "/member/chkPw";
-    }
-  };
-
-  const content = "간단하게 \n 사라바 \n 호스팅을 시작할 수 \n 있습니다.";
-
-  const text = document.querySelector("#text");
-  let i = 0;
-
-  function typing(){
-    let txt = content.charAt(i++);
-    text.innerHTML += txt=== "\n" ? "<br/>": txt;
-  }
-
-  setInterval(typing, 200)
-
-
-</script>
-
-
 </body>
+<script data-th-inline="javascript">
+  const loginUser = [[${session.loginUser}]];
+</script>
+<script data-th-src="@{/js/host/hostStart.js}"></script>
 </html>

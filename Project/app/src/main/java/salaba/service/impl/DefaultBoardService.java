@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import salaba.dao.BoardFileDao;
 import salaba.dao.BoardDao;
 import salaba.service.BoardService;
+import salaba.vo.Nation;
 import salaba.vo.board.BoardFile;
 import salaba.vo.board.Board;
 
@@ -32,6 +33,11 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
       log.debug("xxxx" + board.getFileList());
       boardFileDao.addAll(board.getFileList());
     }
+  }
+
+  @Override
+  public List<Nation> getAllNations() { // 후기 게시판 - 국가 정보 가져오기
+    return boardDao.findAllNationsAndRegions();
   }
 
   @Override
@@ -170,4 +176,9 @@ public class DefaultBoardService implements BoardService { // 게시판 ServiceI
   public int countAllCommentHistory(int no) {
     return boardDao.countAllCommentHistory(no);
   } // count
+
+  @Override
+  public int selectBoardWriterInfo(int boardNo) {
+    return boardDao.selectBoardWriterInfo(boardNo);
+  }
 }

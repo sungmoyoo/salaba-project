@@ -13,9 +13,12 @@ $('#signIn').click((e) => {
         data: JSON.stringify(jsonData),
 
         success: (response) => {
-            console.log(response.accessToken);
+            console.log(response);
+            //accessToken은 sessionStorage에
             sessionStorage.setItem('accessToken', response.accessToken);
-            sessionStorage.setItem('refreshToken', response.refreshToken);
+            sessionStorage.setItem('memberNo', response.memberNo);
+            sessionStorage.setItem('name', response.name);
+            sessionStorage.setItem('remainingTime', 30 * 60);
             window.location.href = '/home';
         },
         error: (error) => {
@@ -23,7 +26,7 @@ $('#signIn').click((e) => {
                 icon: "error",
                 title: "유효하지 않거나 권한이 없습니다.",
                 showConfirmButton: false,
-                timer: 1000000
+                timer: 1000
               })
         }
     });

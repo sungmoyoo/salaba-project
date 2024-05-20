@@ -14,9 +14,14 @@ main {
 #board-header {
   margin-top: 50px;
   display: flex;
-  justify-content: space-between; /* 가로 중앙 정렬 */
-  align-items: center;     /* 세로 중앙 정렬 */
-  height: 100px;           /* 필요에 따라 높이 조정 */
+  justify-content: space-between;
+  /* 가로 중앙 정렬 */
+  align-items: center;
+  /* 세로 중앙 정렬 */
+  height: 100px;
+  /* 필요에 따라 높이 조정 */
+  margin-bottom: 20px;
+  width: 30%;
 }
 
 #board-header button {
@@ -57,23 +62,22 @@ h1 {
   margin-bottom: 20px; /* 하단 여백 추가 */
 }
 
-
-section {
-  width: 80%;
-}
-
 /* 정보공유, 자유 게시판 비율 조정 */
 .board-container {
-  width: 100%;
    /* Flexbox 사용 */
   display: flex;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+
 }
 
 .board-container .board {
-  margin-top: 50px;
+  margin-top: 40px;
   width: 48%;
+}
+
+section {
+  width: 100%;
 }
 
 th, td {

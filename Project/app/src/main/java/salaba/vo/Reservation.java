@@ -24,6 +24,7 @@ public class Reservation implements Serializable {
   private List<RentalHomePhoto> photoList; //숙소사진파일 리스트
   private String nickname; // 닉네임
   private String telNo; // 전화번호
+  private String photo; // 숙소 주인 사진
   private String rentalHomeRule; // 이용규칙
   private String address; // 주소
   private String chatFileName; // 채팅파일명

@@ -17,4 +17,6 @@ public interface CommentDao {
 
   Comment findBy(@Param("commentNo") int commentNo);
 
+  int selectCommentWriterInfo(@Param("commentNo") int commentNo); // 댓글 회원 번호 가져오기
+
 }

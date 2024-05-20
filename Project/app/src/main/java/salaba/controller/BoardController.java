@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import salaba.service.AlarmService;
 import salaba.service.BoardService;
 import salaba.service.CommentService;
 import salaba.service.MemberService;
@@ -31,6 +32,8 @@ import salaba.service.ReplyService;
 import salaba.service.StorageService;
 import salaba.util.Translator;
 import salaba.vo.Alarm;
+import salaba.vo.ConstVO;
+import salaba.vo.Nation;
 import salaba.vo.board.BoardFile;
 import salaba.vo.board.Board;
 import salaba.vo.board.Comment;
@@ -48,7 +51,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   private final StorageService storageService; // 스토리지 서비스
   private final CommentService commentService; // 댓글 서비스
   private final ReplyService replyService; // 답글 서비스
-  private final MemberService memberService; // 회원 서비스
+  private final AlarmService alarmService; // 알람 서비스
+
 
 
   @Value("${ncpbucketname}")
@@ -106,9 +110,14 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @GetMapping("board/form") // 게시글 폼
   public String form(int categoryNo, Model model, HttpSession session) throws Exception {
-    if (session.getAttribute("loginUser") == null) {
 
+    // 후기게시판: 국가, 지역 정보를 가져오는 서비스 호출
+    if (categoryNo == 0) {
+      List<Nation> nations = boardService.getAllNations();
+      log.debug("nations 가져옴: " + nations);
+      model.addAttribute("nations", nations);
     }
+
     model.addAttribute("boardName", categoryNo == 0 ? "후기글 작성"
         : (categoryNo == 1 ? "정보공유글 작성" : "자유글 작성")); // 카테고리 별 분류 - 0 : 후기 / 1 : 정보공유 / 2 : 자유
     model.addAttribute("categoryNo", categoryNo);
@@ -304,7 +313,11 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("board/update")
   public String updateBoard( // 게시글 수정
-      Board board, HttpSession session, SessionStatus sessionStatus) throws Exception {
+      Board board,
+      HttpSession session,
+      SessionStatus sessionStatus
+      //, @RequestParam(required = false) Integer regionNo
+  ) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -352,13 +365,17 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     sessionStatus.setComplete();
 
     return "redirect:list?categoryNo=" + board.getCategoryNo();
-
   }
+
   @GetMapping("board/modify") // 수정 폼으로 들어가기
   public void modifyBoard(@RequestParam("boardNo") int boardNo,
       @RequestParam("categoryNo") int categoryNo, Model model) {
     Board board = boardService.getBoard(boardNo, categoryNo);
     if (categoryNo == 0) {
+
+      List<Nation> nations = boardService.getAllNations();
+      model.addAttribute("nations", nations);
+
       model.addAttribute("boardName", "후기 - 글수정");
     } else if (categoryNo == 1) {
       model.addAttribute("boardName", "정보공유 - 글수정");
@@ -439,13 +456,11 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @PostMapping("/board/comment/add") // 댓글 또는 답글 작성
   public ResponseEntity<?> addComment(
       Comment comment,
-//      @RequestParam("alarmContent") String alarmContent,
-//      @RequestParam("memberNoForAlarm") int memberNoForAlarm,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("title") String title,
       HttpSession session) throws Exception {
 
     log.debug(String.format("comment : %s", comment.toString()));
-//    log.debug(String.format("alarmContent : %s", alarmContent));
-//    log.debug(String.format("memberNoForAlarm : %s", memberNoForAlarm));
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -454,17 +469,26 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     comment.setWriter(loginUser);
     commentService.addComment(comment);
-
+    log.debug(String.format("로그로그 title : %s", title));
+    int memberNoForAlarm = boardService.selectBoardWriterInfo(comment.getBoardNo());
+    Alarm alarm = new Alarm();
     // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-//    if( memberNoForAlarm != loginUser.getNo() ){
-//      Alarm alarm = new Alarm();
-//      alarm.setMemberNo(memberNoForAlarm);
-//      alarm.setContent(alarmContent);
-//      // 알람 추가
-//      memberService.insertNotifyHistory(alarm);
-//    }
+    if( memberNoForAlarm != loginUser.getNo() ){
+      alarm.setMemberNo(memberNoForAlarm);
+      alarm.setContent(alarmContent);
+      String mark = "'" + title + "'" + ConstVO.notify_mark;
+      log.debug(String.format("로그로그 mark : %s", mark));
+      alarm.setMark(mark);
+      // 알람 추가
+      alarmService.addNotifyHistory(alarm);
+      alarm.setNotifyDate(new java.sql.Date(System.currentTimeMillis()));
+    }
     comment.setCreatedDate(new Date());
-    return ResponseEntity.ok(comment);
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("result", comment);
+    responseData.put("alarm", alarm);
+
+    return ResponseEntity.ok(responseData);
   }
 
   @PostMapping("/board/comment/update") // 답글 또는 댓글 수정
@@ -521,8 +545,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("/board/reply/add") // 답글 작성
   public ResponseEntity<?> addReply(Reply reply,
-//      @RequestParam("alarmContent") String alarmContent,
-//      @RequestParam("commentWriterNo") int commentWriterNo,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("title") String title,
       HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -533,16 +557,26 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       reply.setWriter(loginUser);
       replyService.addReply(reply);
 
+      int commentWriterNo = commentService.selectCommentWriterInfo(reply.getCommentNo());
+
       // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-//      if( commentWriterNo != loginUser.getNo() ){
-//        Alarm alarm = new Alarm();
-//        alarm.setMemberNo(commentWriterNo);
-//        alarm.setContent(alarmContent);
-//        // 알람 추가
-//        memberService.insertNotifyHistory(alarm);
-//      }
+      Alarm alarm = new Alarm();
+      if( commentWriterNo != loginUser.getNo() ){
+        alarm.setMemberNo(commentWriterNo);
+        alarm.setContent(alarmContent);
+        String mark = "'" + title + "'" + ConstVO.notify_mark;
+        log.debug(String.format("로그로그 mark : %s", mark));
+        alarm.setMark(mark);
+        // 알람 추가
+        alarmService.addNotifyHistory(alarm);
+        alarm.setNotifyDate(new java.sql.Date(System.currentTimeMillis()));
+      }
       reply.setCreatedDate(new Date());
-      return ResponseEntity.ok(reply);
+      Map<String, Object> responseData = new HashMap<>();
+      responseData.put("result", reply);
+      responseData.put("alarm", alarm);
+
+      return ResponseEntity.ok(responseData);
     } catch (Exception e) {
       return ResponseEntity.internalServerError().build();
     }
@@ -649,31 +683,31 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     List<Board> filteredBoardList;
 
-  // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
-  if ("title".equals(type)) {
-    filteredBoardList = boardService.searchByTitle(keyword, categoryNo);
-  } else if ("content".equals(type)) {
-    filteredBoardList = boardService.searchByContent(keyword, categoryNo);
-  } else {
-    // 유효하지 않은 검색 유형을 처리하는 경우
-    filteredBoardList = Collections.emptyList(); // 빈 리스트 반환
-    model.addAttribute("message", "검색 결과가 없습니다");
-  }
+    // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
+    if ("title".equals(type)) {
+      filteredBoardList = boardService.searchByTitle(keyword, categoryNo);
+    } else if ("content".equals(type)) {
+      filteredBoardList = boardService.searchByContent(keyword, categoryNo);
+    } else {
+      // 유효하지 않은 검색 유형을 처리하는 경우
+      filteredBoardList = Collections.emptyList(); // 빈 리스트 반환
+      model.addAttribute("message", "검색 결과가 없습니다");
+    }
 
-  // 페이징 처리를 위해 검색 결과의 총 개수를 계산
-  int numOfRecord = boardService.countFiltered(categoryNo, type, keyword);
-  int numOfPage = (numOfRecord / pageSize) + (numOfRecord % pageSize > 0 ? 1 : 0);
-  pageNo = Math.max(1, Math.min(pageNo, numOfPage));
+    // 페이징 처리를 위해 검색 결과의 총 개수를 계산
+    int numOfRecord = boardService.countFiltered(categoryNo, type, keyword);
+    int numOfPage = (numOfRecord / pageSize) + (numOfRecord % pageSize > 0 ? 1 : 0);
+    pageNo = Math.max(1, Math.min(pageNo, numOfPage));
 
-  // 필터링된 게시글 목록을 화면에 전달
-  model.addAttribute("list", filteredBoardList);
-  model.addAttribute("categoryNo", categoryNo);
-  model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
-  model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
-  model.addAttribute("pageNo", pageNo);
-  model.addAttribute("pageSize", pageSize);
-  model.addAttribute("numOfPage", numOfPage);
+    // 필터링된 게시글 목록을 화면에 전달
+    model.addAttribute("list", filteredBoardList);
+    model.addAttribute("categoryNo", categoryNo);
+    model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
+    model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
 
-  return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
+    return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
   }
 }

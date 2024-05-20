@@ -1,3 +1,11 @@
+main{
+  display: flex;
+  font-family: "Noto Sans KR";
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 #contact-title-box{
   display: flex;
 }

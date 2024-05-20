@@ -3,7 +3,11 @@
 
 const reportForm = $("#report-form");
 let boardNo = $("#boardNum").text();  // jQuery를 사용하여 data 속성에서 boardNo 추출: 게시글 번호
-
+const alarmContent = window.location.href;
+const alarmMessageComment = "댓글";
+const alarmMessageReply = "답글";
+let board = boardInfo;
+console.log(board);
 //-------------------------------------댓글-------------------------------------
 //댓글 작성하기
 $("#addCommentBtn").click(function (e) {
@@ -20,17 +24,19 @@ $("#addCommentBtn").click(function (e) {
                 // 서버로 보낼 데이터
                 boardNo: boardNo,
                 content: content,
+                alarmContent: alarmContent,
+                title: board.title
             },
             success: function (data) {
                 let newComment = $(`<div class="comment-container">
                               <div class="comment">
                               <div class="commentContentDiv">
                                 <div class="textContent comment-text">
-                                  <span class="targetNo commentNo" hidden>${data.commentNo}</span>
-                                  <img class="profile-img1" height='40px' src='https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.writer.photo}'>
-                                  <span class="nickname">${data.writer.nickname}</span>
-                                  <span class="comment-date">${data.createdDate}</span><br>
-                                  <span class="commentContent">${data.content}</span><br>
+                                  <span class="targetNo commentNo" hidden>${data.result.commentNo}</span>
+                                  <img class="profile-img1" height='40px' src='https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.result.writer.photo}'>
+                                  <span class="nickname">${data.result.writer.nickname}</span>
+                                  <span class="comment-date">${data.result.createdDate}</span><br>
+                                  <span class="commentContent">${data.result.content}</span><br>
                                 </div>
                                 <div class="button-container1">
                                     <button class="del"><i class="fa-regular fa-trash-can"></i></button> <!--삭제 버튼 아이콘-->
@@ -46,6 +52,7 @@ $("#addCommentBtn").click(function (e) {
                 newComment.find('.comment').click(addReplyForm);
                 newComment.children().find(".del").click(deleteComment);
                 newComment.children().find(".modi").click(modifyComment);
+                window.sendAlarm(data.alarm, alarmMessageComment);
             },
             error: function () {
                 // 오류 메시지
@@ -56,7 +63,6 @@ $("#addCommentBtn").click(function (e) {
                     timer: 1000
                   });
                   input.val("");
-                  
             }
         });
     } else {
@@ -109,7 +115,9 @@ function addReply(event) {
             dataType: "json",
             data: {
                 commentNo: commentNo,
-                content: replyContent
+                content: replyContent,
+                alarmContent: alarmContent,
+                title: board.title
             },
             success: function (data) {
                 let newReply = $(`<div>
@@ -117,12 +125,12 @@ function addReply(event) {
                           <div class="replyContentDiv">
                             <div class="textContent reply-text">
                             <span>⮑</span>
-                              <span class="targetNo replyNo" hidden>${data.replyNo}</span>
+                              <span class="targetNo replyNo" hidden>${data.result.replyNo}</span>
                               <!--프로필사진-->
-                              <img class="profile-img2"  height='40px' src= 'https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.writer.photo}'>
-                              <span class="nickname">${data.writer.nickname}</span>
-                              <span class="reply-date">${data.createdDate}</span><br>
-                              <span class="replContent">${data.content}</span><br>
+                              <img class="profile-img2"  height='40px' src= 'https://kr.object.ncloudstorage.com/tp3-salaba/member/${data.result.writer.photo}'>
+                              <span class="nickname">${data.result.writer.nickname}</span>
+                              <span class="reply-date">${data.result.createdDate}</span><br>
+                              <span class="replContent">${data.result.content}</span><br>
                             </div>
                             <div class="button-container2">
                                 <button class="del2"><i class="fa-regular fa-trash-can"></i></button>
@@ -138,6 +146,7 @@ function addReply(event) {
                 replyForm.find('#reply-content').val("");
                 newReply.find('.button-container2').find(".del2").click(deleteReply);
                 newReply.find('.button-container2').find(".modi2").click(modifyReply);
+                window.sendAlarm(data.alarm,alarmMessageReply);
             },
             error: function () {
                 Swal.fire({
@@ -187,6 +196,7 @@ function addReplyForm(e) {
 $(".del2").click(deleteReply);
 
 //답글 수정
+
 $(".modi2").click(modifyReply);
 
 function deleteComment(e) {
@@ -518,13 +528,11 @@ $(".report-btn").click(function (e) {
 
      // 모달 열기
      $("#reportModal").modal("show");
-     
 });
 
 $("#submitBtn").click(function (e) {
     e.preventDefault();
     let reportFiles = $('input[name="reportFiles"]')[0].files;
-   
      // FormData 객체 생성
      let formData = new FormData();
 
@@ -537,7 +545,6 @@ $("#submitBtn").click(function (e) {
      for (let i = 0; i < reportFiles.length; i++) {
          formData.append('reportFiles', reportFiles[i]);
      }
-    
     console.log(formData);
 
     $.ajax({
@@ -620,4 +627,4 @@ function appearButtons() {
 function disappearButtons() {
     // 해당 요소 내의 '.buttons' 클래스를 가진 하위 요소를 숨깁니다.
     $(this).find('.buttons').hide();
-} 
+}

@@ -19,6 +19,7 @@
     <result column="address" property="address"/>
     <result column="lat" property="lat"/>
     <result column="lon" property="lon"/>
+    <result column="photo" property="photo"/>
 
     <association property="payment" javaType="salaba.vo.Payment">
       <id column="reservation_no" property="reservationNo"/>
@@ -33,9 +34,11 @@
       <id column="photo_no" property="photoNo"/>
       <result column="photo_order" property="photoOrder"/>
       <result column="uuid_photo_name" property="uuidPhotoName"/>
+      <result column="photo_explanation" property="photoExplanation"/>
     </collection>
   </resultMap>
 
+  <!-- 예약 이력 리스트 보기 -->
   <select id="selectReservationList" resultMap="ReservationMap">
     select
       t2.name,
@@ -56,11 +59,13 @@
       inner join rental_home t2 on t2.rental_home_no = t1.rental_home_no
       inner join rental_home_photo t3 on t3.rental_home_no = t1.rental_home_no
     where
-      t1.member_no=#{memberNo}
+      t1.member_no=#{memberNo} and
+      t1.state != '4'
     order by
       t1.start_date desc
   </select>
 
+  <!-- 예약 정보 보기 -->
   <select id="selectReservation" resultMap="ReservationMap" parameterType="int">
     select
       t1.reservation_no,
@@ -76,6 +81,8 @@
       t3.uuid_photo_name,
       t3.photo_order,
       t3.photo_no,
+      t3.photo_explanation,
+      t4.amount,
       t4.payment_date,
       t5.photo,
       t5.nickname,
@@ -89,4 +96,13 @@
     where
       t1.reservation_no=#{reservationNo}
   </select>
+
+  <update id="updateReservationForCancel">
+    update
+      reservation
+    set
+      state = '4'
+    where
+      reservation_no = #{reservationNo}
+  </update>
 </mapper>

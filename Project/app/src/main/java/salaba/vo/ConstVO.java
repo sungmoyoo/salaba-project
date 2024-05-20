@@ -46,7 +46,7 @@ public final class ConstVO {
 
   public static final char member_state_blocked = '3'; // 제재
 
-  public static final char member_state_sleep = '4'; // 휴면
+  public static final char member_state_sleep = '4'; // 휴면gi
   
   public static final char login_ok = '0'; // 로그인 성공
   public static final char login_fail = '9'; // 로그인 실패
@@ -57,5 +57,7 @@ public final class ConstVO {
   public static final char text_del = '1'; // 삭제
 
   public static final char text_blocked = '2'; // 제재
+
+  public static final String notify_mark = "게시글에 댓글이 달렸습니다.";
 
 }

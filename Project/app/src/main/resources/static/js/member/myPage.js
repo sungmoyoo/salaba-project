@@ -43,11 +43,17 @@ function myPageAuthorize(){
           $('#checkPassword-container').hide();
           $('#myInformation-container').show();
         }else{
-          alert("비밀번호가 맞지 않습니다.");
+          Swal.fire({
+            icon: "error",
+            title: "비밀번호가 맞지 않습니다."
+          });
         }
       },
       error: ()=>{
-        alert("비밀번호 체크 에러");
+        Swal.fire({
+          icon: "error",
+          title: "비밀번호 체크 에러"
+        });
       }
     })
   });
@@ -80,14 +86,24 @@ function checkNickName(){
     const nickName = $('#nicknameInput').val();
     console.log(nickName);
     if(nickName === ""){
-      alert("닉네임을 입력해주세요");
-      $('#nicknameInput').focus();
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "닉네임을 입력해주세요",
+        confirmButtonText: "확인"
+      }).then((result)=>{
+        $('#nicknameInput').focus();
+        return;
+      });
     }
     if(!validateNickname(nickName)){
-      alert("공백불가,한글 및 영문 숫자 최소2글자 최대 20글자");
-      $('#nicknameInput').focus();
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "공백불가,한글 및 영문 숫자 최소2글자 최대 20글자",
+        confirmButtonText: "확인"
+      }).then((result)=>{
+        $('#nicknameInput').focus();
+        return;
+      });
     }
 
     $.ajax({
@@ -98,15 +114,27 @@ function checkNickName(){
       },
       success: function(data){
         if(data == 0){
-          alert("사용 가능한 닉네임입니다.");
+          Swal.fire({
+            icon: "success",
+            title: "사용 가능한 닉네임입니다."
+          });
         }else{
-          alert("사용 중인 닉네임입니다.");
-          $('#nicknameInput').focus();
-          return;
+          Swal.fire({
+            icon: "error",
+            title: "사용 중인 닉네임입니다.",
+            confirmButtonText: "확인"
+          }).then((result)=>{
+            $('#nicknameInput').focus();
+            return;
+          });
         }
       },
       error: ()=>{
-        alert("닉네임 체크 에러");
+        Swal.fire({
+          icon: "error",
+          title: "닉네임 체크 에러",
+          confirmButtonText: "확인"
+        });
       }
     });
   });
@@ -233,21 +261,36 @@ function changePassword(){
     const secondPasswordInput = $('#changePassword-passwordCheck').val();
   
     if( firstPasswordInput == "" || secondPasswordInput == "" ){
-      alert("변경할 비밀번호를 입력해주세요");
-      $('#changePassword-passwordInput').focus();
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "변경할 비밀번호를 입력해주세요",
+        confirmButtonText: "확인"
+      }).then((result)=>{
+        $('#changePassword-passwordInput').focus();
+        return;
+      });
     }
   
     if( firstPasswordInput != secondPasswordInput ){
-      alert("비밀번호가 일치하지 않습니다");
-      $('#changePassword-passwordCheck').focus();
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호가 일치하지 않습니다",
+        confirmButtonText: "확인"
+      }).then((result)=>{
+        $('#changePassword-passwordInput').focus();
+        return;
+      });
     }
   
     if( !validatePassword(secondPasswordInput) ){
-      alert("대,소문자,숫자,특수문자를 포함한 8글자 이상 20글자 이하로 설정해주세요");
-      $('#changePassword-passwordInput').focus();
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "대,소문자,숫자,특수문자를 포함한 8글자 이상 20글자 이하로 설정해주세요",
+        confirmButtonText: "확인"
+      }).then((result)=>{
+        $('#changePassword-passwordInput').focus();
+        return;
+      });
     }
   
     $.ajax({
@@ -262,8 +305,13 @@ function changePassword(){
         $('#changePassword-passwordCheck').val("");
         $('#changePassword-passwordInput').val("");
         $('#changePassword-open-button').click();
-        alert(data);
-        location.href = "/member/myPage?memberNo="+loginUser.no;
+        Swal.fire({
+          icon: "success",
+          title: data,
+          confirmButtonText: "확인"
+        }).then((result)=>{
+          location.href = "/member/myPage?memberNo="+loginUser.no;
+        });
       }
     });
   });
@@ -304,10 +352,16 @@ function updateUserInfo(){
       contentType: false, // 컨텐츠 타입 설정
       data: formData, // 폼 데이터 전송
       success: function(data){
-        alert(data);
+        Swal.fire({
+          icon: "success",
+          title: data
+        });
       },
       error: ()=>{
-        alert("회원정보 수정 에러");
+        Swal.fire({
+          icon: "error",
+          title: "회원정보 수정 에러"
+        });
       }
     });
   });
@@ -324,12 +378,22 @@ function memberWithdrawal(){
       },
       success: function(data){
         if(data == 1){
-          alert("회원탈퇴되었습니다.");
-          location.href = "/main";
+          Swal.fire({
+            title: "회원탈퇴되었습니다.",
+            icon: "success",
+            confirmButtonText: "확인"
+          }).then((result)=>{
+            if(result.isConfirmed) {
+              location.href = "/main";
+            }
+          });
         }
       },
       error:()=>{
-        alert("회원탈퇴 에러");
+        Swal.fire({
+          icon: "error",
+          title: "회원탈퇴 에러"
+        });
         return;
       }
     });

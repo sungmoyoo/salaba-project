@@ -1,12 +1,17 @@
 package salaba.service;
 
 import java.util.List;
+import salaba.vo.Nation;
 import salaba.vo.board.BoardFile;
 import salaba.vo.board.Board;
 
 public interface BoardService {
 
   void addBoard(Board board); // 게시판 글 작성
+  List<Nation> getAllNations(); // 국가, 지역 정보
+
+
+  List<Nation> getAllNations(); // 국가, 지역 정보
 
   List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo); // 게시판 조회
 
@@ -49,5 +54,7 @@ public interface BoardService {
 
   List<Board> commentHistory(int pageNo, int pageSize, int no); // 작성댓글 내역
   int countAllCommentHistory(int memberNo); // count
+
+  int selectBoardWriterInfo(int boardNo);
 
 }

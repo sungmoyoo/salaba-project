@@ -3,6 +3,7 @@ package salaba.dao;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import salaba.vo.Nation;
 import salaba.vo.board.Board;
 import salaba.vo.board.BoardFile;
 import salaba.vo.rental_home.RentalHomePhoto;
@@ -11,6 +12,8 @@ import salaba.vo.rental_home.RentalHomePhoto;
 public interface BoardDao {  // 게시판 인터페이스
 
   void addBoard(Board board); // 게시글 작성
+
+  List<Nation> findAllNationsAndRegions(); // 모든 국가, 지역 정보를 가져오기
 
   int deleteBoard(@Param("boardNo") int boardNo); // 글 삭제
 
@@ -57,4 +60,6 @@ public interface BoardDao {  // 게시판 인터페이스
       @Param("no") int no);
 
   int countAllCommentHistory(int no);// count
+  
+  int selectBoardWriterInfo(@Param("boardNo") int boardNo); // 게시글 작성자 회원번호 가져오기
 }

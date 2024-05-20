@@ -7,19 +7,30 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <link rel="stylesheet" type="text/css" href="/css/common.css">
   <link rel="stylesheet" type="text/css" href="/css/mainStyle.css">
+  <link rel="stylesheet" type="text/css" href="/css/searchContainer.css">
   <link rel="stylesheet" type="text/css" href="/css/modal/loginModal.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 </head>
+<script th:inline="javascript">
+  const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
+  const sessionInfo = /*[[${session}]]*/ null;
+  const loginUser = /*[[${session.loginUser}]]*/ null;
+</script>
 <body>
   <div data-th-replace="header :: header"></div>
-  <div data-th-replace="rentalHomeHeader :: rentalHomeHeader">header</div>
-  
-<main>
-  <section class="theme-section">
-    <div class="theme-container">
+  <div class="container-fluid row mb-5">
+    <div class="col-sm-4 container text-center">
+      <div data-th-replace="rentalHomeHeader :: rentalHomeHeader">header</div>
+    </div>  
+  </div>
+  <section class="theme-section container-fluid row align-items-center">
+    <div class="col">
+
+    </div>
+    <div class="col">
       <button class="scroll-left-button"onclick="scrollThemes(-480)">
         <span>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
@@ -27,12 +38,16 @@
           </svg>
         </span>
       </button>
+    </div>
+    <div class="theme-container d-flex flex-row col-9">
       <div data-th-each="theme : ${session.themeList}" class="theme-icon-container">
         <a data-th-href="@{theme(themeName=${theme.themeName})}" name="themeName">
           <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}" alt="테마 이미지">
           <span class="theme-name" data-th-text="${theme.themeName}"></span>
         </a>
       </div>
+    </div>
+    <div class="col">
       <button class="scroll-right-button" onclick="scrollThemes(480)">
         <span>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
@@ -41,8 +56,8 @@
         </span>
       </button>
     </div>
-    <div class="filter">
-      <button class="filter-button" onclick="openFilterPopup()">
+    <div class="filter col">
+      <button class="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
         <span class="filter-button-span">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
             <path fill="none" d="M7 16H3m26 0H15M29 6h-4m-8 0H3m26 20h-4M7 16a4 4 0 1 0 8 0 4 4 0 0 0-8 0zM17 6a4 4 0 1 0 8 0 4 4 0 0 0-8 0zm0 20a4 4 0 1 0 8 0 4 4 0 0 0-8 0zm0 0H3"></path>
@@ -52,42 +67,42 @@
       </button>
     </div>
   </section>
-  <section class="slider-container">
-    <div class="listing-container">
-      <div data-th-each="rentalHome : ${rentalHomeList}" class="listing-item" data-th-object="${rentalHome}">
-        <div class="listing-slider">
-          <a data-th-href="@{rentalHome/view(rentalHomeNo=${rentalHome.rentalHomeNo})}" name="rentalHomeNo">
-            <img class="slide-image" data-th-each="photo : ${rentalHome.rentalHomePhotos}"
-                 data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
-          </a>
-          <button class="slide-button prev-button">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
-                <path fill="none" d="M20 28 8.7 16.7a1 1 0 0 1 0-1.4L20 4"></path>
-               </svg>
-            </span>
-          </button>
-          <button class="slide-button next-button">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 12px; width: 12px; stroke: currentcolor; stroke-width: 5.33333px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
-                <path fill="none" d="m12 4 11.3 11.3a1 1 0 0 1 0 1.4L12 28"></path>
-              </svg>
-            </span>
-          </button>
-          <div class="listing-item-content">
-            <div class="listing-text">
-              <span data-th-text="${rentalHome.name}">숙소 이름</span>
+  
+<main class="container-sm mt-5">
+  <section class="slider-container container-fluid">
+    <div class="listing-container container-fluid row">
+      <div class="card p-2 mx-auto mb-4" style="width: 18rem;" data-th-each="rentalHome : ${rentalHomeList}" data-th-object="${rentalHome}">
+        <div data-th-id="${'carousel-'+rentalHome.rentalHomeNo}" class="carousel slide">
+          <div class="carousel-inner">
+            <div data-th-each="photo, iterStat : ${rentalHome.rentalHomePhotos}" class="carousel-item" data-th-classappend="${iterStat.index == 0} ? 'active'">
+              <a data-th-href="@{rentalHome/view(rentalHomeNo=${rentalHome.rentalHomeNo})}" name="rentalHomeNo">
+                <img class="slide-image" data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/rentalHome/' + ${photo.uuidPhotoName}(type=f,w=265,h=252,faceopt=false,ttype=jpg)}" alt="숙소 이미지">
+              </a>
             </div>
-             <div class="listing-price">
-              <span>$ </span>
-              <span data-th-text="${rentalHome.price}">숙소 가격</span>
-             </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="listing-text">
+            <span data-th-text="${rentalHome.name}">숙소 이름</span>
+          </div>
+           <div class="listing-price">
+            <span>$ </span>
+            <span data-th-text="${rentalHome.price}">숙소 가격</span>
            </div>
         </div>
       </div>
     </div>
   </section>
-  <section class="map-section">
+
+  <section class="map-section container">
       <div id="map" style="height: 100%">
   
       </div>
@@ -106,53 +121,64 @@
     </span>
   </button>
 </main>
-<div id="filterPopup" class="popup">
-  <div class="popup-content">
-    <span class="close-button" onclick="closeFilterPopup()">&times;</span>
-
-    <!-- 필터 폼 -->
-    <div>
-      <h3>숙소 유형</h3>
-      <div class="filter-options-home-type" data-th-each="theme : ${session.themeList}">
-        <label class="theme-checkbox-label">
-          <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}" data-th-if="${theme.themeNo < 10}">
-        </label>
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="filterModalLabel">필터</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- 필터 폼 -->
+      <div class="modal-body row">
+        <div class="row p-2">
+          <h3>숙소 유형</h3>
+          <div class="filter-options-home-type" data-th-each="theme : ${session.themeList}" data-th-if="${theme.themeNo < 10}">
+            <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}">
+            <input type="checkbox" class="btn-check" data-th-id="${'check-'+theme.themeNo}" name="theme" data-th-value="${theme.themeName}" autocomplete="off">
+            <label class="theme-checkbox-label btn" data-th-for="${'check-'+theme.themeNo}" data-th-text="${theme.themeName}">
+            </label>
+          </div>
+        </div>
+        <div class="row p-2">
+          <h3>테마</h3>
+          <div class="filter-options-theme" data-th-each="theme : ${session.themeList}" data-th-if="${theme.themeNo >= 10 && theme.themeNo < 100}">
+            <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}">
+            <input type="checkbox" class="btn-check" data-th-id="${'check-'+theme.themeNo}" name="theme" data-th-value="${theme.themeName}" autocomplete="off">
+            <label class="theme-checkbox-label btn" data-th-for="${'check-'+theme.themeNo}" data-th-text="${theme.themeName}">
+          </div>
+        </div>
+        <div class="row p-2">
+          <div class="form-floating mb-3 col">
+            <input type="number" class="form-control" id="minPrice" name="minPrice" placeholder="최소 가격" value="0" min="0">
+            <label for="minPrice">최소 가격</label>
+          </div>
+          <div class="form-floating mb-3 col">
+            <input type="number" class="form-control" id="maxPrice" name="maxPrice" placeholder="최대 가격" value="100000" min="1">
+            <label for="maxPrice">최대 가격</label>
+          </div>
+        </div>
+        <!-- <div>
+          <h3>편의 시설</h3>
+          <div class="filter-options-facility" data-th-each="facility : ${session.facilityList}">
+            <label class="facility-checkbox-label">
+              
+            </label>
+          </div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="getFilterData()" data-bs-dismiss="modal">필터</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
-    <div>
-      <h3>테마</h3>
-      <div class="filter-options-theme" data-th-each="theme : ${session.themeList}">
-        <label class="theme-checkbox-label">
-          <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}" data-th-if="${theme.themeNo >= 10 && theme.themeNo < 100}">
-        </label>
-      </div>
-    </div>
-    <div>
-      <label for="minPrice">최소 가격:</label>
-      <input type="number" id="minPrice" name="minPrice">
-      <label for="maxPrice">최대 가격:</label>
-      <input type="number" id="maxPrice" name="maxPrice">
-    </div>
-    <div>
-      <h3>편의 시설</h3>
-      <div class="filter-options-facility" data-th-each="facility : ${session.facilityList}">
-        <label class="facility-checkbox-label">
-          
-        </label>
-      </div>
-    </div>
-    <button class="apply-filter-button" onclick="getFilterData()" th:text="${rentalHomeList.size + '개의 숙소 보기'}">버튼</button>
   </div>
 </div>
 <div data-th-replace="footer :: footer" class="footer-div">footer</div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script th:inline="javascript">
-  const rentalHomeList = /*[[${rentalHomeList}]]*/ null;
-  const sessionInfo = /*[[${session}]]*/ null;
-  const loginUser = /*[[${session.loginUser}]]*/ null;
-</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script data-th-src="@{/js/main.js}"></script>
 <script data-th-src="@{/js/header.js}"></script>
+<script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script>
 </html>

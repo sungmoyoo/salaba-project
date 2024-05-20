@@ -59,10 +59,10 @@
   </body>
 
   <script id="unprcs-template" type="text/x-handlebars-template">
-      <div><span>숙소등록신청</span><a href="/rental/list?menu=2">{{rentalReg}}</a></div>
-      <div><span>숙소신고</span><a href="/report/list?menu=1">{{rentalReport}}</a></div>
-      <div><span>게시글신고</span><a href="/report/list?menu=2">{{boardReport}}</a></div>
-      <div><span>댓글신고</span><a href="/report/list?menu=3">{{commentReport}}</a></div>
-      <div><span>문의</span><a href="/qna/list">{{qnaCount}}</a></div>
+      <div><span>숙소등록신청</span><a href="/rental/list?menu=2&incomplete=true">{{rentalReg}}</a></div>
+      <div><span>숙소신고</span><a href="/report/list?menu=1&incomplete=true">{{rentalReport}}</a></div>
+      <div><span>게시글신고</span><a href="/report/list?menu=2&incomplete=true">{{boardReport}}</a></div>
+      <div><span>댓글신고</span><a href="/report/list?menu=3&incomplete=true">{{commentReport}}</a></div>
+      <div><span>문의</span><a href="/qna/list?incomplete=true">{{qnaCount}}</a></div>
   </script>
 </html>

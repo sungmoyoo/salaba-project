@@ -16,14 +16,14 @@ function setAlarmContent(messageObj){
   alarmContent.push({
     memberNo: messageObj.memberNo,
     content: messageObj.content,
-    timestamp: messageObj.timestamp
+    timestamp: messageObj.notifyDate
   });
 }
 let count = 1;
 // 클라이언트 연결시
 wss.on('connection', (ws) => {
   console.log("클라이언트 연결됨");
-  console.log("접속인원 : " + count++);
+  console.log("접속인원 : " + loginUser.size);
   // 클라이언트로부터 메시지를 받았을 때
   ws.on('message', (message) => {
     console.log("클라이언트로부터 요청을 받음");
