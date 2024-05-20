@@ -658,7 +658,7 @@ $('#userLoginModal').on('hidden.bs.modal', function (e) {
     $('input').removeClass('is-valid');
 });
 
-$(document).on('click','.btn-close', function(){
+$(document).on('click','.loginModalClose', function(){
   // 이메일 input 초기화
   $('#userEmail').val('');
   // 비밀번호 input 초기화

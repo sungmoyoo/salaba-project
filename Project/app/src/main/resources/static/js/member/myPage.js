@@ -336,13 +336,26 @@ function updateUserInfo(){
     if( $('#inputUserPhoto')[0].files[0] != null && $('#inputUserPhoto')[0].files[0] != undefined ){
       formData.append('file', $('#inputUserPhoto')[0].files[0]); // 파일 추가
     }
+
+    if( $('input[name="gender"]:checked').val() != "none" ){
+      formData.append('sex', $('input[name="gender"]:checked').val());
+    }
+
+    if( $('#telInput').val() != "" || $('#telInput').val().length > 0 ){
+      formData.append('telNo', $('#telInput').val());
+    }
+
+    if( getNationNo($('.form-select').val()) != null ){
+      formData.append('nationNo', getNationNo($('.form-select').val()));
+    }
+
+    if( $('#addressInput').val() != "" || $('#addressInput').val() != null ){
+      formData.append('address', $('#addressInput').val());
+    }
+
     formData.append('no', loginUser.no);
     formData.append('name', $('#nameInput').val());
     formData.append('nickname', $('#nicknameInput').val());
-    formData.append('telNo', $('#telInput').val());
-    formData.append('sex', $('input[name="gender"]:checked').val());
-    formData.append('nationNo', getNationNo($('.form-select').val()));
-    formData.append('address', $('#addressInput').val());
     
     if(themes.length > 0){
       formData.append('themes', themes);
