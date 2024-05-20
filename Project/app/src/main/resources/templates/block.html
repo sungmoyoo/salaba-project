@@ -3,18 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <style>
-    .title-block {
-      font-family: Arial, sans-serif;
-      font-size: 24px;
-      text-align: center;
-      margin: 20px;
-    }
-    .button-container {
-      text-align: center;
-      margin-top: 20px;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="/css/block.css">
 </head>
 <body>
 <div class="title-block">
@@ -24,12 +13,6 @@
 <button onclick="goBack()">이전으로</button>
 </div>
 
-<script>
-  // 브라우저의 이전 페이지로 이동하는 함수
-  function goBack() {
-    window.history.back();
-  }
-</script>
-
+<script data-th-src="@{/js/block.js}"></script>
 </body>
 </html>

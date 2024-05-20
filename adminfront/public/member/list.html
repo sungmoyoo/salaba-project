@@ -11,14 +11,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"
-      integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
   <body>
     <header class="x-page-header"></header>
@@ -37,24 +29,28 @@
           </button>
         </div>
       </form>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>이름</th>
-            <th>닉네임</th>
-            <th>이메일</th>
-            <th>연락처</th>
-            <th>가입일</th>
-            <th id="changing-th"></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-          <td colspan="10" class="tablefoot"></td>
-        </tfoot>
-      </table>
+      <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>이름</th>
+              <th>닉네임</th>
+              <th>이메일</th>
+              <th>연락처</th>
+              <th>가입일</th>
+              <th id="changing-th"></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
+
     <div id="detailModal" class="modal">
       <div class="modal-content" id="modalContent"></div>
 
@@ -172,7 +168,10 @@
         {{/each}}
       </div>
     </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/list.js"></script>
     <script src="/js/common.js"></script>
     <script src="/js/page-init.js"></script>

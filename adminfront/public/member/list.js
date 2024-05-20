@@ -5,7 +5,13 @@ let menu = pageContext.params.get("menu");
     axiosInstance.get(`${RESTAPI_HOST}/member/list/${menu}`).then((response) => {
         let result = response.data;
         if (response.status == "failure") {
-            alert(response.error);
+            Swal.fire({
+                icon: "error",
+                title: "목록을 불러오는중 오류가 발생하였습니다.",
+                text: response.error,
+                showConfirmButton: false,
+                timer: 1500
+              });
             return;
         }
         console.log(result);
@@ -31,9 +37,15 @@ let menu = pageContext.params.get("menu");
                 .then((response2) => {
                     let result2 = response2.data.data;
                     if (response2.status == 'failure') {
-                        alert(response2.error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "목록 상세를 불러오는중 오류가 발생하였습니다.",
+                            text: response2.error,
+                            showConfirmButton: false,
+                            timer: 1500
+                          });
+                        return;
                     }
-                    console.log(result2);
                     let detailTemplate = Handlebars.compile($("#detail-template").html());
                     modalContent.html(detailTemplate(result2));
                     if (menu == 1) {
@@ -59,25 +71,29 @@ let menu = pageContext.params.get("menu");
                         axiosInstance.put(`${RESTAPI_HOST}/member/update`, requestData)
                         .then((response) => {
                             if (response.status == 'failure') {
-                                alert('등급 변경 오류');
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "등급 변경 오류",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                  });
                                 return;
                             }
-                            closeButton.click();
+                            
+                            Swal.fire({
+                                icon: "success",
+                                title: "성공적으로 변경되었습니다.",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                closeButton.click();
+                            });
+                            
                         })
-                        .catch((error) => {
-                            // 에러가 발생했을 때의 처리
-                            if (error.response.status === 403) {
-                                alert('권한이 없습니다.');
-                              // 특정 작업 수행
-                            }
-                        });
-                        
 
                     })
 
                 });
-
-
             let closeButton = $("#closeBtn");
             closeButton.click(() => {
                 modal.css("display", "none");

@@ -19,7 +19,7 @@ section form {
 }
 
 .note-editor{
-  width: 100% !important; /* summernote의 기본 1440px고정넓이라는 우선순위를 무시하고 다음이 적용되도록 한다.*/
+  width: 100% !important; /* summernote의 기본 1440px 고정넓이라는 우선순위를 무시하고 다음이 적용되도록 한다.*/
 }
 
 /*분류~공개범위 묶기*/
@@ -110,8 +110,9 @@ input[name='title'] {
   /* 경계선 설정 */
   border-radius: 4px;
   /* 약간 둥근 모서리 */
-  font-size: 16px;
+  font-size: 18px;
   /* 충분히 큰 글꼴 크기로 가독성 향상 */
+  font-weight: 500;
   margin-bottom: 10px;
 }
 
@@ -124,6 +125,7 @@ label {
   margin-right: 10px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

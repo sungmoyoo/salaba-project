@@ -30,22 +30,24 @@
       <button class="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
 </form>
-<table border="1">
-    <thead>
-    <tr>
-        <th>No</th>
-        <th>숙소명</th>
+<div class="tbl-header">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>숙소명</th>
         <th id="changing-th"></th>
         <th>등록일</th>
         <th>상태</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-    <tfoot>
-    <td colspan="10" class="tablefoot"></td>
-    </tfoot>
-</table>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tbody></tbody>
+    </table>
+  </div>
 </div>
 
 <div id="detailModal" class="modal">
@@ -155,7 +157,7 @@
         </form>
         </div>
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/list.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/page-init.js"></script>

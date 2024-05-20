@@ -10,7 +10,7 @@
 </head>
 <body>
 <div id="mainHeader">
-    <img id="logo" src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo2.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png"/>
+    <img id="logo" src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/logo/newLogo1.png?type=w_sh&w=150&quality=100&sharp_amt=1.0&ttype=png"/>
     <h1 id="title">관리자 페이지</h1>
 </div>
 <div class="login">
@@ -19,44 +19,13 @@
         <div id="pw"><input type="password" name="password" placeholder="비밀번호"/></div>
         <button type="button" id="signIn">로그인</button>
     </form>
-    <!-- <a data-th-href="@{/signup}">가입하기</a> -->
 </div>
 
+<script src="/auth/form.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/common.js"></script>
 <script src="/js/page-init.js"></script>
-<script>
-    $('#signIn').click((e) => {
-        let email = $('#email').children().first().val();
-        let pw = $('#pw').children().first().val();
-        let jsonData = {
-                email: email,
-                password: pw
-            }
-        $.ajax({
-            url: `${RESTAPI_HOST}/auth/login`,
-            type: 'POST',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify(jsonData),
-
-            success: (response) => {
-                console.log(response.accessToken);
-                sessionStorage.setItem('accessToken', response.accessToken);
-                sessionStorage.setItem('refreshToken', response.refreshToken);
-                window.location.href = '/home';
-            },
-            error: (error) => {
-                alert('유효하지 않거나 권한이 없습니다.')
-            }
-        });
-    });
-
-
-</script>
 </body>
 </html>
-
-
-
 
 
