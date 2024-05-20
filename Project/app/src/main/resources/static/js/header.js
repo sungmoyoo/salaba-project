@@ -354,29 +354,29 @@ function loginForGoogle(){
 
   form.submit();
 
-  if(googleLoginWindow){
-    console.log(1111);
-    googleLoginWindow.onbeforeunload = function(data){
-      console.log(2222);
-      googleLoginWindow.close();
-      if(data.no == 0){
-        console.log(3333);
+  // 메시지 이벤트 리스너 등록
+  window.addEventListener('message', function(event) {
+    // 올바른 출처인지 확인
+    if (event.origin !== 'http://localhost:8888') {
+        return;
+    }
+    
+    let data = event.data;
+    if (data.no == 0) {
         $('#userjoin-button').click();
         $('#joinMember-name').val(data.name);
         $('#joinMember-email').val(data.email);
-        
-        $('#joinMember-name').prop('disabled');
-        $('#joinMember-email').prop('disabled');
+
+        $('#joinMember-name').prop('disabled', true);
+        $('#joinMember-email').prop('disabled', true);
         $('#joinMember-name').addClass('is-valid');
         $('#joinMember-email').addClass('is-valid');
-      }else{
-        console.log(4444);
+    } else {
         sessionStorage.setItem('loginUser', data);
-        modalCloseButton.click();
+        $('#modalCloseButton').click();
         location.href = "main";
-      }
     }
-  }
+  });
 }
 
 // 회원가입
@@ -642,3 +642,32 @@ function initJoinMemberModal(){
     form.classList.remove('is-valid');
   });
 }
+
+// LogIn 모달 전체 초기화
+$('#userLoginModal').on('hidden.bs.modal', function (e) {
+    // 이메일 input 초기화
+    $('#userEmail').val('');
+    // 비밀번호 input 초기화
+    $('#userPassword').val('');
+    // 이메일 저장 체크 해제
+    $('#saveEmail').prop('checked', false);
+    $('input').val('');
+    // 모든 input 요소의 disabled 속성 제거
+    $('input').prop('disabled', false);
+    // 모든 input 요소의 is-valid 클래스 제거
+    $('input').removeClass('is-valid');
+});
+
+$(document).on('click','.btn-close', function(){
+  // 이메일 input 초기화
+  $('#userEmail').val('');
+  // 비밀번호 input 초기화
+  $('#userPassword').val('');
+  // 이메일 저장 체크 해제
+  $('#saveEmail').prop('checked', false);
+  $('input').val('');
+  // 모든 input 요소의 disabled 속성 제거
+  $('input').prop('disabled', false);
+  // 모든 input 요소의 is-valid 클래스 제거
+  $('input').removeClass('is-valid');
+});
