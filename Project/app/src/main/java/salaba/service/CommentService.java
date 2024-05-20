@@ -1,6 +1,7 @@
 package salaba.service;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 import salaba.vo.board.Board;
 import salaba.vo.board.Comment;
 import salaba.vo.board.Reply;
@@ -16,4 +17,6 @@ public interface CommentService {
   int deleteComment(int commentNo);  // 댓글 삭제
 
   Comment getBy(int commentNo);
+
+  int selectCommentWriterInfo(int commentNo); // 댓글 회원 번호 가져오기
 }

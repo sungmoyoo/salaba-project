@@ -13,4 +13,5 @@ public interface ReservationDao {
 
   Reservation selectReservation(@Param("reservationNo") int reservationNo);
 
+  int updateReservationForCancel(@Param("reservationNo") int reservationNo);
 }

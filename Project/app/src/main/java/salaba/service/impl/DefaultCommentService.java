@@ -37,5 +37,8 @@ public class DefaultCommentService implements CommentService { // 댓글
     return commentDao.findBy(commentNo);
   } // 댓글 찾기
 
-
+  @Override
+  public int selectCommentWriterInfo(int commentNo) {
+    return commentDao.selectCommentWriterInfo(commentNo); // 댓글 회원 번호 가져오기
+  }
 }

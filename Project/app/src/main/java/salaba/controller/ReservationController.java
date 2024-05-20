@@ -5,9 +5,11 @@ import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import salaba.service.ReservationService;
 import salaba.vo.Member;
@@ -35,4 +37,10 @@ public class ReservationController {
     model.addAttribute("reservation", reservation);
   }
 
+  @PostMapping("/member/reservation/cancel")
+  public ResponseEntity<Integer> updateReservationForCancel(@RequestParam(value = "reservationNo", required = false) Integer reservationNo){
+    int result = reservationService.updateReservationForCancel(reservationNo);
+
+    return ResponseEntity.ok(result);
+  }
 }

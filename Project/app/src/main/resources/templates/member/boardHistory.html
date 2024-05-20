@@ -22,12 +22,12 @@
 </script>
 <body>
   <div data-th-replace="header :: header">머리말</div>
-<main class="row">
-  <section id="myPage-leftSection" class="col-2">
+<main class="container-sm">
+  <section id="myPage-leftSection" class="g-col-2 mt-5">
     <div data-th-replace="/member/myPageSideMenu :: myPageSideMenu">a</div>
   </section>
 
-  <section id="myPage-rightSection" class="row col-8">
+  <section id="myPage-rightSection" class="row g-col-8 p-4 mt-5">
     <div id="myPage-title-container">
       <div>
         <h1>작성글 내역</h1>
@@ -59,7 +59,7 @@
         </tbody>
       </table>    
       <!--페이징 시작-->
-      <div>
+      <div class="d-flex justify-content-center">
         <nav aria-label="Page navigation">
           <ul class="pagination">
             <li class="page-item">

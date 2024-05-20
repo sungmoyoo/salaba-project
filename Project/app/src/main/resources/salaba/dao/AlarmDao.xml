@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salaba.dao.AlarmDao">
+
+  <resultMap id="AlarmMap" type="salaba.vo.Alarm">
+    <id column="notify_no" property="notifyNo"/>
+    <result column="member_no" property="memberNo"/>
+    <result column="content" property="content"/>
+    <result column="notify_date" property="notifyDate"/>
+    <result column="mark" property="mark"/>
+  </resultMap>
+
+  <select id="selectNotifyHistory" resultMap="AlarmMap">
+    select
+      notify_no,
+      member_no,
+      content,
+      notify_date,
+      mark
+    from
+      notify_history
+    where
+      member_no = #{memberNo} and
+      state = '0'
+    order by
+      notify_no desc
+  </select>
+
+  <insert id="addNotifyHistory" parameterType="salaba.vo.Alarm" useGeneratedKeys="true" keyProperty="notifyNo">
+    insert into
+      notify_history
+      (
+        member_no,
+        content,
+        mark
+      )
+    values
+      (
+        #{memberNo},
+        #{content},
+        #{mark}
+      )
+  </insert>
+
+  <update id="updateNotifyHistory">
+    update
+      notify_history
+    set
+      state = #{state}
+    where
+      notify_no = #{notifyNo}
+  </update>
+
+</mapper>

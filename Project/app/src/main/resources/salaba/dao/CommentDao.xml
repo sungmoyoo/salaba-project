@@ -83,4 +83,13 @@
     comment_no=#{commentNo}
   </update>
 
+  <!-- 댓글 작성자 회원 번호 가져오기 -->
+  <select id="selectCommentWriterInfo">
+    select
+      member_no
+    from
+      comment
+    where
+      comment_no = #{commentNo}
+  </select>
 </mapper>

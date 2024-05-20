@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import salaba.service.AlarmService;
 import salaba.service.BoardService;
 import salaba.service.CommentService;
 import salaba.service.MemberService;
@@ -31,6 +32,7 @@ import salaba.service.ReplyService;
 import salaba.service.StorageService;
 import salaba.util.Translator;
 import salaba.vo.Alarm;
+import salaba.vo.ConstVO;
 import salaba.vo.Nation;
 import salaba.vo.board.BoardFile;
 import salaba.vo.board.Board;
@@ -49,7 +51,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   private final StorageService storageService; // 스토리지 서비스
   private final CommentService commentService; // 댓글 서비스
   private final ReplyService replyService; // 답글 서비스
-  private final MemberService memberService; // 회원 서비스
+  private final AlarmService alarmService; // 알람 서비스
+
 
 
   @Value("${ncpbucketname}")
@@ -453,13 +456,11 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @PostMapping("/board/comment/add") // 댓글 또는 답글 작성
   public ResponseEntity<?> addComment(
       Comment comment,
-//      @RequestParam("alarmContent") String alarmContent,
-//      @RequestParam("memberNoForAlarm") int memberNoForAlarm,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("title") String title,
       HttpSession session) throws Exception {
 
     log.debug(String.format("comment : %s", comment.toString()));
-//    log.debug(String.format("alarmContent : %s", alarmContent));
-//    log.debug(String.format("memberNoForAlarm : %s", memberNoForAlarm));
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -468,17 +469,26 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     comment.setWriter(loginUser);
     commentService.addComment(comment);
-
+    log.debug(String.format("로그로그 title : %s", title));
+    int memberNoForAlarm = boardService.selectBoardWriterInfo(comment.getBoardNo());
+    Alarm alarm = new Alarm();
     // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-//    if( memberNoForAlarm != loginUser.getNo() ){
-//      Alarm alarm = new Alarm();
-//      alarm.setMemberNo(memberNoForAlarm);
-//      alarm.setContent(alarmContent);
-//      // 알람 추가
-//      memberService.insertNotifyHistory(alarm);
-//    }
+    if( memberNoForAlarm != loginUser.getNo() ){
+      alarm.setMemberNo(memberNoForAlarm);
+      alarm.setContent(alarmContent);
+      String mark = "'" + title + "'" + ConstVO.notify_mark;
+      log.debug(String.format("로그로그 mark : %s", mark));
+      alarm.setMark(mark);
+      // 알람 추가
+      alarmService.addNotifyHistory(alarm);
+      alarm.setNotifyDate(new java.sql.Date(System.currentTimeMillis()));
+    }
     comment.setCreatedDate(new Date());
-    return ResponseEntity.ok(comment);
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("result", comment);
+    responseData.put("alarm", alarm);
+
+    return ResponseEntity.ok(responseData);
   }
 
   @PostMapping("/board/comment/update") // 답글 또는 댓글 수정
@@ -535,8 +545,8 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("/board/reply/add") // 답글 작성
   public ResponseEntity<?> addReply(Reply reply,
-//      @RequestParam("alarmContent") String alarmContent,
-//      @RequestParam("commentWriterNo") int commentWriterNo,
+      @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("title") String title,
       HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -547,16 +557,26 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       reply.setWriter(loginUser);
       replyService.addReply(reply);
 
+      int commentWriterNo = commentService.selectCommentWriterInfo(reply.getCommentNo());
+
       // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
-//      if( commentWriterNo != loginUser.getNo() ){
-//        Alarm alarm = new Alarm();
-//        alarm.setMemberNo(commentWriterNo);
-//        alarm.setContent(alarmContent);
-//        // 알람 추가
-//        memberService.insertNotifyHistory(alarm);
-//      }
+      Alarm alarm = new Alarm();
+      if( commentWriterNo != loginUser.getNo() ){
+        alarm.setMemberNo(commentWriterNo);
+        alarm.setContent(alarmContent);
+        String mark = "'" + title + "'" + ConstVO.notify_mark;
+        log.debug(String.format("로그로그 mark : %s", mark));
+        alarm.setMark(mark);
+        // 알람 추가
+        alarmService.addNotifyHistory(alarm);
+        alarm.setNotifyDate(new java.sql.Date(System.currentTimeMillis()));
+      }
       reply.setCreatedDate(new Date());
-      return ResponseEntity.ok(reply);
+      Map<String, Object> responseData = new HashMap<>();
+      responseData.put("result", reply);
+      responseData.put("alarm", alarm);
+
+      return ResponseEntity.ok(responseData);
     } catch (Exception e) {
       return ResponseEntity.internalServerError().build();
     }

@@ -70,7 +70,11 @@ public class QuestionController {
   }
 
   @GetMapping("/member/contact")
-  public void contact(){
+  public String contact(HttpSession session){
+    if(session.getAttribute("loginUser") == null){
+      return "main";
+    }
+    return "/member/contact";
   }
 
 }

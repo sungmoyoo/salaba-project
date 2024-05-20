@@ -20,7 +20,7 @@ function setQuestionPage(){
 
     const row = $('<tr class="table-light"></tr>');
     const titleCell = $('<td class="table-light"></td>');
-    const titleLink = $('<a></a>')
+    const titleLink = $('<a id="question-title"></a>')
       .attr('href', '#')
       .text(question.title);
     titleCell.append(titleLink);

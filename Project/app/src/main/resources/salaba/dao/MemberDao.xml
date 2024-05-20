@@ -45,13 +45,6 @@
     <result column="save_date" property="saveDate"/>
   </resultMap>
 
-  <resultMap id="AlarmMap" type="salaba.vo.Alarm">
-    <id column="notify_no" property="notifyNo"/>
-    <result column="member_no" property="memberNo"/>
-    <result column="content" property="content"/>
-    <result column="notify_date" property="notifyDate"/>
-  </resultMap>
-
   <insert id="addMember" parameterType="Member"><!--회원가입>-->
     insert into member(
       name,
@@ -185,6 +178,35 @@
       t1.member_no = #{memberNo}
   </select>
 
+  <select id="selectEmailForGoogle" resultMap="MemberMap">
+    select
+      t1.member_no,
+      t1.email,
+      t1.name,
+      t1.nickname,
+      t1.birthday,
+      t1.tel_no,
+      t1.nation_no,
+      t1.address,
+      t1.sex,
+      t1.photo,
+      t1.state,
+      t2.grade_name,
+      t3.theme_no,
+      t4.theme_name,
+      t5.save_content,
+      t5.save_point,
+      t5.save_date
+    from
+      member t1
+      inner join grade t2 on t2.grade_no = t1.grade_no
+      left outer join member_preference t3 on t3.member_no = t1.member_no
+      left outer join theme t4 on t4.theme_no = t3.theme_no
+      left outer join point_history t5 on t5.member_no = t1.member_no
+    where
+      email= #{email}
+  </select>
+
   <!-- 이메일 찾기 -->
   <select id="findEmail" resultMap="MemberMap">
     select
@@ -250,19 +272,6 @@
       member_no = #{no}
   </delete>
 
-  <select id="selectNotifyHistory" resultMap="AlarmMap">
-    select
-      notify_no,
-      member_no,
-      content,
-      notify_date
-    from
-      notify_history
-    where
-      member_no = #{memberNo} and
-      state = '0'
-  </select>
-
   <select id="boardStateCheck" resultType="String">
     select
       state
@@ -272,19 +281,4 @@
       and board_category_no = #{categoryNo}
   </select>
 
-  <insert id="addNotifyHistory" parameterType="salaba.vo.Alarm">
-    insert into notify_history
-      (member_no,content)
-    values
-      (#{memberNo},#{content})
-  </insert>
-
-  <update id="updateNotifyHistory">
-    update
-      notify_history
-    set
-      state = #{state}
-    where
-      notify_no = #{notifyNo}
-  </update>
 </mapper>
