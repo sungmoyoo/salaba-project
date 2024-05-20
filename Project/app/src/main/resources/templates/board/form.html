@@ -52,22 +52,8 @@
           <div class="selectBox" data-th-if="*{categoryNo == 0}">
             <span>지역:</span>
             <select class="form-select form-select-sm" name="regionNo">
-              <optgroup label="[국내여행]">
-                <option value="1">서울</option>
-                <option value="2">제주도</option>
-                <option value="3">전주</option>
-              </optgroup>
-              <optgroup labexl="[해외여행]">
-                <option value="11">삿포로</option>
-                <option value="12">오사카</option>
-                <option value="13">후쿠오카</option>
-                <option value="21">베를린</option>
-                <option value="22">프랑크푸르트</option>
-                <option value="31">브리즈번</option>
-                <option value="32">멜버른</option>
-                <option value="33">시드니</option>
-                <option value="41">파리</option>
-                <option value="42">몽펠리에</option>
+              <optgroup data-th-each="nation : ${nations}" data-th-object="${nation}" data-th-label="*{nationName}">
+                <option data-th-each="region : ${nation.regionList}" data-th-object="${region}" data-th-value="*{regionNo}" data-th-text="*{regionName}">지역이름</option>
               </optgroup>
             </select>
           </div>

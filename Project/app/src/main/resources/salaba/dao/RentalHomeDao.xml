@@ -34,6 +34,12 @@
     <result column="created_date" property="createdDate"/>
     <result column="score" property="score"/>
     <result column="review" property="review"/>
+
+    <association property="writer" javaType="Member">
+      <id column="member_no" property="no"/>
+      <result column="name" property="name"/>
+      <result column="photo" property="photo"/>
+    </association>
   </resultMap>
 
   <resultMap id="rentalHomeSearch" type="RentalHome">
@@ -319,10 +325,14 @@
     select
       t2.created_date,
       t2.score,
-      t2.review
+      t2.review,
+      m.member_no,
+      m.name,
+      m.photo
     from
       reservation t1
       inner join rental_home_review t2 on t1.reservation_no = t2.reservation_no
+      inner join member m on t1.member_no = m.member_no
     where
       t1.rental_home_no = #{rental_home_no}
     order by

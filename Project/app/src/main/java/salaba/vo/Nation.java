@@ -1,8 +1,9 @@
 package salaba.vo;
 
 import java.io.Serializable;
-import lombok.Data;
+import java.util.List;
 
+import lombok.Data;
 
 @Data
 public class Nation implements Serializable { // 국가
@@ -11,4 +12,5 @@ public class Nation implements Serializable { // 국가
 
   private int nationNo; // 국가 번호
   private String nationName; // 이름
+  private List<Region> regionList; // 지역 정보 받아오기
 }

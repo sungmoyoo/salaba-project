@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import salaba.vo.Region;
-import salaba.vo.Reservation2;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;

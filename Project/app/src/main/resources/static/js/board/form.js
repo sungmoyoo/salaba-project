@@ -67,7 +67,8 @@ $('#write-button').click(function(e) {
     let content = $('.note-editable').html();
     console.log(content);
     let imageCount = countImages(content);
-    if (imageCount < 3) {
+    let categoryNo = $('#categoryNo').val();
+    if (imageCount < 3 && categoryNo == 0) {
         Swal.fire({
             icon: "error",
             title: "이미지 파일을 3개이상 올려주세요",

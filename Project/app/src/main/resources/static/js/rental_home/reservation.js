@@ -90,7 +90,7 @@ function requestPay(paymethod) {
                               endDate: formatDate(checkOutDate),
                               numberOfPeople: guests,
                               payment: {
-                                paymentNo: paymentNo,
+                                paymentNo: uid,
                                 amount: data.response.amount,
                                 payMethod: paymethod
                               }

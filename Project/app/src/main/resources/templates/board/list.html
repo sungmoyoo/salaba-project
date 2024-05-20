@@ -34,7 +34,7 @@
   <body>
     <div data-th-replace="header :: header">머리말</div>
     <h1 data-th-text="${boardName}" hidden>게시판</h1>
-    <main>
+    <main class="container-sm">
       <div id="board-header">
         <!-- 게시판 버튼 -->
         <button
@@ -327,6 +327,7 @@
     </main>
     <div data-th-replace="footer :: footer">꼬리말</div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script data-th-src="@{/js/board/list.js}"></script>
     <script data-th-src="@{/js/board/alert.js}"></script>
     <script data-th-src="@{/js/common/alarm.js}"></script>

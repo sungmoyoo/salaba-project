@@ -31,6 +31,7 @@ import salaba.service.ReplyService;
 import salaba.service.StorageService;
 import salaba.util.Translator;
 import salaba.vo.Alarm;
+import salaba.vo.Nation;
 import salaba.vo.board.BoardFile;
 import salaba.vo.board.Board;
 import salaba.vo.board.Comment;
@@ -106,9 +107,14 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @GetMapping("board/form") // 게시글 폼
   public String form(int categoryNo, Model model, HttpSession session) throws Exception {
-    if (session.getAttribute("loginUser") == null) {
 
-    }
+//    if (categoryNo == 0) {
+//      List<Nation> nations = boardService.getAllNations();
+//      log.debug("======================================" + nations);
+//
+//      model.addAttribute("nations", nations);
+//    }
+
     model.addAttribute("boardName", categoryNo == 0 ? "후기글 작성"
         : (categoryNo == 1 ? "정보공유글 작성" : "자유글 작성")); // 카테고리 별 분류 - 0 : 후기 / 1 : 정보공유 / 2 : 자유
     model.addAttribute("categoryNo", categoryNo);
