@@ -443,6 +443,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   public ResponseEntity<?> addComment(
       Comment comment,
       @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("title") String title,
       HttpSession session) throws Exception {
 
     log.debug(String.format("comment : %s", comment.toString()));
@@ -454,18 +455,19 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     comment.setWriter(loginUser);
     commentService.addComment(comment);
-
+    log.debug(String.format("로그로그 title : %s", title));
     int memberNoForAlarm = boardService.selectBoardWriterInfo(comment.getBoardNo());
-    int alarmResult = 0;
     Alarm alarm = new Alarm();
     // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
     if( memberNoForAlarm != loginUser.getNo() ){
       alarm.setMemberNo(memberNoForAlarm);
       alarm.setContent(alarmContent);
+      String mark = "'" + title + "'" + ConstVO.notify_mark;
+      log.debug(String.format("로그로그 mark : %s", mark));
+      alarm.setMark(mark);
       // 알람 추가
       alarmService.addNotifyHistory(alarm);
       alarm.setNotifyDate(new java.sql.Date(System.currentTimeMillis()));
-      alarmResult = 1;
     }
     comment.setCreatedDate(new Date());
     Map<String, Object> responseData = new HashMap<>();
@@ -530,6 +532,7 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @PostMapping("/board/reply/add") // 답글 작성
   public ResponseEntity<?> addReply(Reply reply,
       @RequestParam("alarmContent") String alarmContent,
+      @RequestParam("title") String title,
       HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -541,16 +544,18 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
       replyService.addReply(reply);
 
       int commentWriterNo = commentService.selectCommentWriterInfo(reply.getCommentNo());
-      int alarmResult = 0;
 
       // 게시글 작성자와 댓글 작성자가 다를 때만 알람 추가
       Alarm alarm = new Alarm();
       if( commentWriterNo != loginUser.getNo() ){
         alarm.setMemberNo(commentWriterNo);
         alarm.setContent(alarmContent);
+        String mark = "'" + title + "'" + ConstVO.notify_mark;
+        log.debug(String.format("로그로그 mark : %s", mark));
+        alarm.setMark(mark);
         // 알람 추가
         alarmService.addNotifyHistory(alarm);
-        alarmResult = 1;
+        alarm.setNotifyDate(new java.sql.Date(System.currentTimeMillis()));
       }
       reply.setCreatedDate(new Date());
       Map<String, Object> responseData = new HashMap<>();

@@ -57,7 +57,7 @@
       </button>
     </div>
     <div class="filter col">
-      <button class="filter-button" onclick="openFilterPopup()">
+      <button class="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
         <span class="filter-button-span">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3px; overflow: visible;" aria-hidden="true" role="presentation" focusable="false">
             <path fill="none" d="M7 16H3m26 0H15M29 6h-4m-8 0H3m26 20h-4M7 16a4 4 0 1 0 8 0 4 4 0 0 0-8 0zM17 6a4 4 0 1 0 8 0 4 4 0 0 0-8 0zm0 20a4 4 0 1 0 8 0 4 4 0 0 0-8 0zm0 0H3"></path>
@@ -121,42 +121,56 @@
     </span>
   </button>
 </main>
-<div id="filterPopup" class="popup">
-  <div class="popup-content">
-    <span class="close-button" onclick="closeFilterPopup()">&times;</span>
-
-    <!-- 필터 폼 -->
-    <div>
-      <h3>숙소 유형</h3>
-      <div class="filter-options-home-type" data-th-each="theme : ${session.themeList}">
-        <label class="theme-checkbox-label">
-          <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}" data-th-if="${theme.themeNo < 10}">
-        </label>
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="filterModalLabel">필터</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- 필터 폼 -->
+      <div class="modal-body row">
+        <div class="row p-2">
+          <h3>숙소 유형</h3>
+          <div class="filter-options-home-type" data-th-each="theme : ${session.themeList}" data-th-if="${theme.themeNo < 10}">
+            <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}">
+            <input type="checkbox" class="btn-check" data-th-id="${'check-'+theme.themeNo}" name="theme" data-th-value="${theme.themeName}" autocomplete="off">
+            <label class="theme-checkbox-label btn" data-th-for="${'check-'+theme.themeNo}" data-th-text="${theme.themeName}">
+            </label>
+          </div>
+        </div>
+        <div class="row p-2">
+          <h3>테마</h3>
+          <div class="filter-options-theme" data-th-each="theme : ${session.themeList}" data-th-if="${theme.themeNo >= 10 && theme.themeNo < 100}">
+            <img data-th-src="@{'https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/theme/' + ${theme.themeName} + .png(type=f,w=24,h=24,faceopt=false,ttype=png)}">
+            <input type="checkbox" class="btn-check" data-th-id="${'check-'+theme.themeNo}" name="theme" data-th-value="${theme.themeName}" autocomplete="off">
+            <label class="theme-checkbox-label btn" data-th-for="${'check-'+theme.themeNo}" data-th-text="${theme.themeName}">
+          </div>
+        </div>
+        <div class="row p-2">
+          <div class="form-floating mb-3 col">
+            <input type="number" class="form-control" id="minPrice" name="minPrice" placeholder="최소 가격" value="0" min="0">
+            <label for="minPrice">최소 가격</label>
+          </div>
+          <div class="form-floating mb-3 col">
+            <input type="number" class="form-control" id="maxPrice" name="maxPrice" placeholder="최대 가격" value="100000" min="1">
+            <label for="maxPrice">최대 가격</label>
+          </div>
+        </div>
+        <!-- <div>
+          <h3>편의 시설</h3>
+          <div class="filter-options-facility" data-th-each="facility : ${session.facilityList}">
+            <label class="facility-checkbox-label">
+              
+            </label>
+          </div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="getFilterData()" data-bs-dismiss="modal">필터</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
-    <div>
-      <h3>테마</h3>
-      <div class="filter-options-theme" data-th-each="theme : ${session.themeList}">
-        <label class="theme-checkbox-label">
-          <input type="checkbox" name="theme" data-th-value="${theme.themeName}" data-th-text="${theme.themeName}" data-th-if="${theme.themeNo >= 10 && theme.themeNo < 100}">
-        </label>
-      </div>
-    </div>
-    <div>
-      <label for="minPrice">최소 가격:</label>
-      <input type="number" id="minPrice" name="minPrice">
-      <label for="maxPrice">최대 가격:</label>
-      <input type="number" id="maxPrice" name="maxPrice">
-    </div>
-    <div>
-      <h3>편의 시설</h3>
-      <div class="filter-options-facility" data-th-each="facility : ${session.facilityList}">
-        <label class="facility-checkbox-label">
-          
-        </label>
-      </div>
-    </div>
-    <button class="apply-filter-button" onclick="getFilterData()" th:text="${rentalHomeList.size + '개의 숙소 보기'}">버튼</button>
   </div>
 </div>
 <div data-th-replace="footer :: footer" class="footer-div">footer</div>

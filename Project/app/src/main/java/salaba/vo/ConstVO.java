@@ -58,4 +58,6 @@ public final class ConstVO {
 
   public static final char text_blocked = '2'; // 제재
 
+  public static final String notify_mark = "게시글에 댓글이 달렸습니다.";
+
 }

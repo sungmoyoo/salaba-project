@@ -10,6 +10,7 @@
     <result column="member_no" property="memberNo"/>
     <result column="content" property="content"/>
     <result column="notify_date" property="notifyDate"/>
+    <result column="mark" property="mark"/>
   </resultMap>
 
   <select id="selectNotifyHistory" resultMap="AlarmMap">
@@ -17,7 +18,8 @@
       notify_no,
       member_no,
       content,
-      notify_date
+      notify_date,
+      mark
     from
       notify_history
     where
@@ -32,12 +34,14 @@
       notify_history
       (
         member_no,
-        content
+        content,
+        mark
       )
     values
       (
         #{memberNo},
-        #{content}
+        #{content},
+        #{mark}
       )
   </insert>
 

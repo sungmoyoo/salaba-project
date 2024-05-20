@@ -19,4 +19,6 @@ public class Alarm implements Serializable {
   private String content; // 내용
 
   private Date notifyDate; // 일시
+  
+  private String mark; // 알람 표시 내용
 }

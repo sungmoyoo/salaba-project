@@ -6,6 +6,8 @@ let boardNo = $("#boardNum").text();  // jQuery를 사용하여 data 속성에�
 const alarmContent = window.location.href;
 const alarmMessageComment = "댓글";
 const alarmMessageReply = "답글";
+let board = boardInfo;
+console.log(board);
 //-------------------------------------댓글-------------------------------------
 //댓글 작성하기
 $("#addCommentBtn").click(function (e) {
@@ -22,7 +24,8 @@ $("#addCommentBtn").click(function (e) {
                 // 서버로 보낼 데이터
                 boardNo: boardNo,
                 content: content,
-                alarmContent: alarmContent
+                alarmContent: alarmContent,
+                title: board.title
             },
             success: function (data) {
                 let newComment = $(`<div class="comment-container">
@@ -114,7 +117,8 @@ function addReply(event) {
             data: {
                 commentNo: commentNo,
                 content: replyContent,
-                alarmContent: alarmContent
+                alarmContent: alarmContent,
+                title: board.title
             },
             success: function (data) {
                 let newReply = $(`<div>

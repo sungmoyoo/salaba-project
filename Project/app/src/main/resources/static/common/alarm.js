@@ -84,7 +84,7 @@ function setAlarmPopover(alarm){
   let popoverContent = '';
 
   alarm.forEach(item => {
-    let alarmLink = '<a href="' + item.content + '" class="alarm-link" id="'+ item.notifyNo +'">' + item.alarmType + '</a>';
+    let alarmLink = '<a href="' + item.content + '" class="alarm-link" id="'+ item.notifyNo +'">' + item.mark + '</a>';
     popoverContent += `
       <div class="card mb-2">
         <div class="card-body p-2">
@@ -177,7 +177,7 @@ window.sendAlarm = function(alarm, alarmType) {
       message: "getAlarm",
       memberNo: alarm.memberNo,
       content: alarm.content,
-      alarmType: alarmType,
+      mark: alarm.mark,
       timestamp: alarm.notifyDate
     };
     window.ws.send(JSON.stringify(message));
