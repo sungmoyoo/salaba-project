@@ -9,6 +9,7 @@ const sl = loginUser;
 
 console.log(sessionInfo);
 console.log(loginUser);
+sessionStorage.setItem("memberNo", loginUser.no);
 
 // 지도 보기 / 목록보기 버튼
 const mapButton = document.getElementById('mapButton');

@@ -1,0 +1,56 @@
+.room-container {
+  font-family: "Noto Sans KR";
+  font-weight: 400;
+  font-optical-sizing: auto;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 2px solid #35C5B3;
+  margin: 50px 20px 20px 33px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(25% - 100px);
+  text-align: center;
+  transition: transform 0.5s ease, filter 0.5s ease, box-shadow 0.5s ease; /* 호버 시에 부드러운 전환 효과 추가 */
+}
+
+.room-container:hover {
+  transform: rotate(5deg); /* 호버 시에 약간 회전하는 효과 */
+  filter: hue-rotate(90deg); /* 호버 시에 색상을 변화시키는 효과 */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+}
+
+.img-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 25%;
+  overflow: hidden;
+}
+
+.profileImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info-container {
+  width: 100%;
+  padding: 10px;
+}
+
+.room-info {
+  margin-bottom: 5px;
+}
+
+#chatRoomsTitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#emptyChatNotification {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin: 50px auto;
+}

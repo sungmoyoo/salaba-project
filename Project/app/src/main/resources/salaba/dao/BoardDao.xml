@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="salaba.dao.BoardDao">
 
@@ -43,18 +43,29 @@
       <result column="uuid_file_name" property="uuidFileName"/>
     </collection>
   </resultMap>
+  <!--   후기게시판 - 국가, 지역 정보 불러오기-->
+  <resultMap id="NationMap" type="Nation">
+    <id column="nation_no" property="nationNo"/>
+    <result column="nation_name" property="nationName"/>
+
+    <collection property="regionList" ofType="Region">
+      <id column="region_no" property="regionNo"/>
+      <result column="region_name" property="regionName"/>
+      <result column="nation_no" property="nationNo"/>
+    </collection>
+  </resultMap>
 
   <resultMap id="CommentHistoryMap" type="commentHistory">
-      <id column="member_no" property="no"/>
-      <result column="board_no" property="boardNo"/>
-      <result column="comment_no" property="commentNo"/>
-      <result column="board_category_no" property="categoryNo"/>
-      <result column="reply_no" property="replyNo"/>
-      <result column="title" property="title"/>
-      <result column="content" property="content"/>
-      <result column="created_date" property="createdDate"/>
-      <result column="state" property="state"/>
-      <result column="cnr" property="cnr"/>
+    <id column="member_no" property="no"/>
+    <result column="board_no" property="boardNo"/>
+    <result column="comment_no" property="commentNo"/>
+    <result column="board_category_no" property="categoryNo"/>
+    <result column="reply_no" property="replyNo"/>
+    <result column="title" property="title"/>
+    <result column="content" property="content"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="state" property="state"/>
+    <result column="cnr" property="cnr"/>
   </resultMap>
   <!-- 첨부 파일: 썸네일 제작을 위해 resultMap 사용 -->
   <resultMap id="fileList" type="BoardFile">
@@ -66,7 +77,7 @@
 
   <!-- 게시글 작성 -->
   <insert id="addBoard" parameterType="Board"
-    useGeneratedKeys="true" keyColumn="board_no" keyProperty="boardNo">
+          useGeneratedKeys="true" keyColumn="board_no" keyProperty="boardNo">
     <if test="categoryNo == 0">
       insert into
         board
@@ -112,6 +123,20 @@
         )
     </if>
   </insert>
+
+  <!--  후기 게시판 - 지역 찾기-->
+  <select id="findAllNationsAndRegions" resultMap="NationMap">
+    select
+    r.region_no,
+    r.region_name,
+    r.nation_no,
+    n.nation_name
+    from
+    region r
+    inner join nation n ON r.nation_no = n.nation_no
+    order by
+    nation_no desc;
+  </select>
 
   <!-- 게시글 삭제: 상태 update로 관리함 -->
   <update id="deleteBoard">
@@ -160,8 +185,7 @@
         b.board_category_no = 0
         AND b.state != '1'
       ORDER BY
-        b.created_date desc,
-        like_count desc
+        b.created_date desc
     </if>
     <if test="categoryNo != 0">
       <!-- 정보공유, 자유게시판 & 나머지 -->
@@ -196,8 +220,7 @@
         AND b.state != '1'
         AND h.head_no != 1
       ORDER BY
-        b.created_date desc,
-        like_count desc
+        b.created_date desc
         limit #{rowCount} offset #{offset}
     </if>
   </select>
@@ -265,10 +288,41 @@
       m.nickname,
       h.head_no,
       h.head_content,
-      bf.file_no,
-      bf.uuid_file_name,
-      r.region_no,
-      r.region_name
+      (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count
+      FROM
+      board b
+      INNER JOIN head h ON b.head_no = h.head_no
+      INNER JOIN member m ON b.member_no = m.member_no
+      LEFT JOIN board_like bl ON b.board_no = bl.board_no
+      LEFT JOIN board_file bf ON b.board_no = bf.board_no
+      WHERE
+      b.board_category_no = #{categoryNo}
+      AND b.state != '1'
+      AND h.head_no = 1
+      ORDER BY
+      b.created_date desc
+    </if>
+  </select>
+
+  <!-- 메인 화면 - 일반 게시글 -->
+  <select id="main" resultMap="BoardMap">
+    select
+    b.board_no,
+    b.board_category_no,
+    b.title,
+    b.view_count,
+    b.content,
+    b.created_date,
+    b.state,
+    (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
+    m.member_no,
+    m.nickname,
+    h.head_no,
+    h.head_content,
+    bf.file_no,
+    bf.uuid_file_name,
+    r.region_no,
+    r.region_name
     from
       board b
       inner join head h on b.head_no=h.head_no
@@ -278,34 +332,33 @@
     where
       b.state != '1'
     order by
-      b.created_date desc,
-      like_count desc
+      b.created_date desc
       limit #{rowCount} offset #{offset}
   </select>
 
   <!-- 상세 조회 -->
   <select id="findBy" resultMap="BoardMap">
     select
-      b.board_no,
-      b.board_category_no,
-      b.title,
-      b.content,
-      b.view_count,
-      b.created_date,
-      b.state,
-      <if test="categoryNo != 0">
-        h.head_no,
-        h.head_content,
-      </if>
-      <if test="categoryNo == 0">
-        r.region_no,
-        r.region_name,
-      </if>
-      bs.scope_name,
-      bs.scope_no,
-      m.member_no,
-      m.nickname,
-      (select count(*) from board_like where board_no=#{boardNo}) as like_count
+    b.board_no,
+    b.board_category_no,
+    b.title,
+    b.content,
+    b.view_count,
+    b.created_date,
+    b.state,
+    <if test="categoryNo != 0">
+      h.head_no,
+      h.head_content,
+    </if>
+    <if test="categoryNo == 0">
+      r.region_no,
+      r.region_name,
+    </if>
+    bs.scope_name,
+    bs.scope_no,
+    m.member_no,
+    m.nickname,
+    (select count(*) from board_like where board_no=#{boardNo}) as like_count
     from
       board b
       left join head h on b.head_no=h.head_no
@@ -319,8 +372,7 @@
     and
       b.state != '1'
     order by
-      b.created_date desc,
-      b.like_count desc
+      b.created_date desc
   </select>
 
   <!-- 게시글 썸네일 사진 가져오기-->
@@ -347,6 +399,9 @@
       title=#{title},
       content=#{content},
       head_no=#{headNo},
+      <if test="categoryNo == 0">
+      region_no=#{region.regionNo},
+      </if>
       scope_no=#{scopeNo}
     where
       board_no=#{boardNo}
@@ -416,21 +471,21 @@
     <choose>
       <when test='type.equals("title")'>
         SELECT
-          b.board_no,
-          b.board_category_no,
-          b.title,
-          b.view_count,
-          b.created_date,
-          (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
-          m.member_no,
-          m.nickname,
-          h.head_no,
-          h.head_content,
-          (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
-          r.region_no,
-          r.region_name,
-          bf.file_no,
-          bf.uuid_file_name
+        b.board_no,
+        b.board_category_no,
+        b.title,
+        b.view_count,
+        b.created_date,
+        (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
+        m.member_no,
+        m.nickname,
+        h.head_no,
+        h.head_content,
+        (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
+        r.region_no,
+        r.region_name,
+        bf.file_no,
+        bf.uuid_file_name
         FROM
         board b
         inner join head h on b.head_no=h.head_no
@@ -438,42 +493,42 @@
         left join region r on b.region_no=r.region_no
         LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
         WHERE
-          b.board_category_no = #{categoryNo}
+        b.board_category_no = #{categoryNo}
         AND
-          title LIKE CONCAT('%', #{keyword}, '%')
+        title LIKE CONCAT('%', #{keyword}, '%')
         AND
         b.state != '1'
       </when>
       <when test='type.equals("content")'>
         SELECT
-          b.board_no,
-          b.board_category_no,
-          b.title,
-          b.view_count,
-          b.content,
-          b.created_date,
-          b.state,
-          (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
-          m.member_no,
-          m.nickname,
-          h.head_no,
-          h.head_content,
-          (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
-          r.region_no,
-          r.region_name,
-          bf.file_no,
-          bf.uuid_file_name
+        b.board_no,
+        b.board_category_no,
+        b.title,
+        b.view_count,
+        b.content,
+        b.created_date,
+        b.state,
+        (select count(*) from board_like bl where bl.board_no=b.board_no) as like_count,
+        m.member_no,
+        m.nickname,
+        h.head_no,
+        h.head_content,
+        (select count(*) from board_file bf where bf.board_no=b.board_no) as file_count,
+        r.region_no,
+        r.region_name,
+        bf.file_no,
+        bf.uuid_file_name
         FROM
-          board b
-          inner join head h on b.head_no=h.head_no
-          inner join member m on b.member_no=m.member_no
-          left join board_file bf on b.board_no=bf.board_no
-          left join region r on b.region_no=r.region_no
-          LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
+        board b
+        inner join head h on b.head_no=h.head_no
+        inner join member m on b.member_no=m.member_no
+        left join board_file bf on b.board_no=bf.board_no
+        left join region r on b.region_no=r.region_no
+        LEFT OUTER JOIN board_file bf on bf.board_no=b.board_no
         WHERE
-          b.board_category_no = #{categoryNo}
+        b.board_category_no = #{categoryNo}
         AND
-          content LIKE CONCAT('%', #{keyword}, '%')
+        content LIKE CONCAT('%', #{keyword}, '%')
         AND
         b.state != '1'
       </when>
@@ -578,53 +633,53 @@
   <!-- 작성댓글 내역 -->
   <select id="findCommentHistory" resultMap="CommentHistoryMap">
     select cnr.* from (
-      select
-        '댓글' as cnr,
-        c.member_no,
-        c.board_no,
-        b.board_category_no,
-        b.title,
-        c.content,
-        c.created_date
-      from
-        comment c
-        inner join board b on c.board_no=b.board_no
-      where
-        c.member_no = #{no}
-        and c.state = 0
-      union all
-      select
-        '답글' as cnr,
-        r.member_no,
-        c.board_no,
-        b.board_category_no,
-        b.title,
-        r.content,
-        r.created_date
-      from
-        reply r
-        inner join comment c on c.comment_no=r.comment_no
-        inner join board b on c.board_no=b.board_no
-      where
-        r.member_no = #{no}
-        and r.state = 0) cnr
+    select
+    '댓글' as cnr,
+    c.member_no,
+    c.board_no,
+    b.board_category_no,
+    b.title,
+    c.content,
+    c.created_date
+    from
+    comment c
+    inner join board b on c.board_no=b.board_no
+    where
+    c.member_no = #{no}
+    and c.state = 0
+    union all
+    select
+    '답글' as cnr,
+    r.member_no,
+    c.board_no,
+    b.board_category_no,
+    b.title,
+    r.content,
+    r.created_date
+    from
+    reply r
+    inner join comment c on c.comment_no=r.comment_no
+    inner join board b on c.board_no=b.board_no
+    where
+    r.member_no = #{no}
+    and r.state = 0) cnr
     order by created_date desc
     limit #{rowCount} offset #{offset}
   </select>
 
   <select id="countAllCommentHistory" resultType="int" parameterType="int">
     select sum(cnt) from (
-      select
-        count(*) as  cnt
-      from comment c
-      where c.member_no = #{no}
-        and c.state = 0
+    select
+    count(*) as  cnt
+    from comment c
+    where c.member_no = #{no}
+    and c.state = 0
     union all
-      select
-        count(*) as  cnt
-      from reply r
-      where r.member_no = #{no}
-        and r.state = 0
+    select
+    count(*) as  cnt
+    from reply r
+    where r.member_no = #{no}
+    and r.state = 0
     ) cnr
   </select>
 

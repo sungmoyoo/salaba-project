@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import salaba.dao.RentalHomeDao;
 import salaba.service.RentalHomeService;
-import salaba.vo.Reservation2;
 import salaba.vo.rental_home.RentalHome;
 import salaba.vo.rental_home.RentalHomeFacility;
 import salaba.vo.rental_home.RentalHomePhoto;

@@ -10,6 +10,11 @@ const tbody = $("tbody");
     }
     var trTemplate = Handlebars.compile($("#tr-template").html());
     $("tbody").html(trTemplate(result));
+    let incomplete = pageContext.params.get("incomplete");
+
+    if (incomplete == 'true') {
+        $('#incomplete').click();
+    }
 
     $(".rowItem").click(function () {
       let modal = $("#detailModal");
@@ -30,8 +35,9 @@ const tbody = $("tbody");
           modalContent.html(detailTemplate(data));
           console.log(data.state);
           if (data.state != "0") {
-            $("#answer").prop("readonly", true);
-            $(".dealBtn").hide();
+            $(".dealBox").hide();
+          } else {
+            $('.answer-info').hide();
           }
 
           $(".dealBtn").click((e) => {

@@ -57,6 +57,15 @@
       <button type="button" id="closeBtn">✕</button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/page-init.js"></script>
+    <script src="list.js"></script>
+    <script src="/js/list.js"></script>
+
     <script id="tr-template" type="text/x-handlebars-template">
       {{#each data}}
         <tr class="rowItem">
@@ -111,7 +120,7 @@
             <span>{{warningCount}}</span></div>
           <div class="hr"></div>
         </div>
-        <div class="grade">
+        <div class="dealBox grade">
           <select class="dealSelect">
             <option value="1">브론즈</option>
             <option value="2">실버</option>
@@ -121,7 +130,8 @@
           </select>
           <button class="dealBtn">등급 변경</button>
         </div>
-        <br />
+        <br/>
+        <h4 class="rentalList-title">호스트 소유 숙소목록</h4>
         {{#each rentals}}
           <div id="rentals">
             <div class="infoBox">
@@ -154,27 +164,20 @@
                 >{{stateStr}}</span></div>
               <div class="hr"></div>
             </div>
-
-            <div class="info"><span>숙소 테마:</span>
+            <div class="infoBox">
+            <div class="info"><span>숙소 유형:</span>
               {{#each themes}}
                 <div>
                   <span>{{themeName}}</span>
                 </div>
               {{/each}}
             </div>
+          </div>
             <hr />
             <br />
           </div>
         {{/each}}
       </div>
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/js/list.js"></script>
-    <script src="/js/common.js"></script>
-    <script src="/js/page-init.js"></script>
-    <script src="list.js"></script>
   </body>
 </html>

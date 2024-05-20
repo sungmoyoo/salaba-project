@@ -64,9 +64,9 @@ h1 {
 .date-input {
   pointer-events: none;
   border: none;
-  width: 15%; 
+  width: 10%;
   margin-right: 70%;
-  font-size: 13px;
+  font-size: 14px;
   color: rgb(152, 152, 152);
 }
 
@@ -86,14 +86,44 @@ h1 {
   color: white;
 }
 
-/* 게시글 수정 버튼 */
-.board-modify {
-  padding:7px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
-  font-size: 14px; /* 글꼴 크기를 조절 */
-  margin-left: 20px;
-  margin-right: 20px;
+.modify-delete {
+    text-align: right;
+    margin-right: 20px;
 }
 
+/* 게시글 수정 버튼 */
+.board-modify {
+  padding:7px 11px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
+  font-size: 14px; /* 글꼴 크기를 조절 */
+  border: 2px solid #718de0;
+  background-color: #fff;
+  border-radius: 13px;
+  color: black;
+  text-decoration: none;
+}
+
+.board-modify:hover {
+  border: 2px solid #fff;
+  background-color: #718de0;
+  color: #fff;
+}
+
+/* 게시글 삭제 버튼 */
+#boardDelBtn {
+  padding:7px 11px;
+  font-size: 14px;
+  border: 2px solid #718de0;
+  background-color: #fff;
+  border-radius: 13px;
+  color: black;
+  text-decoration: none;
+}
+
+#boardDelBtn:hover {
+  border: 2px solid #fff;
+  background-color: #718de0;
+  color: #fff;
+}
 
 /*내용 전까지를 묶는 박스*/
 .info-box{
@@ -106,15 +136,18 @@ h1 {
 .content-box {
   overflow-y: auto;
   background-color: white;
-  padding: 40px; /* 패딩을 늘림 */
+  padding: 40px;
   margin-top: 20px;
-  width: 100%; /* 너비를 늘림 */
- /* 최소 높이 설정 */
-  font-size: 18px; /* 글꼴 크기 증가 */
-  overflow: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
-  box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
-  border-top: 2px solid rgb(152, 152, 152); /* 상단에 구분선 추가 */
-  border-bottom: 2px solid rgb(152, 152, 152); /* 하단에 구분선 추가 */
+  width: 100%;
+  font-size: 18px;
+  overflow: auto;
+  box-sizing: border-box;
+  border-top: 2px solid rgb(152, 152, 152);
+  border-bottom: 2px solid rgb(152, 152, 152);
+}
+
+.content-box #summernote{
+  min-height: 500px;
 }
 
 .content-box #summernote{
@@ -203,8 +236,6 @@ h1 {
   width: 100%;
   text-align: left;
   overflow: hidden;
-
-  
 }
 
 /*댓글 작성하기*/

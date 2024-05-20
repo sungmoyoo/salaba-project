@@ -63,7 +63,6 @@ $("#addCommentBtn").click(function (e) {
                     timer: 1000
                   });
                   input.val("");
-                  
             }
         });
     } else {
@@ -197,6 +196,7 @@ function addReplyForm(e) {
 $(".del2").click(deleteReply);
 
 //답글 수정
+
 $(".modi2").click(modifyReply);
 
 function deleteComment(e) {
@@ -528,13 +528,11 @@ $(".report-btn").click(function (e) {
 
      // 모달 열기
      $("#reportModal").modal("show");
-     
 });
 
 $("#submitBtn").click(function (e) {
     e.preventDefault();
     let reportFiles = $('input[name="reportFiles"]')[0].files;
-   
      // FormData 객체 생성
      let formData = new FormData();
 
@@ -547,7 +545,6 @@ $("#submitBtn").click(function (e) {
      for (let i = 0; i < reportFiles.length; i++) {
          formData.append('reportFiles', reportFiles[i]);
      }
-    
     console.log(formData);
 
     $.ajax({
@@ -630,4 +627,4 @@ function appearButtons() {
 function disappearButtons() {
     // 해당 요소 내의 '.buttons' 클래스를 가진 하위 요소를 숨깁니다.
     $(this).find('.buttons').hide();
-} 
+}
