@@ -10,9 +10,6 @@ public interface BoardService {
   void addBoard(Board board); // 게시판 글 작성
   List<Nation> getAllNations(); // 국가, 지역 정보
 
-
-  List<Nation> getAllNations(); // 국가, 지역 정보
-
   List<Board> listBoard(int categoryNo, int pageNo, int pageSize, int headNo); // 게시판 조회
 
   List<Board> findAnnouncements(int categoryNo, int limit); // 게시글 목록 공지사항 조회
