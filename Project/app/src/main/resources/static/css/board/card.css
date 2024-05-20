@@ -11,17 +11,18 @@ h3 {
   
   }
 
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+
+.card-container {
+    width: 100%;
 }
   /* 후기게시판 - 카드 형식으로 조회 */
   .card-deck {
     display: flex;
-    justify-content: flex-start; /* 가운데 정렬 */
+    flex-wrap: wrap;
+    justify-content: space-between;
     height: 100%;
-    width: 95%;
+    width: 100%;
+    gap: 2%;
   }
   
   .card {
@@ -29,26 +30,23 @@ h3 {
         border-radius: 20px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         transition: 0.3s;
-        width: 25%; /* 각 카드의 너비를 조절하여 한 줄에 4개의 카드가 들어가도록 설정 */
-        margin-right: 2%; /* 각 카드 사이의 간격을 설정 */
-        margin-left: 2%;
-        margin-top: 25px; /* 카드 위쪽 여백 추가 */
-        margin-bottom: 25px; /* 카드 아래 여백을 설정 */
+        width: 22%;
         display: inline-block; /* 카드들이 일렬로 표시되도록 설정 */
         vertical-align: top; /* 카드들을 위쪽 정렬하여 표시되도록 설정 */
         flex-direction: column; /* 내부 컨텐츠를 수직으로 쌓음 */
         align-items: center; /* 가로 축 중앙 정렬 */
         justify-content: center; /* 세로 축 중앙 정렬 */
+        margin-bottom: 4%;
     }
   
   .card:last-child {
-        margin-right: 0; /* 마지막 카드는 오른쪽 여백을 없애줌 */
+        margin-right: 0;
   }
   
   .card:hover {
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
-  
+
   /*작성일, 추천수를 카드 하단에 표시*/
   .boardcard-footer {
       display: flex;

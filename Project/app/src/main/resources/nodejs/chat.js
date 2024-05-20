@@ -136,9 +136,22 @@ function deleteChatUser(ws){
     });
 
     if(roomInfo.size === 0){ // Map에 해당 채팅방에 사용자가 없는경우
-      sentPreviousMessagesRooms.delete(reservationNo); // 채팅방 완전 삭제
-      uploadFile(); // 스토리지 서버에 파일 업로드
+      if (fs.existsSync(chatFile.chatFileFullPath)) {
+        fs.readFile(chatFile.chatFileFullPath, 'utf8', (err, data) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          sentPreviousMessagesRooms.delete(reservationNo); // 채팅방 완전 삭제
+          uploadFile(); // 스토리지 서버에 파일 업로드
+        });
+      } else {
+        console.log("채팅 기록 파일이 없습니다.");
+      }
     }
+
+
+
   });
 }
 

@@ -108,12 +108,12 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
   @GetMapping("board/form") // 게시글 폼
   public String form(int categoryNo, Model model, HttpSession session) throws Exception {
 
-//    if (categoryNo == 0) {
-//      List<Nation> nations = boardService.getAllNations();
-//      log.debug("======================================" + nations);
-//
-//      model.addAttribute("nations", nations);
-//    }
+    // 후기게시판: 국가, 지역 정보를 가져오는 서비스 호출
+    if (categoryNo == 0) {
+      List<Nation> nations = boardService.getAllNations();
+      log.debug("nations 가져옴: " + nations);
+      model.addAttribute("nations", nations);
+    }
 
     model.addAttribute("boardName", categoryNo == 0 ? "후기글 작성"
         : (categoryNo == 1 ? "정보공유글 작성" : "자유글 작성")); // 카테고리 별 분류 - 0 : 후기 / 1 : 정보공유 / 2 : 자유
@@ -310,7 +310,11 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
   @PostMapping("board/update")
   public String updateBoard( // 게시글 수정
-      Board board, HttpSession session, SessionStatus sessionStatus) throws Exception {
+      Board board,
+      HttpSession session,
+      SessionStatus sessionStatus
+      //, @RequestParam(required = false) Integer regionNo
+  ) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -358,13 +362,17 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
     sessionStatus.setComplete();
 
     return "redirect:list?categoryNo=" + board.getCategoryNo();
-
   }
+
   @GetMapping("board/modify") // 수정 폼으로 들어가기
   public void modifyBoard(@RequestParam("boardNo") int boardNo,
       @RequestParam("categoryNo") int categoryNo, Model model) {
     Board board = boardService.getBoard(boardNo, categoryNo);
     if (categoryNo == 0) {
+
+      List<Nation> nations = boardService.getAllNations();
+      model.addAttribute("nations", nations);
+
       model.addAttribute("boardName", "후기 - 글수정");
     } else if (categoryNo == 1) {
       model.addAttribute("boardName", "정보공유 - 글수정");
@@ -655,31 +663,31 @@ public class BoardController {  // 게시판, 댓글, 답글 컨트롤러
 
     List<Board> filteredBoardList;
 
-  // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
-  if ("title".equals(type)) {
-    filteredBoardList = boardService.searchByTitle(keyword, categoryNo);
-  } else if ("content".equals(type)) {
-    filteredBoardList = boardService.searchByContent(keyword, categoryNo);
-  } else {
-    // 유효하지 않은 검색 유형을 처리하는 경우
-    filteredBoardList = Collections.emptyList(); // 빈 리스트 반환
-    model.addAttribute("message", "검색 결과가 없습니다");
-  }
+    // 검색 유형에 따라 적절한 서비스 메서드를 호출하여 필터링된 게시글 목록을 가져옴
+    if ("title".equals(type)) {
+      filteredBoardList = boardService.searchByTitle(keyword, categoryNo);
+    } else if ("content".equals(type)) {
+      filteredBoardList = boardService.searchByContent(keyword, categoryNo);
+    } else {
+      // 유효하지 않은 검색 유형을 처리하는 경우
+      filteredBoardList = Collections.emptyList(); // 빈 리스트 반환
+      model.addAttribute("message", "검색 결과가 없습니다");
+    }
 
-  // 페이징 처리를 위해 검색 결과의 총 개수를 계산
-  int numOfRecord = boardService.countFiltered(categoryNo, type, keyword);
-  int numOfPage = (numOfRecord / pageSize) + (numOfRecord % pageSize > 0 ? 1 : 0);
-  pageNo = Math.max(1, Math.min(pageNo, numOfPage));
+    // 페이징 처리를 위해 검색 결과의 총 개수를 계산
+    int numOfRecord = boardService.countFiltered(categoryNo, type, keyword);
+    int numOfPage = (numOfRecord / pageSize) + (numOfRecord % pageSize > 0 ? 1 : 0);
+    pageNo = Math.max(1, Math.min(pageNo, numOfPage));
 
-  // 필터링된 게시글 목록을 화면에 전달
-  model.addAttribute("list", filteredBoardList);
-  model.addAttribute("categoryNo", categoryNo);
-  model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
-  model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
-  model.addAttribute("pageNo", pageNo);
-  model.addAttribute("pageSize", pageSize);
-  model.addAttribute("numOfPage", numOfPage);
+    // 필터링된 게시글 목록을 화면에 전달
+    model.addAttribute("list", filteredBoardList);
+    model.addAttribute("categoryNo", categoryNo);
+    model.addAttribute("type", type); // 검색 유형을 유지하기 위해 전달
+    model.addAttribute("keyword", keyword); // 검색 키워드를 유지하기 위해 전달
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
 
-  return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
+    return "board/list"; // 필터링된 게시글 목록을 보여줄 뷰 페이지
   }
 }
