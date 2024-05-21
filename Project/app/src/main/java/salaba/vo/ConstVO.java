@@ -16,7 +16,7 @@ public final class ConstVO {
 
   public static final char reservation_state_no = '2';// 예약 거절
 
-  public static final char reservation_state_end = '3';// 이용 완료
+  public static final String reservation_state_end = "3";// 이용 완료
 
   // 게시판 신고 대상 타입
   public static final char report_type_b = '0'; // 게시판

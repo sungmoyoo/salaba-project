@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import salaba.service.BookmarkService;
 import salaba.service.PaymentService;
 import salaba.service.RentalHomeService;
 import salaba.vo.Member;
@@ -35,7 +36,7 @@ public class RentalHomeController {
 
   private final static Log log = LogFactory.getLog(RentalHomeController.class);
   private final RentalHomeService rentalHomeService; // RentalHomeService
-  private final PaymentService paymentService;
+  private final BookmarkService bookmarkService;
 
   @GetMapping("/main")
   public String rentalHomeMain( HttpSession httpSession, Model model,
@@ -99,20 +100,29 @@ public class RentalHomeController {
   }
 
   @GetMapping("/rentalHome/view")
-  public void rentalHomeView( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model){ // 숙소 상세 조회
-    model.addAttribute("rentalHome", rentalHomeService.getRentalHomeDetailView(rentalHomeNo));
+  public void rentalHomeView( @RequestParam(value = "rentalHomeNo") int rentalHomeNo, Model model, HttpSession session){ // 숙소 상세 조회
+    RentalHome rentalHome = rentalHomeService.getRentalHomeDetailView(rentalHomeNo);
+    model.addAttribute("rentalHome", rentalHome);
     model.addAttribute("rentalHomeReview", rentalHomeService.getRentalHomeReviewList(rentalHomeNo));
     model.addAttribute("rentalHomeReviewAverage",Math.round(rentalHomeService.rentalHomeReviewAverage(rentalHomeNo) * 100) / 100.0);
     model.addAttribute("rentalHomePhoto", rentalHomeService.getRentalHomePhotos(rentalHomeNo));
     model.addAttribute("rentalHomeFacility", rentalHomeService.getRentalHomeFacilities(rentalHomeNo));
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    int result = bookmarkService.selectOneBookMark(loginUser.getNo(), rentalHomeNo);
+    if( result > 0 ){
+      model.addAttribute("bookMark", result);
+    }
   }
 
 
 @PostMapping("/rentalHome/addReview")
-  public String rentalHomeReviewAdd( RentalHomeReview rentalHomeReview, int rentalHomeNo) {
+  public ResponseEntity<String> rentalHomeReviewAdd( RentalHomeReview rentalHomeReview,
+    @RequestParam(value = "rentalHomeNo", required = false) Integer rentalHomeNo) {
+
     log.debug(String.format("reservationNo : %s", rentalHomeReview.getReservationNo()));
     rentalHomeService.addRentalHomeReview(rentalHomeReview); // 숙소 리뷰 작성
-    return "redirect:review?rentalHomeNo=" + rentalHomeNo; // 작성전 페이지로 돌아가기
+    return ResponseEntity.ok("리뷰 작성 완료");
   }
 
   @GetMapping("/rentalHome/review")

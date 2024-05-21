@@ -7,5 +7,10 @@ import salaba.vo.rental_home.RentalHome;
 public interface BookmarkService {
 
   List<RentalHome> selectUserBookMark(int memberNo);
-  int deleteBookMark(@Param("memberNo") int memberNo , @Param("rentalHomeNo") int rentalHomeNo);
+  int deleteBookMark(int memberNo , int rentalHomeNo);
+
+  int selectOneBookMark(int memberNo, int rentalHomeNo);
+
+  int addBookMark(int memberNo, int rentalHomeNo);
+
 }

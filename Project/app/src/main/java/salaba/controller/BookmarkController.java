@@ -39,4 +39,15 @@ public class BookmarkController {
     bookmarkService.deleteBookMark(loginUser.getNo(), rentalHomeNo);
     return ResponseEntity.ok("즐겨찾기 삭제완료");
   }
+
+  @PostMapping("/bookmark/add")
+  public ResponseEntity<String> addBookMark(
+      @RequestParam(value = "memberNo",required = false) Integer memberNo,
+      @RequestParam(value = "rentalHomeNo", required = false) Integer rentalHomeNo){
+
+    log.debug(String.format("로그 로그 memberNo : %s", memberNo));
+    log.debug(String.format("로그 로그 rentalHomeNo : %s", rentalHomeNo));
+    bookmarkService.addBookMark(memberNo,rentalHomeNo);
+    return ResponseEntity.ok("즐겨찾기를 추가했습니다");
+  }
 }

@@ -12,4 +12,8 @@ public interface BookmarkDao {
   List<RentalHome> selectUserBookMark(@Param("memberNo") int memberNo);
 
   int deleteBookMark(@Param("memberNo") int memberNo , @Param("rentalHomeNo") int rentalHomeNo);
+
+  int selectOneBookMark(@Param("memberNo") int memberNo, @Param("rentalHomeNo") int rentalHomeNo);
+
+  int addBookMark(@Param("memberNo") int memberNo, @Param("rentalHomeNo") int rentalHomeNo);
 }

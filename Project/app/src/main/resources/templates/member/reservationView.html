@@ -60,6 +60,8 @@
           <span class="col" data-th-text="${'예약번호 : '+ reservation.reservationNo}"></span>
           <button type="button" class="btn btn-secondary col-sm-2 align-self-end" 
               data-th-if="${reservation.state != '3'}" data-bs-toggle="modal" data-bs-target="#reservationCancel">예약 취소</button>
+          <button type="button" class="btn btn-secondary col-sm-2 align-self-end" 
+              data-th-if="${reservation.state == '3'}" data-bs-toggle="modal" data-bs-target="#reservationReview">리뷰 작성</button>
         </div>
       </div>
       <div class="p-2" id="payment-content">
@@ -154,6 +156,53 @@
     </div>
   </div>
   
+  <!-- 리뷰 작성 모달 -->
+  <th:block data-th-if="${reviews != null}">
+    <div class="modal fade" id="reservationReview" tabindex="-1" aria-labelledby="reservationReviewLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="reservationReviewLabel">숙소 리뷰</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-light table-striped-columns table-hover">
+              <thead>
+                <tr class="table-light">
+                  <th style="text-align:center;">작성자</th>
+                  <th style="text-align:center;">내용</th>
+                  <th style="text-align:center;">점수</th>
+                  <th style="text-align:center;">작성 날짜</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-light" data-th-each="review : ${reviews}">
+                  <td class="table-light" data-th-text="*{writer.name}"></td>
+                  <td class="table-light" data-th-text="*{review}" style="text-align:center;"></td>
+                  <td class="table-light" data-th-text="*{score}" style="text-align:center;"></td>
+                  <td class="table-light" data-th-text="${#dates.format(review.createdDate,'yyyy-MM-dd')}" style="text-align:center;"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <div class="mb-3">
+              <label for="reviewText" class="form-label">리뷰 작성</label>
+              <textarea class="form-control" id="reviewText" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="reviewScore" class="form-label">평점</label>
+              <input class="form-control" type="number" id="reviewScore" min="1" max="5">
+            </div>
+            <div>
+              <button type="button" class="btn btn-primary" id="reservationReviewButton" data-bs-dismiss="modal">리뷰 작성</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
 
 </main>
   
