@@ -73,7 +73,7 @@
       t1.start_date,
       t1.end_date,
       t1.state,
-      t2.rental_home_no
+      t2.rental_home_no,
       t2.name,
       t2.rental_home_rule,
       t2.address,
