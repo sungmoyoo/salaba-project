@@ -389,7 +389,7 @@ $('#bookMarkAdd').on('click', function(){
         confirmButtonText: "확인"
       }).then((result)=>{
         if(result.isConfirmed){
-          location.href = "/redirect";
+          location.reload();
         }
       });
     },
@@ -419,7 +419,7 @@ $('#bookMarkDel').on('click',function(){
         confirmButtonText: "확인"
       }).then((result)=>{
         if(result.isConfirmed){
-          location.href = "/redirect";
+          location.reload();
         }
       });
     },

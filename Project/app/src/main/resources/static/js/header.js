@@ -65,7 +65,7 @@ function logout(){
     type: "POST",
     url: "/auth/logout",
     success: function(){
-      location.href = "/main";
+      location.reload();
     },
     error: ()=>{
 
@@ -146,7 +146,7 @@ function userLogin(){
 function checkLogin( data ){
   const state = data.state;
   if( state == "0" ){
-    location.href = "/main";
+    location.reload();
   }else if( state == "1" ){
     Swal.fire({
       icon: "error",
@@ -374,7 +374,7 @@ function loginForGoogle(){
     } else {
         sessionStorage.setItem('loginUser', data);
         $('#modalCloseButton').click();
-        location.href = "main";
+        location.reload();
     }
   });
 }
