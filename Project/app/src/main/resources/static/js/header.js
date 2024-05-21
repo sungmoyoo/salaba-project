@@ -146,7 +146,7 @@ function userLogin(){
 function checkLogin( data ){
   const state = data.state;
   if( state == "0" ){
-    location.href = "main";
+    location.href = "/main";
   }else if( state == "1" ){
     Swal.fire({
       icon: "error",

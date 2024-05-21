@@ -97,9 +97,8 @@ document.getElementById("reportForm").addEventListener("submit", (event) => {
 
   const category = document.getElementById("category").value;
   const content = document.getElementById("rentalHome-report-content").value;
-  const memberNo = sessionInfo.no;
   const rentalHomeNo = rentalHomeNoModel;
-
+  
   // RentalHomeReport 객체 생성
   const rentalHomeReport = {
     rentalHomeNo: rentalHomeNo,
@@ -108,15 +107,16 @@ document.getElementById("reportForm").addEventListener("submit", (event) => {
     reportCategoryNo: category
   }
   console.log(rentalHomeReport)
-
-  if (memberNo == null) {
+  
+  if (sessionInfo == null) {
     Swal.fire({
       icon: "error",
       title: "로그인이 필요합니다.",
     });
     return;
   }
-
+  const memberNo = sessionInfo.no;
+  
   // Ajax 요청 보내기
   $.ajax({
     type: "POST",
@@ -366,15 +366,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 즐겨찾기 추가
 $('#bookMarkAdd').on('click', function(){
-  const memberNo = sessionInfo.no;
-  console.log(memberNo);
-  if (memberNo == null) {
+  if (sessionInfo == null) {
     Swal.fire({
       icon: "error",
       title: "로그인이 필요합니다.",
     });
     return;
   }
+  const memberNo = sessionInfo.no;
   const rentalHomeNo = rentalHomeNoModel;
   $.ajax({
     type: "POST",
