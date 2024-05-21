@@ -1,4 +1,4 @@
-let loginUser = sessionInfo; // 세션 로그인 정보
+let loginUser = session; // 세션 로그인 정보
 const nationList = nationListModel;
 let userPreference = [];
 
