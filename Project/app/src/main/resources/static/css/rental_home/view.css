@@ -53,10 +53,10 @@ main{
 .photo-container-item{
     display: flex;
     margin-right: 10px;
+    max-width: 300px;
 }
 
 .photo-container-item img{
-    
     border-radius: 10px;
 }
 
