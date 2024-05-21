@@ -246,22 +246,24 @@ public class HostController {
           old.getRentalHomePhotos().getLast().getPhotoOrder());
       rentalHome.setRentalHomePhotos(newFiles);
     }
-    for (RentalHomePhoto oldPhoto : old.getRentalHomePhotos()) {
-      boolean isPhotoFound = false;
 
-      for (String photoName : existPhotoName) {
-        if (photoName.equals(oldPhoto.getUuidPhotoName())) {
-          isPhotoFound = true;
-          break;
+    if (existPhotoName != null) {
+      for (RentalHomePhoto oldPhoto : old.getRentalHomePhotos()) {
+        boolean isPhotoFound = false;
+
+        for (String photoName : existPhotoName) {
+          if (photoName.equals(oldPhoto.getUuidPhotoName())) {
+            isPhotoFound = true;
+            break;
+          }
+        }
+        if (!isPhotoFound) {
+          // 삭제 메서드 호출
+          hostService.deleteRentalHomePhotoByName(oldPhoto.getUuidPhotoName());
+          storageService.delete(this.bucketName, uploadDir, oldPhoto.getUuidPhotoName());
         }
       }
-      if (!isPhotoFound) {
-        // 삭제 메서드 호출
-        hostService.deleteRentalHomePhotoByName(oldPhoto.getUuidPhotoName());
-        storageService.delete(this.bucketName, uploadDir, oldPhoto.getUuidPhotoName());
-      }
     }
-
 
     rentalHome.setThemes(themeTransform(themeNos, themeNames, type));
     rentalHome.setRentalHomeFacilities(
