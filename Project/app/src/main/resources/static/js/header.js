@@ -209,15 +209,25 @@ function findUserEmail(){
       const state = data.state;
       console.log(state);
       if( state == "0" ){
-        console.log("asdasdasd");
-        $('#find-email-username').val("");
-        $('#find-email-userbirth').val("");
-        $('#find-email-fail-button').click();
+        Swal.fire({
+          icon: "error",
+          title: "등록된 이메일이 없습니다.",
+          confirmButtonText: "확인"
+        }).then((result)=>{
+          $('#find-email-username').val("");
+          $('#find-email-userbirth').val("");
+          $('#find-email-fail-button').click();
+        });
       }else if( state == "1" ){
-        console.log("qweqweqweqwe");
-        $('#find-email-username').val("");
-        $('#find-email-userbirth').val("");
-        $('#find-email-success-button').click();
+        Swal.fire({
+          icon: "success",
+          title: data.email,
+          confirmButtonText: "확인"
+        }).then((result)=>{
+          $('#find-email-username').val("");
+          $('#find-email-userbirth').val("");
+          $('#find-email-success-button').click();
+        });
       }
     },
     error: ()=>{
