@@ -54,4 +54,29 @@
       member_no = #{memberNo} and
       rental_home_no = #{rentalHomeNo}
   </delete>
+
+  <select id="selectOneBookMark">
+    select
+      count(*)
+    from
+      bookmark
+    where
+      member_no = #{memberNo} and
+      rental_home_no = #{rentalHomeNo}
+  </select>
+
+  <insert id="addBookMark">
+    insert into
+      bookmark
+      (
+        member_no,
+        rental_home_no
+      )
+    values
+      (
+        #{memberNo},
+        #{rentalHomeNo}
+      )
+  </insert>
+
 </mapper>
