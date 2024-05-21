@@ -178,9 +178,9 @@
               </thead>
               <tbody>
                 <tr class="table-light" data-th-each="review : ${reviews}">
-                  <td class="table-light" data-th-text="*{writer.name}"></td>
-                  <td class="table-light" data-th-text="*{review}" style="text-align:center;"></td>
-                  <td class="table-light" data-th-text="*{score}" style="text-align:center;"></td>
+                  <td class="table-light" data-th-text="${review.writer.name}"></td>
+                  <td class="table-light" data-th-text="${review.review}" style="text-align:center;"></td>
+                  <td class="table-light" data-th-text="${review.score}" style="text-align:center;"></td>
                   <td class="table-light" data-th-text="${#dates.format(review.createdDate,'yyyy-MM-dd')}" style="text-align:center;"></td>
                 </tr>
               </tbody>
