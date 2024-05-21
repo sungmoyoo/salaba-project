@@ -177,7 +177,7 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script data-th-inline="javascript">
-
+  const sessionInfo = /*[[${session}]]*/ null;
   function enter(event) {
     if (event.keyCode === 13) {
       sendMessage();

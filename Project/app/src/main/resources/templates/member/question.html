@@ -13,6 +13,8 @@
 </head>
 <script th:inline="javascript">
   const questionModel = /*[[${questionList}]]*/ null;
+  const sessionInfo = /*[[${session}]]*/ null;
+  console.log(sessionInfo);
 </script>
 <body>
   <div data-th-replace="header :: header">header</div>
