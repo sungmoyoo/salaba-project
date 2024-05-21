@@ -1,0 +1,224 @@
+/*댓글,답글 리스트*/
+#comment-box {
+  margin-bottom: 100px;
+  margin-left: 20px;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+}
+
+/*댓글 작성하기*/
+#comment-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px; /* 내부 여백 설정 */
+  height: 100%;
+  width: 100%; /* 폼의 너비 설정 */
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+#comment-content {
+  border: 1px solid gray;
+  height: 50px; /* 고정 높이 사용 */
+  width: 80%;
+  border-radius: 10px; /* 모서리를 약간 둥글게 설정 */
+  text-align: left;
+  box-sizing: border-box; 
+  line-height: normal; /* line-height를 normal로 설정 */
+
+}
+
+#reply-content {
+  border: 1px solid gray;
+  height: 60%;
+  width: 80%;
+  border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
+  text-align: right; /* 텍스트를 오른쪽에 정렬 */
+  align-self: flex-end; /* 자신을 오른쪽으로 정렬 */
+  box-sizing: border-box; 
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.commentContentDiv, .replyContentDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    padding: 5px;
+    margin-bottom: 5px; 
+    border-bottom: 1px solid gainsboro;
+  
+  }
+  
+  .replyContentDiv {
+    margin-left: 30px;
+  }
+  
+  /* 댓글 내용 정렬 조정 */
+  .comment-text {
+    display:block;
+    align-items: center;
+    gap: 10px; /* 요소 간의 간격 */
+  }
+  
+  /*답글 */
+  .reply-text {
+    gap: 10px; /* 요소 간의 간격 */
+    margin-left: 40px;
+  }
+  
+  /*수정, 삭제, 신고를 묶어둔 컨테이너*/
+  .button-container1, .button-container2 {
+    display: flex;
+    height: 40px;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
+  }
+  
+  .commentContentBox {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  /* 댓글, 답글 내용 크기 조정 */
+  .commentContent, .replContent {  
+    flex: 1; /* 부모 요소에서 남은 공간을 차지  */
+    height: 610%; 
+    width: 60%;
+    font-size: 15px; /* 댓글과 답글 내용의 글꼴 크기를 키움 */
+    margin-left: 30%; 
+  }
+  
+  
+  /*댓글, 답글 작성일*/
+  .comment-date, .reply-date {
+    color: gray;
+    margin-left: 10px;
+    font-size: 10px;
+  }
+  
+  /*댓글 수정 폼*/
+  .commentModifyForm {
+    align-items: flex-end;
+  }
+  
+  /*컨텐츠*/
+  .textContent {
+    padding: 0px;
+    border: 1px solid #fdfdfd; /*댓글, 답글 경계선 묶기 */
+    margin-bottom: 5px;
+    border-radius: 2px; /* 테두리 모서리 둥글게 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  /*작성자명*/
+  .nickname {
+    margin-top: 5px;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 11pt;
+  }
+  
+  
+  /* 답글 폼 */
+  /*평소에 폼 숨기기 -> 이벤트 발생 시 나타나는 폼*/
+  /* .form-hidden {
+    display: none;
+    overflow: hidden;
+  } */
+  
+  #replyForm {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    margin-right: 30px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    text-align: left; /* 폼 내용을 왼쪽으로 정렬 */
+  }
+  
+  /* 프로필 사진 원형 만들기 */
+  .profile-img1, .profile-img2 {
+    width: 30px; /* 이미지의 가로 크기 */
+    height: 30px; /* 이미지의 세로 크기 */
+    object-fit: cover; /* 이미지를 요소 크기에 맞게 조정 */
+    border-radius: 50%; /* 둥근 모서리로 설정 */
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 5px;
+  }
+  
+  
+  /* 삭제, 수정, 신고 버튼 */
+  .del, .del2, .modi, .modi2, .comment-report-btn, .reply-report-btn, .comtModiConfirm, .comtModiCancel, .replModiConfirm, .replModiCancel {
+    border: none;
+    padding:5px 10px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
+    font-size: 13px; /* 글꼴 크기를 조절 */
+    background-color: #ffffff;
+  }
+  
+  /*수정 폼*/
+  .commentModifyForm, .replyModifyForm {
+    gap: 10px; /* 요소들 사이의 간격 */
+    padding: 10px; /* 내부 여백 */
+    border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .newContent {
+    width: 85%; /* 가로 크기를 부모 요소의 전체 크기로 설정 */
+    height: 60px; /* 높이 설정 */
+    border: 1px solid gray; /* 상자 테두리 색상 및 스타일 */
+    border-radius: 4px; /* 모서리를 약간 둥글게 설정 */
+    padding: 10px; /* 내부 여백 설정 */
+    box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+    resize: none; /* 사용자가 크기를 조절하지 못하도록 설정 */
+  }
+  
+  /*댓글 달기 버튼*/
+  #addCommentBtn  {
+    border: 2px solid #718de0;
+    background-color: #fff;
+    border-radius: 15px;
+    padding:13px 12px; /* 버튼의 크기를 키우기 위해 패딩을 조절 */
+    font-size: 14px; /* 글꼴 크기를 조절 */
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 9px;
+    align-self: flex-end; /* 자신을 오른쪽으로 정렬 */
+  }
+  
+  #addCommentBtn:hover {
+    border: 2px solid #fff;
+    background-color: #718de0;
+    color: #fff;
+  }
+  
+  /* 답글 달기 버튼 */
+  #addReplyBtn, #cancelReplyBtn {
+    border: 1px solid #fff;
+    padding: 3px 6px; /* 패딩을 줄여서 버튼 크기를 작게 조정 */
+    font-size: 14px; /* 글꼴 크기를 조절 */
+    height: 30px; /* 버튼의 높이를 작게 조정 */
+    width: 80px; /* 버튼의 너비를 작게 조정 */
+    margin-top: 10px; /* 버튼을 폼의 하단에 띄우기 */
+    align-self: flex-end; /* 버튼을 오른쪽으로 정렬 */
+    margin-left: 10px; /* 폼과의 간격 조정 */
+  }
+
+  .button-container1, .button-container2 {
+    display: none;
+    margin-right: 100px;
+  }
+  
+  .button-container1 button:hover, .button-container2 button:hover{
+    color: #ccc;
+  }
