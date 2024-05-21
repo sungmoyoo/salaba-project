@@ -14,8 +14,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="sweetalert2.min.css">
   <script th:inline="javascript">
-    const sessionInfo = /*[[${session.loginUser}]]*/ null;
+    const sessionUser = /*[[${session.loginUser}]]*/ null;
     const reservationInfo = /*[[${reservation}]]*/ null;
+    const sessionInfo = /*[[${session}]]*/ null;
     console.log(sessionInfo);
     console.log(reservationInfo);
   </script>

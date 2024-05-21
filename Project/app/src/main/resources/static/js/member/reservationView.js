@@ -13,7 +13,7 @@ const reservation = reservationInfo;
 
 // 예약보기 페이지 셋팅
 function reservationViewPageSet(){
-  const session = sessionInfo;
+  const session = sessionUser;
   let cardHtml = '<div class="container-fluid card mb-4"><div class="row g-0"><div class="col-md-4 align-self-center" style="max-height: 252px; max-width: 265px;">';
   cardHtml += '<div class="carousel slide" id="carousel-' + reservation.reservationNo + '" data-bs-ride="carousel">';
   cardHtml += '<div class="carousel-indicators">';
