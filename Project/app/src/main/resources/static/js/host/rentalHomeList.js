@@ -33,13 +33,19 @@ el.forEach(function(e) {
   let stateDiv = e.querySelector('.state');
   let state = stateDiv.textContent;
 
-  if (state !== "등록 심사중") {
+  if (state == "운영중") {
     e.onclick = () => {
       window.location.href = "rentalHomeView?rentalHomeNo=" + e.getAttribute("data-no");
     };
   } else {
     e.onclick = () => {
-      alert("등록 심사중인 숙소입니다.")
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "운영중인 숙소만 조회할 수 있습니다.",
+        showConfirmButton: false,
+        timer: 1000
+      });
     };
   }
 });
