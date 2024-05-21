@@ -108,14 +108,14 @@ document.getElementById("reportForm").addEventListener("submit", (event) => {
   }
   console.log(rentalHomeReport)
   
-  if (sessionInfo == null) {
+  if (sessionUser == null) {
     Swal.fire({
       icon: "error",
       title: "로그인이 필요합니다.",
     });
     return;
   }
-  const memberNo = sessionInfo.no;
+  const memberNo = sessionUser.no;
   
   // Ajax 요청 보내기
   $.ajax({
@@ -366,14 +366,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 즐겨찾기 추가
 $('#bookMarkAdd').on('click', function(){
-  if (sessionInfo == null) {
+  if (sessionUser == null) {
     Swal.fire({
       icon: "error",
       title: "로그인이 필요합니다.",
     });
     return;
   }
-  const memberNo = sessionInfo.no;
+  const memberNo = sessionUser.no;
   const rentalHomeNo = rentalHomeNoModel;
   $.ajax({
     type: "POST",
