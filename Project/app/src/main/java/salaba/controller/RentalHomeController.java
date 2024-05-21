@@ -109,9 +109,11 @@ public class RentalHomeController {
     model.addAttribute("rentalHomeFacility", rentalHomeService.getRentalHomeFacilities(rentalHomeNo));
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    int result = bookmarkService.selectOneBookMark(loginUser.getNo(), rentalHomeNo);
-    if( result > 0 ){
-      model.addAttribute("bookMark", result);
+    if(loginUser != null){
+      int result = bookmarkService.selectOneBookMark(loginUser.getNo(), rentalHomeNo);
+      if( result > 0 ){
+        model.addAttribute("bookMark", result);
+      }
     }
   }
 

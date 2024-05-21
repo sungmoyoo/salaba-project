@@ -97,7 +97,7 @@ document.getElementById("reportForm").addEventListener("submit", (event) => {
 
   const category = document.getElementById("category").value;
   const content = document.getElementById("rentalHome-report-content").value;
-  const memberNo = sessionMemberNo;
+  const memberNo = sessionInfo.loginUser.no;
   const rentalHomeNo = rentalHomeNoModel;
 
   // RentalHomeReport 객체 생성
@@ -366,7 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 즐겨찾기 추가
 $('#bookMarkAdd').on('click', function(){
-  const memberNo = sessionMemberNo;
+  const memberNo = sessionInfo.loginUser.no;
   console.log(memberNo);
   if (memberNo == null) {
     Swal.fire({
