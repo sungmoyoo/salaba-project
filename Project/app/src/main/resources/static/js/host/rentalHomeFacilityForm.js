@@ -1,3 +1,4 @@
+const nextButton = document.getElementById('nextButton');
 // + - 버튼 상호작용
 document.addEventListener('DOMContentLoaded', function() {
   const plusButtons = document.querySelectorAll('.fa-circle-plus');
@@ -43,8 +44,6 @@ function checkRequiredFields() {
 
   let isEmpty = roomFacility.some(facility => Number(facility.value) <= 0)
 
-  const nextButton = document.getElementById('nextButton');
-
  if (isEmpty || checkboxes.length <= 0) {
     nextButton.disabled = true;
     nextButton.classList.add('disabled');
@@ -54,8 +53,19 @@ function checkRequiredFields() {
     nextButton.classList.add('enabled');
     nextButton.classList.remove('disabled');
   }
+}
 
+nextButton.onclick = () => {
+  let checkboxes = document.querySelectorAll('.checkboxes');
+      checkboxes.forEach(function(checkbox) {
+          let hiddenFacilityName = checkbox.nextElementSibling;
+          let hiddenFacilityNo = hiddenFacilityName.nextElementSibling;
 
+          if (!checkbox.checked) {
+              hiddenFacilityName.remove();
+              hiddenFacilityNo.remove();
+          }
+      });
 }
 
 

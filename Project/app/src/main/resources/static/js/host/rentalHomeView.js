@@ -18,12 +18,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-    // 날짜 초기화
-    const startInput = document.getElementById('hostingStartDate');
-    startDate = startInput.value;
-    startInput.value = formatDate(startInput.value);
-    const endInput = document.getElementById('hostingEndDate');
-    endInput.value = formatDate(endInput.value);
+  // 날짜 초기화
+  const startInput = document.getElementById('hostingStartDate');
+  startDate = startInput.value;
+  startInput.value = formatDate(startInput.value);
+  const endInput = document.getElementById('hostingEndDate');
+  endDate = endInput.value;
+  endInput.value = formatDate(endInput.value);
 
   const deleteButtons = document.querySelectorAll('.delete-button');
   deleteButtons.forEach(button => {
@@ -134,12 +135,17 @@ function updateFormData() {
       formData.append('photoExplanations', obj.description.value);
     });
   }
-  uploadedImage = document.querySelectorAll('.uploaded-image');
+  let uploadedImage = document.querySelectorAll('.uploaded-image');
 
   uploadedImage.forEach(image => {
-    formData.append('existFileNames', image.getAttribute('data-uuidPhotoName'));
+    formData.append('existPhotoName', image.getAttribute('data-uuidPhotoName'));
   });
 }
+let uploadedImage = document.querySelectorAll('.uploaded-image');
+
+uploadedImage.forEach(image => {
+    console.log(image.getAttribute('data-uuidPhotoName'));
+  });
 
 function photoCountAndDisplay(files) {
   let imageContainer = document.getElementById('image-container');
@@ -370,7 +376,6 @@ function formatDate(dateString) {
 
 // 변경 확인
 window.onload = function() {
-
 
   document.querySelectorAll('input').forEach(element => {
     element.addEventListener('change', checkRequiredFields);
