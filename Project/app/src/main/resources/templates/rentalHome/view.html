@@ -7,11 +7,12 @@
   <title>Title</title>
   <script th:inline="javascript">
     const rentalHomeModel = /*[[${rentalHome}]]*/ null;
-    const sessionMemberNo = /*[[${session.memberNo}]]*/ null;
     const rentalHomeNoModel = /*[[${rentalHome.rentalHomeNo}]]*/ null;
     const rentalHomeReviewModel = /*[[${rentalHomeReview}]]*/ null;
     const rentalHomePhoto = /*[[${rentalHomePhoto}]]*/ null;
     const sessionInfo = /*[[${session.loginUser}]]*/ null;
+    const result = /*[[${bookMark}]]*/ null;
+
 
     console.log(rentalHomeModel);
     console.log(rentalHomePhoto);
@@ -35,7 +36,7 @@
 </div>
 <main class="container-sm">
   <!-- 숙소 사진 -->
-  <section class="photo-gallery">
+  <section class="photo-gallery container">
     <div class="photo-container">
       <div class="photo-container-item" data-th-each="photo : ${rentalHomePhoto}" data-th-object="${rentalHomePhoto}">
         <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
@@ -47,6 +48,14 @@
     <div id="rentalHome-content-left">
       <div class="rentalHome-name">
         <span data-th-text="${rentalHome.name}">숙소 이름</span>
+      </div>
+      <div id="bookMark">
+        <svg id="bookMarkAdd" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" data-th-if="${bookMark == null}">
+          <path d="m479-74-81-73q-105-94-173.5-163t-108-124Q77-489 61-536t-16-98q0-108.95 72.74-181.98Q190.47-889 299-889q50.93 0 96.97 18Q442-853 479-818q37-35 83.03-53 46.04-18 96.97-18 109.38 0 182.69 73.02Q915-742.95 915-634q0 50-15.5 97T844-435.5q-40 54.5-109 124T560-147l-81 73Zm0-169q94-86 154.5-145t95-103q34.5-44 47.5-77.15 13-33.15 13-65.83 0-56.02-37.01-92.52-37-36.5-92.51-36.5Q616-763 578-736.5 540-710 525-669h-91q-14.53-41-53.26-67.5Q342-763 299.27-763q-54.54 0-90.91 36.5Q172-690 172-634q0 33.76 13.44 67.99 13.44 34.24 48 78.13Q268-444 327.5-385.5 387-327 479-243Zm2-260Z"/>
+        </svg>
+        <svg id="bookMarkDel" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" data-th-if="${bookMark != null}">
+          <path d="m479-74-81-73q-105-94-173.5-163t-108-124Q77-489 61-536t-16-98q0-109 72.5-182T299-889q51 0 97 18t83 53q37-35 83-53t97-18q109 0 182.5 73T915-634q0 50-15.5 97T844-435.5q-40 54.5-109 124T560-147l-81 73Z"/>
+        </svg>
       </div>
       <div>
         <div class="rentalHome-address">

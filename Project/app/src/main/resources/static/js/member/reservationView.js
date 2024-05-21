@@ -5,6 +5,7 @@ $(document).ready(function(){
   initMap();
   setRefundContent();
   reservationCancel();
+  reviewWrite();
 });
 
 const reservation = reservationInfo;
@@ -91,7 +92,7 @@ function rentalHomeRuleSet(){
 
   // 이용규칙 길이 확인
   const ruleLength = rentalHomeRule.text().length;
-  const maxLength = 5; // 원하는 최대 길이 설정
+  const maxLength = 20; // 원하는 최대 길이 설정
 
   if (ruleLength > maxLength) {
     hiddenRentalHomeRule.text(rentalHomeRule.text().substring(maxLength));
@@ -151,6 +152,36 @@ function reservationCancel(){
         Swal.fire({
           icon: "error",
           title: "예약취소 에러"
+        });
+      }
+    });
+  });
+}
+
+// 리뷰 작성
+function reviewWrite(){
+  $('#reservationReviewButton').on('click', function(){
+    let review = $('#reviewText').val();
+    let score = $('#reviewScore').val();
+    $.ajax({
+      type: "POST",
+      url: "/rentalHome/addReview",
+      data:{
+        review: review,
+        score: score,
+        reservationNo: reservation.reservationNo,
+        rentalHomeNo: reservation.rentalHomeNo
+      },
+      success: function(data){
+        Swal.fire({
+          icon:"success",
+          title: data
+        });
+      },
+      error: () =>{
+        Swal.fire({
+          icon: "error",
+          title: "리뷰 작성 에러"
         });
       }
     });

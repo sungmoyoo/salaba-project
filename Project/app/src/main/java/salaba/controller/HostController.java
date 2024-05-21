@@ -141,8 +141,7 @@ public class HostController {
   ) {
     RentalHome rentalHome = (RentalHome) session.getAttribute("rentalHome");
 
-    rentalHome.setRentalHomeFacilities(
-        facilityTransform(facilityCount, facilityNos, facilityNames));
+    rentalHome.setRentalHomeFacilities(facilityTransform(facilityCount, facilityNos, facilityNames));
 
     rentalHome.setCapacity(capacity);
 
@@ -238,10 +237,6 @@ public class HostController {
       }
     }
 
-    if (rentalHome.getRentalHomePhotos() == null) {
-      System.out.println("true");
-    }
-
     // 모든 숙소 정보 vo 형태에 맞게 변환 후 set
     RentalHome old = hostService.getRentalHome(rentalHome.getRentalHomeNo());
     if (photos != null) { // 추가된 사진이 있을 때만
@@ -251,21 +246,19 @@ public class HostController {
           old.getRentalHomePhotos().getLast().getPhotoOrder());
       rentalHome.setRentalHomePhotos(newFiles);
     }
-    if (existPhotoName != null) {
-      for (String photoName : existPhotoName) {
-        boolean isPhotoFound = false;
+    for (RentalHomePhoto oldPhoto : old.getRentalHomePhotos()) {
+      boolean isPhotoFound = false;
 
-        for (RentalHomePhoto oldPhoto : old.getRentalHomePhotos()) {
-          if (oldPhoto.getUuidPhotoName().equals(photoName)) {
-            isPhotoFound = true;
-            break;
-          }
+      for (String photoName : existPhotoName) {
+        if (photoName.equals(oldPhoto.getUuidPhotoName())) {
+          isPhotoFound = true;
+          break;
         }
-        if (!isPhotoFound) {
-          // 삭제 메서드 호출
-          hostService.deleteRentalHomePhotoByName(photoName);
-          storageService.delete(this.bucketName, uploadDir, photoName);
-        }
+      }
+      if (!isPhotoFound) {
+        // 삭제 메서드 호출
+        hostService.deleteRentalHomePhotoByName(oldPhoto.getUuidPhotoName());
+        storageService.delete(this.bucketName, uploadDir, oldPhoto.getUuidPhotoName());
       }
     }
 

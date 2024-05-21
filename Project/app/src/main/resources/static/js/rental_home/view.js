@@ -97,7 +97,7 @@ document.getElementById("reportForm").addEventListener("submit", (event) => {
 
   const category = document.getElementById("category").value;
   const content = document.getElementById("rentalHome-report-content").value;
-  const memberNo = sessionStorage.getItem("memberNo");
+  const memberNo = sessionInfo.loginUser.no;
   const rentalHomeNo = rentalHomeNoModel;
 
   // RentalHomeReport 객체 생성
@@ -363,3 +363,72 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   })
 });
+
+// 즐겨찾기 추가
+$('#bookMarkAdd').on('click', function(){
+  const memberNo = sessionInfo.loginUser.no;
+  console.log(memberNo);
+  if (memberNo == null) {
+    Swal.fire({
+      icon: "error",
+      title: "로그인이 필요합니다.",
+    });
+    return;
+  }
+  const rentalHomeNo = rentalHomeNoModel;
+  $.ajax({
+    type: "POST",
+    url: "/bookmark/add",
+    data:{
+      memberNo: memberNo,
+      rentalHomeNo: rentalHomeNo
+    },
+    success: function(data){
+      Swal.fire({
+        icon: "success",
+        title: data,
+        confirmButtonText: "확인"
+      }).then((result)=>{
+        if(result.isConfirmed){
+          location.href = "/redirect";
+        }
+      });
+    },
+    error: ()=>{
+      Swal.fire({
+        icon: "error",
+        title: "즐겨찾기 추가 에러"
+      });
+    }
+  });
+});
+
+// 즐겨찾기 삭제
+$('#bookMarkDel').on('click',function(){
+  const rentalHomeNo = rentalHomeNoModel;
+
+  $.ajax({
+    type: "POST",
+    url: "/bookmark/delete",
+    data:{
+      rentalHomeNo: rentalHomeNo
+    },
+    success: function(data){
+      Swal.fire({
+        icon: "success",
+        title: data,
+        confirmButtonText: "확인"
+      }).then((result)=>{
+        if(result.isConfirmed){
+          location.href = "/redirect";
+        }
+      });
+    },
+    error: ()=>{
+      Swal.fire({
+        icon: "error",
+        title: "즐겨찾기 삭제 에러"
+      });
+    }
+  })
+})

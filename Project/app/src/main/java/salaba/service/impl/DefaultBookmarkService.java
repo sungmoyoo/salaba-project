@@ -22,4 +22,14 @@ public class DefaultBookmarkService implements BookmarkService {
   public int deleteBookMark(int memberNo, int rentalHomeNo) {
     return bookmarkDao.deleteBookMark(memberNo, rentalHomeNo);
   }
+
+  @Override
+  public int selectOneBookMark(int memberNo, int rentalHomeNo) {
+    return bookmarkDao.selectOneBookMark(memberNo, rentalHomeNo);
+  }
+
+  @Override
+  public int addBookMark(int memberNo, int rentalHomeNo) {
+    return bookmarkDao.addBookMark(memberNo, rentalHomeNo);
+  }
 }
