@@ -194,7 +194,7 @@
   function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
       results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return '';
@@ -202,7 +202,7 @@
   }
 
   // 상대방의 이름 가져오기
-  var opponentName = getParameterByName('opponentName');
+  const opponentName = getParameterByName('opponentName');
 
   // 채팅방 이름 설정
   if (opponentName) {
@@ -210,7 +210,7 @@
   }
 
   // sender 설정
-  var sender = getParameterByName('sender');
+  const sender = getParameterByName('sender');
   if(sender == 1){
     sender = 'guest';
   }else{
@@ -242,7 +242,7 @@
     ws.send(JSON.stringify(requestData));
   }
 
-  var lastDate;
+  let lastDate;
 
   ws.onmessage = function(event){
     const message = JSON.parse(event.data);
@@ -352,4 +352,5 @@ function checkAndUpdateDate(timestamp) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script data-th-src="@{/js/host/hostHeader.js}"></script>
+<script data-th-src="@{/common/alarm.js}" src="common/alarm.js" type="module"></script>
 </body>

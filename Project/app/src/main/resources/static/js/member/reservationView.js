@@ -44,7 +44,7 @@ function reservationViewPageSet(){
   cardHtml += '<div class="col-md-6 mt-3"><div class="row" id="card-text-box"><div class="col"><img src="https://5ns6sjke2756.edge.naverncp.com/nBMc0TCJiv/member/'+reservation.photo+ '?type=f&w=80&h=80&ttype=jpg"></div>';
   cardHtml += '<div class="col align-self-center"><span class="card-text" id="card-text-host-nickname">'+ reservation.nickname +'님의 숙소</span></div></div>'
   cardHtml += '<div id="card-text-box" class="mt-2"><span class="card-text" id="card-text-payment-date">결제일 : '+ reservation.payment.paymentDate +'</span></div>';
-  cardHtml += '<div id="card-text-box" class="mt-2"><a href="/chat?sender=1&reservationNo='+reservation.reservationNo+'&name='+ session.name +'&memberNo='+ session.no +'"><span class="card-text" id="card-text-chatWithHost">호스트와 대화하기</span></a></div>';
+  cardHtml += '<div id="card-text-box" class="mt-2"><a href="/chat?sender=1&reservationNo='+reservation.reservationNo+'&name='+ session.name +'&memberNo='+ session.no +'&opponentName'+session.name+'"><span class="card-text" id="card-text-chatWithHost">호스트와 대화하기</span></a></div>';
   cardHtml += '<div id="card-text-box" class="mt-2"><span class="card-text" id="card-text-host-tel">'+ reservation.telNo +'</span></div></div>'
   cardHtml += '<div class="col-md-6 mt-3"><div class="card-text-box"><span class="card-text" id="card-text-start-date">체크인 : '+ reservation.startDate +'</span></div>';
   cardHtml += '<div id="card-text-box" class="mt-2"><span class="card-text" id="card-text-end-date">체크아웃'+ reservation.endDate +'</span></div>';
