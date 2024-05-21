@@ -32,7 +32,7 @@
     </foreach>
   </insert>
 
-  <delete id="deletePhoto" parameterType="int">
+  <delete id="deletePhoto" parameterType="String">
     delete from
       rental_home_photo
     where uuid_photo_name=#{value}
