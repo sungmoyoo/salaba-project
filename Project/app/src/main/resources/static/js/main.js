@@ -168,9 +168,10 @@ function updateButtonLabel(count){
   button.textContent = count+'개의 숙소 보기';
 }
 
-let filteredRentalHomeList = rentalHomeList;
+let filteredRentalHomeList;
 
 function getFilterData(){ // 필터 적용
+  console.log(rentalHomeList);
   let themes = [];
   let checkboxes = document.querySelectorAll('input[name="theme"]:checked');
   checkboxes.forEach(checkbox => {
@@ -192,14 +193,8 @@ function getFilterData(){ // 필터 적용
   console.log(filteredRentalHomeList.length);
   console.log(filteredRentalHomeList);
 
-  // 필터링된 숙소의 갯수 업데이트
-  updateButtonLabel( filteredRentalHomeList.length );
-
   // 필터링된 숙소 리스트 업데이트
   updateRentalHomeList(filteredRentalHomeList);
-
-  // 팝업 닫기
-  closeFilterPopup();
 }
 
 function scrollThemes(offset) { // 테마 스크롤 이벤트
