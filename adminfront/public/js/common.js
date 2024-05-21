@@ -6,6 +6,20 @@ const pageContext = {
 
 const axiosInstance = axios.create();
 
+// 요청 인터셉터 설정: 매 요청마다 sessionStorage에서 accessToken을 가져와서 헤더에 설정
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = sessionStorage.getItem('accessToken');
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 // 전역 에러 핸들러 추가
 axiosInstance.interceptors.response.use(
     (response) => {

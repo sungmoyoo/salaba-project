@@ -136,7 +136,7 @@
             <div class="itemList">
             {{#each facilities}}
             <div>
-                <span data-th-if="*{facilityNo > 3}">{{name}}</span>
+                <span>{{name}}</span>
             </div>
             {{/each}}
             </div>
@@ -150,7 +150,7 @@
             </div>
             {{/each}}
             </div>
-            <div>
+            <div class="dealBox">
                 <button id="approve" class="dealBtn">등록 승인</button>
                 <button id="reject" class="dealBtn">등록 거부</button>
             </div>

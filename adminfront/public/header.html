@@ -18,6 +18,7 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/common.js"></script>
 
 <style>
   #mainHeader {
@@ -32,7 +33,7 @@
     width: 98%;
     height: 80px;
   }
-  
+
   .logo-container {
     display: flex;
     flex-direction: row;
@@ -61,8 +62,6 @@
     font-weight: bold;
   }
 
-  
-
   #logout {
     cursor: pointer;
     transition: color 0.3s ease;
@@ -78,111 +77,116 @@
     color: white;
   }
 
+  #timer {
+    display: inline-block;
+      width: 50px; /* 고정 너비 설정 */
+      text-align: center; /* 중앙 정렬 */
+      font-family: monospace; /* 고정 폭 글꼴 사용 (선택 사항) */
+  }
+
   #extendToken {
     cursor: pointer;
     transition: color 0.3s ease;
-    left: 30px;
-    border: 1px solid #718DE0;
+    border: 1px solid #718de0;
     background-color: white;
     padding: 8px;
     border-radius: 8px;
   }
 
   #extendToken:hover {
-    background-color: #718DE0;
+    background-color: #718de0;
     color: white;
   }
 </style>
+
+<script src="/js/timer.js"></script>
+
 <script>
   const accessToken = sessionStorage.getItem("accessToken");
   const userName = sessionStorage.getItem("name");
   $("#userName").text(userName);
 
   if (accessToken) {
-    $(document).ready(function() {
-    const initialDuration = 30 * 60; // 30 minutes in seconds
-    const display = $('#timer');
-    const extendButton = $('#extendToken');
+    $(document).ready(function () {
+      const extendButton = $("#extendToken");
+      const remainingTime = getRemainingTime();
+      startTimer(remainingTime, $('#timer'));
 
-    function startTimer(duration, display) {
-        let timer = duration, minutes, seconds;
-        const interval = setInterval(function () {
-            sessionStorage.setItem('remainingTime', timer);
+      extendButton.click(function () {
+  
+        console.log("oldToken",sessionStorage.getItem("accessToken"));
+        console.log("refreshToken", sessionStorage.getItem("refreshToken"));
+        let jsonData = {
+          refreshToken: sessionStorage.getItem("refreshToken"),
+        };
 
-            minutes = Math.floor(timer / 60);
-            seconds = timer % 60;
+        axiosInstance.post(`${RESTAPI_HOST}/auth/refreshToken`, jsonData)
+        .then((response) => {
+          sessionStorage.setItem("accessToken", response.data.accessToken);
+          sessionStorage.setItem("remainingTime", initialDuration); // Reset the timer
+          stopTimer(timeInterval);
+          startTimer(initialDuration, $("#timer")); 
+          Swal.fire({
+              icon: "success",
+              title: "연장되었습니다.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+        })
+        .catch((error) => {
+          Swal.fire({
+              icon: "error",
+              title: "오류.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+        })
 
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
+        // $.ajax({
+        //   url: `${RESTAPI_HOST}/auth/refreshToken`,
+        //   type: 'post',
+        //   data: jsonData,
+        //   success: function(response) {
+        //     sessionStorage.setItem("accessToken", response.accessToken);
+        //     sessionStorage.setItem("remainingTime", initialDuration); // Reset the timer
+        //     console.log("newToken",sessionStorage.getItem("accessToken"));
+        //     stopTimer(timeInterval);
+        //     startTimer(initialDuration, $("#timer")); 
+        //     Swal.fire({
+        //       icon: "success",
+        //       title: "연장되었습니다.",
+        //       showConfirmButton: false,
+        //       timer: 1500,
+        //     });
+        //     console.log("accessToken",sessionStorage.getItem("remainingTime"));
+        //   },
+        //   error: function() {
+        //     Swal.fire({
+        //       icon: "error",
+        //       title: "오류.",
+        //       showConfirmButton: false,
+        //       timer: 1500,
+        //     });
+        //   }
+        // })
 
-            display.text(minutes + ":" + seconds);
+      });
 
-            if (--timer < 0) {
-                clearInterval(interval);
-                sessionStorage.removeItem('remainingTime');
-                alert('Token expired! Please login again.');
-            }
-        }, 1000);
-    }
-
-    function getRemainingTime() {
-        const savedTime = sessionStorage.getItem('remainingTime');
-        if (savedTime) {
-            return parseInt(savedTime, 10);
-        }
-        return initialDuration;
-    }
-
-    const remainingTime = getRemainingTime();
-    startTimer(remainingTime, display);
-
-    extendButton.click(function() {
-      console.log("extend");
-        $.ajax({
-            url: `${RESTAPI_HOST}/auth/refreshToken`, // Your server endpoint to extend the token
-            method: 'POST',
-             // Assuming refresh token is stored in cookie
-            success: function(response) {
-                console.log(response);
-                sessionStorage.setItem('remainingTime', initialDuration); // Reset the timer
-                startTimer(initialDuration, display);
-                Swal.fire({
-                            icon: "success",
-                            title: "연장되었습니다.",
-                            showConfirmButton: false,
-                            timer: 1500
-                          });
-            },
-            error: function() {
-              Swal.fire({
-                            icon: "error",
-                            title: "오류.",
-                            showConfirmButton: false,
-                            timer: 1500
-                          });
-            }
-        });
-
-        sessionStorage.setItem('remainingTime', initialDuration); // Reset the timer
-                startTimer(initialDuration, display);
+      // function getCookie(name) {
+      //     const value = `; ${document.cookie}`;
+      //     const parts = value.split(`; ${name}=`);
+      //     if (parts.length === 2) return parts.pop().split(';').shift();
+      // }
     });
-
-    // function getCookie(name) {
-    //     const value = `; ${document.cookie}`;
-    //     const parts = value.split(`; ${name}=`);
-    //     if (parts.length === 2) return parts.pop().split(';').shift();
-    // }
-});
   }
 
   $("#logout").click((e) => {
     e.preventDefault();
     e.stopPropagation();
-    // let refreshToken = sessionStorage.getItem("refreshToken");
     if (accessToken) {
-      // const logoutData = {
-      //   refreshToken: refreshToken
-      // }
+      const logoutData = {
+        refreshToken: sessionStorage.getItem("refreshToken"),
+      };
       Swal.fire({
         title: "로그아웃 하시겠습니까?",
         icon: "warning",
@@ -193,8 +197,8 @@
         cancelButtonText: "취소",
       }).then((result) => {
         if (result.isConfirmed) {
-          axios
-            .delete(`${RESTAPI_HOST}/auth/logout`)
+          axiosInstance
+            .delete(`${RESTAPI_HOST}/auth/logout`, logoutData)
             .then((response) => {
               Swal.fire({
                 icon: "success",
@@ -202,6 +206,8 @@
                 showConfirmButton: false,
                 timer: 1000,
               }).then(() => {
+                sessionStorage.removeItem("remainingTime");
+                stopTimer();
                 window.location.href = "/";
               });
             })

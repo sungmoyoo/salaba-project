@@ -40,6 +40,7 @@ main{
     margin-top: 20px;
     margin-bottom: 20px;
     width: 100%;
+    height: 50%;
     overflow-x: auto;
     display: flex;
 }
@@ -55,6 +56,7 @@ main{
 }
 
 .photo-container-item img{
+    
     border-radius: 10px;
 }
 

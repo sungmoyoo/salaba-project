@@ -1,2 +1,9 @@
-package org.admin.security.jwt.util;public class LoginInfoDto {
+package org.admin.security.jwt.util;
+import lombok.Data;
+
+@Data
+public class LoginInfoDto {
+    private Long memberId;
+    private String email;
+    private String name;
 }

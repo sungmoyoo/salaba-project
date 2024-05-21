@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 })
 
 public class App {
-
     public static void main(String[] args) {
         System.out.println("한달살기 관리자 시스템 실행");
         SpringApplication.run(App.class, args);
