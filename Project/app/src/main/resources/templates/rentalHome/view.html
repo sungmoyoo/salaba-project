@@ -14,6 +14,7 @@
     const sessionInfo = /*[[${session.loginUser}]]*/ null;
     const result = /*[[${bookMark}]]*/ null;
 
+
     console.log(rentalHomeModel);
     console.log(rentalHomePhoto);
     console.log(sessionInfo);
@@ -36,7 +37,7 @@
 </div>
 <main class="container-sm">
   <!-- 숙소 사진 -->
-  <section class="photo-gallery">
+  <section class="photo-gallery container">
     <div class="photo-container">
       <div class="photo-container-item" data-th-each="photo : ${rentalHomePhoto}" data-th-object="${rentalHomePhoto}">
         <img data-th-src=" @{'https://kr.object.ncloudstorage.com/tp3-salaba/rentalHome/' + ${photo.uuidPhotoName}}" alt="숙소 이미지">
